@@ -4,22 +4,121 @@
   <meta charset="UTF-8" />
   <title>Upcore AI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Upcore AI - Workflow automation and secure integrations." />
+  <meta name="description" content="Upcore AI — Secure workflow automation and intelligent integrations." />
+
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #050505;
+      --text-main: #ffffff;
+      --text-muted: #888888;
+      --accent: #00F5FF;
+      --border: rgba(255,255,255,0.08);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 96px 24px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-top: 64px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: var(--text-muted);
+      max-width: 720px;
+    }
+
+    .card {
+      margin-top: 40px;
+      padding: 32px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.02);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer {
+      margin-top: 96px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Upcore AI</h1>
-  <p>
-    Upcore AI is a technology platform designed to automate workflows
-    and integrate with third-party services to improve productivity
-    and operational efficiency.
-  </p>
-  <p>
-    The application uses secure authentication methods, including
-    Google OAuth, to allow users to safely connect their accounts
-    and manage authorized data access.
-  </p>
-  <p>
-    Contact: <a href="mailto:yael67089@gmail.com">yael67089@gmail.com</a>
-  </p>
+  <main class="container">
+    <h1>upcore ai</h1>
+
+    <p>
+      Upcore AI is a technology platform focused on secure workflow automation
+      and intelligent integrations with third-party services.
+    </p>
+
+    <p>
+      The application uses industry-standard authentication methods, including
+      Google OAuth, to allow users to connect their accounts securely and
+      manage authorized data access.
+    </p>
+
+    <div class="card">
+      <h2>Security & Privacy</h2>
+      <p>
+        Upcore AI accesses only the data explicitly authorized by the user.
+        Users can review or revoke permissions at any time through their
+        Google Account settings.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Contact</h2>
+      <p>
+        For support or inquiries, contact
+        <a href="mailto:yael67089@gmail.com">yael67089@gmail.com</a>
+      </p>
+    </div>
+
+    <footer>
+      <p>
+        <a href="/privacy-policy.html">Privacy Policy</a> ·
+        <a href="/terms-of-service.html">Terms of Service</a>
+      </p>
+    </footer>
+  </main>
 </body>
 </html>
