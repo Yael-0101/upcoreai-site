@@ -91,6 +91,111 @@
             border-radius: 60px;
             text-decoration: none;
             font-weight: 800;
+            font-size: 0.95rem;
+            transition: 0.4s all cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 0 0 rgba(0, 229, 255, 0);
+        }
+
+        .btn-pro-cyan:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 229, 255, 0.3);
+        }
+
+        /* Grid de Servicios */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            padding: 100px 8% 150px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card-pro {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 4rem 2.5rem;
+            border-radius: 30px;
+            transition: 0.5s;
+        }
+
+        .card-pro:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--royal-violet);
+        }
+
+        .card-pro h3 { font-size: 1.6rem; margin-bottom: 1rem; letter-spacing: -0.5px; }
+        .card-pro p { color: #777; font-size: 1.05rem; }
+
+        /* Footer */
+        footer {
+            padding: 60px 5%;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer-links a {
+            color: #444;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover { color: var(--electric-cyan); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">upcore ai</div>
+        <div class="nav-links">
+            <a href="#pilares">Vision</a>
+            <a href="mailto:yael67089@gmail.com">Contact</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div data-aos="fade-up" data-aos-duration="1000">
+            <h1 class="main-title">Digital Sovereignty.<br>
+                <span class="text-gradient">No more friction.</span>
+            </h1>
+            <p class="hero-subtitle">Autonomous intelligence systems engineered for absolute operational dominance.</p>
+            <a href="mailto:yael67089@gmail.com" class="btn-pro-cyan">Request Access</a>
+        </div>
+    </header>
+
+    <section id="pilares" class="grid-container">
+        <div class="card-pro" data-aos="fade-up" data-aos-delay="100">
+            <h3>Autonomous Intelligence</h3>
+            <p>Self-learning processes that execute and optimize without human friction.</p>
+        </div>
+        <div class="card-pro" data-aos="fade-up" data-aos-delay="200">
+            <h3>Power & Control</h3>
+            <p>Reclaim your sovereignty with high-command technology that manages itself.</p>
+        </div>
+        <div class="card-pro" data-aos="fade-up" data-aos-delay="300">
+            <h3>Technical Perfection</h3>
+            <p>Minimalist design masking absolute functional complexity for seamless results.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-of-service.html">Terms of Service</a>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Inicialización forzada para evitar pantalla negra
+        window.onload = function() {
+            AOS.init({ duration: 800, once: true });
+        };
+    </script>
+</body>
+</html>
      
      
      
