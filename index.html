@@ -1,4 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcore AI | Digital Sovereignty</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
+    <style>
+        :root {
+            --deep-black: #050505;
+            --electric-cyan: #00E5FF;
+            --royal-violet: #8A2BE2;
+            --pure-white: #FFFFFF;
+            --main-gradient: linear-gradient(135deg, var(--electric-cyan), var(--royal-violet));
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--deep-black);
+            color: var(--pure-white);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* --- FONDO NEURONAL VIBRANTE --- */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background-color: #000;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 8%;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(5, 5, 5, 0.6);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo { font-weight: 900; font-size: 1.2rem; letter-spacing: -1px; }
+
+        /* --- BOTONES PRINCIPALES (GRADIENTE RELLENO) --- */
+        .btn-pro-gradient {
+            background: var(--main-gradient);
+            background-size: 200% auto;
+            color: #fff;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 800;
+            display: inline-block;
+            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border: none;
+            box-shadow: 0 10px 25px rgba(0, 229, 255, 0.2);
+        }
+
+        .btn-pro-gradient:hover {
+            background-position: right center;
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(138, 43, 226, 0.4);
+        }
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 5%;
+        }
+
+        .main-title {
+            font-size: clamp(2.8rem, 10vw, 6.5rem);
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            line-height: 0.95;
+            margin-bottom: 2rem;
+        }
+
+        .text-gradient {
+            background: var(--main-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- RECUADROS CON BORDE GRADIENTE --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            padding: 100px 8% 150px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card-pro {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 4rem 2.5rem;
+            border-radius: 34px;
+            position: relative;
+            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-pro::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 34px; padding: 2px;
+            background: var(--main-gradient);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            opacity: 0; transition: 0.5s;
+        }
+
+        .card-pro:hover {
+            transform: translateY(-12px);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0, 229, 255, 0.15);
+        }
+
+        .card-pro:hover::before { opacity: 1; }
+
+        /* --- FOOTER Y BOTONES LEGALES CON BORDE GRADIENTE --- */
+        footer { padding: 80px 5%; text-align: center; }
+
+        .btn-legal {
+            color: #777;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 50px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.02);
+            transition: 0.4s;
+            display: inline-block;
+            margin: 0 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-legal::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50px; padding: 1.5px;
+            background: var(--main-gradient);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            opacity: 0; transition: 0.4s;
+        }
+
+        .btn-legal:hover {
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 229, 255, 0.3);
+        }
+
+        .btn-legal:hover::before { opacity: 1; }
+
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <nav class="navbar">
+        <div class="logo">upcore ai</div>
+        <div class="nav-links">
+            <a href="#pilares" style="margin-right: 20px;">Vision</a>
+            <a href="mailto:yael67089@gmail.com" class="btn-pro-gradient" style="padding: 0.6rem 1.5rem; font-size: 0.75rem;">Contact</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div data-aos="fade-up" data-aos-duration="1200">
+            <h1 class="main-title">Digital Sovereignty.<br>
+                <span class="text-gradient">No more friction.</span>
+            </h1>
+            <p style="color: #888; margin-bottom: 3.5rem; max-width: 600px;">Autonomous intelligence systems engineered for absolute operational dominance.</p>
+            <a href="mailto:yael67089@gmail.com" class="btn-pro-gradient" style="padding: 1.3rem 3.5rem; font-size: 1rem;">Request Access</a>
+        </div>
+    </header>
+
+    <section id="pilares" class="grid-container">
+        <div class="card-pro" data-aos="fade-up" data-aos-delay="100">
+            <h3>Autonomous Intelligence</h3>
+            <p style="color: #777; margin-top: 10px;">Self-learning processes that execute and optimize without human friction.</p>
+        </div>
+        <div class="card-pro" data-aos="fade-up" data-aos-delay="200">
+            <h3>Power & Control</h3>
+            <p style="color: #777; margin-top: 10px;">Reclaim your sovereignty with high-command technology that manages itself.</p>
+        </div>
+        <div class="card-pro" data-aos="fade-up" data-aos-delay="300">
+            <h3>Technical Perfection</h3>
+            <p style="color: #777; margin-top: 10px;">Minimalist design masking absolute functional complexity for seamless results.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="privacy-policy.html" class="btn-legal">Privacy Policy</a>
+            <a href="terms-of-service.html" class="btn-legal">Terms of Service</a>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 90, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#00E5FF", "#8A2BE2"] },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3.5, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00E5FF", "opacity": 0.25, "width": 1.2 },
+                "move": { "enable": true, "speed": 2.5, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 180, "line_linked": { "opacity": 0.5 } } }
+            },
+            "retina_detect": true
+        });
+        window.onload = function() { AOS.init({ duration: 800, once: true }); };
+    </script>
+</body>
+</html>
      
      
      
