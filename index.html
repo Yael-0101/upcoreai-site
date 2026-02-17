@@ -15,7 +15,6 @@
             --electric-cyan: #00E5FF;
             --royal-violet: #8A2BE2;
             --pure-white: #FFFFFF;
-            /* Gradiente de la paleta */
             --main-gradient: linear-gradient(135deg, var(--electric-cyan), var(--royal-violet));
         }
 
@@ -81,11 +80,10 @@
             margin-bottom: 3.5rem;
         }
 
-        /* BOTÓN PRO CON GRADIENTE ANIMADO */
+        /* BOTÓN GRADIENTE ANIMADO */
         .btn-pro-gradient {
-            position: relative;
             background: var(--main-gradient);
-            background-size: 200% auto; /* Para la animación de movimiento */
+            background-size: 200% auto;
             color: #fff;
             padding: 1.2rem 3rem;
             border-radius: 60px;
@@ -95,18 +93,16 @@
             display: inline-block;
             transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             border: none;
-            cursor: pointer;
             box-shadow: 0 10px 20px rgba(0, 229, 255, 0.2);
         }
 
         .btn-pro-gradient:hover {
-            background-position: right center; /* Mueve el gradiente */
+            background-position: right center;
             transform: translateY(-5px) scale(1.05);
             box-shadow: 0 20px 40px rgba(138, 43, 226, 0.4);
-            color: #fff;
         }
 
-        /* Grid de Servicios */
+        /* GRID Y TARJETAS CON BORDE DIFUMINADO */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -118,18 +114,43 @@
 
         .card-pro {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
             padding: 4rem 2.5rem;
             border-radius: 30px;
+            position: relative;
+            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+        }
+
+        /* Efecto de borde difuminado al hacer hover */
+        .card-pro::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 30px;
+            padding: 2px; /* Grosor del borde */
+            background: var(--main-gradient);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
             transition: 0.5s;
         }
 
         .card-pro:hover {
-            border-color: var(--electric-cyan);
-            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0, 229, 255, 0.15);
         }
 
-        /* Footer */
+        .card-pro:hover::before {
+            opacity: 1;
+        }
+
+        .card-pro h3 { font-size: 1.6rem; margin-bottom: 1rem; letter-spacing: -0.5px; }
+        .card-pro p { color: #777; font-size: 1.05rem; }
+
         footer {
             padding: 60px 5%;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -141,7 +162,6 @@
             text-decoration: none;
             margin: 0 15px;
             font-size: 0.8rem;
-            transition: 0.3s;
         }
     </style>
 </head>
