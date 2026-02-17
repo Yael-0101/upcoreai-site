@@ -6,6 +6,7 @@
     <title>Upcore AI | Digital Sovereignty</title>
     
     <link rel="icon" type="image/png" href="favicon.png">
+    
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
@@ -29,7 +30,7 @@
             opacity: 1 !important;
         }
 
-        /* --- NAVEGACIÓN PRO --- */
+        /* --- NAVBAR --- */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -53,27 +54,23 @@
             text-decoration: none; 
             font-size: 0.85rem; 
             opacity: 0.6; 
-            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
+            transition: 0.4s;
         }
 
-        /* Animación de subrayado difuminado para links de nav */
         .nav-links a:hover { 
             opacity: 1; 
             color: var(--electric-cyan);
             text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
         }
 
-        /* --- BOTONES CON GRADIENTE ANIMADO --- */
+        /* --- BOTÓN GRADIENTE ANIMADO --- */
         .btn-pro-gradient {
             background: var(--main-gradient);
             background-size: 200% auto;
             color: #fff;
-            padding: 1rem 2.5rem;
             border-radius: 60px;
             text-decoration: none;
             font-weight: 800;
-            font-size: 0.9rem;
             display: inline-block;
             transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             border: none;
@@ -84,8 +81,8 @@
 
         .btn-pro-gradient:hover {
             background-position: right center;
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: 0 15px 35px rgba(138, 43, 226, 0.4);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(138, 43, 226, 0.4);
         }
 
         /* --- HERO SECTION --- */
@@ -167,7 +164,7 @@
         .card-pro h3 { font-size: 1.6rem; margin-bottom: 1rem; letter-spacing: -0.5px; }
         .card-pro p { color: #777; font-size: 1.05rem; }
 
-        /* --- FOOTER Y LINKS LEGALES PRO --- */
+        /* --- FOOTER Y LINKS LEGALES INTENSOS --- */
         footer {
             padding: 80px 5%;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -182,24 +179,26 @@
         }
 
         .footer-links a {
-            color: #555;
+            color: #777;
             text-decoration: none;
             font-size: 0.85rem;
             font-weight: 700;
-            transition: 0.4s;
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: 1px solid transparent;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
         }
 
         .footer-links a:hover {
             color: var(--pure-white);
-            border-color: rgba(0, 229, 255, 0.3);
+            transform: translateY(-3px);
+            border-color: var(--electric-cyan);
             background: rgba(0, 229, 255, 0.05);
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
         }
 
-        .copyright { color: #222; font-size: 0.75rem; margin-top: 20px; }
+        .copyright { color: #222; font-size: 0.75rem; margin-top: 30px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -242,7 +241,7 @@
             <a href="privacy-policy.html">Privacy Policy</a>
             <a href="terms-of-service.html">Terms of Service</a>
         </div>
-        <p class="copyright">© 2026 Upcore AI. Engineered for Excellence.</p>
+        <p class="copyright">© 2026 UPCORE AI. ENGINEERED FOR EXCELLENCE.</p>
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -253,15 +252,6 @@
     </script>
 </body>
 </html>
-     
-     
-     
-     
-     
-     
-     
-     
-     
      
      
      
