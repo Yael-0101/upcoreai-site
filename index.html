@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upcore AI | Soberanía Digital</title>
+    <title>Upcore AI | Digital Sovereignty</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
     
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- VARIABLES DE MARCA (ESTILO APPLE) --- */
         :root {
             --deep-black: #050505;
             --electric-cyan: #00E5FF;
             --royal-violet: #8A2BE2;
             --pure-white: #FFFFFF;
+            --glass: rgba(255, 255, 255, 0.03);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,22 +29,25 @@
             overflow-x: hidden;
         }
 
-        /* --- NAVEGACIÓN --- */
+        /* Navbar Mejorada */
         .navbar {
             display: flex;
             justify-content: space-between;
             padding: 2rem 5%;
             align-items: center;
-            position: absolute;
+            position: fixed;
             width: 100%;
-            z-index: 10;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -1px; text-transform: lowercase; }
-        .nav-links a { color: white; text-decoration: none; margin-left: 2rem; font-size: 0.9rem; opacity: 0.8; transition: 0.3s; }
+        .logo { font-weight: 800; font-size: 1.4rem; letter-spacing: -1px; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 2rem; font-size: 0.9rem; opacity: 0.7; transition: 0.3s; }
         .nav-links a:hover { opacity: 1; color: var(--electric-cyan); }
 
-        /* --- HERO SECTION --- */
+        /* Hero Ultra-Pro */
         .hero {
             height: 100vh;
             display: flex;
@@ -50,13 +55,14 @@
             justify-content: center;
             padding: 0 5%;
             text-align: center;
+            background: radial-gradient(circle at center, rgba(138, 43, 226, 0.05) 0%, transparent 70%);
         }
 
         .main-title {
-            font-size: clamp(2.5rem, 8vw, 5.5rem);
+            font-size: clamp(2.5rem, 9vw, 6rem);
             font-weight: 800;
-            letter-spacing: -0.04em;
-            line-height: 1.1;
+            letter-spacing: -0.05em;
+            line-height: 1;
             margin-bottom: 1.5rem;
         }
 
@@ -67,120 +73,27 @@
         }
 
         .hero-subtitle {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             color: #888;
-            max-width: 650px;
-            margin: 0 auto 2.5rem;
+            max-width: 700px;
+            margin: 0 auto 3rem;
         }
 
-        /* --- BOTONES --- */
+        /* Botón con Acción mailto */
         .btn-pro-cyan {
             background: var(--electric-cyan);
             color: black;
-            padding: 1.2rem 2.5rem;
+            padding: 1.3rem 3rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 700;
             display: inline-block;
-            transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: 0.4s cubic-bezier(0.2, 1, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.2);
         }
 
         .btn-pro-cyan:hover {
-            box-shadow: 0 0 30px rgba(0, 229, 255, 0.4);
-            transform: scale(1.03);
-        }
-
-        /* --- GRID DE PILARES --- */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 100px 5%;
-            max-width: 1300px;
-            margin: 0 auto;
-        }
-
-        .card-pro {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 3.5rem 2.5rem;
-            border-radius: 28px;
-            backdrop-filter: blur(20px);
-            transition: 0.5s ease;
-            text-align: left;
-        }
-
-        .card-pro:hover {
-            border-color: var(--electric-cyan);
-            background: rgba(255, 255, 255, 0.05);
-            transform: translateY(-5px);
-        }
-
-        .card-pro h3 { margin-bottom: 1rem; font-size: 1.5rem; color: var(--pure-white); }
-        .card-pro p { color: #888; font-size: 1rem; }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .navbar { padding: 1.5rem 5%; }
-            .main-title { font-size: 3rem; }
-        }
-    </style>
-</head>
-<body>
-
-    <nav class="navbar">
-        <div class="logo">upcore ai</div>
-        <div class="nav-links">
-            <a href="#pilares">Visión</a>
-            <a href="mailto:yael67089@gmail.com">Contacto</a>
-        </div>
-    </nav>
-
-    <header class="hero">
-        <div class="container" data-aos="fade-up" data-aos-duration="1000">
-            <h1 class="main-title">Soberanía Digital.<br>
-                <span class="text-gradient">El fin de la fricción.</span>
-            </h1>
-            <p class="hero-subtitle">Sistemas de inteligencia autónoma diseñados para el dominio absoluto de tu operación.</p>
-            <div class="hero-buttons">
-                <a href="mailto:yael67089@gmail.com" class="btn-pro-cyan">Solicitar Acceso</a>
-            </div>
-        </div>
-    </header>
-
-    <section id="pilares" class="grid-container">
-        <div class="card-pro" data-aos="fade-up" data-aos-delay="100">
-            <h3>Inteligencia Autónoma</h3>
-            <p>Procesos que aprenden y ejecutan. Sin intervención, sin errores.</p>
-        </div>
-        <div class="card-pro" data-aos="fade-up" data-aos-delay="200">
-            <h3>Poder y Control</h3>
-            <p>Recupera la soberanía de tu tiempo con tecnología de mando superior.</p>
-        </div>
-        <div class="card-pro" data-aos="fade-up" data-aos-delay="300">
-            <h3>Perfección Técnica</h3>
-            <p>Minimalismo estético ocultando una complejidad funcional absoluta.</p>
-        </div>
-    </section>
-
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({
-            duration: 1000,
-            once: true,
-            easing: 'ease-out-cubic'
-        });
-    </script>
-</body>
-</html>
-     
-     
-     
-     
-     
-     
-     
-     
+            box-shadow: 0 15px 4
      
      
      
