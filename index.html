@@ -169,118 +169,77 @@
   <meta name="description" content="Upcore AI — Secure workflow automation and intelligent integrations." />
 
   <!-- Inter Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800;900&display=swap" rel="stylesheet">
+:root {
+    --black: #050505;
+    --cyan: #00E5FF;
+    --violet: #8A2BE2;
+    --white: #FFFFFF;
+}
 
-  <style>
-    :root {
-      --bg: #050505;
-      --text-main: #ffffff;
-      --text-muted: #888888;
-      --accent: #00F5FF;
-      --border: rgba(255,255,255,0.08);
-      --radius: 16px;
-    }
+body {
+    background-color: var(--black);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+}
 
-    * {
-      box-sizing: border-box;
-    }
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
 
-    body {
-      margin: 0;
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--bg);
-      color: var(--text-main);
-      line-height: 1.6;
-    }
+.main-title {
+    font-size: clamp(3rem, 8vw, 5.5rem); /* Se ajusta al tamaño de pantalla */
+    font-weight: 800;
+    letter-spacing: -3px;
+    line-height: 1.05;
+}
 
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 96px 24px;
-    }
+.text-gradient {
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-    h1 {
-      font-size: 3rem;
-      font-weight: 900;
-      letter-spacing: -0.05em;
-      margin-bottom: 16px;
-    }
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 100px 5%;
+    max-width: 1300px;
+    margin: 0 auto;
+}
 
-    h2 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      margin-top: 64px;
-      margin-bottom: 12px;
-    }
+.card-pro {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 3rem;
+    border-radius: 24px;
+    backdrop-filter: blur(15px);
+    transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-    p {
-      color: var(--text-muted);
-      max-width: 720px;
-    }
+.card-pro:hover {
+    border-color: var(--cyan);
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.05);
+}
 
-    .card {
-      margin-top: 40px;
-      padding: 32px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: rgba(255,255,255,0.02);
-    }
+.btn-pro-cyan {
+    background: var(--cyan);
+    color: black;
+    padding: 18px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    display: inline-block;
+    transition: 0.3s;
+}
 
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    footer {
-      margin-top: 96px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-  </style>
-</head>
-
-<body>
-  <main class="container">
-    <h1>upcore ai</h1>
-
-    <p>
-      Upcore AI is a technology platform focused on secure workflow automation
-      and intelligent integrations with third-party services.
-    </p>
-
-    <p>
-      The application uses industry-standard authentication methods, including
-      Google OAuth, to allow users to connect their accounts securely and
-      manage authorized data access.
-    </p>
-
-    <div class="card">
-      <h2>Security & Privacy</h2>
-      <p>
-        Upcore AI accesses only the data explicitly authorized by the user.
-        Users can review or revoke permissions at any time through their
-        Google Account settings.
-      </p>
-    </div>
-
-    <div class="card">
-      <h2>Contact</h2>
-      <p>
-        For support or inquiries, contact
-        <a href="mailto:yael67089@gmail.com">yael67089@gmail.com</a>
-      </p>
-    </div>
-
-    <footer>
-      <p>
-        <a href="/privacy-policy.html">Privacy Policy</a> ·
-        <a href="/terms-of-service.html">Terms of Service</a>
-      </p>
-    </footer>
-  </main>
-</body>
-</html>
+.btn-pro-cyan:hover {
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
+}
