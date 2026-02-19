@@ -48,17 +48,14 @@
 
         .booking-section, .contact-section { padding: 100px 8%; max-width: 1000px; margin: 0 auto; text-align: center; }
 
-        /* --- ESTILO DE LA CAPTURA: Borde con resplandor --- */
+        /* --- SOLUCIÓN FINAL: Mantiene tu diseño al 100% --- */
         .card-pro-box { 
-            background: rgba(255, 255, 255, 0.03); 
+            /* Esta técnica aplica el gradiente al borde sin romper el redondeo ni el fondo */
+            background: linear-gradient(var(--deep-black), var(--deep-black)) padding-box, 
+                        var(--main-gradient) border-box;
             padding: 4rem 2rem; 
             border-radius: 40px; 
-            /* Borde fino con gradiente */
-            border: 1.5px solid;
-            border-image-source: var(--main-gradient);
-            border-image-slice: 1;
-            /* Efecto de resplandor (Glow) como en tu captura */
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15), inset 0 0 15px rgba(138, 43, 226, 0.1);
+            border: 1.5px solid transparent; /* El borde es transparente para que se vea el fondo gradiente */
             backdrop-filter: blur(20px); 
         }
 
@@ -119,6 +116,7 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        /* Partículas originales (Red Neuronal) */
         particlesJS("particles-js", {
             "particles": {
                 "number": { "value": 80 },
