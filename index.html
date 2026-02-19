@@ -18,21 +18,18 @@
             --main-gradient: linear-gradient(135deg, var(--electric-cyan), var(--royal-violet));
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
             background-color: var(--deep-black);
             color: var(--pure-white);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* --- NEURAL BACKGROUND --- */
         #particles-js {
             position: fixed;
             width: 100%; height: 100%;
-            top: 0; left: 0;
             z-index: -1;
             background-color: #000;
         }
@@ -65,6 +62,7 @@
             border: none;
             box-shadow: 0 10px 25px rgba(0, 229, 255, 0.2);
             cursor: pointer;
+            text-align: center;
         }
 
         .btn-pro-gradient:hover {
@@ -114,14 +112,14 @@
             letter-spacing: 4px;
             font-size: 0.7rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-top: 80px;
         }
 
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
-            padding: 40px 8% 100px;
+            padding: 40px 8% 80px;
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -136,41 +134,65 @@
             backdrop-filter: blur(10px);
         }
 
-        .card-pro::before {
-            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 34px; padding: 2px;
-            background: var(--main-gradient);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude;
-            opacity: 0; transition: 0.5s;
-        }
-
-        .card-pro:hover { transform: translateY(-12px); }
-        .card-pro:hover::before { opacity: 1; }
+        .card-pro:hover { transform: translateY(-12px); border-color: var(--electric-cyan); }
 
         .card-pro h3 { font-size: 1.5rem; margin-bottom: 1rem; }
         .card-pro p { color: #777; line-height: 1.6; }
 
-        /* --- TAILORED BOX --- */
-        .tailored-box {
-            margin: 100px 8%;
-            padding: 80px 5%;
-            background: rgba(255, 255, 255, 0.01);
-            border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        /* --- INTEGRATIONS --- */
+        .integrations {
             text-align: center;
+            padding: 60px 8%;
+            opacity: 0.5;
         }
 
-        .tailored-box h2 { font-size: 2.5rem; margin-bottom: 1.5rem; }
-        .tailored-box p { color: #888; max-width: 800px; margin: 0 auto 3rem; font-size: 1.1rem; }
+        .logo-cloud {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            font-weight: 800;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+        }
+
+        /* --- CONTACT SECTION (FORMULARIO INTEGRADO) --- */
+        .contact-section {
+            padding: 100px 8%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 4rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+        }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .full-width { grid-column: span 2; }
+
+        input, select, textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.2rem;
+            border-radius: 12px;
+            color: white;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        input:focus { border-color: var(--electric-cyan); outline: none; }
+
+        label { font-size: 0.7rem; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 5px; display: block; }
 
         /* --- FOOTER --- */
         footer { padding: 60px 5%; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
-        .btn-legal {
-            color: #555; text-decoration: none; font-size: 0.8rem; margin: 0 15px; transition: 0.3s;
-        }
-        .btn-legal:hover { color: var(--electric-cyan); }
+        .btn-legal { color: #444; text-decoration: none; font-size: 0.8rem; margin: 0 15px; transition: 0.3s; }
+        .btn-legal:hover { color: white; }
+
     </style>
 </head>
 <body>
@@ -180,7 +202,7 @@
     <nav class="navbar">
         <div class="logo">upcore ai</div>
         <div class="nav-links">
-            <a href="contact.html" class="btn-pro-gradient" style="padding: 0.7rem 1.8rem; font-size: 0.8rem;">Request Access</a>
+            <a href="#contact" class="btn-pro-gradient" style="padding: 0.7rem 1.8rem; font-size: 0.8rem;">Request Access</a>
         </div>
     </nav>
 
@@ -190,44 +212,81 @@
                 <span class="text-gradient">Modern Enterprises.</span>
             </h1>
             <p class="hero-subtitle">Engineering custom autonomous ecosystems for businesses that demand absolute efficiency. We transform complex operations into seamless, self-managed systems.</p>
-            <a href="contact.html" class="btn-pro-gradient" style="padding: 1.4rem 4rem; font-size: 1.1rem;">Scale Your Business</a>
+            <a href="#contact" class="btn-pro-gradient" style="padding: 1.4rem 4rem; font-size: 1.1rem;">Scale Operations Now</a>
         </div>
     </header>
+
+    <div class="integrations" data-aos="fade-in">
+        <p style="margin-bottom: 30px; font-size: 0.8rem; letter-spacing: 3px;">SEAMLESSLY CONNECTED WITH</p>
+        <div class="logo-cloud">
+            <span>SLACK</span> <span>SALESFORCE</span> <span>SHOPIFY</span> <span>AWS</span> <span>HUBSPOT</span> <span>STRIPE</span>
+        </div>
+    </div>
 
     <div class="section-label" data-aos="fade-up">Automation Hub</div>
     
     <section class="grid-container">
         <div class="card-pro" data-aos="fade-up" data-aos-delay="100">
             <h3>Workflow Autopilot</h3>
-            <p>We design intelligent workflows that connect your stack and execute critical tasks with zero human intervention.</p>
+            <p>We architect intelligent workflows that bridge your software stack, executing high-stakes tasks with zero manual friction.</p>
         </div>
         <div class="card-pro" data-aos="fade-up" data-aos-delay="200">
             <h3>Custom AI Agents</h3>
-            <p>Develop specialized AI agents trained on your proprietary data for sales, high-level support, or data synthesis.</p>
+            <p>Deploy specialized neural agents trained on your proprietary data for autonomous sales, support, and synthesis.</p>
         </div>
         <div class="card-pro" data-aos="fade-up" data-aos-delay="300">
             <h3>Neural Infrastructure</h3>
-            <p>Architecting private technical frameworks for companies to operate with absolute digital sovereignty and security.</p>
+            <p>Building private technical frameworks that guarantee data sovereignty and security for enterprise-scale operations.</p>
         </div>
     </section>
 
-    <section class="tailored-box" data-aos="zoom-in">
-        <h2 class="text-gradient">If it's a process, it's automatable.</h2>
-        <p>We don't do "one size fits all." We analyze your business model from the ground up to build custom engineering that eliminates friction and multiplies your operational capacity.</p>
-        <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; opacity: 0.4; font-weight: 700; font-size: 0.8rem; letter-spacing: 2px;">
-            <span>CRM & SALES</span>
-            <span>FINANCE & OPS</span>
-            <span>SUPPLY CHAIN</span>
-            <span>DATA ANALYSIS</span>
+    <section id="contact" class="contact-section">
+        <div class="form-card" data-aos="zoom-in">
+            <h2 style="font-size: 2.5rem; margin-bottom: 2rem; text-align: center;">Ready to <span class="text-gradient">Automate?</span></h2>
+            <form action="#">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" placeholder="John Doe" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Company Website</label>
+                        <input type="url" placeholder="https://company.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Business Email</label>
+                        <input type="email" placeholder="john@company.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Company Size</label>
+                        <select>
+                            <option>1-10 employees</option>
+                            <option>11-50 employees</option>
+                            <option>51-200 employees</option>
+                            <option>200+ employees</option>
+                        </select>
+                    </div>
+                    <div class="input-group full-width">
+                        <label>Core Process to Automate</label>
+                        <textarea rows="4" placeholder="Describe the friction you want to eliminate..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn-pro-gradient" style="width: 100%; margin-top: 30px; padding: 1.2rem; border:none;">Submit Strategy Request</button>
+            </form>
+            
+            <div style="margin-top: 40px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px;">
+                <p style="color: #666; margin-bottom: 15px;">Prefer a direct call?</p>
+                <a href="https://calendly.com" target="_blank" style="color: var(--electric-cyan); text-decoration: none; font-weight: 700; font-size: 0.9rem;">Schedule an AI Strategy Session →</a>
+            </div>
         </div>
     </section>
 
     <footer>
         <div style="margin-bottom: 20px;">
-            <a href="privacy-policy.html" class="btn-legal">Privacy Policy</a>
-            <a href="terms-of-service.html" class="btn-legal">Terms of Service</a>
+            <a href="#" class="btn-legal">Privacy Policy</a>
+            <a href="#" class="btn-legal">Terms of Service</a>
         </div>
-        <p style="color: #222; font-size: 0.7rem; letter-spacing: 3px;">© 2026 UPCORE AI</p>
+        <p style="color: #222; font-size: 0.7rem; letter-spacing: 3px;">© 2026 UPCORE AI | ENGINEERED FOR DOMINANCE</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
@@ -235,16 +294,14 @@
     <script>
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 85, "density": { "enable": true, "value_area": 800 } },
+                "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
                 "color": { "value": ["#00E5FF", "#8A2BE2"] },
-                "opacity": { "value": 0.4 },
+                "opacity": { "value": 0.5 },
                 "size": { "value": 3 },
-                "line_linked": { "enable": true, "distance": 150, "color": "#00E5FF", "opacity": 0.2, "width": 1 },
-                "move": { "enable": true, "speed": 2 }
+                "line_linked": { "enable": true, "distance": 150, "color": "#00E5FF", "opacity": 0.25, "width": 1.2 },
+                "move": { "enable": true, "speed": 2.5 }
             },
-            "interactivity": {
-                "events": { "onhover": { "enable": true, "mode": "grab" } }
-            },
+            "interactivity": { "events": { "onhover": { "enable": true, "mode": "grab" } } },
             "retina_detect": true
         });
         AOS.init({ duration: 1000, once: true });
