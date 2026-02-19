@@ -48,13 +48,16 @@
 
         .booking-section, .contact-section { padding: 100px 8%; max-width: 1000px; margin: 0 auto; text-align: center; }
 
-        /* --- CONTORNO GRADIENTE ESTÁTICO (SIN SNAKE EFFECT) --- */
+        /* --- CAMBIO: Solo color de contorno (estático, sin animación) --- */
         .card-pro-box { 
-            background: linear-gradient(var(--deep-black), var(--deep-black)) padding-box,
-                        var(--main-gradient) border-box;
+            background: rgba(255, 255, 255, 0.03); 
             padding: 4rem 2rem; 
             border-radius: 40px; 
-            border: 2px solid transparent; 
+            border: 2px solid;
+            border-image-source: var(--main-gradient);
+            border-image-slice: 1;
+            /* Nota: Para mantener el border-radius con gradiente en CSS se usa border-image, 
+               pero si prefieres un color sólido exacto del cian usa: border: 1px solid var(--electric-cyan); */
             backdrop-filter: blur(20px); 
         }
 
