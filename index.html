@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upcore AI | Digital Sovereignty</title>
+    <title>Upcore AI | Enterprise Automation</title>
     
     <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -28,13 +28,11 @@
             position: relative;
         }
 
-        /* --- FONDO NEURONAL VIBRANTE --- */
+        /* --- FONDO NEURONAL --- */
         #particles-js {
             position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
+            width: 100%; height: 100%;
+            top: 0; left: 0;
             z-index: -1;
             background-color: #000;
         }
@@ -46,8 +44,7 @@
             padding: 1.5rem 8%;
             align-items: center;
             position: fixed;
-            width: 100%;
-            top: 0;
+            width: 100%; top: 0;
             z-index: 1000;
             background: rgba(5, 5, 5, 0.6);
             backdrop-filter: blur(20px);
@@ -56,7 +53,6 @@
 
         .logo { font-weight: 900; font-size: 1.2rem; letter-spacing: -1px; }
 
-        /* --- BOTONES PRINCIPALES (GRADIENTE RELLENO) --- */
         .btn-pro-gradient {
             background: var(--main-gradient);
             background-size: 200% auto;
@@ -68,6 +64,7 @@
             transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             border: none;
             box-shadow: 0 10px 25px rgba(0, 229, 255, 0.2);
+            cursor: pointer;
         }
 
         .btn-pro-gradient:hover {
@@ -88,10 +85,10 @@
         }
 
         .main-title {
-            font-size: clamp(2.8rem, 10vw, 6.5rem);
+            font-size: clamp(2.5rem, 8vw, 5.5rem);
             font-weight: 900;
             letter-spacing: -0.06em;
-            line-height: 0.95;
+            line-height: 1;
             margin-bottom: 2rem;
         }
 
@@ -101,12 +98,30 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* --- RECUADROS CON BORDE GRADIENTE --- */
+        .hero-subtitle {
+            color: #888;
+            margin-bottom: 3.5rem;
+            max-width: 750px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* --- AUTOMATION HUB --- */
+        .section-label {
+            text-align: center;
+            color: var(--electric-cyan);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
-            padding: 100px 8% 150px;
+            padding: 40px 8% 100px;
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -118,7 +133,6 @@
             position: relative;
             transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             border: 1px solid rgba(255, 255, 255, 0.06);
-            overflow: hidden;
             backdrop-filter: blur(10px);
         }
 
@@ -132,50 +146,31 @@
             opacity: 0; transition: 0.5s;
         }
 
-        .card-pro:hover {
-            transform: translateY(-12px);
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 20px 40px rgba(0, 229, 255, 0.15);
-        }
-
+        .card-pro:hover { transform: translateY(-12px); border-color: transparent; }
         .card-pro:hover::before { opacity: 1; }
 
-        /* --- FOOTER Y BOTONES LEGALES CON BORDE GRADIENTE --- */
-        footer { padding: 80px 5%; text-align: center; }
+        .card-pro h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+        .card-pro p { color: #777; line-height: 1.6; }
 
+        /* --- SECCIÓN TAILORED SOLUTIONS --- */
+        .tailored-box {
+            margin: 100px 8%;
+            padding: 80px 5%;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .tailored-box h2 { font-size: 2.5rem; margin-bottom: 1.5rem; }
+        .tailored-box p { color: #888; max-width: 800px; margin: 0 auto 3rem; font-size: 1.1rem; }
+
+        /* --- FOOTER --- */
+        footer { padding: 60px 5%; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
         .btn-legal {
-            color: #777;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 700;
-            padding: 12px 28px;
-            border-radius: 50px;
-            position: relative;
-            background: rgba(255, 255, 255, 0.02);
-            transition: 0.4s;
-            display: inline-block;
-            margin: 0 10px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #555; text-decoration: none; font-size: 0.8rem; margin: 0 15px; transition: 0.3s;
         }
-
-        .btn-legal::before {
-            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 50px; padding: 1.5px;
-            background: var(--main-gradient);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude;
-            opacity: 0; transition: 0.4s;
-        }
-
-        .btn-legal:hover {
-            color: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 229, 255, 0.3);
-        }
-
-        .btn-legal:hover::before { opacity: 1; }
-
+        .btn-legal:hover { color: var(--electric-cyan); }
     </style>
 </head>
 <body>
@@ -185,41 +180,54 @@
     <nav class="navbar">
         <div class="logo">upcore ai</div>
         <div class="nav-links">
-            <a href="#pilares" style="margin-right: 20px;">Vision</a>
-            <a href="mailto:yael67089@gmail.com" class="btn-pro-gradient" style="padding: 0.6rem 1.5rem; font-size: 0.75rem;">Contact</a>
+            <a href="mailto:yael67089@gmail.com" class="btn-pro-gradient" style="padding: 0.7rem 1.8rem; font-size: 0.8rem;">Request Access</a>
         </div>
     </nav>
 
     <header class="hero">
-        <div data-aos="fade-up" data-aos-duration="1200">
-            <h1 class="main-title">Digital Sovereignty.<br>
-                <span class="text-gradient">No more friction.</span>
+        <div data-aos="fade-up">
+            <h1 class="main-title">The Neural OS for<br>
+                <span class="text-gradient">Modern Enterprises.</span>
             </h1>
-            <p style="color: #888; margin-bottom: 3.5rem; max-width: 600px;">Autonomous intelligence systems engineered for absolute operational dominance.</p>
-            <a href="mailto:yael67089@gmail.com" class="btn-pro-gradient" style="padding: 1.3rem 3.5rem; font-size: 1rem;">Request Access</a>
+            <p class="hero-subtitle">Engineering custom autonomous ecosystems for businesses that demand absolute efficiency. We transform complex operations into seamless, self-managed systems.</p>
+            <a href="#contact" class="btn-pro-gradient" style="padding: 1.4rem 4rem; font-size: 1.1rem;">Scale Your Business</a>
         </div>
     </header>
 
-    <section id="pilares" class="grid-container">
+    <div class="section-label" data-aos="fade-up">Automation Hub</div>
+    
+    <section class="grid-container">
         <div class="card-pro" data-aos="fade-up" data-aos-delay="100">
-            <h3>Autonomous Intelligence</h3>
-            <p style="color: #777; margin-top: 10px;">Self-learning processes that execute and optimize without human friction.</p>
+            <h3>Workflow Autopilot</h3>
+            <p>Diseñamos flujos de trabajo inteligentes que conectan tus herramientas y ejecutan tareas críticas sin intervención humana.</p>
         </div>
         <div class="card-pro" data-aos="fade-up" data-aos-delay="200">
-            <h3>Power & Control</h3>
-            <p style="color: #777; margin-top: 10px;">Reclaim your sovereignty with high-command technology that manages itself.</p>
+            <h3>Custom AI Agents</h3>
+            <p>Desarrollamos agentes de IA especializados y entrenados con tu propia data para ventas, atención al cliente o análisis de datos.</p>
         </div>
         <div class="card-pro" data-aos="fade-up" data-aos-delay="300">
-            <h3>Technical Perfection</h3>
-            <p style="color: #777; margin-top: 10px;">Minimalist design masking absolute functional complexity for seamless results.</p>
+            <h3>Neural Infrastructure</h3>
+            <p>Arquitectamos infraestructuras técnicas privadas para que empresas y negocios operen con soberanía digital y seguridad absoluta.</p>
+        </div>
+    </section>
+
+    <section class="tailored-box" data-aos="zoom-in">
+        <h2 class="text-gradient">If it's a process, it's automatable.</h2>
+        <p>No creemos en soluciones genéricas. Analizamos tu modelo de negocio desde la base para construir ingeniería a medida que elimine fricciones y multiplique tu capacidad operativa.</p>
+        <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; opacity: 0.4;">
+            <span>CRM & Sales</span>
+            <span>Finance & Ops</span>
+            <span>Supply Chain</span>
+            <span>Data Analysis</span>
         </div>
     </section>
 
     <footer>
-        <div class="footer-links">
+        <div style="margin-bottom: 20px;">
             <a href="privacy-policy.html" class="btn-legal">Privacy Policy</a>
             <a href="terms-of-service.html" class="btn-legal">Terms of Service</a>
         </div>
+        <p style="color: #222; font-size: 0.7rem; letter-spacing: 3px;">© 2026 UPCORE AI</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
@@ -227,26 +235,22 @@
     <script>
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 90, "density": { "enable": true, "value_area": 800 } },
+                "number": { "value": 85, "density": { "enable": true, "value_area": 800 } },
                 "color": { "value": ["#00E5FF", "#8A2BE2"] },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.5, "random": true },
-                "size": { "value": 3.5, "random": true },
-                "line_linked": { "enable": true, "distance": 150, "color": "#00E5FF", "opacity": 0.25, "width": 1.2 },
-                "move": { "enable": true, "speed": 2.5, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
+                "opacity": { "value": 0.4 },
+                "size": { "value": 3 },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00E5FF", "opacity": 0.2, "width": 1 },
+                "move": { "enable": true, "speed": 2 }
             },
             "interactivity": {
-                "detect_on": "canvas",
-                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
-                "modes": { "grab": { "distance": 180, "line_linked": { "opacity": 0.5 } } }
+                "events": { "onhover": { "enable": true, "mode": "grab" } }
             },
             "retina_detect": true
         });
-        window.onload = function() { AOS.init({ duration: 800, once: true }); };
+        AOS.init({ duration: 1000, once: true });
     </script>
 </body>
 </html>
-     
      
      
      
