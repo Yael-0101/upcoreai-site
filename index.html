@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upcore AI | Enterprise Automation Systems</title>
+    <title>Upcore AI | Neural Enterprise Solutions</title>
     
     <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -60,7 +60,6 @@
             display: inline-block;
             transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             border: none;
-            box-shadow: 0 10px 25px rgba(0, 229, 255, 0.2);
             cursor: pointer;
             text-align: center;
         }
@@ -68,7 +67,7 @@
         .btn-pro-gradient:hover {
             background-position: right center;
             transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 20px 40px rgba(138, 43, 226, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 229, 255, 0.3);
         }
 
         /* --- HERO --- */
@@ -86,7 +85,7 @@
             font-size: clamp(2.5rem, 8vw, 5.5rem);
             font-weight: 900;
             letter-spacing: -0.06em;
-            line-height: 1;
+            line-height: 1.1;
             margin-bottom: 2rem;
         }
 
@@ -104,7 +103,7 @@
             line-height: 1.6;
         }
 
-        /* --- SECTIONS --- */
+        /* --- SECTIONS LABEL & GRID --- */
         .section-label {
             text-align: center;
             color: var(--electric-cyan);
@@ -112,7 +111,7 @@
             letter-spacing: 4px;
             font-size: 0.7rem;
             font-weight: 700;
-            margin-top: 80px;
+            margin-top: 100px;
         }
 
         .grid-container {
@@ -128,20 +127,31 @@
             background: rgba(255, 255, 255, 0.02);
             padding: 4rem 2.5rem;
             border-radius: 34px;
-            position: relative;
-            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             border: 1px solid rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(10px);
+            transition: 0.4s;
         }
 
-        .card-pro:hover { transform: translateY(-12px); border-color: var(--electric-cyan); }
+        .card-pro:hover { transform: translateY(-10px); border-color: var(--electric-cyan); }
         .card-pro h3 { font-size: 1.5rem; margin-bottom: 1rem; }
         .card-pro p { color: #777; line-height: 1.6; }
 
-        .integrations { text-align: center; padding: 60px 8%; opacity: 0.5; }
-        .logo-cloud { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; font-weight: 800; letter-spacing: 2px; font-size: 0.9rem; }
+        /* --- BOOKING SECTION (Hero Link) --- */
+        .booking-section {
+            padding: 100px 8%;
+            text-align: center;
+        }
 
-        /* --- CONTACT SECTION --- */
+        .booking-card {
+            background: linear-gradient(rgba(138, 43, 226, 0.05), rgba(0, 229, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4rem 2rem;
+            border-radius: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* --- CONTACT FORM (Navbar Link) --- */
         .contact-section { padding: 100px 8%; max-width: 900px; margin: 0 auto; }
         .form-card {
             background: rgba(255, 255, 255, 0.03);
@@ -159,17 +169,12 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 1.2rem;
             border-radius: 12px;
-            color: white;
-            width: 100%;
-            font-family: inherit;
+            color: white; width: 100%; font-family: inherit;
         }
 
-        input:focus { border-color: var(--electric-cyan); outline: none; }
         label { font-size: 0.7rem; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 5px; display: block; }
 
-        footer { padding: 60px 5%; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
-        .btn-legal { color: #444; text-decoration: none; font-size: 0.8rem; margin: 0 15px; transition: 0.3s; }
-        .btn-legal:hover { color: white; }
+        footer { padding: 60px 5%; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); color: #222; font-size: 0.7rem; letter-spacing: 3px; }
     </style>
 </head>
 <body>
@@ -189,37 +194,41 @@
                 <span class="text-gradient">Modern Enterprises.</span>
             </h1>
             <p class="hero-subtitle">Engineering custom autonomous ecosystems for businesses that demand absolute efficiency. We transform complex operations into seamless, self-managed systems.</p>
-            <a href="#contact" class="btn-pro-gradient" style="padding: 1.4rem 4rem; font-size: 1.1rem;">Scale Operations Now</a>
+            <a href="#booking" class="btn-pro-gradient" style="padding: 1.4rem 4rem; font-size: 1.1rem;">Schedule Strategy Session</a>
         </div>
     </header>
 
-    <div class="integrations" data-aos="fade-in">
-        <p style="margin-bottom: 30px; font-size: 0.8rem; letter-spacing: 3px;">SEAMLESSLY CONNECTED WITH</p>
-        <div class="logo-cloud">
-            <span>SLACK</span> <span>SALESFORCE</span> <span>SHOPIFY</span> <span>AWS</span> <span>HUBSPOT</span> <span>STRIPE</span>
+    <section id="booking" class="booking-section">
+        <div class="booking-card" data-aos="zoom-in">
+            <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Direct <span class="text-gradient">Consultation</span></h2>
+            <p style="color: #888; margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Skip the queue. Book a 15-minute discovery call to audit your current business infrastructure and identify automation opportunities.
+            </p>
+            <a href="https://calendly.com" target="_blank" class="btn-pro-gradient" style="padding: 1rem 3rem;">View Available Slots →</a>
         </div>
-    </div>
+    </section>
 
     <div class="section-label" data-aos="fade-up">Automation Hub</div>
     
     <section class="grid-container">
         <div class="card-pro" data-aos="fade-up" data-aos-delay="100">
             <h3>Workflow Autopilot</h3>
-            <p>We architect intelligent workflows that bridge your software stack, executing high-stakes tasks with zero manual friction.</p>
+            <p>Architecting intelligent bridges across your software stack to execute high-stakes tasks with zero manual friction.</p>
         </div>
         <div class="card-pro" data-aos="fade-up" data-aos-delay="200">
             <h3>Custom AI Agents</h3>
-            <p>Deploy specialized neural agents trained on your proprietary data for autonomous sales, support, and synthesis.</p>
+            <p>Proprietary neural agents trained on your unique data to handle autonomous sales, logic, and operational synthesis.</p>
         </div>
         <div class="card-pro" data-aos="fade-up" data-aos-delay="300">
             <h3>Neural Infrastructure</h3>
-            <p>Building private technical frameworks that guarantee data sovereignty and security for enterprise-scale operations.</p>
+            <p>Technical blueprints that secure absolute digital sovereignty, ensuring your data and processes remain private and efficient.</p>
         </div>
     </section>
 
     <section id="contact" class="contact-section">
-        <div class="form-card" data-aos="zoom-in">
-            <h2 style="font-size: 2.5rem; margin-bottom: 2rem; text-align: center;">Ready to <span class="text-gradient">Automate?</span></h2>
+        <div class="form-card" data-aos="fade-up">
+            <h2 style="font-size: 2.2rem; margin-bottom: 2rem; text-align: center;">Partner with <span class="text-gradient">Upcore AI</span></h2>
+            <p style="text-align: center; color: #666; margin-bottom: 3rem;">Submit your business details for a custom automation proposal.</p>
             <form action="#">
                 <div class="form-grid">
                     <div class="input-group">
@@ -244,26 +253,17 @@
                         </select>
                     </div>
                     <div class="input-group full-width">
-                        <label>Core Process to Automate</label>
-                        <textarea rows="4" placeholder="Describe the friction you want to eliminate..."></textarea>
+                        <label>Core Process to Transform</label>
+                        <textarea rows="4" placeholder="Describe the specific process you want to automate..."></textarea>
                     </div>
                 </div>
-                <button type="submit" class="btn-pro-gradient" style="width: 100%; margin-top: 30px; padding: 1.2rem; border:none; cursor: pointer;">Submit Strategy Request</button>
+                <button type="submit" class="btn-pro-gradient" style="width: 100%; margin-top: 30px; padding: 1.2rem; border:none;">Submit Application</button>
             </form>
-            
-            <div style="margin-top: 40px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px;">
-                <p style="color: #666; margin-bottom: 15px;">Prefer a direct call?</p>
-                <a href="https://calendly.com" target="_blank" style="color: var(--electric-cyan); text-decoration: none; font-weight: 700; font-size: 0.9rem;">Schedule an AI Strategy Session →</a>
-            </div>
         </div>
     </section>
 
     <footer>
-        <div style="margin-bottom: 20px;">
-            <a href="#" class="btn-legal">Privacy Policy</a>
-            <a href="#" class="btn-legal">Terms of Service</a>
-        </div>
-        <p style="color: #222; font-size: 0.7rem; letter-spacing: 3px;">© 2026 UPCORE AI | ENGINEERED FOR DOMINANCE</p>
+        <p>© 2026 UPCORE AI | MINIMALISM • PERFECTION • SYMMETRY</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
@@ -271,12 +271,12 @@
     <script>
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
+                "number": { "value": 90, "density": { "enable": true, "value_area": 800 } },
                 "color": { "value": ["#00E5FF", "#8A2BE2"] },
                 "opacity": { "value": 0.5 },
-                "size": { "value": 3 },
-                "line_linked": { "enable": true, "distance": 150, "color": "#00E5FF", "opacity": 0.25, "width": 1.2 },
-                "move": { "enable": true, "speed": 2.5 }
+                "size": { "value": 2.5 },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00E5FF", "opacity": 0.2, "width": 1 },
+                "move": { "enable": true, "speed": 2 }
             },
             "interactivity": { "events": { "onhover": { "enable": true, "mode": "grab" } } },
             "retina_detect": true
@@ -285,18 +285,6 @@
     </script>
 </body>
 </html>
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
-     
      
      
      
