@@ -48,47 +48,14 @@
 
         .booking-section, .contact-section { padding: 100px 8%; max-width: 1000px; margin: 0 auto; text-align: center; }
 
-        /* --- CAMBIO SOLICITADO: CONTORNO CON COLOR DE BOTÓN --- */
+        /* --- CONTORNO GRADIENTE ESTÁTICO (SIN SNAKE EFFECT) --- */
         .card-pro-box { 
-            position: relative;
-            background: #080808; 
+            background: linear-gradient(var(--deep-black), var(--deep-black)) padding-box,
+                        var(--main-gradient) border-box;
             padding: 4rem 2rem; 
             border-radius: 40px; 
+            border: 2px solid transparent; 
             backdrop-filter: blur(20px); 
-            overflow: hidden; /* Para contener la animación del borde */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        /* Capa del Gradiente (Igual al botón) */
-        .card-pro-box::before {
-            content: '';
-            position: absolute;
-            width: 150%;
-            height: 150%;
-            top: -25%;
-            left: -25%;
-            background: conic-gradient(from 0deg, transparent 70%, var(--electric-cyan), var(--royal-violet));
-            animation: rotateBorder 4s linear infinite;
-        }
-
-        /* Tapa interna para crear el efecto de borde fino de 2px */
-        .card-pro-box::after {
-            content: '';
-            position: absolute;
-            inset: 2px; 
-            background: #080808;
-            border-radius: 38px;
-            z-index: 1;
-        }
-
-        /* Asegura que el contenido esté visible sobre el borde */
-        .card-pro-box > * { position: relative; z-index: 2; }
-
-        @keyframes rotateBorder {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; text-align: left; }
