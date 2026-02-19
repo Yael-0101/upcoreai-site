@@ -18,51 +18,34 @@
             --main-gradient: linear-gradient(135deg, var(--electric-cyan), var(--royal-violet));
         }
 
-        /* --- GLOBAL & SMOOTH SCROLL --- */
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
-        body { 
-            background-color: var(--deep-black); 
-            color: var(--pure-white); 
-            font-family: 'Inter', sans-serif; 
-            overflow-x: hidden; 
-        }
+        body { background-color: var(--deep-black); color: var(--pure-white); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
         #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; background-color: #000; }
 
-        /* --- APPLE STYLE NAVIGATION --- */
+        /* --- NAVIGATION --- */
         .navbar {
             display: flex; justify-content: space-between; padding: 1.5rem 8%; align-items: center;
             position: fixed; width: 100%; top: 0; z-index: 1000;
             background: rgba(5, 5, 5, 0.7); backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-
         .logo { font-weight: 900; font-size: 1.4rem; letter-spacing: -1px; text-transform: lowercase; }
 
-        /* --- BOTONES CON ANIMACIÓN PRO --- */
+        /* --- ANIMATED BUTTONS (UPCORE PALETTE) --- */
         .btn-pro-gradient {
             background: var(--main-gradient);
             background-size: 200% auto;
-            color: #fff;
-            border-radius: 60px;
-            text-decoration: none;
-            font-weight: 800;
-            display: inline-block;
-            border: none;
-            cursor: pointer;
-            text-align: center;
+            color: #fff; border-radius: 60px; text-decoration: none; font-weight: 800;
+            display: inline-block; border: none; cursor: pointer; text-align: center;
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 0 0 rgba(0, 229, 255, 0);
         }
-
         .btn-pro-gradient:hover {
             background-position: right center;
             transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(0, 229, 255, 0.25);
+            box-shadow: 0 15px 35px rgba(0, 229, 255, 0.3);
         }
-
-        .btn-pro-gradient:active { transform: scale(0.98); }
 
         /* --- HERO --- */
         .hero { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 5%; }
@@ -70,55 +53,50 @@
         .text-gradient { background: var(--main-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-subtitle { color: #888; margin-bottom: 3.5rem; max-width: 750px; font-size: 1.2rem; line-height: 1.6; }
 
-        /* --- TARJETAS CON CONTORNOS GRADIENT (UPCORE STYLE) --- */
-        .card-pro-box { 
-            background: rgba(255, 255, 255, 0.02); 
-            padding: 4rem 2.5rem; 
-            border-radius: 40px; 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            backdrop-filter: blur(20px); 
-            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-        }
+        /* --- INTEGRATIONS --- */
+        .integrations { text-align: center; padding: 40px 8%; opacity: 0.5; }
+        .logo-cloud { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; font-weight: 800; letter-spacing: 2px; font-size: 0.8rem; }
 
-        .card-pro-box:hover {
+        /* --- AUTOMATION HUB CARDS --- */
+        .section-label { text-align: center; color: var(--electric-cyan); text-transform: uppercase; letter-spacing: 4px; font-size: 0.7rem; font-weight: 700; margin-top: 100px; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; padding: 40px 8% 80px; max-width: 1400px; margin: 0 auto; }
+        
+        .card-pro {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 4rem 2.5rem; border-radius: 34px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(10px);
+            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-pro:hover { 
+            transform: translateY(-12px); 
             border-color: var(--electric-cyan);
             background: rgba(255, 255, 255, 0.04);
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 229, 255, 0.1);
         }
+        .card-pro h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+        .card-pro p { color: #777; line-height: 1.6; }
 
-        /* --- FORMULARIOS --- */
+        /* --- BOOKING & CONTACT BOXES --- */
+        .box-container { padding: 80px 8%; max-width: 1100px; margin: 0 auto; text-align: center; }
+        .card-pro-box { 
+            background: rgba(255, 255, 255, 0.03); padding: 4rem; border-radius: 40px; 
+            border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(20px);
+            transition: 0.4s;
+        }
+        .card-pro-box:hover { border-color: var(--royal-violet); }
+
+        /* --- FORM STYLING --- */
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; text-align: left; }
         .full-width { grid-column: span 2; }
-
         input, select, textarea { 
-            background: rgba(255, 255, 255, 0.04); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            padding: 1.2rem; 
-            border-radius: 16px; 
-            color: white; 
-            width: 100%; 
-            font-family: inherit;
-            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); 
+            padding: 1.2rem; border-radius: 16px; color: white; width: 100%; font-family: inherit; transition: 0.3s;
         }
+        input:focus { border-color: var(--electric-cyan); outline: none; background: rgba(255, 255, 255, 0.08); }
+        label { font-size: 0.7rem; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 8px; display: block; }
 
-        input:focus, textarea:focus { 
-            outline: none; 
-            border-color: var(--electric-cyan); 
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.1);
-        }
-
-        label { font-size: 0.7rem; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 1px; }
-
-        /* --- FOOTER --- */
-        footer { padding: 80px 5% 40px; text-align: center; color: #333; font-size: 0.75rem; letter-spacing: 4px; font-weight: 700; }
-
-        /* --- SECCIONES --- */
-        .booking-section, .contact-section { padding: 100px 8%; max-width: 1100px; margin: 0 auto; text-align: center; }
-
+        footer { padding: 80px 5%; text-align: center; color: #333; font-size: 0.7rem; letter-spacing: 4px; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.03); }
     </style>
 </head>
 <body>
@@ -135,12 +113,36 @@
     <header class="hero">
         <div data-aos="fade-up">
             <h1 class="main-title">The Neural OS for<br><span class="text-gradient">Modern Enterprises.</span></h1>
-            <p class="hero-subtitle">Engineering custom autonomous ecosystems for businesses that demand absolute perfection and symmetrical efficiency.</p>
+            <p class="hero-subtitle">Engineering custom autonomous ecosystems for businesses that demand absolute efficiency and symmetrical perfection.</p>
             <a href="#booking" class="btn-pro-gradient" style="padding: 1.5rem 4rem; font-size: 1.1rem;">Schedule Strategy Session</a>
         </div>
     </header>
 
-    <section id="booking" class="booking-section">
+    <div class="integrations" data-aos="fade-in">
+        <p style="margin-bottom: 30px; font-size: 0.8rem; letter-spacing: 3px;">SEAMLESSLY CONNECTED WITH</p>
+        <div class="logo-cloud">
+            <span>SLACK</span> <span>SALESFORCE</span> <span>SHOPIFY</span> <span>AWS</span> <span>HUBSPOT</span> <span>STRIPE</span>
+        </div>
+    </div>
+
+    <div class="section-label" data-aos="fade-up">Automation Hub</div>
+    
+    <section class="grid-container">
+        <div class="card-pro" data-aos="fade-up" data-aos-delay="100">
+            <h3>Workflow Autopilot</h3>
+            <p>Architecting intelligent bridges across your software stack to execute high-stakes tasks with zero manual friction.</p>
+        </div>
+        <div class="card-pro" data-aos="fade-up" data-aos-delay="200">
+            <h3>Custom AI Agents</h3>
+            <p>Proprietary neural agents trained on your unique data to handle autonomous sales, logic, and operational synthesis.</p>
+        </div>
+        <div class="card-pro" data-aos="fade-up" data-aos-delay="300">
+            <h3>Neural Infrastructure</h3>
+            <p>Technical blueprints that secure absolute digital sovereignty, ensuring your processes remain private and efficient.</p>
+        </div>
+    </section>
+
+    <section id="booking" class="box-container">
         <div class="card-pro-box" data-aos="zoom-in">
             <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Strategy <span class="text-gradient">Session</span></h2>
             <p style="color: #888; margin-bottom: 3rem; max-width: 600px; margin: 0 auto 3rem;">Audit your business infrastructure with our lead engineers and identify high-impact automation opportunities.</p>
@@ -148,16 +150,15 @@
         </div>
     </section>
 
-    <section id="contact" class="contact-section">
+    <section id="contact" class="box-container">
         <div class="card-pro-box" data-aos="fade-up">
             <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Project <span class="text-gradient">Application</span></h2>
-            <p style="color: #666; margin-bottom: 3rem;">Submit your company data for a customized neural OS architecture proposal.</p>
             <form action="#">
                 <div class="form-grid">
                     <div class="input-group"><label>Full Name</label><input type="text" placeholder="John Doe" required></div>
                     <div class="input-group"><label>Company Website</label><input type="url" placeholder="https://company.com" required></div>
                     <div class="input-group full-width"><label>Business Email</label><input type="email" placeholder="john@company.com" required></div>
-                    <div class="input-group full-width"><label>What should we automate?</label><textarea rows="4" placeholder="Briefly describe your process friction..."></textarea></div>
+                    <div class="input-group full-width"><label>What should we automate?</label><textarea rows="4" placeholder="Describe your process friction..."></textarea></div>
                 </div>
                 <button type="submit" class="btn-pro-gradient" style="width: 100%; margin-top: 40px; padding: 1.3rem; border:none; font-size: 1rem;">Submit Application</button>
             </form>
@@ -173,36 +174,27 @@
     <script>
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 90, "density": { "enable": true, "value_area": 800 } },
+                "number": { "value": 90 },
                 "color": { "value": ["#00E5FF", "#8A2BE2"] },
                 "opacity": { "value": 0.5 },
                 "size": { "value": 3 },
-                "line_linked": { "enable": true, "distance": 150, "color": "#00E5FF", "opacity": 0.2, "width": 1 },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00E5FF", "opacity": 0.2 },
                 "move": { "enable": true, "speed": 1.5 }
-            },
-            "interactivity": { "events": { "onhover": { "enable": true, "mode": "grab" } } },
-            "retina_detect": true
+            }
         });
         AOS.init({ duration: 1000, once: true });
 
-        // Smooth Scroll Fix
+        // Force Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    window.scrollTo({
-                        top: target.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
+                if (target) { window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' }); }
             });
         });
     </script>
 </body>
 </html>
-     
-     
      
      
      
