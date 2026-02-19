@@ -70,23 +70,54 @@
         .text-gradient { background: var(--main-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-subtitle { color: #888; margin-bottom: 3.5rem; max-width: 750px; font-size: 1.2rem; line-height: 1.6; }
 
-        /* --- TARJETAS CON CONTORNOS GRADIENT (UPCORE STYLE) --- */
+        /* --- TARJETAS CON CONTORNO ANIMADO (MISMO COLOR QUE BOTÓN REQUEST) --- */
         .card-pro-box { 
-            background: rgba(255, 255, 255, 0.02); 
+            position: relative;
+            background: #0a0a0a; /* Fondo sólido para que el efecto destaque */
             padding: 4rem 2.5rem; 
             border-radius: 40px; 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
             backdrop-filter: blur(20px); 
             transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden; /* Corta el gradiente circular para crear la línea */
+        }
+
+        /* La "linea de carga" animada con los colores del botón */
+        .card-pro-box::before {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            /* Usamos los colores exactos: Cyan y Violet */
+            background: conic-gradient(from 0deg, transparent 70%, var(--electric-cyan), var(--royal-violet));
+            animation: borderRotate 4s linear infinite;
+        }
+
+        /* Tapa interna para crear el borde fino de 1px o 2px */
+        .card-pro-box::after {
+            content: '';
+            position: absolute;
+            inset: 2px; /* Grosor del contorno */
+            background: #0a0a0a;
+            border-radius: 38px;
+            z-index: 1;
+        }
+
+        /* Asegura que el texto y botones estén por encima de la animación */
+        .card-pro-box > * {
             position: relative;
-            overflow: hidden;
+            z-index: 2;
+        }
+
+        @keyframes borderRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .card-pro-box:hover {
-            border-color: var(--electric-cyan);
-            background: rgba(255, 255, 255, 0.04);
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
         }
 
         /* --- FORMULARIOS --- */
@@ -185,7 +216,7 @@
         });
         AOS.init({ duration: 1000, once: true });
 
-        // Smooth Scroll Fix
+        // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
