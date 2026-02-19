@@ -33,29 +33,13 @@
 
         .logo { font-weight: 900; font-size: 1.2rem; letter-spacing: -1px; text-transform: lowercase; }
 
-        /* --- BOTONES CON ANIMACIÓN AVANZADA --- */
         .btn-pro-gradient {
-            background: var(--main-gradient); 
-            background-size: 200% auto; 
-            color: #fff;
-            border-radius: 60px; 
-            text-decoration: none; 
-            font-weight: 800;
-            display: inline-block; 
-            border: none; 
-            cursor: pointer; 
-            text-align: center;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 0 0 rgba(0, 229, 255, 0);
+            background: var(--main-gradient); background-size: 200% auto; color: #fff;
+            border-radius: 60px; text-decoration: none; font-weight: 800;
+            display: inline-block; transition: 0.5s; border: none; cursor: pointer; text-align: center;
         }
 
-        .btn-pro-gradient:hover { 
-            background-position: right center; 
-            transform: translateY(-5px) scale(1.03); 
-            box-shadow: 0 15px 30px rgba(0, 229, 255, 0.3);
-        }
-
-        .btn-pro-gradient:active { transform: scale(0.97); }
+        .btn-pro-gradient:hover { background-position: right center; transform: translateY(-5px); }
 
         .hero { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 5%; }
         .main-title { font-size: clamp(2.5rem, 8vw, 5.5rem); font-weight: 900; letter-spacing: -0.06em; line-height: 1.1; margin-bottom: 2rem; }
@@ -64,18 +48,16 @@
 
         .booking-section, .contact-section { padding: 100px 8%; max-width: 1000px; margin: 0 auto; text-align: center; }
 
-        /* --- TARJETAS CON CONTORNO ANIMADO (SNAKE EFFECT) --- */
+        /* --- SOLO ESTO HA CAMBIADO: EL CONTORNO ANIMADO --- */
         .card-pro-box { 
             position: relative;
             background: rgba(255, 255, 255, 0.03); 
             padding: 4rem 2rem; 
             border-radius: 40px; 
             backdrop-filter: blur(20px); 
-            transition: transform 0.4s ease;
-            overflow: hidden; /* Importante para que el efecto no se salga */
+            overflow: hidden; /* Corta la luz que sale del recuadro */
         }
 
-        /* El haz de luz que gira */
         .card-pro-box::before {
             content: '';
             position: absolute;
@@ -87,52 +69,26 @@
             animation: rotateBorder 4s linear infinite;
         }
 
-        /* La capa interior que crea el efecto de borde delgado */
         .card-pro-box::after {
             content: '';
             position: absolute;
-            inset: 2px; /* Este es el grosor de la línea del contorno */
-            background: #080808; /* Color sólido para el interior */
+            inset: 2px; /* Grosor de la línea */
+            background: #080808; /* El interior de la caja vuelve a ser oscuro */
             border-radius: 38px;
             z-index: 1;
         }
 
-        /* Asegurar que el contenido sea visible por encima de la luz */
-        .card-pro-box > * {
-            position: relative;
-            z-index: 2;
-        }
+        .card-pro-box > * { position: relative; z-index: 2; }
 
         @keyframes rotateBorder {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-
-        .card-pro-box:hover {
-            transform: translateY(-5px);
-        }
+        /* ----------------------------------------------- */
 
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; text-align: left; }
         .full-width { grid-column: span 2; }
-
-        input, select, textarea { 
-            background: rgba(255, 255, 255, 0.05); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            padding: 1.2rem; 
-            border-radius: 12px; 
-            color: white; 
-            width: 100%; 
-            font-family: inherit;
-            transition: all 0.3s ease;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--electric-cyan);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.1);
-        }
-
+        input, select, textarea { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1.2rem; border-radius: 12px; color: white; width: 100%; font-family: inherit; }
         label { font-size: 0.7rem; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 5px; display: block; }
 
         footer { padding: 60px 5%; text-align: center; color: #222; font-size: 0.7rem; letter-spacing: 3px; }
@@ -212,7 +168,3 @@
     </script>
 </body>
 </html>
-     
-     
-     
-  
