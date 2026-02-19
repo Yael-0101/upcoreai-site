@@ -1,1 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcore AI | Neural Enterprise Systems</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
+    <style>
+        :root {
+            --deep-black: #050505;
+            --electric-cyan: #00E5FF;
+            --royal-violet: #8A2BE2;
+            --pure-white: #FFFFFF;
+            --main-gradient: linear-gradient(135deg, var(--electric-cyan), var(--royal-violet));
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body { background-color: var(--deep-black); color: var(--pure-white); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; background-color: #000; }
+
+        .navbar {
+            display: flex; justify-content: space-between; padding: 1.5rem 8%; align-items: center;
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            background: rgba(5, 5, 5, 0.6); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo { font-weight: 900; font-size: 1.2rem; letter-spacing: -1px; text-transform: lowercase; }
+
+        .btn-pro-gradient {
+            background: var(--main-gradient); background-size: 200% auto; color: #fff;
+            border-radius: 60px; text-decoration: none; font-weight: 800;
+            display: inline-block; transition: 0.5s; border: none; cursor: pointer; text-align: center;
+        }
+
+        .btn-pro-gradient:hover { background-position: right center; transform: translateY(-5px); }
+
+        .hero { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 5%; }
+        .main-title { font-size: clamp(2.5rem, 8vw, 5.5rem); font-weight: 900; letter-spacing: -0.06em; line-height: 1.1; margin-bottom: 2rem; }
+        .text-gradient { background: var(--main-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-subtitle { color: #888; margin-bottom: 3.5rem; max-width: 750px; font-size: 1.2rem; line-height: 1.6; }
+
+        .booking-section, .contact-section { padding: 100px 8%; max-width: 1000px; margin: 0 auto; text-align: center; }
+        .card-pro-box { background: rgba(255, 255, 255, 0.03); padding: 4rem 2rem; border-radius: 40px; border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(20px); }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; text-align: left; }
+        .full-width { grid-column: span 2; }
+        input, select, textarea { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1.2rem; border-radius: 12px; color: white; width: 100%; font-family: inherit; }
+        label { font-size: 0.7rem; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 5px; display: block; }
+
+        footer { padding: 60px 5%; text-align: center; color: #222; font-size: 0.7rem; letter-spacing: 3px; }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <nav class="navbar">
+        <div class="logo">upcore ai</div>
+        <div class="nav-links">
+            <a href="#contact" class="btn-pro-gradient" style="padding: 0.7rem 1.8rem; font-size: 0.8rem;">Request Access</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div data-aos="fade-up">
+            <h1 class="main-title">The Neural OS for<br><span class="text-gradient">Modern Enterprises.</span></h1>
+            <p class="hero-subtitle">Engineering custom autonomous ecosystems for businesses. We transform complex operations into seamless systems.</p>
+            <a href="#booking" class="btn-pro-gradient" style="padding: 1.4rem 4rem; font-size: 1.1rem;">Schedule Session</a>
+        </div>
+    </header>
+
+    <section id="booking" class="booking-section">
+        <div class="card-pro-box" data-aos="zoom-in">
+            <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Strategy <span class="text-gradient">Session</span></h2>
+            <p style="color: #888; margin-bottom: 2rem;">Book a direct call to audit your business infrastructure.</p>
+            <a href="https://calendly.com" target="_blank" class="btn-pro-gradient" style="padding: 1rem 3rem;">Open Calendar</a>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="card-pro-box" data-aos="fade-up">
+            <h2 style="font-size: 2.2rem; margin-bottom: 2rem;">Project <span class="text-gradient">Application</span></h2>
+            <form action="#">
+                <div class="form-grid">
+                    <div class="input-group"><label>Full Name</label><input type="text" placeholder="John Doe"></div>
+                    <div class="input-group"><label>Company Website</label><input type="url" placeholder="https://company.com"></div>
+                    <div class="input-group full-width"><label>Business Email</label><input type="email" placeholder="john@company.com"></div>
+                    <div class="input-group full-width"><label>Message</label><textarea rows="4" placeholder="How can we help?"></textarea></div>
+                </div>
+                <button type="submit" class="btn-pro-gradient" style="width: 100%; margin-top: 30px; padding: 1.2rem; border:none;">Submit Application</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 UPCORE AI | MINIMALISM • PERFECTION • SYMMETRY</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80 },
+                "color": { "value": "#00E5FF" },
+                "line_linked": { "enable": true, "color": "#00E5FF", "opacity": 0.2 },
+                "move": { "enable": true, "speed": 2 }
+            }
+        });
+        AOS.init({ duration: 1000 });
+
+        // SCRIPT DE SEGURIDAD: Fuerza el scroll si el enlace falla
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
