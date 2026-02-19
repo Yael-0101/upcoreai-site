@@ -70,18 +70,18 @@
         .text-gradient { background: var(--main-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-subtitle { color: #888; margin-bottom: 3.5rem; max-width: 750px; font-size: 1.2rem; line-height: 1.6; }
 
-        /* --- TARJETAS CON CONTORNOS ANIMADOS (MODIFICADO) --- */
+        /* --- TARJETAS CON CONTORNOS ANIMADOS (SNAKE BORDER) --- */
         .card-pro-box { 
             position: relative;
-            background: #0a0a0a; 
+            background: #080808; 
             padding: 4rem 2.5rem; 
             border-radius: 40px; 
             backdrop-filter: blur(20px); 
             transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: hidden; /* Necesario para la animación del borde */
+            overflow: hidden; 
         }
 
-        /* El haz de luz animado con la paleta de Upcore */
+        /* Efecto de luz giratoria con los colores del botón Request */
         .card-pro-box::before {
             content: '';
             position: absolute;
@@ -93,17 +93,17 @@
             animation: borderTrace 4s linear infinite;
         }
 
-        /* La capa interior para el grosor del borde */
+        /* Tapa interior para crear el borde fino */
         .card-pro-box::after {
             content: '';
             position: absolute;
-            inset: 2px; /* Grosor del contorno */
-            background: #0a0a0a;
+            inset: 2px; 
+            background: #080808;
             border-radius: 38px;
             z-index: 1;
         }
 
-        /* Asegurar que el contenido original esté al frente */
+        /* Asegurar que el contenido (los recuadros de info) esté arriba */
         .card-pro-box > * { position: relative; z-index: 2; }
 
         @keyframes borderTrace {
