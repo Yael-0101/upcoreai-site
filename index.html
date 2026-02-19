@@ -33,29 +33,13 @@
 
         .logo { font-weight: 900; font-size: 1.2rem; letter-spacing: -1px; text-transform: lowercase; }
 
-        /* --- BOTONES CON ANIMACIÓN AVANZADA --- */
+        /* --- BOTONES ANIMADOS --- */
         .btn-pro-gradient {
-            background: var(--main-gradient); 
-            background-size: 200% auto; 
-            color: #fff;
-            border-radius: 60px; 
-            text-decoration: none; 
-            font-weight: 800;
-            display: inline-block; 
-            border: none; 
-            cursor: pointer; 
-            text-align: center;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); /* Transición suave Apple */
-            box-shadow: 0 0 0 rgba(0, 229, 255, 0);
+            background: var(--main-gradient); background-size: 200% auto; color: #fff;
+            border-radius: 60px; text-decoration: none; font-weight: 800;
+            display: inline-block; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); border: none; cursor: pointer; text-align: center;
         }
-
-        .btn-pro-gradient:hover { 
-            background-position: right center; 
-            transform: translateY(-5px) scale(1.03); 
-            box-shadow: 0 15px 30px rgba(0, 229, 255, 0.3); /* Brillo Upcore */
-        }
-
-        .btn-pro-gradient:active { transform: scale(0.97); }
+        .btn-pro-gradient:hover { background-position: right center; transform: translateY(-5px) scale(1.03); box-shadow: 0 15px 30px rgba(0, 229, 255, 0.3); }
 
         .hero { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 5%; }
         .main-title { font-size: clamp(2.5rem, 8vw, 5.5rem); font-weight: 900; letter-spacing: -0.06em; line-height: 1.1; margin-bottom: 2rem; }
@@ -64,43 +48,58 @@
 
         .booking-section, .contact-section { padding: 100px 8%; max-width: 1000px; margin: 0 auto; text-align: center; }
 
-        /* --- TARJETAS CON CONTORNOS UPCORE AI --- */
+        /* --- CONTORNO ANIMADO TIPO CARGA (SNAKE BORDER) --- */
         .card-pro-box { 
-            background: rgba(255, 255, 255, 0.03); 
+            position: relative;
+            background: #0a0a0a; /* Fondo sólido para que el efecto destaque */
             padding: 4rem 2rem; 
             border-radius: 40px; 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            backdrop-filter: blur(20px); 
-            transition: border 0.4s ease, transform 0.4s ease;
+            overflow: hidden; /* Corta la animación fuera de la caja */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .card-pro-box:hover {
-            border: 1px solid var(--electric-cyan); /* Contorno Upcore */
-            transform: translateY(-5px);
+        /* La línea de carga que gira */
+        .card-pro-box::before {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: conic-gradient(transparent, transparent, transparent, var(--electric-cyan), var(--royal-violet));
+            animation: rotateBorder 4s linear infinite;
+        }
+
+        /* El fondo interno para tapar el centro del gradiente y que solo se vea el borde */
+        .card-pro-box::after {
+            content: '';
+            position: absolute;
+            inset: 2px; /* Grosor del contorno */
+            background: #0a0a0a;
+            border-radius: 38px;
+            z-index: 1;
+        }
+
+        /* Asegurar que el contenido esté por encima de la animación */
+        .card-pro-box > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes rotateBorder {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; text-align: left; }
         .full-width { grid-column: span 2; }
-
-        /* --- INPUTS CON ANIMACIÓN DE FOCO --- */
+        
         input, select, textarea { 
-            background: rgba(255, 255, 255, 0.05); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            padding: 1.2rem; 
-            border-radius: 12px; 
-            color: white; 
-            width: 100%; 
-            font-family: inherit;
-            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
+            padding: 1.2rem; border-radius: 12px; color: white; width: 100%; font-family: inherit; 
         }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--electric-cyan);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.1);
-        }
-
+        input:focus { border-color: var(--electric-cyan); outline: none; }
+        
         label { font-size: 0.7rem; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 5px; display: block; }
 
         footer { padding: 60px 5%; text-align: center; color: #222; font-size: 0.7rem; letter-spacing: 3px; }
@@ -127,15 +126,15 @@
 
     <section id="booking" class="booking-section">
         <div class="card-pro-box" data-aos="zoom-in">
-            <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Strategy <span class="text-gradient">Session</span></h2>
-            <p style="color: #888; margin-bottom: 2rem;">Book a direct call to audit your business infrastructure.</p>
+            <h2>Strategy <span class="text-gradient">Session</span></h2>
+            <p style="color: #888; margin-bottom: 2rem; margin-top: 1rem;">Book a direct call to audit your business infrastructure.</p>
             <a href="https://calendly.com" target="_blank" class="btn-pro-gradient" style="padding: 1rem 3rem;">Open Calendar</a>
         </div>
     </section>
 
     <section id="contact" class="contact-section">
         <div class="card-pro-box" data-aos="fade-up">
-            <h2 style="font-size: 2.2rem; margin-bottom: 2rem;">Project <span class="text-gradient">Application</span></h2>
+            <h2 style="margin-bottom: 2rem;">Project <span class="text-gradient">Application</span></h2>
             <form action="#">
                 <div class="form-grid">
                     <div class="input-group"><label>Full Name</label><input type="text" placeholder="John Doe"></div>
@@ -164,19 +163,6 @@
             }
         });
         AOS.init({ duration: 1000 });
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    window.scrollTo({
-                        top: target.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
     </script>
 </body>
 </html>
