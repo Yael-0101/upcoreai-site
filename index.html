@@ -18,43 +18,107 @@
             --main-gradient: linear-gradient(135deg, var(--electric-cyan), var(--royal-violet));
         }
 
+        /* --- GLOBAL & SMOOTH SCROLL --- */
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
-        body { background-color: var(--deep-black); color: var(--pure-white); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body { 
+            background-color: var(--deep-black); 
+            color: var(--pure-white); 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; 
+        }
 
         #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; background-color: #000; }
 
+        /* --- APPLE STYLE NAVIGATION --- */
         .navbar {
             display: flex; justify-content: space-between; padding: 1.5rem 8%; align-items: center;
             position: fixed; width: 100%; top: 0; z-index: 1000;
-            background: rgba(5, 5, 5, 0.6); backdrop-filter: blur(20px);
+            background: rgba(5, 5, 5, 0.7); backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .logo { font-weight: 900; font-size: 1.2rem; letter-spacing: -1px; text-transform: lowercase; }
+        .logo { font-weight: 900; font-size: 1.4rem; letter-spacing: -1px; text-transform: lowercase; }
 
+        /* --- BOTONES CON ANIMACIÓN PRO --- */
         .btn-pro-gradient {
-            background: var(--main-gradient); background-size: 200% auto; color: #fff;
-            border-radius: 60px; text-decoration: none; font-weight: 800;
-            display: inline-block; transition: 0.5s; border: none; cursor: pointer; text-align: center;
+            background: var(--main-gradient);
+            background-size: 200% auto;
+            color: #fff;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 800;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 0 0 rgba(0, 229, 255, 0);
         }
 
-        .btn-pro-gradient:hover { background-position: right center; transform: translateY(-5px); }
+        .btn-pro-gradient:hover {
+            background-position: right center;
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 229, 255, 0.25);
+        }
 
+        .btn-pro-gradient:active { transform: scale(0.98); }
+
+        /* --- HERO --- */
         .hero { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 5%; }
         .main-title { font-size: clamp(2.5rem, 8vw, 5.5rem); font-weight: 900; letter-spacing: -0.06em; line-height: 1.1; margin-bottom: 2rem; }
         .text-gradient { background: var(--main-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-subtitle { color: #888; margin-bottom: 3.5rem; max-width: 750px; font-size: 1.2rem; line-height: 1.6; }
 
-        .booking-section, .contact-section { padding: 100px 8%; max-width: 1000px; margin: 0 auto; text-align: center; }
-        .card-pro-box { background: rgba(255, 255, 255, 0.03); padding: 4rem 2rem; border-radius: 40px; border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(20px); }
+        /* --- TARJETAS CON CONTORNOS GRADIENT (UPCORE STYLE) --- */
+        .card-pro-box { 
+            background: rgba(255, 255, 255, 0.02); 
+            padding: 4rem 2.5rem; 
+            border-radius: 40px; 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(20px); 
+            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
 
+        .card-pro-box:hover {
+            border-color: var(--electric-cyan);
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- FORMULARIOS --- */
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; text-align: left; }
         .full-width { grid-column: span 2; }
-        input, select, textarea { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1.2rem; border-radius: 12px; color: white; width: 100%; font-family: inherit; }
-        label { font-size: 0.7rem; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 5px; display: block; }
 
-        footer { padding: 60px 5%; text-align: center; color: #222; font-size: 0.7rem; letter-spacing: 3px; }
+        input, select, textarea { 
+            background: rgba(255, 255, 255, 0.04); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            padding: 1.2rem; 
+            border-radius: 16px; 
+            color: white; 
+            width: 100%; 
+            font-family: inherit;
+            transition: 0.3s;
+        }
+
+        input:focus, textarea:focus { 
+            outline: none; 
+            border-color: var(--electric-cyan); 
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.1);
+        }
+
+        label { font-size: 0.7rem; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 8px; display: block; letter-spacing: 1px; }
+
+        /* --- FOOTER --- */
+        footer { padding: 80px 5% 40px; text-align: center; color: #333; font-size: 0.75rem; letter-spacing: 4px; font-weight: 700; }
+
+        /* --- SECCIONES --- */
+        .booking-section, .contact-section { padding: 100px 8%; max-width: 1100px; margin: 0 auto; text-align: center; }
+
     </style>
 </head>
 <body>
@@ -64,37 +128,38 @@
     <nav class="navbar">
         <div class="logo">upcore ai</div>
         <div class="nav-links">
-            <a href="#contact" class="btn-pro-gradient" style="padding: 0.7rem 1.8rem; font-size: 0.8rem;">Request Access</a>
+            <a href="#contact" class="btn-pro-gradient" style="padding: 0.8rem 2rem; font-size: 0.85rem;">Request Access</a>
         </div>
     </nav>
 
     <header class="hero">
         <div data-aos="fade-up">
             <h1 class="main-title">The Neural OS for<br><span class="text-gradient">Modern Enterprises.</span></h1>
-            <p class="hero-subtitle">Engineering custom autonomous ecosystems for businesses. We transform complex operations into seamless systems.</p>
-            <a href="#booking" class="btn-pro-gradient" style="padding: 1.4rem 4rem; font-size: 1.1rem;">Schedule Session</a>
+            <p class="hero-subtitle">Engineering custom autonomous ecosystems for businesses that demand absolute perfection and symmetrical efficiency.</p>
+            <a href="#booking" class="btn-pro-gradient" style="padding: 1.5rem 4rem; font-size: 1.1rem;">Schedule Strategy Session</a>
         </div>
     </header>
 
     <section id="booking" class="booking-section">
         <div class="card-pro-box" data-aos="zoom-in">
             <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Strategy <span class="text-gradient">Session</span></h2>
-            <p style="color: #888; margin-bottom: 2rem;">Book a direct call to audit your business infrastructure.</p>
-            <a href="https://calendly.com" target="_blank" class="btn-pro-gradient" style="padding: 1rem 3rem;">Open Calendar</a>
+            <p style="color: #888; margin-bottom: 3rem; max-width: 600px; margin: 0 auto 3rem;">Audit your business infrastructure with our lead engineers and identify high-impact automation opportunities.</p>
+            <a href="https://calendly.com" target="_blank" class="btn-pro-gradient" style="padding: 1.2rem 3.5rem;">View Available Slots →</a>
         </div>
     </section>
 
     <section id="contact" class="contact-section">
         <div class="card-pro-box" data-aos="fade-up">
-            <h2 style="font-size: 2.2rem; margin-bottom: 2rem;">Project <span class="text-gradient">Application</span></h2>
+            <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Project <span class="text-gradient">Application</span></h2>
+            <p style="color: #666; margin-bottom: 3rem;">Submit your company data for a customized neural OS architecture proposal.</p>
             <form action="#">
                 <div class="form-grid">
-                    <div class="input-group"><label>Full Name</label><input type="text" placeholder="John Doe"></div>
-                    <div class="input-group"><label>Company Website</label><input type="url" placeholder="https://company.com"></div>
-                    <div class="input-group full-width"><label>Business Email</label><input type="email" placeholder="john@company.com"></div>
-                    <div class="input-group full-width"><label>Message</label><textarea rows="4" placeholder="How can we help?"></textarea></div>
+                    <div class="input-group"><label>Full Name</label><input type="text" placeholder="John Doe" required></div>
+                    <div class="input-group"><label>Company Website</label><input type="url" placeholder="https://company.com" required></div>
+                    <div class="input-group full-width"><label>Business Email</label><input type="email" placeholder="john@company.com" required></div>
+                    <div class="input-group full-width"><label>What should we automate?</label><textarea rows="4" placeholder="Briefly describe your process friction..."></textarea></div>
                 </div>
-                <button type="submit" class="btn-pro-gradient" style="width: 100%; margin-top: 30px; padding: 1.2rem; border:none;">Submit Application</button>
+                <button type="submit" class="btn-pro-gradient" style="width: 100%; margin-top: 40px; padding: 1.3rem; border:none; font-size: 1rem;">Submit Application</button>
             </form>
         </div>
     </section>
@@ -108,15 +173,19 @@
     <script>
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 80 },
-                "color": { "value": "#00E5FF" },
-                "line_linked": { "enable": true, "color": "#00E5FF", "opacity": 0.2 },
-                "move": { "enable": true, "speed": 2 }
-            }
+                "number": { "value": 90, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#00E5FF", "#8A2BE2"] },
+                "opacity": { "value": 0.5 },
+                "size": { "value": 3 },
+                "line_linked": { "enable": true, "distance": 150, "color": "#00E5FF", "opacity": 0.2, "width": 1 },
+                "move": { "enable": true, "speed": 1.5 }
+            },
+            "interactivity": { "events": { "onhover": { "enable": true, "mode": "grab" } } },
+            "retina_detect": true
         });
-        AOS.init({ duration: 1000 });
+        AOS.init({ duration: 1000, once: true });
 
-        // SCRIPT DE SEGURIDAD: Fuerza el scroll si el enlace falla
+        // Smooth Scroll Fix
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -132,8 +201,6 @@
     </script>
 </body>
 </html>
-     
-     
      
      
      
