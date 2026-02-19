@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upcore AI | Neural Enterprise Systems</title>
+    <title>Upcore AI | Enterprise Automation</title>
     
     <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -18,98 +18,159 @@
             --main-gradient: linear-gradient(135deg, var(--electric-cyan), var(--royal-violet));
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body { background-color: var(--deep-black); color: var(--pure-white); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body {
+            background-color: var(--deep-black);
+            color: var(--pure-white);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; background-color: #000; }
+        /* --- FONDO NEURONAL --- */
+        #particles-js {
+            position: fixed;
+            width: 100%; height: 100%;
+            top: 0; left: 0;
+            z-index: -1;
+            background-color: #000;
+        }
 
+        /* --- NAVBAR --- */
         .navbar {
-            display: flex; justify-content: space-between; padding: 1.5rem 8%; align-items: center;
-            position: fixed; width: 100%; top: 0; z-index: 1000;
-            background: rgba(5, 5, 5, 0.7); backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 8%;
+            align-items: center;
+            position: fixed;
+            width: 100%; top: 0;
+            z-index: 1000;
+            background: rgba(5, 5, 5, 0.6);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .logo { font-weight: 900; font-size: 1.4rem; letter-spacing: -1px; text-transform: lowercase; }
+        .logo { font-weight: 900; font-size: 1.2rem; letter-spacing: -1px; }
 
         .btn-pro-gradient {
-            background: var(--main-gradient); background-size: 200% auto; color: #fff;
-            border-radius: 60px; text-decoration: none; font-weight: 800;
-            display: inline-block; border: none; cursor: pointer; text-align: center;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--main-gradient);
+            background-size: 200% auto;
+            color: #fff;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 800;
+            display: inline-block;
+            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border: none;
+            box-shadow: 0 10px 25px rgba(0, 229, 255, 0.2);
+            cursor: pointer;
         }
 
         .btn-pro-gradient:hover {
             background-position: right center;
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(0, 229, 255, 0.25);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(138, 43, 226, 0.4);
         }
 
-        .hero { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 5%; }
-        .main-title { font-size: clamp(2.5rem, 8vw, 5.5rem); font-weight: 900; letter-spacing: -0.06em; line-height: 1.1; margin-bottom: 2rem; }
-        .text-gradient { background: var(--main-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-subtitle { color: #888; margin-bottom: 3.5rem; max-width: 750px; font-size: 1.2rem; line-height: 1.6; }
-
-        /* --- CONTENEDOR DE SERVICIOS --- */
-        .services-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 2rem; 
-            padding: 80px 8%; 
-            max-width: 1300px; 
-            margin: 0 auto; 
+        /* --- HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 5%;
         }
 
-        /* --- TARJETAS CON SNAKE BORDER --- */
-        .card-pro-box { 
+        .main-title {
+            font-size: clamp(2.5rem, 8vw, 5.5rem);
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            line-height: 1;
+            margin-bottom: 2rem;
+        }
+
+        .text-gradient {
+            background: var(--main-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            color: #888;
+            margin-bottom: 3.5rem;
+            max-width: 750px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* --- AUTOMATION HUB --- */
+        .section-label {
+            text-align: center;
+            color: var(--electric-cyan);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            padding: 40px 8% 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card-pro {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 4rem 2.5rem;
+            border-radius: 34px;
             position: relative;
-            background: #080808; 
-            padding: 3rem 2rem; 
-            border-radius: 30px; 
-            overflow: hidden;
             transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(10px);
         }
 
-        .card-pro-box::before {
-            content: '';
-            position: absolute;
-            width: 160%; height: 160%;
-            top: -30%; left: -30%;
-            background: conic-gradient(from 0deg, transparent 70%, var(--electric-cyan), var(--royal-violet));
-            animation: borderTrace 5s linear infinite;
+        .card-pro::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 34px; padding: 2px;
+            background: var(--main-gradient);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            opacity: 0; transition: 0.5s;
         }
 
-        .card-pro-box::after {
-            content: '';
-            position: absolute;
-            inset: 2px; 
-            background: #080808;
-            border-radius: 28px;
-            z-index: 1;
+        .card-pro:hover { transform: translateY(-12px); border-color: transparent; }
+        .card-pro:hover::before { opacity: 1; }
+
+        .card-pro h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+        .card-pro p { color: #777; line-height: 1.6; }
+
+        /* --- SECCIÓN TAILORED SOLUTIONS --- */
+        .tailored-box {
+            margin: 100px 8%;
+            padding: 80px 5%;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
         }
 
-        .card-pro-box > * { position: relative; z-index: 2; }
+        .tailored-box h2 { font-size: 2.5rem; margin-bottom: 1.5rem; }
+        .tailored-box p { color: #888; max-width: 800px; margin: 0 auto 3rem; font-size: 1.1rem; }
 
-        @keyframes borderTrace {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        /* --- FOOTER --- */
+        footer { padding: 60px 5%; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
+        .btn-legal {
+            color: #555; text-decoration: none; font-size: 0.8rem; margin: 0 15px; transition: 0.3s;
         }
-
-        .card-pro-box:hover { transform: translateY(-10px); }
-
-        .service-icon { font-size: 2rem; margin-bottom: 1.5rem; display: block; }
-        .service-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; }
-        .service-text { color: #777; font-size: 0.95rem; line-height: 1.6; }
-
-        /* --- SECCIONES Y FORMULARIOS --- */
-        .booking-section, .contact-section { padding: 80px 8%; max-width: 1100px; margin: 0 auto; text-align: center; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; text-align: left; margin-top: 2rem; }
-        .full-width { grid-column: span 2; }
-        input, textarea { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); padding: 1.2rem; border-radius: 12px; color: white; width: 100%; font-family: inherit; }
-        label { font-size: 0.7rem; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 8px; display: block; }
-
-        footer { padding: 80px 5% 40px; text-align: center; color: #333; font-size: 0.7rem; letter-spacing: 4px; font-weight: 700; }
+        .btn-legal:hover { color: var(--electric-cyan); }
     </style>
 </head>
 <body>
@@ -119,61 +180,54 @@
     <nav class="navbar">
         <div class="logo">upcore ai</div>
         <div class="nav-links">
-            <a href="#contact" class="btn-pro-gradient" style="padding: 0.8rem 2rem; font-size: 0.85rem;">Request Access</a>
+            <a href="mailto:yael67089@gmail.com" class="btn-pro-gradient" style="padding: 0.7rem 1.8rem; font-size: 0.8rem;">Request Access</a>
         </div>
     </nav>
 
     <header class="hero">
         <div data-aos="fade-up">
-            <h1 class="main-title">The Neural OS for<br><span class="text-gradient">Modern Enterprises.</span></h1>
-            <p class="hero-subtitle">Engineering custom autonomous ecosystems for businesses that demand absolute perfection and symmetrical efficiency.</p>
-            <a href="#booking" class="btn-pro-gradient" style="padding: 1.5rem 4rem; font-size: 1.1rem;">Schedule Strategy Session</a>
+            <h1 class="main-title">The Neural OS for<br>
+                <span class="text-gradient">Modern Enterprises.</span>
+            </h1>
+            <p class="hero-subtitle">Engineering custom autonomous ecosystems for businesses that demand absolute efficiency. We transform complex operations into seamless, self-managed systems.</p>
+            <a href="#contact" class="btn-pro-gradient" style="padding: 1.4rem 4rem; font-size: 1.1rem;">Scale Your Business</a>
         </div>
     </header>
 
-    <section class="services-grid">
-        <div class="card-pro-box" data-aos="fade-up">
-            <span class="service-icon">⚙️</span>
-            <h3 class="service-title">Autonomous Workflows</h3>
-            <p class="service-text">We design end-to-end neural pipelines that eliminate repetitive manual tasks across your entire organization.</p>
+    <div class="section-label" data-aos="fade-up">Automation Hub</div>
+    
+    <section class="grid-container">
+        <div class="card-pro" data-aos="fade-up" data-aos-delay="100">
+            <h3>Workflow Autopilot</h3>
+            <p>Diseñamos flujos de trabajo inteligentes que conectan tus herramientas y ejecutan tareas críticas sin intervención humana.</p>
         </div>
-        <div class="card-pro-box" data-aos="fade-up" data-aos-delay="100">
-            <span class="service-icon">🧠</span>
-            <h3 class="service-title">Custom AI Agents</h3>
-            <p class="service-text">Development of specialized LLM agents trained on your private data to handle complex decision-making.</p>
+        <div class="card-pro" data-aos="fade-up" data-aos-delay="200">
+            <h3>Custom AI Agents</h3>
+            <p>Desarrollamos agentes de IA especializados y entrenados con tu propia data para ventas, atención al cliente o análisis de datos.</p>
         </div>
-        <div class="card-pro-box" data-aos="fade-up" data-aos-delay="200">
-            <span class="service-icon">📊</span>
-            <h3 class="service-title">Neural Analytics</h3>
-            <p class="service-text">Deep integration of predictive models to transform raw data into symmetrical, actionable business intelligence.</p>
-        </div>
-    </section>
-
-    <section id="booking" class="booking-section">
-        <div class="card-pro-box" data-aos="zoom-in">
-            <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Strategy <span class="text-gradient">Session</span></h2>
-            <p style="color: #888; margin-bottom: 2rem;">Audit your business infrastructure with our lead engineers.</p>
-            <a href="https://calendly.com" target="_blank" class="btn-pro-gradient" style="padding: 1.2rem 3.5rem;">View Available Slots →</a>
+        <div class="card-pro" data-aos="fade-up" data-aos-delay="300">
+            <h3>Neural Infrastructure</h3>
+            <p>Arquitectamos infraestructuras técnicas privadas para que empresas y negocios operen con soberanía digital y seguridad absoluta.</p>
         </div>
     </section>
 
-    <section id="contact" class="contact-section">
-        <div class="card-pro-box" data-aos="fade-up">
-            <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Project <span class="text-gradient">Application</span></h2>
-            <form action="#">
-                <div class="form-grid">
-                    <div class="input-group"><label>Full Name</label><input type="text" placeholder="John Doe"></div>
-                    <div class="input-group"><label>Company Website</label><input type="url" placeholder="https://company.com"></div>
-                    <div class="input-group full-width"><label>Business Email</label><input type="email" placeholder="john@company.com"></div>
-                    <div class="input-group full-width"><label>Message</label><textarea rows="4" placeholder="Briefly describe your process friction..."></textarea></div>
-                </div>
-                <button type="submit" class="btn-pro-gradient" style="width: 100%; margin-top: 30px; padding: 1.3rem; border:none;">Submit Application</button>
-            </form>
+    <section class="tailored-box" data-aos="zoom-in">
+        <h2 class="text-gradient">If it's a process, it's automatable.</h2>
+        <p>No creemos en soluciones genéricas. Analizamos tu modelo de negocio desde la base para construir ingeniería a medida que elimine fricciones y multiplique tu capacidad operativa.</p>
+        <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; opacity: 0.4;">
+            <span>CRM & Sales</span>
+            <span>Finance & Ops</span>
+            <span>Supply Chain</span>
+            <span>Data Analysis</span>
         </div>
     </section>
 
     <footer>
-        <p>© 2026 UPCORE AI | MINIMALISM • PERFECTION • SYMMETRY</p>
+        <div style="margin-bottom: 20px;">
+            <a href="privacy-policy.html" class="btn-legal">Privacy Policy</a>
+            <a href="terms-of-service.html" class="btn-legal">Terms of Service</a>
+        </div>
+        <p style="color: #222; font-size: 0.7rem; letter-spacing: 3px;">© 2026 UPCORE AI</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
@@ -181,14 +235,16 @@
     <script>
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 90, "density": { "enable": true, "value_area": 800 } },
+                "number": { "value": 85, "density": { "enable": true, "value_area": 800 } },
                 "color": { "value": ["#00E5FF", "#8A2BE2"] },
-                "opacity": { "value": 0.5 },
+                "opacity": { "value": 0.4 },
                 "size": { "value": 3 },
                 "line_linked": { "enable": true, "distance": 150, "color": "#00E5FF", "opacity": 0.2, "width": 1 },
-                "move": { "enable": true, "speed": 1.5 }
+                "move": { "enable": true, "speed": 2 }
             },
-            "interactivity": { "events": { "onhover": { "enable": true, "mode": "grab" } } },
+            "interactivity": {
+                "events": { "onhover": { "enable": true, "mode": "grab" } }
+            },
             "retina_detect": true
         });
         AOS.init({ duration: 1000, once: true });
