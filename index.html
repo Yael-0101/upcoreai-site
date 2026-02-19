@@ -70,18 +70,18 @@
         .text-gradient { background: var(--main-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-subtitle { color: #888; margin-bottom: 3.5rem; max-width: 750px; font-size: 1.2rem; line-height: 1.6; }
 
-        /* --- TARJETAS CON CONTORNO ANIMADO (MISMO COLOR QUE BOTÓN REQUEST) --- */
+        /* --- TARJETAS CON CONTORNOS ANIMADOS (MODIFICADO) --- */
         .card-pro-box { 
             position: relative;
-            background: #0a0a0a; /* Fondo sólido para que el efecto destaque */
+            background: #0a0a0a; 
             padding: 4rem 2.5rem; 
             border-radius: 40px; 
             backdrop-filter: blur(20px); 
             transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: hidden; /* Corta el gradiente circular para crear la línea */
+            overflow: hidden; /* Necesario para la animación del borde */
         }
 
-        /* La "linea de carga" animada con los colores del botón */
+        /* El haz de luz animado con la paleta de Upcore */
         .card-pro-box::before {
             content: '';
             position: absolute;
@@ -89,12 +89,11 @@
             height: 150%;
             top: -25%;
             left: -25%;
-            /* Usamos los colores exactos: Cyan y Violet */
             background: conic-gradient(from 0deg, transparent 70%, var(--electric-cyan), var(--royal-violet));
-            animation: borderRotate 4s linear infinite;
+            animation: borderTrace 4s linear infinite;
         }
 
-        /* Tapa interna para crear el borde fino de 1px o 2px */
+        /* La capa interior para el grosor del borde */
         .card-pro-box::after {
             content: '';
             position: absolute;
@@ -104,20 +103,17 @@
             z-index: 1;
         }
 
-        /* Asegura que el texto y botones estén por encima de la animación */
-        .card-pro-box > * {
-            position: relative;
-            z-index: 2;
-        }
+        /* Asegurar que el contenido original esté al frente */
+        .card-pro-box > * { position: relative; z-index: 2; }
 
-        @keyframes borderRotate {
+        @keyframes borderTrace {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
 
         .card-pro-box:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
         /* --- FORMULARIOS --- */
@@ -216,7 +212,6 @@
         });
         AOS.init({ duration: 1000, once: true });
 
-        // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
