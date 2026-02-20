@@ -9,279 +9,265 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --deep-black: #050505;
-            --electric-cyan: #00E5FF;
-            --royal-violet: #8A2BE2;
-            --pure-white: #FFFFFF;
-            --main-gradient: linear-gradient(135deg, var(--electric-cyan), var(--royal-violet));
-        }
+<style>
+:root {
+    --deep-black: #050505;
+    --electric-cyan: #00E5FF;
+    --royal-violet: #8A2BE2;
+    --pure-white: #FFFFFF;
+    --main-gradient: linear-gradient(135deg, var(--electric-cyan), var(--royal-violet));
+}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+* { margin:0; padding:0; box-sizing:border-box; scroll-behavior:smooth; }
 
-        body {
-            background-color: var(--deep-black);
-            color: var(--pure-white);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
+body {
+    background-color: var(--deep-black);
+    color: var(--pure-white);
+    font-family:'Inter', sans-serif;
+    overflow-x:hidden;
+}
 
-        #particles-js {
-            position: fixed;
-            width: 100%; height: 100%;
-            z-index: -1;
-            background-color: #000;
-        }
+#particles-js {
+    position:fixed;
+    width:100%; height:100%;
+    z-index:-1;
+    background-color:#000;
+}
 
-        /* --- NAVBAR --- */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            padding: 1.5rem 8%;
-            align-items: center;
-            position: fixed;
-            width: 100%; top: 0;
-            z-index: 1000;
-            background: rgba(5, 5, 5, 0.6);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    padding:1.5rem 8%;
+    align-items:center;
+    position:fixed;
+    width:100%; top:0;
+    z-index:1000;
+    background:rgba(5,5,5,0.6);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(255,255,255,0.05);
+}
 
-        .logo { font-weight: 900; font-size: 1.2rem; letter-spacing: -1px; text-transform: lowercase; }
+.logo { font-weight:900; font-size:1.2rem; letter-spacing:-1px; text-transform:lowercase; }
 
-        .btn-pro-gradient {
-            background: var(--main-gradient);
-            background-size: 200% auto;
-            color: #fff;
-            border-radius: 60px;
-            text-decoration: none;
-            font-weight: 800;
-            display: inline-block;
-            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            border: none;
-            cursor: pointer;
-            text-align: center;
-        }
+.btn-pro-gradient {
+    background: var(--main-gradient);
+    background-size:200% auto;
+    color:#fff;
+    border-radius:60px;
+    text-decoration:none;
+    font-weight:800;
+    display:inline-block;
+    transition:0.5s cubic-bezier(0.16,1,0.3,1);
+}
 
-        .btn-pro-gradient:hover {
-            background-position: right center;
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 20px 40px rgba(0, 229, 255, 0.3);
-        }
+.btn-pro-gradient:hover {
+    background-position:right center;
+    transform:translateY(-5px) scale(1.05);
+    box-shadow:0 20px 40px rgba(0,229,255,0.3);
+}
 
-        /* --- HERO --- */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0 5%;
-        }
+/* HERO */
+.hero {
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:0 5%;
+}
 
-        .main-title {
-            font-size: clamp(2.5rem, 8vw, 5.5rem);
-            font-weight: 900;
-            letter-spacing: -0.06em;
-            line-height: 1.1;
-            margin-bottom: 2rem;
-        }
+.main-title {
+    font-size:clamp(2.5rem,8vw,5.5rem);
+    font-weight:900;
+    letter-spacing:-0.06em;
+    margin-bottom:2rem;
+}
 
-        .text-gradient {
-            background: var(--main-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+.text-gradient {
+    background:var(--main-gradient);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
 
-        .hero-subtitle {
-            color: #888;
-            margin-bottom: 3.5rem;
-            max-width: 750px;
-            font-size: 1.2rem;
-            line-height: 1.6;
-        }
+.hero-subtitle {
+    color:#888;
+    margin-bottom:3.5rem;
+    max-width:750px;
+    font-size:1.2rem;
+    line-height:1.6;
+}
 
-        /* --- SECTIONS LABEL & GRID --- */
-        .section-label {
-            text-align: center;
-            color: var(--electric-cyan);
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            margin-top: 100px;
-        }
+/* GRID */
+.section-label {
+    text-align:center;
+    color:var(--electric-cyan);
+    text-transform:uppercase;
+    letter-spacing:4px;
+    font-size:0.7rem;
+    font-weight:700;
+    margin-top:100px;
+}
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            padding: 40px 8% 80px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+.grid-container {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:2rem;
+    padding:40px 8% 80px;
+    max-width:1400px;
+    margin:0 auto;
+}
 
-        .card-pro {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 4rem 2.5rem;
-            border-radius: 34px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(10px);
-            transition: 0.4s;
-        }
+/* ========================= */
+/* ULTRA PREMIUM CARD GLOW */
+/* ========================= */
 
-        .card-pro:hover { transform: translateY(-10px); border-color: var(--electric-cyan); }
-        .card-pro h3 { font-size: 1.5rem; margin-bottom: 1rem; }
-        .card-pro p { color: #777; line-height: 1.6; }
+.card-pro {
+    position:relative;
+    background:rgba(255,255,255,0.02);
+    padding:4rem 2.5rem;
+    border-radius:34px;
+    border:1px solid rgba(255,255,255,0.06);
+    backdrop-filter:blur(10px);
+    transition:all 0.4s ease;
+    overflow:hidden;
+}
 
-        /* --- BOOKING SECTION (Hero Link) --- */
-        .booking-section {
-            padding: 100px 8%;
-            text-align: center;
-        }
+/* borde gradiente oculto */
+.card-pro::before {
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:34px;
+    padding:1px;
+    background:var(--main-gradient);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+            mask-composite:exclude;
+    opacity:0;
+    transition:opacity 0.35s ease;
+}
 
-        .booking-card {
-            background: linear-gradient(rgba(138, 43, 226, 0.05), rgba(0, 229, 255, 0.05));
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 4rem 2rem;
-            border-radius: 40px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+/* hover efecto completo */
+.card-pro:hover {
+    transform:translateY(-12px);
+    box-shadow:
+        0 0 40px rgba(0,229,255,0.15),
+        0 0 70px rgba(138,43,226,0.18);
+}
 
-        /* --- CONTACT FORM (Navbar Link) --- */
-        .contact-section { padding: 100px 8%; max-width: 900px; margin: 0 auto; }
-        .form-card {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 4rem;
-            border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px);
-        }
+/* mostrar borde glow */
+.card-pro:hover::before {
+    opacity:1;
+}
 
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-        .full-width { grid-column: span 2; }
+.card-pro h3 { font-size:1.5rem; margin-bottom:1rem; }
+.card-pro p { color:#777; line-height:1.6; }
 
-        input, select, textarea {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1.2rem;
-            border-radius: 12px;
-            color: white; width: 100%; font-family: inherit;
-        }
+/* BOOKING */
+.booking-section { padding:100px 8%; text-align:center; }
 
-        label { font-size: 0.7rem; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 5px; display: block; }
+.booking-card {
+    background:linear-gradient(rgba(138,43,226,0.05),rgba(0,229,255,0.05));
+    border:1px solid rgba(255,255,255,0.1);
+    padding:4rem 2rem;
+    border-radius:40px;
+    max-width:1000px;
+    margin:0 auto;
+}
 
-        footer { padding: 60px 5%; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); color: #222; font-size: 0.7rem; letter-spacing: 3px; }
-    </style>
+/* CONTACT */
+.contact-section { padding:100px 8%; max-width:900px; margin:0 auto; }
+.form-card {
+    background:rgba(255,255,255,0.03);
+    padding:4rem;
+    border-radius:40px;
+    border:1px solid rgba(255,255,255,0.08);
+    backdrop-filter:blur(20px);
+}
+
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+.full-width { grid-column:span 2; }
+
+input,select,textarea {
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+    padding:1.2rem;
+    border-radius:12px;
+    color:white;
+    width:100%;
+}
+
+footer {
+    padding:60px 5%;
+    text-align:center;
+    border-top:1px solid rgba(255,255,255,0.05);
+    color:#222;
+    font-size:0.7rem;
+    letter-spacing:3px;
+}
+</style>
 </head>
+
 <body>
 
-    <div id="particles-js"></div>
+<div id="particles-js"></div>
 
-    <nav class="navbar">
-        <div class="logo">upcore ai</div>
-        <div class="nav-links">
-            <a href="#contact" class="btn-pro-gradient" style="padding: 0.7rem 1.8rem; font-size: 0.8rem;">Request Access</a>
-        </div>
-    </nav>
+<nav class="navbar">
+    <div class="logo">upcore ai</div>
+    <a href="#contact" class="btn-pro-gradient" style="padding:0.7rem 1.8rem;font-size:0.8rem;">
+        Request Access
+    </a>
+</nav>
 
-    <header class="hero">
-        <div data-aos="fade-up">
-            <h1 class="main-title">The Neural OS for<br>
-                <span class="text-gradient">Modern Enterprises.</span>
-            </h1>
-            <p class="hero-subtitle">Engineering custom autonomous ecosystems for businesses that demand absolute efficiency. We transform complex operations into seamless, self-managed systems.</p>
-            <a href="#booking" class="btn-pro-gradient" style="padding: 1.4rem 4rem; font-size: 1.1rem;">Schedule Strategy Session</a>
-        </div>
-    </header>
+<header class="hero">
+    <h1 class="main-title">
+        The Neural OS for<br>
+        <span class="text-gradient">Modern Enterprises.</span>
+    </h1>
+    <p class="hero-subtitle">
+        Engineering custom autonomous ecosystems for businesses that demand absolute efficiency.
+    </p>
+</header>
 
-    <section id="booking" class="booking-section">
-        <div class="booking-card" data-aos="zoom-in">
-            <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Direct <span class="text-gradient">Consultation</span></h2>
-            <p style="color: #888; margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-                Skip the queue. Book a 15-minute discovery call to audit your current business infrastructure and identify automation opportunities.
-            </p>
-            <a href="https://calendly.com" target="_blank" class="btn-pro-gradient" style="padding: 1rem 3rem;">View Available Slots →</a>
-        </div>
-    </section>
+<div class="section-label">Automation Hub</div>
 
-    <div class="section-label" data-aos="fade-up">Automation Hub</div>
-    
-    <section class="grid-container">
-        <div class="card-pro" data-aos="fade-up" data-aos-delay="100">
-            <h3>Workflow Autopilot</h3>
-            <p>Architecting intelligent bridges across your software stack to execute high-stakes tasks with zero manual friction.</p>
-        </div>
-        <div class="card-pro" data-aos="fade-up" data-aos-delay="200">
-            <h3>Custom AI Agents</h3>
-            <p>Proprietary neural agents trained on your unique data to handle autonomous sales, logic, and operational synthesis.</p>
-        </div>
-        <div class="card-pro" data-aos="fade-up" data-aos-delay="300">
-            <h3>Neural Infrastructure</h3>
-            <p>Technical blueprints that secure absolute digital sovereignty, ensuring your data and processes remain private and efficient.</p>
-        </div>
-    </section>
+<section class="grid-container">
+    <div class="card-pro">
+        <h3>Workflow Autopilot</h3>
+        <p>Architecting intelligent bridges across your software stack.</p>
+    </div>
 
-    <section id="contact" class="contact-section">
-        <div class="form-card" data-aos="fade-up">
-            <h2 style="font-size: 2.2rem; margin-bottom: 2rem; text-align: center;">Partner with <span class="text-gradient">Upcore AI</span></h2>
-            <p style="text-align: center; color: #666; margin-bottom: 3rem;">Submit your business details for a custom automation proposal.</p>
-            <form action="#">
-                <div class="form-grid">
-                    <div class="input-group">
-                        <label>Full Name</label>
-                        <input type="text" placeholder="John Doe" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Company Website</label>
-                        <input type="url" placeholder="https://company.com" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Business Email</label>
-                        <input type="email" placeholder="john@company.com" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Company Size</label>
-                        <select>
-                            <option>1-10 employees</option>
-                            <option>11-50 employees</option>
-                            <option>51-200 employees</option>
-                            <option>200+ employees</option>
-                        </select>
-                    </div>
-                    <div class="input-group full-width">
-                        <label>Core Process to Transform</label>
-                        <textarea rows="4" placeholder="Describe the specific process you want to automate..."></textarea>
-                    </div>
-                </div>
-                <button type="submit" class="btn-pro-gradient" style="width: 100%; margin-top: 30px; padding: 1.2rem; border:none;">Submit Application</button>
-            </form>
-        </div>
-    </section>
+    <div class="card-pro">
+        <h3>Custom AI Agents</h3>
+        <p>Proprietary neural agents trained on your unique data.</p>
+    </div>
 
-    <footer>
-        <p>© 2026 UPCORE AI | MINIMALISM • PERFECTION • SYMMETRY</p>
-    </footer>
+    <div class="card-pro">
+        <h3>Neural Infrastructure</h3>
+        <p>Technical blueprints that secure absolute digital sovereignty.</p>
+    </div>
+</section>
 
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 90, "density": { "enable": true, "value_area": 800 } },
-                "color": { "value": ["#00E5FF", "#8A2BE2"] },
-                "opacity": { "value": 0.5 },
-                "size": { "value": 2.5 },
-                "line_linked": { "enable": true, "distance": 150, "color": "#00E5FF", "opacity": 0.2, "width": 1 },
-                "move": { "enable": true, "speed": 2 }
-            },
-            "interactivity": { "events": { "onhover": { "enable": true, "mode": "grab" } } },
-            "retina_detect": true
-        });
-        AOS.init({ duration: 1000, once: true });
-    </script>
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+particlesJS("particles-js", {
+    particles:{
+        number:{value:90},
+        color:{value:["#00E5FF","#8A2BE2"]},
+        opacity:{value:0.5},
+        size:{value:2.5},
+        line_linked:{enable:true,color:"#00E5FF",opacity:0.2},
+        move:{enable:true,speed:2}
+    }
+});
+AOS.init({duration:1000,once:true});
+</script>
+
 </body>
 </html>
