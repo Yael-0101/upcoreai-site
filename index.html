@@ -18,10 +18,8 @@
 --card:#0c0c0c;
 --text:#ffffff;
 --muted:#8b8b8b;
-
 --cyan:#00E5FF;
 --violet:#8A2BE2;
-
 --grad:linear-gradient(135deg,var(--cyan),var(--violet));
 }
 
@@ -42,21 +40,6 @@ color:var(--text);
 background:#000;
 line-height:1.6;
 overflow-x:hidden;
-}
-
-/* =========================
-   ANIMACIÓN TEXTO PREMIUM
-========================= */
-
-.reveal{
-opacity:0;
-transform:translateY(30px);
-transition:all .8s cubic-bezier(.16,1,.3,1);
-}
-
-.reveal.visible{
-opacity:1;
-transform:translateY(0);
 }
 
 /* =========================
@@ -98,7 +81,7 @@ padding:100px 0;
 border-bottom:1px solid rgba(255,255,255,.05);
 }
 
-h1{font-size:3.2rem;font-weight:800;letter-spacing:-.02em}
+h1{font-size:3.2rem;font-weight:800}
 h2{font-size:2.2rem;margin-bottom:15px}
 p{color:var(--muted)}
 
@@ -173,7 +156,7 @@ box-shadow:0 0 25px rgba(0,229,255,.4);
 }
 
 /* =========================
-   TARJETAS PREMIUM
+   TARJETAS
 ========================= */
 
 .grid{
@@ -208,18 +191,13 @@ opacity:.35;
 transition:.35s;
 }
 
-.card:hover::before{
-opacity:1;
-}
-
+.card:hover::before{opacity:1}
 .card:hover{
 transform:translateY(-6px);
 box-shadow:0 0 40px rgba(0,229,255,.25);
 }
 
-/* =========================
-   STEP LABEL
-========================= */
+/* ========================= */
 
 .step{
 font-size:.75rem;
@@ -228,18 +206,12 @@ color:var(--cyan);
 margin-bottom:10px;
 }
 
-/* =========================
-   METRICS
-========================= */
-
 .metric{
 font-size:2.4rem;
 font-weight:700;
 }
 
-/* =========================
-   FORM
-========================= */
+/* ========================= */
 
 .form input,.form textarea{
 width:100%;
@@ -250,10 +222,6 @@ border:1px solid rgba(255,255,255,.08);
 border-radius:10px;
 color:white;
 }
-
-/* =========================
-   FOOTER
-========================= */
 
 footer{
 text-align:center;
@@ -279,62 +247,102 @@ font-size:.8rem;
 </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
 <div class="container">
-<h1 class="reveal">
+<h1>
 Autonomous Infrastructure<br>
 <span class="gradient">for High-Performance Companies</span>
 </h1>
-<p class="reveal">
+<p>
 Self-operating systems that eliminate manual work, optimize decisions,
 and scale operations without increasing headcount.
 </p>
-<a href="#contact" class="btn reveal">Request Infrastructure Audit</a>
+<a href="#contact" class="btn">Request Infrastructure Audit</a>
 </div>
 </section>
 
+<!-- PROBLEM -->
 <section id="problem">
 <div class="container">
-<div class="step reveal">STEP 01</div>
-<h2 class="reveal">Operational Complexity is the Growth Killer</h2>
+<div class="step">STEP 01</div>
+<h2>Operational Complexity is the Growth Killer</h2>
 <div class="grid grid-3">
-<div class="card reveal"><h3>Manual Overload</h3><p>Thousands of wasted operational hours.</p></div>
-<div class="card reveal"><h3>Disconnected Systems</h3><p>Tools without unified intelligence.</p></div>
-<div class="card reveal"><h3>Fragile Automation</h3><p>Workflows that break under change.</p></div>
+<div class="card"><h3>Manual Overload</h3><p>Thousands of wasted operational hours.</p></div>
+<div class="card"><h3>Disconnected Systems</h3><p>Tools without unified intelligence.</p></div>
+<div class="card"><h3>Fragile Automation</h3><p>Workflows that break under change.</p></div>
 </div>
 </div>
 </section>
 
+<!-- SYSTEM -->
 <section id="system">
 <div class="container">
-<div class="step reveal">STEP 02</div>
-<h2 class="reveal">The Neural Operating System</h2>
+<div class="step">STEP 02</div>
+<h2>The Neural Operating System</h2>
 <div class="grid grid-4">
-<div class="card reveal">Data Input</div>
-<div class="card reveal">Decision Intelligence</div>
-<div class="card reveal">Autonomous Execution</div>
-<div class="card reveal">Continuous Learning</div>
+<div class="card">Data Input</div>
+<div class="card">Decision Intelligence</div>
+<div class="card">Autonomous Execution</div>
+<div class="card">Continuous Learning</div>
 </div>
 </div>
 </section>
 
+<!-- RESULTS (METRICS + TESTIMONIOS) -->
 <section id="results">
 <div class="container">
-<div class="step reveal">STEP 03</div>
-<h2 class="reveal">Measured Performance</h2>
+
+<div class="step">STEP 03</div>
+<h2>Measured Performance</h2>
+
 <div class="grid grid-3">
-<div class="reveal"><div class="metric">68%</div><p>Cost reduction</p></div>
-<div class="reveal"><div class="metric">4.2x</div><p>Speed increase</p></div>
-<div class="reveal"><div class="metric">99.99%</div><p>System uptime</p></div>
+<div><div class="metric counter" data-target="68">0</div><p>Cost reduction</p></div>
+<div><div class="metric counter" data-target="4.2">0</div><p>Speed increase</p></div>
+<div><div class="metric counter" data-target="99.99">0</div><p>System uptime</p></div>
 </div>
+
+<br><br><br>
+
+<h2>Enterprise Impact</h2>
+
+<div class="grid grid-3">
+
+<div class="card">
+<h3>Global Logistics Company</h3>
+<p style="margin:15px 0">
+Eliminated 73% of manual coordination across operations.
+</p>
+<div class="metric" style="font-size:1.4rem">+240% throughput</div>
+</div>
+
+<div class="card">
+<h3>SaaS Revenue Operations</h3>
+<p style="margin:15px 0">
+Lead qualification and retention fully autonomous.
+</p>
+<div class="metric" style="font-size:1.4rem">3.8x conversion</div>
+</div>
+
+<div class="card">
+<h3>Financial Services Firm</h3>
+<p style="margin:15px 0">
+Processing time reduced from days to minutes.
+</p>
+<div class="metric" style="font-size:1.4rem">92% faster</div>
+</div>
+
+</div>
+
 </div>
 </section>
 
+<!-- CONTACT -->
 <section id="contact">
 <div class="container">
-<div class="step reveal">STEP 04</div>
-<h2 class="reveal">Request Infrastructure Assessment</h2>
-<form class="form reveal" style="max-width:600px;margin-top:30px">
+<div class="step">STEP 04</div>
+<h2>Request Infrastructure Assessment</h2>
+<form class="form" style="max-width:600px;margin-top:30px">
 <input placeholder="Company Name">
 <input placeholder="Annual Revenue">
 <input placeholder="Team Size">
@@ -348,18 +356,45 @@ and scale operations without increasing headcount.
 UPCORE AI • AUTONOMOUS ENTERPRISE SYSTEMS
 </footer>
 
+<!-- COUNTER SCRIPT -->
 <script>
+
+const counters = document.querySelectorAll(".counter");
+
 const observer = new IntersectionObserver(entries=>{
 entries.forEach(entry=>{
 if(entry.isIntersecting){
-entry.target.classList.add("visible");
+
+let el = entry.target;
+let target = parseFloat(el.dataset.target);
+let duration = 1500;
+let start=null;
+
+function animate(t){
+if(!start) start=t;
+let progress=t-start;
+let percent=Math.min(progress/duration,1);
+let value=target*percent;
+
+el.textContent=value.toFixed(2);
+
+if(percent<1) requestAnimationFrame(animate);
+else{
+if(target==68) el.textContent="68%";
+if(target==4.2) el.textContent="4.2x";
+if(target==99.99) el.textContent="99.99%";
+}
+}
+
+requestAnimationFrame(animate);
+observer.unobserve(el);
+
 }
 });
-},{threshold:0.15});
+},{threshold:.6});
 
-document.querySelectorAll(".reveal").forEach(el=>{
-observer.observe(el);
-});
+counters.forEach(c=>observer.observe(c));
+
 </script>
 
 </body>
