@@ -1,251 +1,210 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upcore AI | Autonomous Enterprise Infrastructure</title>
+<title>Agencia IA</title>
 
+<!-- FUENTES -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<!-- Typed -->
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+<!-- Particles -->
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 
 <style>
 
 /* =========================
-   VARIABLES UPCORE AI
-========================= */
+VARIABLES
+=========================*/
 
 :root{
---bg:#050505;
---card:#0c0c0c;
---text:#ffffff;
---muted:#8b8b8b;
-
---cyan:#00E5FF;
---violet:#8A2BE2;
-
---grad:linear-gradient(135deg,var(--cyan),var(--violet));
+--bg:#0b0f1a;
+--cyan:#00eaff;
+--violet:#8a2be2;
+--gradient:linear-gradient(135deg,#00eaff,#8a2be2);
 }
 
 /* =========================
-   BASE
-========================= */
+GLOBAL
+=========================*/
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-scroll-behavior:smooth;
+font-family:Inter, sans-serif;
 }
 
 body{
-font-family:Inter, sans-serif;
-color:var(--text);
-background:#000;
-line-height:1.6;
+background:var(--bg);
+color:white;
 overflow-x:hidden;
 }
 
-/* =========================
-   FONDO ANIMADO PREMIUM
-========================= */
-
-body::before{
-content:"";
-position:fixed;
-width:200%;
-height:200%;
-top:-50%;
-left:-50%;
-background:
-radial-gradient(circle at 30% 30%, rgba(0,229,255,.15), transparent 40%),
-radial-gradient(circle at 70% 60%, rgba(138,43,226,.15), transparent 40%);
-animation:moveBg 18s linear infinite;
-z-index:-1;
-}
-
-@keyframes moveBg{
-0%{transform:translate(0,0)}
-50%{transform:translate(10%,10%)}
-100%{transform:translate(0,0)}
-}
-
-/* =========================
-   LAYOUT
-========================= */
-
-.container{
-width:92%;
-max-width:1200px;
+section{
+padding:120px 8%;
+max-width:1400px;
 margin:auto;
 }
 
-section{
-padding:100px 0;
-border-bottom:1px solid rgba(255,255,255,.05);
+/* =========================
+PARTICLES
+=========================*/
+
+#particles-bg{
+position:fixed;
+width:100%;
+height:100%;
+top:0;
+left:0;
+z-index:-1;
 }
 
-h1{font-size:3.2rem;font-weight:800;letter-spacing:-.02em}
-h2{font-size:2.2rem;margin-bottom:15px}
-p{color:var(--muted)}
+/* =========================
+HERO
+=========================*/
 
-.gradient{
-background:var(--grad);
+.hero{
+height:90vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+}
+
+.hero h1{
+font-size:60px;
+font-weight:800;
+margin-bottom:20px;
+}
+
+.hero span{
+background:var(--gradient);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
-/* =========================
-   NAV
-========================= */
-
-nav{
-position:fixed;
-top:0;
-width:100%;
-background:rgba(5,5,5,.7);
-backdrop-filter:blur(20px);
-border-bottom:1px solid rgba(255,255,255,.05);
-z-index:1000;
-}
-
-nav .wrap{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:16px 0;
-}
-
-.logo{font-weight:800}
-
-.menu a{
-margin-left:25px;
-color:#aaa;
-text-decoration:none;
-font-size:.9rem;
-}
-.menu a:hover{color:white}
-
-/* =========================
-   HERO
-========================= */
-
-.hero{
-padding-top:160px;
-text-align:center;
-}
 .hero p{
-max-width:600px;
-margin:20px auto;
+opacity:.7;
+margin-bottom:40px;
 }
 
 /* =========================
-   BOTON
-========================= */
+BOTON PREMIUM
+=========================*/
 
 .btn{
-display:inline-block;
-padding:14px 28px;
-border-radius:60px;
-background:var(--grad);
-font-weight:600;
-text-decoration:none;
+padding:16px 34px;
+border-radius:14px;
+background:var(--gradient);
+border:none;
 color:white;
-margin-top:25px;
+font-weight:600;
+cursor:pointer;
 transition:.3s;
 }
+
 .btn:hover{
-transform:translateY(-3px);
-box-shadow:0 0 25px rgba(0,229,255,.4);
+transform:translateY(-4px);
+box-shadow:0 0 30px rgba(0,234,255,.3);
 }
 
 /* =========================
-   TARJETAS PREMIUM
-========================= */
+REVEAL SCROLL
+=========================*/
+
+.reveal{
+opacity:0;
+transform:translateY(60px);
+}
+
+/* =========================
+SERVICIOS
+=========================*/
 
 .grid{
 display:grid;
-gap:25px;
-margin-top:40px;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:30px;
 }
-.grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.grid-4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+
+/* =========================
+CARD PREMIUM BORDE GRADIENTE
+=========================*/
 
 .card{
 position:relative;
-background:rgba(12,12,12,.7);
-padding:30px;
-border-radius:22px;
+border-radius:28px;
+padding:40px;
+background:rgba(255,255,255,.03);
 backdrop-filter:blur(10px);
+overflow:hidden;
+transition:.4s;
 }
 
-/* borde gradiente real */
 .card::before{
 content:"";
 position:absolute;
 inset:0;
-border-radius:22px;
-padding:1px;
-background:var(--grad);
+border-radius:28px;
+padding:2px;
+background:var(--gradient);
+
 -webkit-mask:
 linear-gradient(#000 0 0) content-box,
 linear-gradient(#000 0 0);
 -webkit-mask-composite:xor;
 mask-composite:exclude;
-opacity:.35;
-transition:.35s;
-}
 
-.card:hover::before{
-opacity:1;
+opacity:.6;
 }
 
 .card:hover{
-transform:translateY(-6px);
-box-shadow:0 0 40px rgba(0,229,255,.25);
+transform:translateY(-10px);
+box-shadow:
+0 0 40px rgba(0,234,255,.15),
+0 0 80px rgba(138,43,226,.15);
 }
 
-/* =========================
-   STEP LABEL
-========================= */
-
-.step{
-font-size:.75rem;
-letter-spacing:2px;
-color:var(--cyan);
-margin-bottom:10px;
-}
-
-/* =========================
-   METRICS
-========================= */
-
-.metric{
-font-size:2.4rem;
-font-weight:700;
-}
-
-/* =========================
-   FORM
-========================= */
-
-.form input,.form textarea{
-width:100%;
-padding:14px;
+.card h3{
 margin-bottom:15px;
-background:#0a0a0a;
-border:1px solid rgba(255,255,255,.08);
-border-radius:10px;
-color:white;
 }
 
 /* =========================
-   FOOTER
-========================= */
+COUNTERS
+=========================*/
 
-footer{
+.stats{
+display:flex;
+justify-content:space-around;
 text-align:center;
-padding:60px 0;
-color:#333;
-font-size:.8rem;
+}
+
+.counter{
+font-size:48px;
+font-weight:800;
+background:var(--gradient);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+/* =========================
+TITULOS
+=========================*/
+
+.section-title{
+font-size:42px;
+font-weight:800;
+margin-bottom:60px;
+text-align:center;
 }
 
 </style>
@@ -253,92 +212,137 @@ font-size:.8rem;
 
 <body>
 
-<!-- NAV -->
-<nav>
-<div class="container wrap">
-<div class="logo">UPCORE AI</div>
-<div class="menu">
-<a href="#problem">Problem</a>
-<a href="#system">System</a>
-<a href="#results">Results</a>
-<a href="#contact">Audit</a>
-</div>
-</div>
-</nav>
+<div id="particles-bg"></div>
 
 <!-- HERO -->
 <section class="hero">
-<div class="container">
 <h1>
-Autonomous Infrastructure<br>
-<span class="gradient">for High-Performance Companies</span>
+Automatización IA que
+<span id="typed"></span>
 </h1>
-<p>
-Self-operating systems that eliminate manual work, optimize decisions,
-and scale operations without increasing headcount.
-</p>
-<a href="#contact" class="btn">Request Infrastructure Audit</a>
+
+<p>Transformamos procesos en sistemas inteligentes que trabajan 24/7</p>
+
+<button class="btn">Agendar llamada</button>
+</section>
+
+<!-- SERVICIOS -->
+<section>
+<h2 class="section-title reveal">Servicios</h2>
+
+<div class="grid">
+
+<div class="card reveal">
+<h3>Automatización de Ventas</h3>
+<p>Sistemas inteligentes que convierten clientes automáticamente.</p>
+</div>
+
+<div class="card reveal">
+<h3>Chatbots IA</h3>
+<p>Atención al cliente automatizada con lenguaje natural.</p>
+</div>
+
+<div class="card reveal">
+<h3>Flujos Inteligentes</h3>
+<p>Integraciones y procesos que eliminan trabajo manual.</p>
+</div>
+
 </div>
 </section>
 
-<!-- PROBLEM -->
-<section id="problem">
-<div class="container">
-<div class="step">STEP 01</div>
-<h2>Operational Complexity is the Growth Killer</h2>
-<div class="grid grid-3">
-<div class="card"><h3>Manual Overload</h3><p>Thousands of wasted operational hours.</p></div>
-<div class="card"><h3>Disconnected Systems</h3><p>Tools without unified intelligence.</p></div>
-<div class="card"><h3>Fragile Automation</h3><p>Workflows that break under change.</p></div>
+<!-- STATS -->
+<section>
+<h2 class="section-title reveal">Resultados</h2>
+
+<div class="stats">
+<div>
+<div class="counter" data-target="300">0</div>
+<p>Automatizaciones</p>
+</div>
+
+<div>
+<div class="counter" data-target="70">0</div>
+<p>Clientes</p>
+</div>
+
+<div>
+<div class="counter" data-target="24">0</div>
+<p>Horas activas</p>
 </div>
 </div>
 </section>
 
-<!-- SYSTEM -->
-<section id="system">
-<div class="container">
-<div class="step">STEP 02</div>
-<h2>The Neural Operating System</h2>
-<div class="grid grid-4">
-<div class="card">Data Input</div>
-<div class="card">Decision Intelligence</div>
-<div class="card">Autonomous Execution</div>
-<div class="card">Continuous Learning</div>
-</div>
-</div>
-</section>
+<script>
 
-<!-- RESULTS -->
-<section id="results">
-<div class="container">
-<div class="step">STEP 03</div>
-<h2>Measured Performance</h2>
-<div class="grid grid-3">
-<div><div class="metric">68%</div><p>Cost reduction</p></div>
-<div><div class="metric">4.2x</div><p>Speed increase</p></div>
-<div><div class="metric">99.99%</div><p>System uptime</p></div>
-</div>
-</div>
-</section>
+/* =========================
+PARTICLES
+=========================*/
 
-<!-- CONTACT -->
-<section id="contact">
-<div class="container">
-<div class="step">STEP 04</div>
-<h2>Request Infrastructure Assessment</h2>
-<form class="form" style="max-width:600px;margin-top:30px">
-<input placeholder="Company Name">
-<input placeholder="Annual Revenue">
-<input placeholder="Team Size">
-<textarea rows="4" placeholder="Processes to automate"></textarea>
-<button class="btn">Submit Request</button>
-</form>
-</div>
-</section>
+tsParticles.load("particles-bg",{
+particles:{
+number:{value:60},
+color:{value:"#00eaff"},
+links:{enable:true,color:"#00eaff",opacity:.2,distance:150},
+move:{enable:true,speed:.4},
+opacity:{value:.3},
+size:{value:{min:1,max:3}}
+}
+});
 
-<footer>
-UPCORE AI • AUTONOMOUS ENTERPRISE SYSTEMS
-</footer>
+/* =========================
+TYPING
+=========================*/
+
+new Typed('#typed',{
+strings:[
+"aprende sola",
+"vende automáticamente",
+"escala negocios",
+"trabaja 24/7"
+],
+typeSpeed:50,
+backSpeed:30,
+loop:true
+});
+
+/* =========================
+SCROLL ANIMATION
+=========================*/
+
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.utils.toArray(".reveal").forEach(el=>{
+gsap.to(el,{
+opacity:1,
+y:0,
+duration:1,
+ease:"power3.out",
+scrollTrigger:{
+trigger:el,
+start:"top 85%"
+}
+});
+});
+
+/* =========================
+COUNTERS
+=========================*/
+
+document.querySelectorAll(".counter").forEach(counter=>{
+let target=+counter.dataset.target;
+
+gsap.to(counter,{
+innerText:target,
+duration:2,
+snap:{innerText:1},
+scrollTrigger:{
+trigger:counter,
+start:"top 90%"
+}
+});
+});
+
+</script>
 
 </body>
 </html>
