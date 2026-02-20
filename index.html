@@ -14,13 +14,13 @@
 --card:#0c0c0c;
 --border:#1a1a1a;
 --text:#ffffff;
---muted:#888;
+--muted:#8b8b8b;
 --cyan:#00E5FF;
 --violet:#8A2BE2;
 --grad:linear-gradient(135deg,var(--cyan),var(--violet));
 }
 
-*{margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth}
 body{
 font-family:Inter, sans-serif;
 background:var(--bg);
@@ -28,24 +28,55 @@ color:var(--text);
 line-height:1.6;
 }
 
-.container{
-width:90%;
-max-width:1200px;
-margin:auto;
-}
-
-section{
-padding:100px 0;
-border-bottom:1px solid var(--border);
-}
-
+.container{width:92%;max-width:1200px;margin:auto}
+section{padding:100px 0;border-bottom:1px solid var(--border)}
 h1,h2,h3{letter-spacing:-.02em}
-h1{font-size:3.5rem;font-weight:800}
-h2{font-size:2.4rem;margin-bottom:25px}
-h3{font-size:1.3rem;margin-bottom:10px}
-
+h1{font-size:3.2rem;font-weight:800}
+h2{font-size:2.2rem;margin-bottom:15px}
 p{color:var(--muted)}
 
+.gradient{
+background:var(--grad);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+/* NAV */
+nav{
+position:fixed;
+top:0;
+width:100%;
+background:rgba(5,5,5,.85);
+backdrop-filter:blur(20px);
+border-bottom:1px solid var(--border);
+z-index:1000;
+}
+nav .wrap{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:16px 0;
+}
+.logo{font-weight:800}
+.menu a{
+margin-left:25px;
+color:#aaa;
+text-decoration:none;
+font-size:.9rem;
+}
+.menu a:hover{color:white}
+
+/* HERO */
+.hero{
+padding-top:160px;
+text-align:center;
+}
+.hero p{
+max-width:600px;
+margin:20px auto;
+}
+
+/* BUTTON */
 .btn{
 display:inline-block;
 padding:14px 28px;
@@ -59,10 +90,14 @@ transition:.3s;
 }
 .btn:hover{transform:translateY(-3px)}
 
+/* CARDS */
+.grid{display:grid;gap:25px;margin-top:40px}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
 .card{
 background:var(--card);
 padding:30px;
-border-radius:20px;
+border-radius:18px;
 border:1px solid var(--border);
 transition:.3s;
 }
@@ -71,27 +106,21 @@ border-color:var(--cyan);
 transform:translateY(-6px);
 }
 
-.grid{
-display:grid;
-gap:25px;
-}
-.grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.grid-2{grid-template-columns:repeat(auto-fit,minmax(350px,1fr))}
-
-.center{text-align:center}
-
-.gradient{
-background:var(--grad);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+.step{
+font-size:.75rem;
+letter-spacing:2px;
+color:var(--cyan);
+margin-bottom:10px;
 }
 
+/* METRICS */
 .metric{
-font-size:2.5rem;
+font-size:2.4rem;
 font-weight:700;
 }
 
-.form input, .form textarea{
+/* FORM */
+.form input,.form textarea{
 width:100%;
 padding:14px;
 margin-bottom:15px;
@@ -101,6 +130,7 @@ border-radius:10px;
 color:white;
 }
 
+/* FOOTER */
 footer{
 text-align:center;
 padding:60px 0;
@@ -113,8 +143,23 @@ font-size:.8rem;
 
 <body>
 
+<!-- NAVBAR -->
+<nav>
+<div class="container wrap">
+<div class="logo">UPCORE AI</div>
+<div class="menu">
+<a href="#problem">Problem</a>
+<a href="#system">System</a>
+<a href="#results">Results</a>
+<a href="#industries">Industries</a>
+<a href="#contact">Audit</a>
+</div>
+</div>
+</nav>
+
+
 <!-- HERO -->
-<section class="center">
+<section class="hero">
 <div class="container">
 
 <h1>
@@ -122,59 +167,40 @@ Autonomous Infrastructure<br>
 <span class="gradient">for High-Performance Companies</span>
 </h1>
 
-<p style="max-width:650px;margin:25px auto">
-We engineer self-operating business systems that eliminate manual processes,
-reduce operational cost, and scale decision-making in real time.
+<p>
+Self-operating systems that eliminate manual work, optimize decisions,
+and scale operations without increasing headcount.
 </p>
 
-<a class="btn">Schedule Infrastructure Audit</a>
+<a href="#contact" class="btn">Request Infrastructure Audit</a>
 
 </div>
 </section>
 
 
 <!-- PROBLEM -->
-<section>
-<div class="container center">
-<h2>The Operational Bottleneck</h2>
+<section id="problem">
+<div class="container">
 
-<div class="grid grid-3" style="margin-top:40px">
+<div class="step">STEP 01 — THE PROBLEM</div>
+<h2>Operational Complexity is the Growth Killer</h2>
+
+<div class="grid grid-3">
 
 <div class="card">
 <h3>Manual Overload</h3>
-<p>Teams spend thousands of hours executing repetitive operational tasks.</p>
+<p>Teams waste thousands of hours executing repetitive processes.</p>
 </div>
 
 <div class="card">
-<h3>Disconnected Systems</h3>
-<p>Data lives across tools that don’t communicate intelligently.</p>
+<h3>Disconnected Tools</h3>
+<p>Systems operate in isolation without unified intelligence.</p>
 </div>
 
 <div class="card">
 <h3>Fragile Automation</h3>
-<p>Most workflows break when conditions change.</p>
+<p>Traditional workflows fail when conditions change.</p>
 </div>
-
-</div>
-</div>
-</section>
-
-
-<!-- MODEL -->
-<section>
-<div class="container center">
-
-<h2>The Neural Operating System</h2>
-<p style="max-width:650px;margin:auto">
-We design infrastructure that senses, decides, executes, and optimizes autonomously.
-</p>
-
-<div class="grid grid-4" style="margin-top:50px">
-
-<div class="card"><h3>Data Ingestion</h3></div>
-<div class="card"><h3>Decision Intelligence</h3></div>
-<div class="card"><h3>Autonomous Execution</h3></div>
-<div class="card"><h3>Continuous Optimization</h3></div>
 
 </div>
 
@@ -182,33 +208,20 @@ We design infrastructure that senses, decides, executes, and optimizes autonomou
 </section>
 
 
-<!-- CASE STUDIES -->
-<section>
+<!-- SYSTEM -->
+<section id="system">
 <div class="container">
 
-<h2 class="center">Deployment Results</h2>
+<div class="step">STEP 02 — THE SOLUTION</div>
+<h2>The Neural Operating System</h2>
+<p>Infrastructure that senses, decides, executes, and optimizes automatically.</p>
 
-<div class="grid grid-2" style="margin-top:50px">
+<div class="grid grid-4">
 
-<div class="card">
-<h3>Ecommerce Operations</h3>
-<p>Autonomous order processing infrastructure.</p>
-<ul>
-<li>73% operational time reduction</li>
-<li>42% labor cost reduction</li>
-<li>Real-time logistics decisions</li>
-</ul>
-</div>
-
-<div class="card">
-<h3>SaaS Customer Support</h3>
-<p>AI driven ticket resolution system.</p>
-<ul>
-<li>81% requests automated</li>
-<li>24/7 autonomous support</li>
-<li>Human escalation only when needed</li>
-</ul>
-</div>
+<div class="card"><h3>Data Input</h3></div>
+<div class="card"><h3>Decision Intelligence</h3></div>
+<div class="card"><h3>Autonomous Execution</h3></div>
+<div class="card"><h3>Continuous Learning</h3></div>
 
 </div>
 
@@ -216,12 +229,14 @@ We design infrastructure that senses, decides, executes, and optimizes autonomou
 </section>
 
 
-<!-- METRICS -->
-<section>
-<div class="container center">
-<h2>Infrastructure Impact</h2>
+<!-- RESULTS -->
+<section id="results">
+<div class="container">
 
-<div class="grid grid-3" style="margin-top:50px">
+<div class="step">STEP 03 — IMPACT</div>
+<h2>Measured Infrastructure Performance</h2>
+
+<div class="grid grid-3">
 
 <div>
 <div class="metric">68%</div>
@@ -239,16 +254,19 @@ We design infrastructure that senses, decides, executes, and optimizes autonomou
 </div>
 
 </div>
+
 </div>
 </section>
 
 
 <!-- INDUSTRIES -->
-<section>
+<section id="industries">
 <div class="container">
-<h2 class="center">Industries</h2>
 
-<div class="grid grid-3" style="margin-top:50px">
+<div class="step">STEP 04 — DEPLOYMENT</div>
+<h2>Industries We Optimize</h2>
+
+<div class="grid grid-3">
 
 <div class="card">SaaS Platforms</div>
 <div class="card">Ecommerce Infrastructure</div>
@@ -257,72 +275,19 @@ We design infrastructure that senses, decides, executes, and optimizes autonomou
 <div class="card">Enterprise Back-Office</div>
 
 </div>
+
 </div>
 </section>
 
 
-<!-- SOLUTIONS -->
-<section>
+<!-- CONTACT -->
+<section id="contact">
 <div class="container">
-<h2 class="center">Infrastructure Systems</h2>
 
-<div class="grid grid-3" style="margin-top:50px">
-
-<div class="card">
-<h3>Workflow Infrastructure</h3>
-<p>Autonomous execution of complex operations.</p>
-</div>
-
-<div class="card">
-<h3>Decision Intelligence Systems</h3>
-<p>AI-driven strategic decision engines.</p>
-</div>
-
-<div class="card">
-<h3>Neural Agents</h3>
-<p>Self-learning digital operators.</p>
-</div>
-
-</div>
-</div>
-</section>
-
-
-<!-- METHODOLOGY -->
-<section>
-<div class="container center">
-<h2>Deployment Methodology</h2>
-
-<div class="grid grid-4" style="margin-top:50px">
-
-<div class="card">Operational Mapping</div>
-<div class="card">Intelligence Modeling</div>
-<div class="card">Autonomous Deployment</div>
-<div class="card">Continuous Optimization</div>
-
-</div>
-</div>
-</section>
-
-
-<!-- TECHNOLOGY -->
-<section>
-<div class="container center">
-<h2>Architecture & Technology</h2>
-<p style="max-width:650px;margin:auto">
-Secure cloud infrastructure, real-time data pipelines, model orchestration,
-API integration, and continuous monitoring.
-</p>
-</div>
-</section>
-
-
-<!-- CTA -->
-<section>
-<div class="container center">
+<div class="step">STEP 05 — START</div>
 <h2>Request Infrastructure Assessment</h2>
 
-<form class="form" style="max-width:600px;margin:40px auto">
+<form class="form" style="max-width:600px;margin-top:30px">
 
 <input placeholder="Company Name">
 <input placeholder="Annual Revenue">
@@ -332,6 +297,7 @@ API integration, and continuous monitoring.
 <button class="btn">Submit Request</button>
 
 </form>
+
 </div>
 </section>
 
