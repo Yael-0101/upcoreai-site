@@ -3,37 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upcore AI | Autonomous Enterprise Infrastructure</title>
+<title>Upcore AI | Enterprise Automation Strategy</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
 
-/* ================= VARIABLES ================= */
+/* ================================
+   VARIABLES
+================================ */
 
 :root{
 --bg:#050505;
 --card:#0c0c0c;
---text:#ffffff;
---muted:#8b8b8b;
+--text:#fff;
+--muted:#8a8a8a;
 --cyan:#00E5FF;
 --violet:#8A2BE2;
 --grad:linear-gradient(135deg,var(--cyan),var(--violet));
 }
 
-/* ================= BASE ================= */
-
 *{margin:0;padding:0;box-sizing:border-box}
 body{
 font-family:Inter,sans-serif;
-color:white;
-background:black;
+background:#000;
+color:var(--text);
 line-height:1.6;
 overflow-x:hidden;
 }
 
-/* ================= ANIMATED BACKGROUND ================= */
-
+/* animated background */
 body::before{
 content:"";
 position:fixed;
@@ -44,19 +43,25 @@ left:-50%;
 background:
 radial-gradient(circle at 30% 30%, rgba(0,229,255,.15), transparent 40%),
 radial-gradient(circle at 70% 60%, rgba(138,43,226,.15), transparent 40%);
-animation:moveBg 20s linear infinite;
+animation:bgMove 18s linear infinite;
 z-index:-1;
 }
-@keyframes moveBg{
+@keyframes bgMove{
 0%{transform:translate(0,0)}
 50%{transform:translate(10%,10%)}
 100%{transform:translate(0,0)}
 }
 
-/* ================= LAYOUT ================= */
+.container{
+width:92%;
+max-width:1200px;
+margin:auto;
+}
 
-.container{width:92%;max-width:1200px;margin:auto}
-section{padding:110px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+section{
+padding:100px 0;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
 
 h1{font-size:3.2rem;font-weight:800}
 h2{font-size:2.2rem;margin-bottom:15px}
@@ -68,10 +73,10 @@ background:var(--grad);
 -webkit-text-fill-color:transparent;
 }
 
-/* ================= NAV ================= */
-
+/* NAV */
 nav{
 position:fixed;
+top:0;
 width:100%;
 background:rgba(5,5,5,.7);
 backdrop-filter:blur(20px);
@@ -81,8 +86,10 @@ z-index:1000;
 nav .wrap{
 display:flex;
 justify-content:space-between;
+align-items:center;
 padding:16px 0;
 }
+.logo{font-weight:800}
 .menu a{
 margin-left:25px;
 color:#aaa;
@@ -91,27 +98,24 @@ font-size:.9rem;
 }
 .menu a:hover{color:white}
 
-/* ================= HERO ================= */
-
+/* HERO */
 .hero{
-padding-top:170px;
+padding-top:160px;
 text-align:center;
 }
 .hero p{
-max-width:600px;
+max-width:620px;
 margin:20px auto;
 }
 
-/* ================= BUTTON ================= */
-
+/* BUTTON */
 .btn{
 display:inline-block;
 padding:14px 28px;
 border-radius:60px;
 background:var(--grad);
-font-weight:600;
-text-decoration:none;
 color:white;
+text-decoration:none;
 margin-top:25px;
 transition:.3s;
 }
@@ -120,21 +124,23 @@ transform:translateY(-3px);
 box-shadow:0 0 25px rgba(0,229,255,.4);
 }
 
-/* ================= GRID ================= */
-
-.grid{display:grid;gap:25px;margin-top:40px}
+/* GRID */
+.grid{
+display:grid;
+gap:25px;
+margin-top:40px;
+}
 .grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
 .grid-4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 
-/* ================= CARD ================= */
-
+/* CARD */
 .card{
 position:relative;
 background:rgba(12,12,12,.7);
 padding:30px;
 border-radius:22px;
 backdrop-filter:blur(10px);
-transition:.4s;
+transition:.3s;
 }
 .card::before{
 content:"";
@@ -143,10 +149,12 @@ inset:0;
 border-radius:22px;
 padding:1px;
 background:var(--grad);
--webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+-webkit-mask:
+linear-gradient(#000 0 0) content-box,
+linear-gradient(#000 0 0);
 -webkit-mask-composite:xor;
 mask-composite:exclude;
-opacity:.35;
+opacity:.4;
 transition:.35s;
 }
 .card:hover::before{opacity:1}
@@ -155,34 +163,47 @@ transform:translateY(-6px);
 box-shadow:0 0 40px rgba(0,229,255,.25);
 }
 
-/* ================= METRICS ================= */
+/* STEP */
+.step{
+font-size:.75rem;
+letter-spacing:2px;
+color:var(--cyan);
+margin-bottom:10px;
+}
 
+/* METRICS */
 .metric{
 font-size:2.6rem;
-font-weight:700;
+font-weight:800;
 }
 
-/* ================= TEXT ANIMATION ================= */
-
-.reveal{
-opacity:0;
-transform:translateY(30px);
-transition:1s ease;
-}
-.reveal.active{
-opacity:1;
-transform:translateY(0);
+/* CASE BOX */
+.case{
+background:#0a0a0a;
+padding:40px;
+border-radius:24px;
+margin-top:40px;
 }
 
-/* ================= TESTIMONIAL ================= */
-
-.testimonial{
+/* TESTIMONIAL */
+.quote{
 font-style:italic;
-color:#ccc;
+color:#ddd;
+margin-bottom:10px;
 }
 
-/* ================= FOOTER ================= */
+/* FORM */
+.form input,.form textarea{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+background:#0a0a0a;
+border:1px solid rgba(255,255,255,.08);
+border-radius:10px;
+color:white;
+}
 
+/* FOOTER */
 footer{
 text-align:center;
 padding:60px 0;
@@ -199,12 +220,10 @@ font-size:.8rem;
 <div class="container wrap">
 <div class="logo">UPCORE AI</div>
 <div class="menu">
-<a href="#problem">Problem</a>
-<a href="#system">System</a>
+<a href="#framework">Framework</a>
 <a href="#process">Process</a>
-<a href="#results">Results</a>
+<a href="#case">Case</a>
 <a href="#audit">Audit</a>
-<a href="#contact">Apply</a>
 </div>
 </div>
 </nav>
@@ -212,38 +231,29 @@ font-size:.8rem;
 <!-- HERO -->
 <section class="hero">
 <div class="container">
-<h1 class="reveal">
-Autonomous Infrastructure<br>
-<span class="gradient">for High-Performance Companies</span>
+<h1>
+Automation Strategy for<br>
+<span class="gradient">Private Equity & Enterprise Operations</span>
 </h1>
-<p class="reveal">
-We redesign enterprise operations using intelligent systems that eliminate manual work and scale performance automatically.
+<p>
+We identify, design, and deploy high-ROI automation systems across complex business operations.
+Focused on measurable cost reduction and scalable infrastructure.
 </p>
-<a href="#contact" class="btn reveal">Request Strategic Assessment</a>
+<a href="#audit" class="btn">Request Operational Audit</a>
 </div>
 </section>
 
-<!-- PROBLEM -->
-<section id="problem">
+<!-- FRAMEWORK -->
+<section id="framework">
 <div class="container">
-<h2 class="reveal">Operational Complexity Is The Hidden Profit Leak</h2>
-<div class="grid grid-3">
-<div class="card reveal"><h3>Manual Overload</h3><p>Human execution limits scale.</p></div>
-<div class="card reveal"><h3>Disconnected Systems</h3><p>Fragmented decision layers.</p></div>
-<div class="card reveal"><h3>Reactive Operations</h3><p>No predictive intelligence.</p></div>
-</div>
-</div>
-</section>
+<div class="step">PROPRIETARY FRAMEWORK</div>
+<h2>Enterprise Automation Architecture Model</h2>
 
-<!-- SYSTEM -->
-<section id="system">
-<div class="container">
-<h2 class="reveal">The Neural Operating System</h2>
 <div class="grid grid-4">
-<div class="card reveal">Data Ingestion</div>
-<div class="card reveal">Decision Intelligence</div>
-<div class="card reveal">Autonomous Execution</div>
-<div class="card reveal">Continuous Learning</div>
+<div class="card">Process Intelligence Mapping</div>
+<div class="card">ROI Opportunity Modeling</div>
+<div class="card">System Architecture Design</div>
+<div class="card">Deployment & Optimization</div>
 </div>
 </div>
 </section>
@@ -251,127 +261,126 @@ We redesign enterprise operations using intelligent systems that eliminate manua
 <!-- PROCESS -->
 <section id="process">
 <div class="container">
-<h2 class="reveal">How We Transform Enterprise Operations</h2>
-<div class="grid grid-4">
-<div class="card reveal"><strong>01</strong><p>Operational Intelligence Audit</p></div>
-<div class="card reveal"><strong>02</strong><p>System Architecture Design</p></div>
-<div class="card reveal"><strong>03</strong><p>Implementation Oversight</p></div>
-<div class="card reveal"><strong>04</strong><p>Continuous Optimization</p></div>
+<div class="step">ENGAGEMENT MODEL</div>
+<h2>How Implementation Works</h2>
+
+<div class="grid grid-3">
+<div class="card">
+<h3>Phase 1 — Operational Audit</h3>
+<p>Deep analysis of workflows, systems, and cost structures.</p>
+</div>
+
+<div class="card">
+<h3>Phase 2 — Architecture Design</h3>
+<p>Automation blueprint and implementation roadmap.</p>
+</div>
+
+<div class="card">
+<h3>Phase 3 — Deployment</h3>
+<p>System rollout, monitoring, and continuous optimization.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- CASE -->
+<section id="case">
+<div class="container">
+<div class="step">CASE STUDY</div>
+<h2>Manufacturing Portfolio Company</h2>
+
+<div class="case">
+<p><strong>Initial Situation:</strong> Manual procurement workflow across 4 facilities.</p>
+<p><strong>Employees affected:</strong> 38 operational staff.</p>
+<p><strong>Annual processing volume:</strong> 1.2M transactions.</p>
+
+<br>
+
+<div class="grid grid-3">
+<div><div class="metric">41%</div><p>Operational cost reduction (6 months)</p></div>
+<div><div class="metric">3.6x</div><p>Processing speed increase</p></div>
+<div><div class="metric">$2.8M</div><p>Annual efficiency gain</p></div>
+</div>
+
+<br>
+
+<div class="quote">
+“Automation eliminated manual coordination across facilities.
+Decision latency dropped from hours to minutes.”
+</div>
+<p>— Director of Operations</p>
+
 </div>
 </div>
 </section>
 
 <!-- RESULTS -->
-<section id="results">
+<section>
 <div class="container">
-<h2 class="reveal">Measured Performance Impact</h2>
+<div class="step">MEASURED IMPACT</div>
+<h2>Typical Performance Outcomes</h2>
 
 <div class="grid grid-3">
-<div class="reveal">
-<div class="metric" data-target="68">0</div>
-<p>Cost Reduction</p>
+<div class="card"><div class="metric">25-60%</div><p>Operational cost reduction</p></div>
+<div class="card"><div class="metric">2-5x</div><p>Process acceleration</p></div>
+<div class="card"><div class="metric">90%+</div><p>manual task elimination</p></div>
 </div>
+</div>
+</section>
 
-<div class="reveal">
-<div class="metric" data-target="4.2">0</div>
-<p>Operational Speed Increase</p>
-</div>
+<!-- WHO WE WORK WITH -->
+<section>
+<div class="container">
+<div class="step">CLIENT PROFILE</div>
+<h2>Organizations We Work With</h2>
 
-<div class="reveal">
-<div class="metric" data-target="99.99">0</div>
-<p>System Reliability</p>
+<div class="grid grid-3">
+<div class="card">Private Equity Portfolio Companies</div>
+<div class="card">Revenue $5M – $500M+</div>
+<div class="card">Complex multi-system operations</div>
 </div>
-</div>
-
-<div class="grid grid-3" style="margin-top:70px">
-<div class="card reveal testimonial">
-“Operational workload dropped by 70% within weeks.”
-</div>
-<div class="card reveal testimonial">
-“Decision cycles accelerated across all departments.”
-</div>
-<div class="card reveal testimonial">
-“Automation paid for itself in under 90 days.”
-</div>
-</div>
-
 </div>
 </section>
 
 <!-- AUDIT -->
 <section id="audit">
 <div class="container">
-<h2 class="reveal">AI Operational Efficiency Audit</h2>
-<p class="reveal">A structured analysis identifying automation opportunities with measurable financial impact.</p>
+<div class="step">STRATEGIC ENTRY POINT</div>
+<h2>Operational Automation Audit</h2>
 
 <div class="grid grid-3">
-<div class="card reveal">Process Intelligence Mapping</div>
-<div class="card reveal">Automation ROI Modeling</div>
-<div class="card reveal">Strategic Implementation Roadmap</div>
+
+<div class="card">
+<h3>What We Analyze</h3>
+<p>Process structure, cost drivers, system architecture.</p>
+</div>
+
+<div class="card">
+<h3>What You Receive</h3>
+<p>ROI forecast, automation roadmap, implementation model.</p>
+</div>
+
+<div class="card">
+<h3>Timeline</h3>
+<p>10-14 day structured assessment.</p>
 </div>
 
 </div>
-</section>
 
-<!-- CONTACT -->
-<section id="contact">
-<div class="container">
-<h2 class="reveal">Apply For Strategic Assessment</h2>
-<form style="max-width:600px;margin-top:30px">
-<input placeholder="Company Name" style="width:100%;padding:14px;margin-bottom:15px;background:#0a0a0a;border:1px solid rgba(255,255,255,.08);border-radius:10px;color:white">
-<input placeholder="Annual Revenue" style="width:100%;padding:14px;margin-bottom:15px;background:#0a0a0a;border:1px solid rgba(255,255,255,.08);border-radius:10px;color:white">
-<textarea rows="4" placeholder="Operational challenges" style="width:100%;padding:14px;background:#0a0a0a;border:1px solid rgba(255,255,255,.08);border-radius:10px;color:white"></textarea>
-<button class="btn">Submit Application</button>
+<form class="form" style="max-width:600px;margin-top:40px">
+<input placeholder="Company Name">
+<input placeholder="Annual Revenue">
+<input placeholder="Team Size">
+<textarea rows="4" placeholder="Operational challenge"></textarea>
+<button class="btn">Apply for Audit</button>
 </form>
+
 </div>
 </section>
 
 <footer>
-UPCORE AI • AUTONOMOUS ENTERPRISE SYSTEMS
+UPCORE AI • ENTERPRISE AUTOMATION STRATEGY
 </footer>
-
-<script>
-
-/* REVEAL ON SCROLL */
-
-const observer=new IntersectionObserver(entries=>{
-entries.forEach(e=>{
-if(e.isIntersecting) e.target.classList.add("active");
-});
-});
-document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
-
-/* METRIC COUNTER */
-
-const counters=document.querySelectorAll(".metric");
-
-const counterObserver=new IntersectionObserver(entries=>{
-entries.forEach(entry=>{
-if(!entry.isIntersecting) return;
-
-const el=entry.target;
-const target=parseFloat(el.dataset.target);
-let current=0;
-
-const step=target/100;
-
-const update=()=>{
-current+=step;
-if(current>=target){
-el.innerText=target;
-}else{
-el.innerText=current.toFixed(1);
-requestAnimationFrame(update);
-}
-}
-update();
-counterObserver.unobserve(el);
-});
-});
-
-counters.forEach(c=>counterObserver.observe(c));
-
-</script>
 
 </body>
 </html>
