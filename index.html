@@ -9,9 +9,7 @@
 
 <style>
 
-/* =========================
-   VARIABLES UPCORE AI
-========================= */
+/* ================= VARIABLES ================= */
 
 :root{
 --bg:#050505;
@@ -23,28 +21,18 @@
 --grad:linear-gradient(135deg,var(--cyan),var(--violet));
 }
 
-/* =========================
-   BASE
-========================= */
+/* ================= BASE ================= */
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-scroll-behavior:smooth;
-}
-
+*{margin:0;padding:0;box-sizing:border-box}
 body{
-font-family:Inter, sans-serif;
-color:var(--text);
-background:#000;
+font-family:Inter,sans-serif;
+color:white;
+background:black;
 line-height:1.6;
 overflow-x:hidden;
 }
 
-/* =========================
-   FONDO ANIMADO PREMIUM
-========================= */
+/* ================= ANIMATED BACKGROUND ================= */
 
 body::before{
 content:"";
@@ -56,30 +44,19 @@ left:-50%;
 background:
 radial-gradient(circle at 30% 30%, rgba(0,229,255,.15), transparent 40%),
 radial-gradient(circle at 70% 60%, rgba(138,43,226,.15), transparent 40%);
-animation:moveBg 18s linear infinite;
+animation:moveBg 20s linear infinite;
 z-index:-1;
 }
-
 @keyframes moveBg{
 0%{transform:translate(0,0)}
 50%{transform:translate(10%,10%)}
 100%{transform:translate(0,0)}
 }
 
-/* =========================
-   LAYOUT
-========================= */
+/* ================= LAYOUT ================= */
 
-.container{
-width:92%;
-max-width:1200px;
-margin:auto;
-}
-
-section{
-padding:100px 0;
-border-bottom:1px solid rgba(255,255,255,.05);
-}
+.container{width:92%;max-width:1200px;margin:auto}
+section{padding:110px 0;border-bottom:1px solid rgba(255,255,255,.05)}
 
 h1{font-size:3.2rem;font-weight:800}
 h2{font-size:2.2rem;margin-bottom:15px}
@@ -91,29 +68,21 @@ background:var(--grad);
 -webkit-text-fill-color:transparent;
 }
 
-/* =========================
-   NAV
-========================= */
+/* ================= NAV ================= */
 
 nav{
 position:fixed;
-top:0;
 width:100%;
 background:rgba(5,5,5,.7);
 backdrop-filter:blur(20px);
 border-bottom:1px solid rgba(255,255,255,.05);
 z-index:1000;
 }
-
 nav .wrap{
 display:flex;
 justify-content:space-between;
-align-items:center;
 padding:16px 0;
 }
-
-.logo{font-weight:800}
-
 .menu a{
 margin-left:25px;
 color:#aaa;
@@ -122,12 +91,10 @@ font-size:.9rem;
 }
 .menu a:hover{color:white}
 
-/* =========================
-   HERO
-========================= */
+/* ================= HERO ================= */
 
 .hero{
-padding-top:160px;
+padding-top:170px;
 text-align:center;
 }
 .hero p{
@@ -135,9 +102,7 @@ max-width:600px;
 margin:20px auto;
 }
 
-/* =========================
-   BOTON
-========================= */
+/* ================= BUTTON ================= */
 
 .btn{
 display:inline-block;
@@ -155,17 +120,13 @@ transform:translateY(-3px);
 box-shadow:0 0 25px rgba(0,229,255,.4);
 }
 
-/* =========================
-   TARJETAS
-========================= */
+/* ================= GRID ================= */
 
-.grid{
-display:grid;
-gap:25px;
-margin-top:40px;
-}
+.grid{display:grid;gap:25px;margin-top:40px}
 .grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
 .grid-4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+
+/* ================= CARD ================= */
 
 .card{
 position:relative;
@@ -173,8 +134,8 @@ background:rgba(12,12,12,.7);
 padding:30px;
 border-radius:22px;
 backdrop-filter:blur(10px);
+transition:.4s;
 }
-
 .card::before{
 content:"";
 position:absolute;
@@ -182,46 +143,45 @@ inset:0;
 border-radius:22px;
 padding:1px;
 background:var(--grad);
--webkit-mask:
-linear-gradient(#000 0 0) content-box,
-linear-gradient(#000 0 0);
+-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
 -webkit-mask-composite:xor;
 mask-composite:exclude;
 opacity:.35;
 transition:.35s;
 }
-
 .card:hover::before{opacity:1}
 .card:hover{
 transform:translateY(-6px);
 box-shadow:0 0 40px rgba(0,229,255,.25);
 }
 
-/* ========================= */
-
-.step{
-font-size:.75rem;
-letter-spacing:2px;
-color:var(--cyan);
-margin-bottom:10px;
-}
+/* ================= METRICS ================= */
 
 .metric{
-font-size:2.4rem;
+font-size:2.6rem;
 font-weight:700;
 }
 
-/* ========================= */
+/* ================= TEXT ANIMATION ================= */
 
-.form input,.form textarea{
-width:100%;
-padding:14px;
-margin-bottom:15px;
-background:#0a0a0a;
-border:1px solid rgba(255,255,255,.08);
-border-radius:10px;
-color:white;
+.reveal{
+opacity:0;
+transform:translateY(30px);
+transition:1s ease;
 }
+.reveal.active{
+opacity:1;
+transform:translateY(0);
+}
+
+/* ================= TESTIMONIAL ================= */
+
+.testimonial{
+font-style:italic;
+color:#ccc;
+}
+
+/* ================= FOOTER ================= */
 
 footer{
 text-align:center;
@@ -241,8 +201,10 @@ font-size:.8rem;
 <div class="menu">
 <a href="#problem">Problem</a>
 <a href="#system">System</a>
+<a href="#process">Process</a>
 <a href="#results">Results</a>
-<a href="#contact">Audit</a>
+<a href="#audit">Audit</a>
+<a href="#contact">Apply</a>
 </div>
 </div>
 </nav>
@@ -250,27 +212,25 @@ font-size:.8rem;
 <!-- HERO -->
 <section class="hero">
 <div class="container">
-<h1>
+<h1 class="reveal">
 Autonomous Infrastructure<br>
 <span class="gradient">for High-Performance Companies</span>
 </h1>
-<p>
-Self-operating systems that eliminate manual work, optimize decisions,
-and scale operations without increasing headcount.
+<p class="reveal">
+We redesign enterprise operations using intelligent systems that eliminate manual work and scale performance automatically.
 </p>
-<a href="#contact" class="btn">Request Infrastructure Audit</a>
+<a href="#contact" class="btn reveal">Request Strategic Assessment</a>
 </div>
 </section>
 
 <!-- PROBLEM -->
 <section id="problem">
 <div class="container">
-<div class="step">STEP 01</div>
-<h2>Operational Complexity is the Growth Killer</h2>
+<h2 class="reveal">Operational Complexity Is The Hidden Profit Leak</h2>
 <div class="grid grid-3">
-<div class="card"><h3>Manual Overload</h3><p>Thousands of wasted operational hours.</p></div>
-<div class="card"><h3>Disconnected Systems</h3><p>Tools without unified intelligence.</p></div>
-<div class="card"><h3>Fragile Automation</h3><p>Workflows that break under change.</p></div>
+<div class="card reveal"><h3>Manual Overload</h3><p>Human execution limits scale.</p></div>
+<div class="card reveal"><h3>Disconnected Systems</h3><p>Fragmented decision layers.</p></div>
+<div class="card reveal"><h3>Reactive Operations</h3><p>No predictive intelligence.</p></div>
 </div>
 </div>
 </section>
@@ -278,60 +238,76 @@ and scale operations without increasing headcount.
 <!-- SYSTEM -->
 <section id="system">
 <div class="container">
-<div class="step">STEP 02</div>
-<h2>The Neural Operating System</h2>
+<h2 class="reveal">The Neural Operating System</h2>
 <div class="grid grid-4">
-<div class="card">Data Input</div>
-<div class="card">Decision Intelligence</div>
-<div class="card">Autonomous Execution</div>
-<div class="card">Continuous Learning</div>
+<div class="card reveal">Data Ingestion</div>
+<div class="card reveal">Decision Intelligence</div>
+<div class="card reveal">Autonomous Execution</div>
+<div class="card reveal">Continuous Learning</div>
 </div>
 </div>
 </section>
 
-<!-- RESULTS (METRICS + TESTIMONIOS) -->
+<!-- PROCESS -->
+<section id="process">
+<div class="container">
+<h2 class="reveal">How We Transform Enterprise Operations</h2>
+<div class="grid grid-4">
+<div class="card reveal"><strong>01</strong><p>Operational Intelligence Audit</p></div>
+<div class="card reveal"><strong>02</strong><p>System Architecture Design</p></div>
+<div class="card reveal"><strong>03</strong><p>Implementation Oversight</p></div>
+<div class="card reveal"><strong>04</strong><p>Continuous Optimization</p></div>
+</div>
+</div>
+</section>
+
+<!-- RESULTS -->
 <section id="results">
 <div class="container">
-
-<div class="step">STEP 03</div>
-<h2>Measured Performance</h2>
+<h2 class="reveal">Measured Performance Impact</h2>
 
 <div class="grid grid-3">
-<div><div class="metric counter" data-target="68">0</div><p>Cost reduction</p></div>
-<div><div class="metric counter" data-target="4.2">0</div><p>Speed increase</p></div>
-<div><div class="metric counter" data-target="99.99">0</div><p>System uptime</p></div>
+<div class="reveal">
+<div class="metric" data-target="68">0</div>
+<p>Cost Reduction</p>
 </div>
 
-<br><br><br>
+<div class="reveal">
+<div class="metric" data-target="4.2">0</div>
+<p>Operational Speed Increase</p>
+</div>
 
-<h2>Enterprise Impact</h2>
+<div class="reveal">
+<div class="metric" data-target="99.99">0</div>
+<p>System Reliability</p>
+</div>
+</div>
+
+<div class="grid grid-3" style="margin-top:70px">
+<div class="card reveal testimonial">
+“Operational workload dropped by 70% within weeks.”
+</div>
+<div class="card reveal testimonial">
+“Decision cycles accelerated across all departments.”
+</div>
+<div class="card reveal testimonial">
+“Automation paid for itself in under 90 days.”
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- AUDIT -->
+<section id="audit">
+<div class="container">
+<h2 class="reveal">AI Operational Efficiency Audit</h2>
+<p class="reveal">A structured analysis identifying automation opportunities with measurable financial impact.</p>
 
 <div class="grid grid-3">
-
-<div class="card">
-<h3>Global Logistics Company</h3>
-<p style="margin:15px 0">
-Eliminated 73% of manual coordination across operations.
-</p>
-<div class="metric" style="font-size:1.4rem">+240% throughput</div>
-</div>
-
-<div class="card">
-<h3>SaaS Revenue Operations</h3>
-<p style="margin:15px 0">
-Lead qualification and retention fully autonomous.
-</p>
-<div class="metric" style="font-size:1.4rem">3.8x conversion</div>
-</div>
-
-<div class="card">
-<h3>Financial Services Firm</h3>
-<p style="margin:15px 0">
-Processing time reduced from days to minutes.
-</p>
-<div class="metric" style="font-size:1.4rem">92% faster</div>
-</div>
-
+<div class="card reveal">Process Intelligence Mapping</div>
+<div class="card reveal">Automation ROI Modeling</div>
+<div class="card reveal">Strategic Implementation Roadmap</div>
 </div>
 
 </div>
@@ -340,14 +316,12 @@ Processing time reduced from days to minutes.
 <!-- CONTACT -->
 <section id="contact">
 <div class="container">
-<div class="step">STEP 04</div>
-<h2>Request Infrastructure Assessment</h2>
-<form class="form" style="max-width:600px;margin-top:30px">
-<input placeholder="Company Name">
-<input placeholder="Annual Revenue">
-<input placeholder="Team Size">
-<textarea rows="4" placeholder="Processes to automate"></textarea>
-<button class="btn">Submit Request</button>
+<h2 class="reveal">Apply For Strategic Assessment</h2>
+<form style="max-width:600px;margin-top:30px">
+<input placeholder="Company Name" style="width:100%;padding:14px;margin-bottom:15px;background:#0a0a0a;border:1px solid rgba(255,255,255,.08);border-radius:10px;color:white">
+<input placeholder="Annual Revenue" style="width:100%;padding:14px;margin-bottom:15px;background:#0a0a0a;border:1px solid rgba(255,255,255,.08);border-radius:10px;color:white">
+<textarea rows="4" placeholder="Operational challenges" style="width:100%;padding:14px;background:#0a0a0a;border:1px solid rgba(255,255,255,.08);border-radius:10px;color:white"></textarea>
+<button class="btn">Submit Application</button>
 </form>
 </div>
 </section>
@@ -356,44 +330,46 @@ Processing time reduced from days to minutes.
 UPCORE AI • AUTONOMOUS ENTERPRISE SYSTEMS
 </footer>
 
-<!-- COUNTER SCRIPT -->
 <script>
 
-const counters = document.querySelectorAll(".counter");
+/* REVEAL ON SCROLL */
 
-const observer = new IntersectionObserver(entries=>{
-entries.forEach(entry=>{
-if(entry.isIntersecting){
-
-let el = entry.target;
-let target = parseFloat(el.dataset.target);
-let duration = 1500;
-let start=null;
-
-function animate(t){
-if(!start) start=t;
-let progress=t-start;
-let percent=Math.min(progress/duration,1);
-let value=target*percent;
-
-el.textContent=value.toFixed(2);
-
-if(percent<1) requestAnimationFrame(animate);
-else{
-if(target==68) el.textContent="68%";
-if(target==4.2) el.textContent="4.2x";
-if(target==99.99) el.textContent="99.99%";
-}
-}
-
-requestAnimationFrame(animate);
-observer.unobserve(el);
-
-}
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(e=>{
+if(e.isIntersecting) e.target.classList.add("active");
 });
-},{threshold:.6});
+});
+document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
 
-counters.forEach(c=>observer.observe(c));
+/* METRIC COUNTER */
+
+const counters=document.querySelectorAll(".metric");
+
+const counterObserver=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(!entry.isIntersecting) return;
+
+const el=entry.target;
+const target=parseFloat(el.dataset.target);
+let current=0;
+
+const step=target/100;
+
+const update=()=>{
+current+=step;
+if(current>=target){
+el.innerText=target;
+}else{
+el.innerText=current.toFixed(1);
+requestAnimationFrame(update);
+}
+}
+update();
+counterObserver.unobserve(el);
+});
+});
+
+counters.forEach(c=>counterObserver.observe(c));
 
 </script>
 
