@@ -10,33 +10,34 @@
 <style>
 
 :root{
---bg:#0a0d14;
---card:#111725;
+--bg:#070a12;
+--card:#111827;
 --accent:#5B8CFF;
---text:#e8eefc;
---muted:#8ea2c8;
---border:#1d2638;
+--text:#e6ecff;
+--muted:#8fa3c8;
+--border:#1d2842;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
 
 body{
-background:radial-gradient(circle at 20% 20%,#111a2f,#05070c 60%);
+background:radial-gradient(circle at 20% 20%,#0f1830,#04060b 70%);
 color:var(--text);
-line-height:1.6;
+line-height:1.65;
 }
 
 .container{
 max-width:1200px;
 margin:auto;
-padding:80px 24px;
+padding:90px 24px;
 }
 
-h1{font-size:56px;font-weight:800;letter-spacing:-1px}
-h2{font-size:36px;margin-bottom:20px}
-p{color:var(--muted)}
-
 .section{border-bottom:1px solid var(--border)}
+
+h1{font-size:58px;font-weight:900;letter-spacing:-1px}
+h2{font-size:38px;margin-bottom:20px}
+h3{margin-bottom:10px}
+p{color:var(--muted)}
 
 .card{
 background:rgba(255,255,255,.02);
@@ -46,67 +47,74 @@ border-radius:18px;
 backdrop-filter:blur(12px);
 }
 
-.grid{
-display:grid;
-gap:24px;
-}
-
+.grid{display:grid;gap:24px}
 .grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
 .grid-2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
 
 .metric{
-font-size:44px;
-font-weight:800;
+font-size:48px;
+font-weight:900;
 color:var(--accent);
 }
+
+.badge{
+display:inline-block;
+background:rgba(91,140,255,.12);
+padding:6px 14px;
+border-radius:999px;
+font-size:13px;
+color:var(--accent);
+margin-bottom:18px;
+}
+
+.hero{text-align:center;padding-top:120px}
 
 button{
 background:var(--accent);
 border:none;
 padding:14px 28px;
 border-radius:12px;
+color:white;
 font-weight:600;
 cursor:pointer;
-color:white;
 }
 
 input{
 width:100%;
 padding:14px;
-background:#0e1423;
+margin-top:10px;
+background:#0c1325;
 border:1px solid var(--border);
 border-radius:10px;
 color:white;
 }
 
-.label{font-size:13px;color:var(--muted);margin-top:12px}
-
-.hero{
-text-align:center;
-padding-top:120px;
+.diagram{
+background:#0b1224;
+border-radius:14px;
+padding:20px;
+font-size:14px;
+line-height:1.8;
+border:1px solid var(--border);
 }
 
-.badge{
-display:inline-block;
-background:rgba(91,140,255,.1);
-padding:6px 14px;
-border-radius:999px;
-margin-bottom:20px;
-font-size:13px;
-color:var(--accent);
+.loss{
+font-size:32px;
+font-weight:800;
+color:#ff6b6b;
+margin-top:10px;
 }
 
-.download{
-display:inline-block;
-margin-top:14px;
-color:var(--accent);
-font-weight:600;
-text-decoration:none;
+.roi{
+font-size:28px;
+font-weight:700;
+color:#6dffb2;
+margin-top:12px;
 }
 
 .founder{
 display:flex;
-gap:28px;
+gap:30px;
 align-items:center;
 }
 
@@ -114,19 +122,7 @@ align-items:center;
 width:120px;
 height:120px;
 border-radius:20px;
-background:linear-gradient(135deg,#5B8CFF,#9b7bff);
-}
-
-.limit-box{
-background:linear-gradient(135deg,#5B8CFF15,#9b7bff15);
-border:1px solid #2a3560;
-}
-
-.roi-result{
-font-size:28px;
-font-weight:700;
-color:#6dffb2;
-margin-top:10px;
+background:linear-gradient(135deg,#5B8CFF,#8f7bff);
 }
 
 </style>
@@ -136,118 +132,143 @@ margin-top:10px;
 
 <!-- HERO -->
 <section class="container hero section">
-<div class="badge">Institutional Automation Architecture</div>
-<h1>Operational Intelligence<br>for Capital-Driven Enterprises</h1>
+<div class="badge">Private Equity Portfolio Infrastructure</div>
+<h1>Automation Architecture<br>Built for Capital Performance</h1>
 <p style="max-width:720px;margin:20px auto">
-We design automation infrastructure that restructures cost layers, execution velocity and capital efficiency across complex operating environments.
+We redesign operational execution across portfolio companies by installing autonomous decision infrastructure that restructures cost layers, execution velocity and margin expansion.
 </p>
 </section>
 
-<!-- IMPACT DASHBOARD -->
+<!-- TARGET CLIENT -->
 <section class="container section">
-<h2>Measured Financial Impact</h2>
+<h2>Designed for Portfolio-Scale Operations</h2>
 
 <div class="grid grid-3">
 <div class="card">
-<div class="metric" data-count="42">0</div>
-<p>Median Operational Cost Reduction (%)</p>
+<h3>Private Equity Portfolio Companies</h3>
+<p>Multi-entity operations requiring standardized execution and cost compression.</p>
 </div>
 
 <div class="card">
-<div class="metric" data-count="73">0</div>
-<p>Execution Cycle Time Compression (%)</p>
+<h3>Manufacturing & Logistics Groups</h3>
+<p>High operational complexity and process fragmentation.</p>
 </div>
 
 <div class="card">
-<div class="metric" data-count="118">0</div>
-<p>EBITDA Expansion (basis points)</p>
+<h3>Enterprise Service Operators</h3>
+<p>Labor-heavy execution with predictable decision patterns.</p>
 </div>
+</div>
+</section>
+
+<!-- FRAMEWORK -->
+<section class="container section">
+<h2>Structural Automation Reconstruction Framework™</h2>
+
+<div class="grid grid-3">
+<div class="card">
+<h3>Operational Mapping</h3>
+<p>Full process dependency modeling across systems, teams and decision layers.</p>
+</div>
+
+<div class="card">
+<h3>Execution Re-Architecture</h3>
+<p>Autonomous routing, decision engines and system orchestration deployment.</p>
+</div>
+
+<div class="card">
+<h3>Capital Efficiency Calibration</h3>
+<p>Continuous monitoring of cost compression and throughput expansion.</p>
+</div>
+</div>
+</section>
+
+<!-- ARCHITECTURE DIAGRAM -->
+<section class="container section">
+<h2>Operational Architecture Blueprint</h2>
+
+<div class="diagram">
+DATA LAYER → ERP / CRM / API / HUMAN INPUTS<br>
+↓<br>
+INTELLIGENCE LAYER → Predictive Models + Decision Engines<br>
+↓<br>
+EXECUTION LAYER → Automated Workflows + System Orchestration<br>
+↓<br>
+CONTROL LAYER → Monitoring + Exception Handling + Optimization<br>
+↓<br>
+FINANCIAL TELEMETRY → Cost, Throughput, Margin Impact
 </div>
 </section>
 
 <!-- CASE STUDY -->
 <section class="container section">
-<h2>Institutional Case Study</h2>
+<h2>Technical Case Study — Industrial Operator</h2>
 
 <div class="grid grid-2">
+
 <div class="card">
-<h3>Portfolio Manufacturing Group</h3>
-<p>
-Multi-entity industrial operator with fragmented workflow execution and manual decision routing.
-</p>
-
-<br>
-
-<p><b>Implementation Window:</b> 41 days</p>
-<p><b>Baseline Labor Load:</b> 126 FTE equivalents</p>
-<p><b>Post Automation Load:</b> 78 FTE equivalents</p>
-<p><b>Annualized Cost Reduction:</b> $3.4M</p>
-<p><b>Payback Period:</b> 19 days</p>
-
-<a class="download" href="#">Download Institutional Report (PDF)</a>
+<p><b>Entities:</b> 7 operating companies</p>
+<p><b>Systems Integrated:</b> 14</p>
+<p><b>Manual workflows replaced:</b> 62</p>
+<p><b>Implementation window:</b> 41 days</p>
+<p><b>Labor load reduction:</b> 38%</p>
+<p><b>Annual cost reduction:</b> $3.4M</p>
+<p><b>Payback period:</b> 19 days</p>
 </div>
 
 <div class="card">
-<h3>Architecture Deployed</h3>
-<p>• Cross-system orchestration layer</p>
-<p>• Predictive routing decision model</p>
-<p>• Real-time execution monitoring</p>
-<p>• Exception management engine</p>
-<p>• Financial performance telemetry</p>
+<h3>Deployment Stack</h3>
+<p>• Cross-platform orchestration engine</p>
+<p>• Predictive decision routing</p>
+<p>• Autonomous exception handling</p>
+<p>• Real-time performance telemetry</p>
+<p>• Continuous optimization loop</p>
 </div>
+
 </div>
 </section>
 
-<!-- ROI CALCULATOR -->
+<!-- COST OF INACTION -->
 <section class="container section">
-<h2>Capital Impact Model</h2>
+<h2>Cost of Operational Inertia</h2>
 
 <div class="card" style="max-width:500px">
-<div class="label">Annual Operating Cost ($)</div>
-<input id="cost" type="number" placeholder="5000000">
 
-<div class="label">Automation Efficiency Gain (%)</div>
-<input id="eff" type="number" placeholder="35">
+<input id="ineff" type="number" placeholder="Annual operating cost ($)">
+<input id="lossRate" type="number" placeholder="Inefficiency rate (%)">
 
-<div class="label">Implementation Cost ($)</div>
-<input id="impl" type="number" placeholder="120000">
+<button onclick="calcLoss()" style="margin-top:14px">Calculate Annual Loss</button>
 
-<button style="margin-top:16px" onclick="calcROI()">Calculate Impact</button>
+<div id="lossResult" class="loss"></div>
 
-<div id="roi" class="roi-result"></div>
 </div>
 </section>
 
-<!-- CLIENT ADMISSION -->
+<!-- ROI -->
 <section class="container section">
-<h2>Client Admission Framework</h2>
+<h2>Automation Capital Impact</h2>
+
+<div class="card" style="max-width:500px">
+
+<input id="cost" type="number" placeholder="Annual operating cost ($)">
+<input id="eff" type="number" placeholder="Efficiency gain (%)">
+<input id="impl" type="number" placeholder="Implementation cost ($)">
+
+<button onclick="calcROI()" style="margin-top:14px">Calculate ROI</button>
+
+<div id="roiResult" class="roi"></div>
+
+</div>
+</section>
+
+<!-- METRICS -->
+<section class="container section">
+<h2>Aggregate Deployment Impact</h2>
 
 <div class="grid grid-3">
-<div class="card">
-<h3>Operational Complexity</h3>
-<p>Multi-system workflow dependency and execution fragmentation.</p>
-</div>
-
-<div class="card">
-<h3>Economic Scale</h3>
-<p>Minimum $5M annual operational expenditure.</p>
-</div>
-
-<div class="card">
-<h3>Structural Leverage Potential</h3>
-<p>Clear automation-driven margin expansion path.</p>
-</div>
-</div>
-</section>
-
-<!-- CAPACITY -->
-<section class="container section">
-<div class="card limit-box">
-<h2>Engagement Capacity</h2>
-<p>
-To maintain implementation precision, only 3 institutional engagements are initiated per quarter.
-All partnerships undergo structural compatibility evaluation prior to acceptance.
-</p>
+<div class="card"><div class="metric" data-count="42">0</div><p>Median Cost Reduction (%)</p></div>
+<div class="card"><div class="metric" data-count="73">0</div><p>Execution Time Compression (%)</p></div>
+<div class="card"><div class="metric" data-count="118">0</div><p>EBITDA Expansion (bps)</p></div>
 </div>
 </section>
 
@@ -258,25 +279,24 @@ All partnerships undergo structural compatibility evaluation prior to acceptance
 <div class="card founder">
 <div class="avatar"></div>
 <div>
-<h3>Strategic Automation Architect</h3>
-<p>
-Designs operational intelligence systems focused on capital efficiency,
-execution compression and scalable decision infrastructure across portfolio environments.
+<p>Designs automation infrastructure for multi-entity operating environments focused on execution compression, cost restructuring and scalable decision systems.</p>
+<p style="margin-top:10px">
+Specialization: workflow orchestration, decision modeling, enterprise system integration.
 </p>
 </div>
 </div>
 </section>
 
-<!-- AUDIT APPLICATION -->
+<!-- APPLICATION -->
 <section class="container section">
-<h2>Institutional Audit Application</h2>
+<h2>Institutional Engagement Evaluation</h2>
 
 <div class="card" style="max-width:520px">
 <input placeholder="Company Name">
 <input placeholder="Annual Revenue">
-<input placeholder="Operational Systems Count">
-<input placeholder="Primary Constraint">
-<button style="margin-top:14px">Submit Evaluation Request</button>
+<input placeholder="Number of Systems">
+<input placeholder="Primary Operational Constraint">
+<button style="margin-top:14px">Submit Evaluation</button>
 </div>
 </section>
 
@@ -292,14 +312,12 @@ let el=entry.target;
 let target=+el.dataset.count;
 let count=0;
 let step=target/60;
-let update=()=>{
+function update(){
 count+=step;
 if(count<target){
 el.textContent=Math.floor(count);
 requestAnimationFrame(update);
-}else{
-el.textContent=target;
-}
+}else el.textContent=target;
 }
 update();
 observer.unobserve(el);
@@ -308,17 +326,20 @@ observer.unobserve(el);
 });
 counters.forEach(c=>observer.observe(c));
 
+function calcLoss(){
+let cost=+document.getElementById("ineff").value;
+let rate=+document.getElementById("lossRate").value/100;
+let loss=cost*rate;
+document.getElementById("lossResult").innerText="Estimated annual loss: $"+loss.toLocaleString();
+}
+
 function calcROI(){
 let cost=+document.getElementById("cost").value;
 let eff=+document.getElementById("eff").value/100;
 let impl=+document.getElementById("impl").value;
-
-let annualSavings=cost*eff;
-let payback=impl/annualSavings*365;
-
-document.getElementById("roi").innerText=
-"Annual Savings: $"+annualSavings.toLocaleString()+
-" | Payback: "+payback.toFixed(1)+" days";
+let savings=cost*eff;
+let payback=impl/savings*365;
+document.getElementById("roiResult").innerText="Annual savings: $"+savings.toLocaleString()+" | Payback: "+payback.toFixed(1)+" days";
 }
 
 </script>
