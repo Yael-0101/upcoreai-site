@@ -1,274 +1,326 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upcore AI | Operational Intelligence Systems</title>
+<title>Upcore AI | Institutional Automation Infrastructure</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
+
 :root{
---bg:#0b0f17;
---card:#111826;
---border:#2a3346;
---text:#e6edf3;
---muted:#8b98b0;
---accent:#7df9ff;
---radius:18px;
+--bg:#050505;
+--card:#0c0c0c;
+--text:#ffffff;
+--muted:#9b9b9b;
+--cyan:#00E5FF;
+--violet:#8A2BE2;
+--grad:linear-gradient(135deg,var(--cyan),var(--violet));
 }
 
-*{box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth}
+
 body{
-margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-background:var(--bg);
+font-family:Inter,sans-serif;
+background:#000;
 color:var(--text);
+line-height:1.6;
+overflow-x:hidden;
 }
 
-.container{
-max-width:1200px;
-margin:auto;
-padding:80px 24px;
+body::before{
+content:"";
+position:fixed;
+width:200%;height:200%;
+top:-50%;left:-50%;
+background:
+radial-gradient(circle at 30% 30%, rgba(0,229,255,.15), transparent 40%),
+radial-gradient(circle at 70% 60%, rgba(138,43,226,.15), transparent 40%);
+animation:bgMove 18s linear infinite;
+z-index:-1;
 }
 
-h1,h2,h3{margin:0 0 12px}
-p{color:var(--muted);line-height:1.6}
-
-.hero{
-text-align:center;
-padding-top:120px;
+@keyframes bgMove{
+0%{transform:translate(0,0)}
+50%{transform:translate(10%,10%)}
+100%{transform:translate(0,0)}
 }
 
-.hero h1{
-font-size:56px;
-letter-spacing:-1px;
+.container{width:92%;max-width:1250px;margin:auto}
+section{padding:110px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+
+h1{font-size:3.4rem;font-weight:900;letter-spacing:-.02em}
+h2{font-size:2.4rem;margin-bottom:20px}
+h3{font-size:1.2rem;margin-bottom:10px}
+p{color:var(--muted)}
+
+.gradient{
+background:var(--grad);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
-.hero p{
-font-size:20px;
-max-width:720px;
-margin:20px auto 40px;
+nav{
+position:fixed;
+top:0;width:100%;
+background:rgba(5,5,5,.7);
+backdrop-filter:blur(18px);
+border-bottom:1px solid rgba(255,255,255,.05);
+z-index:1000;
 }
+
+nav .wrap{
+display:flex;justify-content:space-between;align-items:center;padding:18px 0
+}
+
+.logo{font-weight:800;letter-spacing:1px}
+
+.menu a{
+margin-left:28px;
+color:#aaa;
+text-decoration:none;
+font-size:.9rem;
+}
+.menu a:hover{color:white}
+
+.hero{text-align:center;padding-top:170px}
+.hero p{max-width:650px;margin:25px auto}
 
 .btn{
 display:inline-block;
-padding:16px 28px;
-border-radius:12px;
-border:1px solid var(--accent);
-color:white;
-text-decoration:none;
+padding:15px 32px;
+border-radius:60px;
+background:var(--grad);
 font-weight:600;
+text-decoration:none;
+color:white;
+margin-top:30px;
+transition:.35s
 }
 
-.grid{
-display:grid;
-gap:28px;
+.btn:hover{
+transform:translateY(-4px);
+box-shadow:0 0 30px rgba(0,229,255,.4)
 }
 
+.grid{display:grid;gap:26px;margin-top:45px}
 .grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.grid-2{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}
+.grid-4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
 
 .card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:var(--radius);
-padding:28px;
+position:relative;
+background:rgba(12,12,12,.7);
+padding:34px;
+border-radius:22px;
+backdrop-filter:blur(10px);
+transition:.35s
 }
+
+.card::before{
+content:"";
+position:absolute;inset:0;
+border-radius:22px;
+padding:1px;
+background:var(--grad);
+-webkit-mask:
+linear-gradient(#000 0 0) content-box,
+linear-gradient(#000 0 0);
+-webkit-mask-composite:xor;
+mask-composite:exclude;
+opacity:.35;
+transition:.35s;
+}
+
+.card:hover::before{opacity:1}
+.card:hover{transform:translateY(-6px);box-shadow:0 0 45px rgba(0,229,255,.25)}
 
 .metric{
-font-size:40px;
-font-weight:700;
-color:var(--accent);
+font-size:2.6rem;
+font-weight:800;
+margin-bottom:6px;
 }
 
-.section-title{
-font-size:34px;
-margin-bottom:40px;
-text-align:center;
+.architecture{
+display:grid;
+gap:20px;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+margin-top:40px
 }
 
-.process-step{
-display:flex;
-gap:18px;
-align-items:flex-start;
+.archBox{
+padding:25px;
+border-radius:16px;
+background:#0a0a0a;
+border:1px solid rgba(255,255,255,.06)
 }
 
-.step-number{
-width:38px;
-height:38px;
-border-radius:10px;
-border:1px solid var(--accent);
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:700;
-}
-
-.roi-box input{
-width:100%;
-padding:14px;
-margin-top:10px;
-background:#0f1625;
-border:1px solid var(--border);
-border-radius:10px;
-color:white;
-}
-
-.roi-result{
-font-size:32px;
-margin-top:20px;
-color:var(--accent);
-}
-
-footer{
-border-top:1px solid var(--border);
+.download{
 padding:40px;
+border-radius:22px;
+background:rgba(12,12,12,.7);
 text-align:center;
-color:var(--muted);
+max-width:700px;margin:40px auto
 }
+
+.team{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:25px;margin-top:40px
+}
+
+.member{
+text-align:center;
+padding:25px;
+background:#0a0a0a;
+border-radius:16px
+}
+
+.roiInput{
+background:#0a0a0a;
+border:1px solid rgba(255,255,255,.08);
+padding:14px;border-radius:8px;color:white;width:100%;margin-bottom:15px
+}
+
+footer{text-align:center;padding:60px 0;color:#333;font-size:.8rem}
+
 </style>
 </head>
 
 <body>
 
-<!-- HERO -->
-<section class="hero container">
-<h1>Operational AI Systems<br>That Increase EBITDA</h1>
-<p>Diseñamos e implementamos infraestructura de automatización que reduce costos operativos, elimina fricción y escala ingresos sin aumentar headcount.</p>
-<a class="btn" href="#">Solicitar Auditoría Operativa</a>
-</section>
+<nav>
+<div class="container wrap">
+<div class="logo">UPCORE AI</div>
+<div class="menu">
+<a href="#problem">Problem</a>
+<a href="#system">System</a>
+<a href="#case">Case</a>
+<a href="#architecture">Architecture</a>
+<a href="#whitepaper">Research</a>
+<a href="#team">Team</a>
+<a href="#audit">Audit</a>
+</div>
+</div>
+</nav>
 
-<!-- POSITIONING -->
-<section class="container">
-<div class="card">
-<h2>Infrastructure Level Automation</h2>
-<p>No implementamos herramientas. Construimos sistemas operativos empresariales impulsados por IA que transforman la eficiencia estructural del negocio.</p>
+<section class="hero">
+<div class="container">
+<h1>Institutional Automation Infrastructure<br>
+<span class="gradient">For Enterprise Value Creation</span>
+</h1>
+<p>
+We design and deploy autonomous operational systems that increase EBITDA, eliminate manual dependency, and transform execution capacity across enterprise environments.
+</p>
+<a href="#audit" class="btn">Request Strategic Audit</a>
 </div>
 </section>
 
-<!-- FRAMEWORK -->
-<section class="container">
-<h2 class="section-title">Upcore Deployment Framework</h2>
+<section id="problem">
+<div class="container">
+<h2>Operational Inefficiency Destroys Enterprise Value</h2>
+<div class="grid grid-3">
+<div class="card"><h3>Human Bottlenecks</h3><p>Critical workflows depend on manual execution and fragmented coordination.</p></div>
+<div class="card"><h3>Decision Latency</h3><p>Delayed insight reduces capital efficiency and operational responsiveness.</p></div>
+<div class="card"><h3>Scaling Friction</h3><p>Growth increases cost faster than output due to structural inefficiencies.</p></div>
+</div>
+</div>
+</section>
 
+<section id="system">
+<div class="container">
+<h2>Autonomous Operational Framework</h2>
+<div class="grid grid-4">
+<div class="card">Data Ingestion Layer</div>
+<div class="card">Predictive Intelligence Core</div>
+<div class="card">Automated Execution Engine</div>
+<div class="card">Continuous Optimization Loop</div>
+</div>
+</div>
+</section>
+
+<section id="case">
+<div class="container">
+<h2>Documented Enterprise Transformation</h2>
 <div class="grid grid-3">
 <div class="card">
-<h3>1. Operational Mapping</h3>
-<p>Identificación completa de cuellos de botella, fricción humana y pérdida económica oculta.</p>
+<div class="metric">$18.4M</div>
+<p>Annual operational cost reduction</p>
 </div>
-
 <div class="card">
-<h3>2. System Architecture</h3>
-<p>Diseño de infraestructura automatizada integrada con datos, CRM y flujos internos.</p>
+<div class="metric">27%</div>
+<p>EBITDA increase within 120 days</p>
 </div>
-
 <div class="card">
-<h3>3. Autonomous Execution</h3>
-<p>Implementación de agentes, workflows y lógica adaptativa que ejecuta sin intervención humana.</p>
+<div class="metric">92%</div>
+<p>Process automation coverage</p>
+</div>
 </div>
 </div>
 </section>
 
-<!-- RESULTS -->
-<section class="container">
-<h2 class="section-title">Operational Impact</h2>
-
-<div class="grid grid-3">
-<div class="card">
-<div class="metric">-42%</div>
-<p>Reducción promedio en carga operativa manual</p>
-</div>
-
-<div class="card">
-<div class="metric">3.4x</div>
-<p>Aceleración en velocidad de ejecución de procesos</p>
-</div>
-
-<div class="card">
-<div class="metric">+27%</div>
-<p>Incremento medio en margen operativo</p>
+<section id="architecture">
+<div class="container">
+<h2>Enterprise System Architecture</h2>
+<div class="architecture">
+<div class="archBox">Data Pipeline Infrastructure</div>
+<div class="archBox">AI Decision Layer</div>
+<div class="archBox">Workflow Orchestration Engine</div>
+<div class="archBox">Monitoring & Control Systems</div>
+<div class="archBox">Security & Compliance Framework</div>
+<div class="archBox">Performance Analytics</div>
 </div>
 </div>
 </section>
 
-<!-- PROCESS -->
-<section class="container">
-<h2 class="section-title">Implementation Model</h2>
-
-<div class="grid grid-2">
-
-<div class="card process-step">
-<div class="step-number">1</div>
-<div>
-<h3>Diagnostic Audit</h3>
-<p>Análisis técnico del sistema operativo empresarial actual.</p>
+<section id="whitepaper">
+<div class="container">
+<h2>Institutional Research Paper</h2>
+<div class="download">
+<p>
+Operational Automation as a Capital Efficiency Multiplier —
+A quantitative framework for enterprise value expansion through autonomous infrastructure deployment.
+</p>
+<a class="btn">Download Whitepaper</a>
 </div>
-</div>
-
-<div class="card process-step">
-<div class="step-number">2</div>
-<div>
-<h3>Pilot Deployment</h3>
-<p>Implementación controlada para validar impacto económico.</p>
-</div>
-</div>
-
-<div class="card process-step">
-<div class="step-number">3</div>
-<div>
-<h3>Full Infrastructure Rollout</h3>
-<p>Escalamiento completo de automatización a nivel organización.</p>
-</div>
-</div>
-
-<div class="card process-step">
-<div class="step-number">4</div>
-<div>
-<h3>Continuous Optimization</h3>
-<p>Monitoreo, mejora iterativa y expansión funcional.</p>
-</div>
-</div>
-
 </div>
 </section>
 
-<!-- ROI CALCULATOR -->
-<section class="container">
-<h2 class="section-title">ROI Simulator</h2>
-
-<div class="card roi-box">
-<p>Ingresa tu costo operativo mensual aproximado.</p>
-<input type="number" id="cost" placeholder="Ej: 50000">
-<div class="roi-result" id="result">Ahorro estimado: —</div>
+<section id="team">
+<div class="container">
+<h2>Deployment & Engineering Team</h2>
+<div class="team">
+<div class="member"><strong>Systems Architecture</strong><p>Infrastructure design & integration</p></div>
+<div class="member"><strong>Automation Engineering</strong><p>Workflow deployment</p></div>
+<div class="member"><strong>Data Science</strong><p>Predictive modelling</p></div>
+<div class="member"><strong>Operations Strategy</strong><p>Enterprise transformation</p></div>
+</div>
 </div>
 </section>
 
-<!-- RISK REVERSAL -->
-<section class="container">
-<h2 class="section-title">Risk Controlled Deployment</h2>
-<div class="card">
-<p>La implementación inicia con un piloto de impacto medible. Solo escalamos tras validación económica comprobada.</p>
+<section id="audit">
+<div class="container">
+<h2>Enterprise Impact Projection</h2>
+<div style="max-width:500px;margin-top:25px">
+<input class="roiInput" id="cost" placeholder="Annual Operating Cost">
+<input class="roiInput" id="efficiency" placeholder="Efficiency Gain %">
+<button class="btn" onclick="calcROI()">Calculate Impact</button>
+<div id="roiResult" style="margin-top:25px;font-size:1.4rem"></div>
 </div>
-</section>
-
-<!-- CTA -->
-<section class="container hero">
-<h2>Request Operational Audit</h2>
-<p>Evaluación técnica de ineficiencias, pérdidas ocultas y oportunidades de automatización.</p>
-<a class="btn" href="#">Agendar Diagnóstico</a>
+</div>
 </section>
 
 <footer>
-Upcore AI — Operational Intelligence Systems
+UPCORE AI • INSTITUTIONAL AUTOMATION INFRASTRUCTURE
 </footer>
 
 <script>
-const input=document.getElementById("cost")
-const result=document.getElementById("result")
-
-input.addEventListener("input",()=>{
-let cost=Number(input.value)
-let savings=cost*0.32
-result.innerText="Ahorro estimado mensual: $"+savings.toLocaleString()
-})
+function calcROI(){
+let cost=parseFloat(document.getElementById('cost').value)||0;
+let eff=parseFloat(document.getElementById('efficiency').value)||0;
+let result=cost*(eff/100);
+document.getElementById('roiResult').innerHTML="Projected Annual Value Gain: $"+result.toLocaleString();
+}
 </script>
 
 </body>
