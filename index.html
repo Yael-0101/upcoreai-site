@@ -3,126 +3,229 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upcore AI — Institutional Automation Architecture</title>
+<title>Upcore AI | Autonomous Enterprise Infrastructure</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
 
+/* ===============================
+VARIABLES
+=============================== */
+
 :root{
---bg:#070a12;
---card:#111827;
---accent:#5B8CFF;
---text:#e6ecff;
---muted:#8fa3c8;
---border:#1d2842;
+--bg:#050505;
+--card:#0c0c0c;
+--text:#ffffff;
+--muted:#8b8b8b;
+--cyan:#00E5FF;
+--violet:#8A2BE2;
+--grad:linear-gradient(135deg,var(--cyan),var(--violet));
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
+/* ===============================
+BASE
+=============================== */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+scroll-behavior:smooth;
+}
 
 body{
-background:radial-gradient(circle at 20% 20%,#0f1830,#04060b 70%);
-color:var(--text);
-line-height:1.65;
+font-family:Inter,sans-serif;
+background:#000;
+color:white;
+line-height:1.6;
+overflow-x:hidden;
 }
+
+/* ===============================
+ANIMATED BACKGROUND
+=============================== */
+
+body::before{
+content:"";
+position:fixed;
+width:200%;
+height:200%;
+top:-50%;
+left:-50%;
+background:
+radial-gradient(circle at 30% 30%, rgba(0,229,255,.15), transparent 40%),
+radial-gradient(circle at 70% 60%, rgba(138,43,226,.15), transparent 40%);
+animation:bgMove 20s linear infinite;
+z-index:-1;
+}
+
+@keyframes bgMove{
+0%{transform:translate(0,0)}
+50%{transform:translate(8%,8%)}
+100%{transform:translate(0,0)}
+}
+
+/* ===============================
+LAYOUT
+=============================== */
 
 .container{
+width:92%;
 max-width:1200px;
 margin:auto;
-padding:90px 24px;
 }
 
-.section{border-bottom:1px solid var(--border)}
+section{
+padding:110px 0;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
 
-h1{font-size:58px;font-weight:900;letter-spacing:-1px}
-h2{font-size:38px;margin-bottom:20px}
-h3{margin-bottom:10px}
+h1{font-size:3.2rem;font-weight:800;letter-spacing:-.02em}
+h2{font-size:2.2rem;margin-bottom:20px}
 p{color:var(--muted)}
 
-.card{
-background:rgba(255,255,255,.02);
-border:1px solid var(--border);
-padding:28px;
-border-radius:18px;
-backdrop-filter:blur(12px);
+.gradient{
+background:var(--grad);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
-.grid{display:grid;gap:24px}
+/* ===============================
+NAV
+=============================== */
+
+nav{
+position:fixed;
+width:100%;
+background:rgba(5,5,5,.7);
+backdrop-filter:blur(20px);
+border-bottom:1px solid rgba(255,255,255,.05);
+z-index:1000;
+}
+
+nav .wrap{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 0;
+}
+
+.logo{font-weight:800}
+
+.menu a{
+margin-left:25px;
+color:#aaa;
+text-decoration:none;
+font-size:.9rem;
+}
+
+.menu a:hover{color:white}
+
+/* ===============================
+BUTTON
+=============================== */
+
+.btn{
+display:inline-block;
+padding:15px 30px;
+border-radius:60px;
+background:var(--grad);
+color:white;
+text-decoration:none;
+margin-top:25px;
+transition:.3s;
+}
+
+.btn:hover{
+transform:translateY(-3px);
+box-shadow:0 0 30px rgba(0,229,255,.4);
+}
+
+/* ===============================
+CARDS
+=============================== */
+
+.grid{
+display:grid;
+gap:25px;
+margin-top:40px;
+}
+
 .grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.grid-2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
+.grid-4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+
+.card{
+position:relative;
+background:rgba(12,12,12,.7);
+padding:30px;
+border-radius:22px;
+backdrop-filter:blur(10px);
+}
+
+.card::before{
+content:"";
+position:absolute;
+inset:0;
+border-radius:22px;
+padding:1px;
+background:var(--grad);
+-webkit-mask:
+linear-gradient(#000 0 0) content-box,
+linear-gradient(#000 0 0);
+-webkit-mask-composite:xor;
+mask-composite:exclude;
+opacity:.35;
+transition:.35s;
+}
+
+.card:hover::before{opacity:1}
+.card:hover{transform:translateY(-6px)}
 
 .metric{
-font-size:48px;
-font-weight:900;
-color:var(--accent);
+font-size:2.5rem;
+font-weight:800;
 }
 
-.badge{
-display:inline-block;
-background:rgba(91,140,255,.12);
-padding:6px 14px;
-border-radius:999px;
-font-size:13px;
-color:var(--accent);
-margin-bottom:18px;
-}
+/* ===============================
+FORM
+=============================== */
 
-.hero{text-align:center;padding-top:120px}
-
-button{
-background:var(--accent);
-border:none;
-padding:14px 28px;
-border-radius:12px;
-color:white;
-font-weight:600;
-cursor:pointer;
-}
-
-input{
+input,textarea{
 width:100%;
 padding:14px;
-margin-top:10px;
-background:#0c1325;
-border:1px solid var(--border);
+margin-bottom:14px;
+background:#0a0a0a;
+border:1px solid rgba(255,255,255,.08);
 border-radius:10px;
 color:white;
 }
 
-.diagram{
-background:#0b1224;
-border-radius:14px;
-padding:20px;
-font-size:14px;
-line-height:1.8;
-border:1px solid var(--border);
-}
-
-.loss{
-font-size:32px;
-font-weight:800;
-color:#ff6b6b;
-margin-top:10px;
-}
+/* ===============================
+ROI BOX
+=============================== */
 
 .roi{
-font-size:28px;
-font-weight:700;
-color:#6dffb2;
-margin-top:12px;
-}
-
-.founder{
-display:flex;
-gap:30px;
-align-items:center;
-}
-
-.avatar{
-width:120px;
-height:120px;
+background:#0a0a0a;
+padding:30px;
 border-radius:20px;
-background:linear-gradient(135deg,#5B8CFF,#8f7bff);
+margin-top:30px;
+}
+
+.result{
+font-size:1.6rem;
+margin-top:15px;
+color:var(--cyan);
+}
+
+/* ===============================
+FOOTER
+=============================== */
+
+footer{
+text-align:center;
+padding:60px 0;
+color:#333;
 }
 
 </style>
@@ -130,217 +233,146 @@ background:linear-gradient(135deg,#5B8CFF,#8f7bff);
 
 <body>
 
+<!-- NAV -->
+<nav>
+<div class="container wrap">
+<div class="logo">UPCORE AI</div>
+<div class="menu">
+<a href="#cost">Cost</a>
+<a href="#cases">Cases</a>
+<a href="#architecture">System</a>
+<a href="#roi">ROI</a>
+<a href="#contact">Assessment</a>
+</div>
+</div>
+</nav>
+
 <!-- HERO -->
-<section class="container hero section">
-<div class="badge">Private Equity Portfolio Infrastructure</div>
-<h1>Automation Architecture<br>Built for Capital Performance</h1>
-<p style="max-width:720px;margin:20px auto">
-We redesign operational execution across portfolio companies by installing autonomous decision infrastructure that restructures cost layers, execution velocity and margin expansion.
+<section style="padding-top:160px;text-align:center">
+<div class="container">
+<h1>
+Autonomous Infrastructure<br>
+<span class="gradient">for Enterprise Operations</span>
+</h1>
+<p style="max-width:650px;margin:25px auto">
+Self-operating business systems that eliminate operational friction,
+optimize capital efficiency, and scale performance without increasing headcount.
 </p>
+<a href="#contact" class="btn">Request Strategic Assessment</a>
+</div>
 </section>
 
-<!-- TARGET CLIENT -->
-<section class="container section">
-<h2>Designed for Portfolio-Scale Operations</h2>
+<!-- COST -->
+<section id="cost">
+<div class="container">
+<h2>Operational Inefficiency is a Financial Liability</h2>
+<div class="grid grid-3">
+<div class="card"><h3>Manual Processes</h3><p>Hidden labor cost drains profit margins.</p></div>
+<div class="card"><h3>Fragmented Systems</h3><p>Decision latency slows growth.</p></div>
+<div class="card"><h3>Non-Scalable Operations</h3><p>Revenue growth requires headcount growth.</p></div>
+</div>
+</div>
+</section>
 
+<!-- CASES -->
+<section id="cases">
+<div class="container">
+<h2>Enterprise Transformation Case</h2>
 <div class="grid grid-3">
 <div class="card">
-<h3>Private Equity Portfolio Companies</h3>
-<p>Multi-entity operations requiring standardized execution and cost compression.</p>
+<h3>Private Equity Portfolio</h3>
+<p>Unified reporting + autonomous data pipelines.</p>
+<div class="metric">42% cost reduction</div>
 </div>
 
 <div class="card">
-<h3>Manufacturing & Logistics Groups</h3>
-<p>High operational complexity and process fragmentation.</p>
+<h3>Logistics Operator</h3>
+<p>Predictive scheduling + automated routing.</p>
+<div class="metric">3.8x speed</div>
 </div>
 
 <div class="card">
-<h3>Enterprise Service Operators</h3>
-<p>Labor-heavy execution with predictable decision patterns.</p>
+<h3>Financial Services Firm</h3>
+<p>Decision automation + compliance monitoring.</p>
+<div class="metric">99.99% uptime</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+<div class="container">
+<h2>Autonomous Operating System Architecture</h2>
+<div class="grid grid-4">
+<div class="card">Data Ingestion Layer</div>
+<div class="card">Decision Intelligence Engine</div>
+<div class="card">Autonomous Execution</div>
+<div class="card">Continuous Learning Feedback</div>
 </div>
 </div>
 </section>
 
 <!-- FRAMEWORK -->
-<section class="container section">
-<h2>Structural Automation Reconstruction Framework™</h2>
-
+<section>
+<div class="container">
+<h2>Implementation Framework</h2>
 <div class="grid grid-3">
-<div class="card">
-<h3>Operational Mapping</h3>
-<p>Full process dependency modeling across systems, teams and decision layers.</p>
+<div class="card">Enterprise Diagnostics</div>
+<div class="card">System Architecture Design</div>
+<div class="card">Autonomous Deployment</div>
+<div class="card">Operational Stabilization</div>
+<div class="card">Performance Optimization</div>
+<div class="card">Strategic Scaling</div>
 </div>
-
-<div class="card">
-<h3>Execution Re-Architecture</h3>
-<p>Autonomous routing, decision engines and system orchestration deployment.</p>
-</div>
-
-<div class="card">
-<h3>Capital Efficiency Calibration</h3>
-<p>Continuous monitoring of cost compression and throughput expansion.</p>
-</div>
-</div>
-</section>
-
-<!-- ARCHITECTURE DIAGRAM -->
-<section class="container section">
-<h2>Operational Architecture Blueprint</h2>
-
-<div class="diagram">
-DATA LAYER → ERP / CRM / API / HUMAN INPUTS<br>
-↓<br>
-INTELLIGENCE LAYER → Predictive Models + Decision Engines<br>
-↓<br>
-EXECUTION LAYER → Automated Workflows + System Orchestration<br>
-↓<br>
-CONTROL LAYER → Monitoring + Exception Handling + Optimization<br>
-↓<br>
-FINANCIAL TELEMETRY → Cost, Throughput, Margin Impact
-</div>
-</section>
-
-<!-- CASE STUDY -->
-<section class="container section">
-<h2>Technical Case Study — Industrial Operator</h2>
-
-<div class="grid grid-2">
-
-<div class="card">
-<p><b>Entities:</b> 7 operating companies</p>
-<p><b>Systems Integrated:</b> 14</p>
-<p><b>Manual workflows replaced:</b> 62</p>
-<p><b>Implementation window:</b> 41 days</p>
-<p><b>Labor load reduction:</b> 38%</p>
-<p><b>Annual cost reduction:</b> $3.4M</p>
-<p><b>Payback period:</b> 19 days</p>
-</div>
-
-<div class="card">
-<h3>Deployment Stack</h3>
-<p>• Cross-platform orchestration engine</p>
-<p>• Predictive decision routing</p>
-<p>• Autonomous exception handling</p>
-<p>• Real-time performance telemetry</p>
-<p>• Continuous optimization loop</p>
-</div>
-
-</div>
-</section>
-
-<!-- COST OF INACTION -->
-<section class="container section">
-<h2>Cost of Operational Inertia</h2>
-
-<div class="card" style="max-width:500px">
-
-<input id="ineff" type="number" placeholder="Annual operating cost ($)">
-<input id="lossRate" type="number" placeholder="Inefficiency rate (%)">
-
-<button onclick="calcLoss()" style="margin-top:14px">Calculate Annual Loss</button>
-
-<div id="lossResult" class="loss"></div>
-
 </div>
 </section>
 
 <!-- ROI -->
-<section class="container section">
-<h2>Automation Capital Impact</h2>
+<section id="roi">
+<div class="container">
+<h2>Financial Impact Model</h2>
 
-<div class="card" style="max-width:500px">
-
-<input id="cost" type="number" placeholder="Annual operating cost ($)">
-<input id="eff" type="number" placeholder="Efficiency gain (%)">
-<input id="impl" type="number" placeholder="Implementation cost ($)">
-
-<button onclick="calcROI()" style="margin-top:14px">Calculate ROI</button>
-
-<div id="roiResult" class="roi"></div>
+<div class="roi">
+<input id="revenue" placeholder="Annual Revenue (USD)">
+<input id="inefficiency" placeholder="% Operational Inefficiency">
+<button class="btn" onclick="calcROI()">Calculate Impact</button>
+<div class="result" id="roiResult"></div>
+</div>
 
 </div>
 </section>
 
-<!-- METRICS -->
-<section class="container section">
-<h2>Aggregate Deployment Impact</h2>
-
-<div class="grid grid-3">
-<div class="card"><div class="metric" data-count="42">0</div><p>Median Cost Reduction (%)</p></div>
-<div class="card"><div class="metric" data-count="73">0</div><p>Execution Time Compression (%)</p></div>
-<div class="card"><div class="metric" data-count="118">0</div><p>EBITDA Expansion (bps)</p></div>
-</div>
-</section>
-
-<!-- FOUNDER -->
-<section class="container section">
-<h2>Lead Systems Architect</h2>
-
-<div class="card founder">
-<div class="avatar"></div>
-<div>
-<p>Designs automation infrastructure for multi-entity operating environments focused on execution compression, cost restructuring and scalable decision systems.</p>
-<p style="margin-top:10px">
-Specialization: workflow orchestration, decision modeling, enterprise system integration.
-</p>
-</div>
-</div>
-</section>
-
-<!-- APPLICATION -->
-<section class="container section">
-<h2>Institutional Engagement Evaluation</h2>
-
-<div class="card" style="max-width:520px">
+<!-- CONTACT -->
+<section id="contact">
+<div class="container">
+<h2>Strategic Infrastructure Assessment</h2>
+<form style="max-width:600px;margin-top:30px">
 <input placeholder="Company Name">
 <input placeholder="Annual Revenue">
-<input placeholder="Number of Systems">
-<input placeholder="Primary Operational Constraint">
-<button style="margin-top:14px">Submit Evaluation</button>
+<input placeholder="Team Size">
+<textarea rows="4" placeholder="Core Operational Bottlenecks"></textarea>
+<button class="btn">Submit Request</button>
+</form>
 </div>
 </section>
 
-</body>
+<footer>
+UPCORE AI • AUTONOMOUS ENTERPRISE SYSTEMS
+</footer>
 
 <script>
-
-const counters=document.querySelectorAll(".metric");
-const observer=new IntersectionObserver(entries=>{
-entries.forEach(entry=>{
-if(entry.isIntersecting){
-let el=entry.target;
-let target=+el.dataset.count;
-let count=0;
-let step=target/60;
-function update(){
-count+=step;
-if(count<target){
-el.textContent=Math.floor(count);
-requestAnimationFrame(update);
-}else el.textContent=target;
-}
-update();
-observer.unobserve(el);
-}
-});
-});
-counters.forEach(c=>observer.observe(c));
-
-function calcLoss(){
-let cost=+document.getElementById("ineff").value;
-let rate=+document.getElementById("lossRate").value/100;
-let loss=cost*rate;
-document.getElementById("lossResult").innerText="Estimated annual loss: $"+loss.toLocaleString();
-}
-
 function calcROI(){
-let cost=+document.getElementById("cost").value;
-let eff=+document.getElementById("eff").value/100;
-let impl=+document.getElementById("impl").value;
-let savings=cost*eff;
-let payback=impl/savings*365;
-document.getElementById("roiResult").innerText="Annual savings: $"+savings.toLocaleString()+" | Payback: "+payback.toFixed(1)+" days";
-}
+let rev=document.getElementById("revenue").value;
+let ineff=document.getElementById("inefficiency").value;
 
+if(!rev||!ineff)return;
+
+let loss=rev*(ineff/100);
+document.getElementById("roiResult").innerText=
+"Estimated Annual Recoverable Value: $"+loss.toLocaleString();
+}
 </script>
+
+</body>
 </html>
