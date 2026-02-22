@@ -1,377 +1,274 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upcore AI | Autonomous Enterprise Infrastructure</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<title>Upcore AI | Operational Intelligence Systems</title>
 
 <style>
-
-/* ===============================
-VARIABLES
-=============================== */
-
 :root{
---bg:#050505;
---card:#0c0c0c;
---text:#ffffff;
---muted:#8b8b8b;
---cyan:#00E5FF;
---violet:#8A2BE2;
---grad:linear-gradient(135deg,var(--cyan),var(--violet));
+--bg:#0b0f17;
+--card:#111826;
+--border:#2a3346;
+--text:#e6edf3;
+--muted:#8b98b0;
+--accent:#7df9ff;
+--radius:18px;
 }
 
-/* ===============================
-BASE
-=============================== */
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-scroll-behavior:smooth;
-}
-
+*{box-sizing:border-box}
 body{
-font-family:Inter,sans-serif;
-background:#000;
-color:white;
-line-height:1.6;
-overflow-x:hidden;
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+background:var(--bg);
+color:var(--text);
 }
-
-/* ===============================
-ANIMATED BACKGROUND
-=============================== */
-
-body::before{
-content:"";
-position:fixed;
-width:200%;
-height:200%;
-top:-50%;
-left:-50%;
-background:
-radial-gradient(circle at 30% 30%, rgba(0,229,255,.15), transparent 40%),
-radial-gradient(circle at 70% 60%, rgba(138,43,226,.15), transparent 40%);
-animation:bgMove 20s linear infinite;
-z-index:-1;
-}
-
-@keyframes bgMove{
-0%{transform:translate(0,0)}
-50%{transform:translate(8%,8%)}
-100%{transform:translate(0,0)}
-}
-
-/* ===============================
-LAYOUT
-=============================== */
 
 .container{
-width:92%;
 max-width:1200px;
 margin:auto;
+padding:80px 24px;
 }
 
-section{
-padding:110px 0;
-border-bottom:1px solid rgba(255,255,255,.05);
+h1,h2,h3{margin:0 0 12px}
+p{color:var(--muted);line-height:1.6}
+
+.hero{
+text-align:center;
+padding-top:120px;
 }
 
-h1{font-size:3.2rem;font-weight:800;letter-spacing:-.02em}
-h2{font-size:2.2rem;margin-bottom:20px}
-p{color:var(--muted)}
-
-.gradient{
-background:var(--grad);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+.hero h1{
+font-size:56px;
+letter-spacing:-1px;
 }
 
-/* ===============================
-NAV
-=============================== */
-
-nav{
-position:fixed;
-width:100%;
-background:rgba(5,5,5,.7);
-backdrop-filter:blur(20px);
-border-bottom:1px solid rgba(255,255,255,.05);
-z-index:1000;
+.hero p{
+font-size:20px;
+max-width:720px;
+margin:20px auto 40px;
 }
-
-nav .wrap{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:18px 0;
-}
-
-.logo{font-weight:800}
-
-.menu a{
-margin-left:25px;
-color:#aaa;
-text-decoration:none;
-font-size:.9rem;
-}
-
-.menu a:hover{color:white}
-
-/* ===============================
-BUTTON
-=============================== */
 
 .btn{
 display:inline-block;
-padding:15px 30px;
-border-radius:60px;
-background:var(--grad);
+padding:16px 28px;
+border-radius:12px;
+border:1px solid var(--accent);
 color:white;
 text-decoration:none;
-margin-top:25px;
-transition:.3s;
+font-weight:600;
 }
-
-.btn:hover{
-transform:translateY(-3px);
-box-shadow:0 0 30px rgba(0,229,255,.4);
-}
-
-/* ===============================
-CARDS
-=============================== */
 
 .grid{
 display:grid;
-gap:25px;
-margin-top:40px;
+gap:28px;
 }
 
 .grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.grid-4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}
 
 .card{
-position:relative;
-background:rgba(12,12,12,.7);
-padding:30px;
-border-radius:22px;
-backdrop-filter:blur(10px);
+background:var(--card);
+border:1px solid var(--border);
+border-radius:var(--radius);
+padding:28px;
 }
-
-.card::before{
-content:"";
-position:absolute;
-inset:0;
-border-radius:22px;
-padding:1px;
-background:var(--grad);
--webkit-mask:
-linear-gradient(#000 0 0) content-box,
-linear-gradient(#000 0 0);
--webkit-mask-composite:xor;
-mask-composite:exclude;
-opacity:.35;
-transition:.35s;
-}
-
-.card:hover::before{opacity:1}
-.card:hover{transform:translateY(-6px)}
 
 .metric{
-font-size:2.5rem;
-font-weight:800;
+font-size:40px;
+font-weight:700;
+color:var(--accent);
 }
 
-/* ===============================
-FORM
-=============================== */
+.section-title{
+font-size:34px;
+margin-bottom:40px;
+text-align:center;
+}
 
-input,textarea{
+.process-step{
+display:flex;
+gap:18px;
+align-items:flex-start;
+}
+
+.step-number{
+width:38px;
+height:38px;
+border-radius:10px;
+border:1px solid var(--accent);
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+}
+
+.roi-box input{
 width:100%;
 padding:14px;
-margin-bottom:14px;
-background:#0a0a0a;
-border:1px solid rgba(255,255,255,.08);
+margin-top:10px;
+background:#0f1625;
+border:1px solid var(--border);
 border-radius:10px;
 color:white;
 }
 
-/* ===============================
-ROI BOX
-=============================== */
-
-.roi{
-background:#0a0a0a;
-padding:30px;
-border-radius:20px;
-margin-top:30px;
+.roi-result{
+font-size:32px;
+margin-top:20px;
+color:var(--accent);
 }
-
-.result{
-font-size:1.6rem;
-margin-top:15px;
-color:var(--cyan);
-}
-
-/* ===============================
-FOOTER
-=============================== */
 
 footer{
+border-top:1px solid var(--border);
+padding:40px;
 text-align:center;
-padding:60px 0;
-color:#333;
+color:var(--muted);
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- NAV -->
-<nav>
-<div class="container wrap">
-<div class="logo">UPCORE AI</div>
-<div class="menu">
-<a href="#cost">Cost</a>
-<a href="#cases">Cases</a>
-<a href="#architecture">System</a>
-<a href="#roi">ROI</a>
-<a href="#contact">Assessment</a>
-</div>
-</div>
-</nav>
-
 <!-- HERO -->
-<section style="padding-top:160px;text-align:center">
-<div class="container">
-<h1>
-Autonomous Infrastructure<br>
-<span class="gradient">for Enterprise Operations</span>
-</h1>
-<p style="max-width:650px;margin:25px auto">
-Self-operating business systems that eliminate operational friction,
-optimize capital efficiency, and scale performance without increasing headcount.
-</p>
-<a href="#contact" class="btn">Request Strategic Assessment</a>
-</div>
+<section class="hero container">
+<h1>Operational AI Systems<br>That Increase EBITDA</h1>
+<p>Diseñamos e implementamos infraestructura de automatización que reduce costos operativos, elimina fricción y escala ingresos sin aumentar headcount.</p>
+<a class="btn" href="#">Solicitar Auditoría Operativa</a>
 </section>
 
-<!-- COST -->
-<section id="cost">
-<div class="container">
-<h2>Operational Inefficiency is a Financial Liability</h2>
-<div class="grid grid-3">
-<div class="card"><h3>Manual Processes</h3><p>Hidden labor cost drains profit margins.</p></div>
-<div class="card"><h3>Fragmented Systems</h3><p>Decision latency slows growth.</p></div>
-<div class="card"><h3>Non-Scalable Operations</h3><p>Revenue growth requires headcount growth.</p></div>
-</div>
-</div>
-</section>
-
-<!-- CASES -->
-<section id="cases">
-<div class="container">
-<h2>Enterprise Transformation Case</h2>
-<div class="grid grid-3">
+<!-- POSITIONING -->
+<section class="container">
 <div class="card">
-<h3>Private Equity Portfolio</h3>
-<p>Unified reporting + autonomous data pipelines.</p>
-<div class="metric">42% cost reduction</div>
-</div>
-
-<div class="card">
-<h3>Logistics Operator</h3>
-<p>Predictive scheduling + automated routing.</p>
-<div class="metric">3.8x speed</div>
-</div>
-
-<div class="card">
-<h3>Financial Services Firm</h3>
-<p>Decision automation + compliance monitoring.</p>
-<div class="metric">99.99% uptime</div>
-</div>
-</div>
-</div>
-</section>
-
-<!-- ARCHITECTURE -->
-<section id="architecture">
-<div class="container">
-<h2>Autonomous Operating System Architecture</h2>
-<div class="grid grid-4">
-<div class="card">Data Ingestion Layer</div>
-<div class="card">Decision Intelligence Engine</div>
-<div class="card">Autonomous Execution</div>
-<div class="card">Continuous Learning Feedback</div>
-</div>
+<h2>Infrastructure Level Automation</h2>
+<p>No implementamos herramientas. Construimos sistemas operativos empresariales impulsados por IA que transforman la eficiencia estructural del negocio.</p>
 </div>
 </section>
 
 <!-- FRAMEWORK -->
-<section>
-<div class="container">
-<h2>Implementation Framework</h2>
+<section class="container">
+<h2 class="section-title">Upcore Deployment Framework</h2>
+
 <div class="grid grid-3">
-<div class="card">Enterprise Diagnostics</div>
-<div class="card">System Architecture Design</div>
-<div class="card">Autonomous Deployment</div>
-<div class="card">Operational Stabilization</div>
-<div class="card">Performance Optimization</div>
-<div class="card">Strategic Scaling</div>
+<div class="card">
+<h3>1. Operational Mapping</h3>
+<p>Identificación completa de cuellos de botella, fricción humana y pérdida económica oculta.</p>
+</div>
+
+<div class="card">
+<h3>2. System Architecture</h3>
+<p>Diseño de infraestructura automatizada integrada con datos, CRM y flujos internos.</p>
+</div>
+
+<div class="card">
+<h3>3. Autonomous Execution</h3>
+<p>Implementación de agentes, workflows y lógica adaptativa que ejecuta sin intervención humana.</p>
 </div>
 </div>
 </section>
 
-<!-- ROI -->
-<section id="roi">
-<div class="container">
-<h2>Financial Impact Model</h2>
+<!-- RESULTS -->
+<section class="container">
+<h2 class="section-title">Operational Impact</h2>
 
-<div class="roi">
-<input id="revenue" placeholder="Annual Revenue (USD)">
-<input id="inefficiency" placeholder="% Operational Inefficiency">
-<button class="btn" onclick="calcROI()">Calculate Impact</button>
-<div class="result" id="roiResult"></div>
+<div class="grid grid-3">
+<div class="card">
+<div class="metric">-42%</div>
+<p>Reducción promedio en carga operativa manual</p>
+</div>
+
+<div class="card">
+<div class="metric">3.4x</div>
+<p>Aceleración en velocidad de ejecución de procesos</p>
+</div>
+
+<div class="card">
+<div class="metric">+27%</div>
+<p>Incremento medio en margen operativo</p>
+</div>
+</div>
+</section>
+
+<!-- PROCESS -->
+<section class="container">
+<h2 class="section-title">Implementation Model</h2>
+
+<div class="grid grid-2">
+
+<div class="card process-step">
+<div class="step-number">1</div>
+<div>
+<h3>Diagnostic Audit</h3>
+<p>Análisis técnico del sistema operativo empresarial actual.</p>
+</div>
+</div>
+
+<div class="card process-step">
+<div class="step-number">2</div>
+<div>
+<h3>Pilot Deployment</h3>
+<p>Implementación controlada para validar impacto económico.</p>
+</div>
+</div>
+
+<div class="card process-step">
+<div class="step-number">3</div>
+<div>
+<h3>Full Infrastructure Rollout</h3>
+<p>Escalamiento completo de automatización a nivel organización.</p>
+</div>
+</div>
+
+<div class="card process-step">
+<div class="step-number">4</div>
+<div>
+<h3>Continuous Optimization</h3>
+<p>Monitoreo, mejora iterativa y expansión funcional.</p>
+</div>
 </div>
 
 </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact">
-<div class="container">
-<h2>Strategic Infrastructure Assessment</h2>
-<form style="max-width:600px;margin-top:30px">
-<input placeholder="Company Name">
-<input placeholder="Annual Revenue">
-<input placeholder="Team Size">
-<textarea rows="4" placeholder="Core Operational Bottlenecks"></textarea>
-<button class="btn">Submit Request</button>
-</form>
+<!-- ROI CALCULATOR -->
+<section class="container">
+<h2 class="section-title">ROI Simulator</h2>
+
+<div class="card roi-box">
+<p>Ingresa tu costo operativo mensual aproximado.</p>
+<input type="number" id="cost" placeholder="Ej: 50000">
+<div class="roi-result" id="result">Ahorro estimado: —</div>
 </div>
+</section>
+
+<!-- RISK REVERSAL -->
+<section class="container">
+<h2 class="section-title">Risk Controlled Deployment</h2>
+<div class="card">
+<p>La implementación inicia con un piloto de impacto medible. Solo escalamos tras validación económica comprobada.</p>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="container hero">
+<h2>Request Operational Audit</h2>
+<p>Evaluación técnica de ineficiencias, pérdidas ocultas y oportunidades de automatización.</p>
+<a class="btn" href="#">Agendar Diagnóstico</a>
 </section>
 
 <footer>
-UPCORE AI • AUTONOMOUS ENTERPRISE SYSTEMS
+Upcore AI — Operational Intelligence Systems
 </footer>
 
 <script>
-function calcROI(){
-let rev=document.getElementById("revenue").value;
-let ineff=document.getElementById("inefficiency").value;
+const input=document.getElementById("cost")
+const result=document.getElementById("result")
 
-if(!rev||!ineff)return;
-
-let loss=rev*(ineff/100);
-document.getElementById("roiResult").innerText=
-"Estimated Annual Recoverable Value: $"+loss.toLocaleString();
-}
+input.addEventListener("input",()=>{
+let cost=Number(input.value)
+let savings=cost*0.32
+result.innerText="Ahorro estimado mensual: $"+savings.toLocaleString()
+})
 </script>
 
 </body>
