@@ -1,285 +1,378 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upcore AI | Autonomous Enterprise Systems</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<title>Upcore AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
+:root{
+--bg:#0a0a0a;
+--bg-soft:#111;
+--card:#151515;
+--border:#222;
+--text:#ffffff;
+--muted:#9ca3af;
+--accent:#6ee7ff;
+--accent-2:#7c3aed;
+--radius:18px;
+}
 
-/* =========================
-BASE
-========================= */
+*{box-sizing:border-box;margin:0;padding:0}
 
-*{margin:0;padding:0;box-sizing:border-box}
 body{
-font-family:Inter,sans-serif;
-background:#000;
-color:#fff;
+font-family:'Inter',sans-serif;
+background:var(--bg);
+color:var(--text);
+line-height:1.6;
 overflow-x:hidden;
 }
 
-/* =========================
-FONDO
-========================= */
-
-body::before{
-content:"";
-position:fixed;
-width:200%;
-height:200%;
-top:-50%;
-left:-50%;
-background:
-radial-gradient(circle at 30% 30%, rgba(0,229,255,.15), transparent 40%),
-radial-gradient(circle at 70% 60%, rgba(138,43,226,.15), transparent 40%);
-animation:bgMove 18s linear infinite;
-z-index:-1;
-}
-
-@keyframes bgMove{
-0%{transform:translate(0,0)}
-50%{transform:translate(10%,10%)}
-100%{transform:translate(0,0)}
-}
-
-/* =========================
-LAYOUT
-========================= */
-
 .container{
-width:92%;
-max-width:1100px;
+max-width:1200px;
 margin:auto;
+padding:0 20px;
 }
 
-section{padding:110px 0}
+nav{
+position:fixed;
+top:0;
+width:100%;
+background:rgba(10,10,10,0.6);
+backdrop-filter:blur(20px);
+border-bottom:1px solid var(--border);
+z-index:1000;
+}
 
-h1{font-size:3rem;font-weight:800;text-align:center}
-p{color:#9a9a9a;text-align:center}
+.nav-inner{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 0;
+}
 
-.gradient{
-background:linear-gradient(135deg,#00E5FF,#8A2BE2);
+.logo{
+font-weight:800;
+font-size:20px;
+background:linear-gradient(90deg,var(--accent),var(--accent-2));
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 }
 
-/* =========================
-BOTON
-========================= */
+.nav-links a{
+margin-left:28px;
+text-decoration:none;
+color:var(--muted);
+font-weight:500;
+transition:.3s;
+}
 
-.btn{
-padding:14px 28px;
-border-radius:60px;
-border:none;
-background:linear-gradient(135deg,#00E5FF,#8A2BE2);
+.nav-links a:hover{
 color:white;
+}
+
+.hero{
+padding-top:140px;
+padding-bottom:120px;
+text-align:center;
+position:relative;
+}
+
+.hero h1{
+font-size:56px;
+font-weight:900;
+letter-spacing:-1px;
+margin-bottom:20px;
+}
+
+.hero p{
+color:var(--muted);
+font-size:18px;
+max-width:650px;
+margin:0 auto 40px auto;
+}
+
+.button{
+padding:16px 32px;
+border-radius:999px;
+border:none;
 font-weight:600;
 cursor:pointer;
-margin-top:20px;
+font-size:16px;
+background:linear-gradient(90deg,var(--accent),var(--accent-2));
+color:black;
+transition:.3s;
 }
 
-/* =========================
-CARD
-========================= */
+.button:hover{
+transform:translateY(-3px);
+}
+
+.section{
+padding:100px 0;
+}
+
+.section-title{
+font-size:36px;
+font-weight:800;
+text-align:center;
+margin-bottom:60px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:28px;
+}
 
 .card{
-background:rgba(12,12,12,.7);
+background:var(--card);
 padding:30px;
-border-radius:20px;
-margin-top:25px;
-border:1px solid rgba(255,255,255,.08);
-backdrop-filter:blur(10px);
+border-radius:var(--radius);
+border:1px solid var(--border);
+transition:.35s;
 }
 
-/* =========================
-INPUT
-========================= */
+.card:hover{
+transform:translateY(-6px);
+border-color:#333;
+}
 
-input,select{
-width:100%;
+.card h3{
+margin-bottom:10px;
+}
+
+.card p{
+color:var(--muted);
+}
+
+.pricing{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:28px;
+}
+
+.price-card{
+background:var(--card);
+padding:40px;
+border-radius:var(--radius);
+border:1px solid var(--border);
+text-align:center;
+}
+
+.price{
+font-size:42px;
+font-weight:800;
+margin:20px 0;
+}
+
+.chatbot{
+position:fixed;
+bottom:30px;
+right:30px;
+width:320px;
+height:420px;
+background:var(--card);
+border-radius:20px;
+border:1px solid var(--border);
+display:flex;
+flex-direction:column;
+overflow:hidden;
+box-shadow:0 20px 60px rgba(0,0,0,0.6);
+}
+
+.chat-header{
+padding:16px;
+border-bottom:1px solid var(--border);
+font-weight:600;
+}
+
+.chat-messages{
+flex:1;
+padding:16px;
+overflow-y:auto;
+font-size:14px;
+}
+
+.msg{
+margin-bottom:10px;
+padding:10px 14px;
+border-radius:12px;
+max-width:80%;
+}
+
+.user{
+background:#1f2937;
+margin-left:auto;
+}
+
+.bot{
+background:#111;
+border:1px solid var(--border);
+}
+
+.chat-input{
+display:flex;
+border-top:1px solid var(--border);
+}
+
+.chat-input input{
+flex:1;
 padding:14px;
-margin-top:12px;
-background:#0a0a0a;
-border:1px solid rgba(255,255,255,.1);
-border-radius:10px;
+border:none;
+background:transparent;
 color:white;
 }
 
-/* =========================
-DASHBOARD
-========================= */
-
-.dashboard{
-display:none;
-margin-top:40px;
-}
-
-.metric{
-font-size:2.4rem;
-font-weight:700;
+footer{
+padding:60px 0;
+border-top:1px solid var(--border);
+text-align:center;
+color:var(--muted);
 }
 
 .fade{
-animation:fade .6s ease;
+opac ity:0;
+transform:translateY(40px);
+transition:1s;
 }
 
-@keyframes fade{
-from{opacity:0;transform:translateY(20px)}
-to{opacity:1;transform:translateY(0)}
+.show{
+opac ity:1;
+transform:translateY(0);
 }
-
 </style>
 </head>
 
 <body>
 
-<section>
+<nav>
+<div class="container nav-inner">
+<div class="logo">Upcore AI</div>
+<div class="nav-links">
+<a href="#features">Funciones</a>
+<a href="#pricing">Precios</a>
+<a href="#contact">Contacto</a>
+</div>
+</div>
+</nav>
+
+<section class="hero">
 <div class="container">
-
-<h1>
-Autonomous Infrastructure<br>
-<span class="gradient">for High-Performance Companies</span>
-</h1>
-
-<p style="margin-top:20px">
-Describe your operational problem. Upcore AI will design your automation system instantly.
-</p>
-
-<!-- =========================
-DEMO IA
-========================= -->
-
-<div class="card">
-<input id="problemInput" placeholder="Example: automate my leads pipeline">
-<button class="btn" onclick="runAnalysis()">Generate System</button>
-
-<div id="analysisResult" style="margin-top:25px"></div>
-</div>
-
-<!-- =========================
-ONBOARDING
-========================= -->
-
-<div id="onboarding" class="card" style="display:none">
-<h3>Configure Your Infrastructure</h3>
-
-<select id="business">
-<option>Agency</option>
-<option>Ecommerce</option>
-<option>SaaS</option>
-<option>Consulting</option>
-<option>Enterprise</option>
-</select>
-
-<select id="goal">
-<option>Increase Revenue</option>
-<option>Reduce Costs</option>
-<option>Scale Operations</option>
-<option>Automate Workflow</option>
-</select>
-
-<select id="level">
-<option>Basic Automation</option>
-<option>Advanced AI</option>
-<option>Fully Autonomous</option>
-</select>
-
-<button class="btn" onclick="buildSystem()">Build My System</button>
-</div>
-
-<!-- =========================
-DASHBOARD
-========================= -->
-
-<div id="dashboard" class="dashboard">
-
-<div class="card fade">
-<h2>Your Autonomous System</h2>
-<p id="solutionText"></p>
-</div>
-
-<div class="card fade">
-<h2>Execution Flow</h2>
-<ul id="flowList"></ul>
-</div>
-
-<div class="card fade">
-<h2>Expected Performance</h2>
-<div style="display:flex;gap:40px;margin-top:20px">
-<div><div class="metric" id="time"></div><p>Time Saved</p></div>
-<div><div class="metric" id="cost"></div><p>Cost Reduction</p></div>
-<div><div class="metric" id="eff"></div><p>Efficiency Gain</p></div>
-</div>
-</div>
-
-</div>
-
+<h1>Automatización Inteligente Real</h1>
+<p>Construye, escala y domina con automatización impulsada por inteligencia artificial diseñada para empresas modernas.</p>
+<button class="button">Comenzar ahora</button>
 </div>
 </section>
 
+<section class="section" id="features">
+<div class="container">
+<h2 class="section-title">Capacidades de Upcore AI</h2>
+<div class="grid">
+<div class="card fade">
+<h3>Automatización Total</h3>
+<p>Procesos inteligentes que operan 24/7 sin intervención humana.</p>
+</div>
+<div class="card fade">
+<h3>Chatbots Avanzados</h3>
+<p>Ventas, soporte y generación de leads completamente autónomos.</p>
+</div>
+<div class="card fade">
+<h3>Integraciones API</h3>
+<p>Conecta cualquier sistema empresarial en minutos.</p>
+</div>
+<div class="card fade">
+<h3>Analítica Predictiva</h3>
+<p>Decisiones basadas en datos en tiempo real.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section" id="pricing">
+<div class="container">
+<h2 class="section-title">Planes</h2>
+<div class="pricing">
+<div class="price-card">
+<h3>Starter</h3>
+<div class="price">$49</div>
+<p>Automatización básica</p>
+<button class="button">Elegir</button>
+</div>
+<div class="price-card">
+<h3>Pro</h3>
+<div class="price">$149</div>
+<p>Automatización avanzada</p>
+<button class="button">Elegir</button>
+</div>
+<div class="price-card">
+<h3>Enterprise</h3>
+<div class="price">Custom</div>
+<p>Infraestructura completa</p>
+<button class="button">Contactar</button>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section" id="contact">
+<div class="container">
+<h2 class="section-title">Contacto</h2>
+<form style="max-width:500px;margin:auto;display:flex;flex-direction:column;gap:14px">
+<input placeholder="Nombre" required style="padding:14px;border-radius:10px;border:1px solid #222;background:#111;color:white">
+<input placeholder="Email" required style="padding:14px;border-radius:10px;border:1px solid #222;background:#111;color:white">
+<textarea placeholder="Mensaje" required style="padding:14px;border-radius:10px;border:1px solid #222;background:#111;color:white"></textarea>
+<button class="button">Enviar</button>
+</form>
+</div>
+</section>
+
+<footer>
+© 2026 Upcore AI. Todos los derechos reservados.
+</footer>
+
+<div class="chatbot">
+<div class="chat-header">Asistente IA</div>
+<div class="chat-messages" id="chatMessages"></div>
+<div class="chat-input">
+<input id="chatInput" placeholder="Escribe un mensaje...">
+</div>
+</div>
+
 <script>
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(e=>{
+if(e.isIntersecting) e.target.classList.add('show')
+})
+})
 
-/* =========================
-DEMO ANALISIS
-========================= */
+document.querySelectorAll('.fade').forEach(el=>observer.observe(el))
 
-function runAnalysis(){
+const input=document.getElementById('chatInput')
+const chat=document.getElementById('chatMessages')
 
-const problem=document.getElementById("problemInput").value;
+input.addEventListener('keypress',e=>{
+if(e.key==='Enter'){
+const text=input.value.trim()
+if(!text) return
 
-if(!problem)return alert("Describe your problem");
+const user=document.createElement('div')
+user.className='msg user'
+user.textContent=text
+chat.appendChild(user)
 
-document.getElementById("analysisResult").innerHTML=`
-<p style="margin-top:15px;color:#00E5FF">
-Operational inefficiency detected related to "${problem}".
-AI system architecture ready for deployment.
-</p>
-`;
+setTimeout(()=>{
+const bot=document.createElement('div')
+bot.className='msg bot'
+bot.textContent='Respuesta automática generada por Upcore AI.'
+chat.appendChild(bot)
+chat.scrollTop=chat.scrollHeight
+},600)
 
-document.getElementById("onboarding").style.display="block";
+input.value=''
 }
-
-/* =========================
-GENERADOR SISTEMA
-========================= */
-
-function buildSystem(){
-
-const business=document.getElementById("business").value;
-const goal=document.getElementById("goal").value;
-const level=document.getElementById("level").value;
-
-document.getElementById("dashboard").style.display="block";
-
-document.getElementById("solutionText").innerText=
-`Upcore AI deployed an autonomous decision infrastructure optimized for ${business}.
-Primary objective: ${goal}. Automation level: ${level}.`;
-
-const flow=[
-"Capture operational data",
-"AI decision engine",
-"Autonomous execution",
-"Continuous learning loop"
-];
-
-const list=document.getElementById("flowList");
-list.innerHTML="";
-flow.forEach(step=>{
-const li=document.createElement("li");
-li.innerText=step;
-list.appendChild(li);
-});
-
-document.getElementById("time").innerText="68%";
-document.getElementById("cost").innerText="42%";
-document.getElementById("eff").innerText="3.8x";
-
-window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});
-}
-
+})
 </script>
 
 </body>
