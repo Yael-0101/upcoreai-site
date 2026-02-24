@@ -148,17 +148,25 @@
         .card::before {
             content: "";
             position: absolute;
-            inset: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             border-radius: 40px;
             padding: 2px;
             background: rgba(100, 116, 139, 0.2);
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
+            transition: background 0.4s ease;
         }
 
         .card:hover::before { background: var(--gradient); }
-        .card:hover { transform: translateY(-10px); }
+        .card:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.03); }
+
+        .card h3 { margin-bottom: 1.5rem; color: var(--cyan); font-size: 1.6rem; letter-spacing: -1px; }
+        .card p { color: var(--white); font-weight: 300; margin-bottom: 1.5rem; }
+        
+        .card ul { list-style: none; }
+        .card ul li { color: var(--slate); font-size: 0.95rem; margin-bottom: 0.8rem; display: flex; align-items: center; }
+        .card ul li::before { content: "✔"; color: var(--cyan); margin-right: 10px; font-weight: bold; }
 
         .bonus-section {
             margin-top: 5rem;
@@ -169,62 +177,9 @@
             border: 1px dashed rgba(0, 245, 255, 0.3);
         }
 
-        footer { padding: 5rem 10%; text-align: center; color: var(--slate); }
+        footer { padding: 5rem 10%; text-align: center; color: var(--slate); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; }
 
-        /* ======== NUEVA SECCIÓN CONTACTO ======== */
-
-        .contact-panel{
-            display:flex;
-            justify-content:center;
-            align-items:center;
-        }
-
-        .glass-panel{
-            width:100%;
-            max-width:520px;
-            padding:3.5rem 3rem;
-            border-radius:30px;
-            background:rgba(255,255,255,.03);
-            backdrop-filter:blur(25px);
-            border:1px solid rgba(0,245,255,.25);
-            box-shadow:0 0 60px rgba(0,245,255,.08);
-            text-align:center;
-        }
-
-        .glass-panel h2{
-            font-size:2rem;
-            margin-bottom:1rem;
-        }
-
-        .glass-panel p{
-            color:var(--slate);
-            margin-bottom:2rem;
-        }
-
-        .glass-panel input,
-        .glass-panel textarea,
-        .glass-panel select{
-            width:100%;
-            padding:.9rem 1rem;
-            margin-bottom:1rem;
-            border-radius:12px;
-            border:1px solid rgba(100,116,139,.25);
-            background:rgba(0,0,0,.35);
-            color:white;
-            font-family:inherit;
-        }
-
-        .panel-button{
-            width:100%;
-            padding:1rem;
-            border-radius:14px;
-            border:none;
-            background:var(--gradient);
-            color:white;
-            font-weight:600;
-            cursor:pointer;
-        }
-
+        @media (max-width: 768px) { h1 { font-size: 2.8rem; } }
     </style>
 </head>
 <body>
@@ -237,35 +192,192 @@
 </nav>
 
 <header class="hero">
-    <h1 data-aos="fade-up">Tu negocio.<br>Operando solo.</h1>
-    <p data-aos="fade-up" data-aos-delay="200">Automatización inteligente que ejecuta, optimiza y escala tu empresa 24/7.</p>
-    <a href="#proceso" class="cta-button">Agendar auditoría estratégica</a>
+    <h1 data-aos="fade-up" data-aos-duration="1000">Tu negocio.<br>Operando solo.</h1>
+    <p data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">Automatización inteligente que ejecuta, optimiza y escala tu empresa 24/7.</p>
+    <div data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
+        <a href="#proceso" class="cta-button">Agendar auditoría estratégica</a>
+    </div>
 </header>
 
-<!-- TODO TU CONTENIDO ORIGINAL IGUAL (beneficios, servicios, proceso, etc) -->
+<section id="beneficios">
+    <h2 data-aos="fade-up">Beneficios</h2>
+    <div class="grid">
+        <div class="card" data-aos="fade-up" data-aos-delay="100">
+            <h3>Eficiencia Directa</h3>
+            <p>Eliminamos tareas manuales y cuellos de botella para reducir gastos operativos.</p>
+            <ul>
+                <li>Hasta 60% menos carga operativa</li>
+                <li>Procesos activos 24/7</li>
+                <li>Enfoque en estrategia pura</li>
+            </ul>
+        </div>
+        <div class="card" data-aos="fade-up" data-aos-delay="200">
+            <h3>Escala Infinita</h3>
+            <p>Crece sin que tu estructura colapse. Maneja más clientes sin contratar más personal.</p>
+            <ul>
+                <li>Crecimiento sin fricción</li>
+                <li>Sistemas para alto volumen</li>
+                <li>Infraestructura de expansión</li>
+            </ul>
+        </div>
+        <div class="card" data-aos="fade-up" data-aos-delay="300">
+            <h3>Lógica de Datos</h3>
+            <p>Transformamos datos en acciones automáticas que optimizan rendimiento en tiempo real.</p>
+            <ul>
+                <li>Análisis sin intervención</li>
+                <li>Decisiones basadas en hechos</li>
+                <li>Precisión estratégica</li>
+            </ul>
+        </div>
+    </div>
+</section>
 
-<!-- ======== NUEVA SECCIÓN AGREGADA ======== -->
-<section class="contact-panel">
-    <div class="glass-panel" data-aos="zoom-in">
-        <h2>Solicita tu automatización</h2>
-        <p>Cuéntanos sobre tu empresa y tus objetivos.</p>
+<section id="servicios">
+    <h2 data-aos="fade-up">Servicios</h2>
+    <div class="grid">
+        <div class="card" data-aos="zoom-in-up">
+            <h3>Automatización Operativa</h3>
+            <p>Sistemas autónomos que ejecutan procesos de principio a fin de forma impecable.</p>
+        </div>
+        <div class="card" data-aos="zoom-in-up" data-aos-delay="100">
+            <h3>Agentes de IA</h3>
+            <p>Asistentes inteligentes para ventas y atención que califican leads sin descanso.</p>
+        </div>
+        <div class="card" data-aos="zoom-in-up" data-aos-delay="200">
+            <h3>Inteligencia Aplicada</h3>
+            <p>Optimización continua mediante el uso de datos en tiempo real.</p>
+        </div>
+    </div>
+</section>
 
-        <form>
-            <input type="text" placeholder="Tu nombre">
-            <input type="text" placeholder="Empresa">
-            <input type="email" placeholder="Correo">
+<section id="proceso">
+    <h2 data-aos="fade-up">El Proceso</h2>
+    <div class="grid">
+        <div class="card" data-aos="fade-right">
+            <h3>Fase 01 — Diagnóstico</h3>
+            <p><strong style="color: var(--cyan)">Entregable:</strong> Mapa de optimización.</p>
+        </div>
+        <div class="card" data-aos="fade-right" data-aos-delay="100">
+            <h3>Fase 02 — Arquitectura</h3>
+            <p><strong style="color: var(--cyan)">Entregable:</strong> Plano técnico escalable.</p>
+        </div>
+        <div class="card" data-aos="fade-right" data-aos-delay="200">
+            <h3>Fase 03 — Activación</h3>
+            <p><strong style="color: var(--cyan)">Resultado:</strong> Funcionamiento en vivo.</p>
+        </div>
+        <div class="card" data-aos="fade-right" data-aos-delay="300">
+            <h3>Fase 04 — Evolución</h3>
+            <p><strong style="color: var(--cyan)">Resultado:</strong> Mejora continua 24/7.</p>
+        </div>
+    </div>
 
-            <select>
-                <option>Presupuesto estimado</option>
-                <option>$1k – $5k</option>
-                <option>$5k – $15k</option>
-                <option>$15k – $50k</option>
-                <option>$50k+</option>
-            </select>
+    <div class="bonus-section" data-aos="flip-up">
+        <h2 style="font-size: 2rem; margin-bottom: 2rem;">Resultados Esperados</h2>
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
+            <span>✔ Menos tareas manuales</span>
+            <span>✔ Respuesta instantánea</span>
+            <span>✔ Eficiencia operativa</span>
+            <span>✔ Procesos escalables</span>
+        </div>
+    </div>
+</section>
 
-            <textarea rows="4" placeholder="Qué deseas automatizar"></textarea>
+<!-- NUEVA SECCIÓN FORMULARIO -->
+<section id="contacto">
+    <h2 data-aos="fade-up">Solicita una auditoría estratégica</h2>
 
-            <button class="panel-button">Enviar solicitud</button>
+    <div data-aos="zoom-in" style="
+        max-width: 720px;
+        margin: 0 auto;
+        background: rgba(255,255,255,0.02);
+        border-radius: 30px;
+        padding: 3rem;
+        border: 1px solid rgba(0,245,255,0.15);
+        backdrop-filter: blur(20px);
+    ">
+
+        <form style="display:flex; flex-direction:column; gap:1.4rem;">
+
+            <div>
+                <label style="font-size:0.9rem; color:var(--slate);">Nombre</label>
+                <input type="text" placeholder="Tu nombre" required style="
+                    width:100%;
+                    margin-top:6px;
+                    padding:14px 16px;
+                    border-radius:12px;
+                    border:1px solid rgba(255,255,255,0.08);
+                    background: rgba(255,255,255,0.03);
+                    color:white;
+                    outline:none;
+                ">
+            </div>
+
+            <div>
+                <label style="font-size:0.9rem; color:var(--slate);">Empresa</label>
+                <input type="text" placeholder="Nombre de tu empresa o proyecto" style="
+                    width:100%;
+                    margin-top:6px;
+                    padding:14px 16px;
+                    border-radius:12px;
+                    border:1px solid rgba(255,255,255,0.08);
+                    background: rgba(255,255,255,0.03);
+                    color:white;
+                    outline:none;
+                ">
+            </div>
+
+            <div>
+                <label style="font-size:0.9rem; color:var(--slate);">Email</label>
+                <input type="email" placeholder="Tu correo electrónico de contacto" required style="
+                    width:100%;
+                    margin-top:6px;
+                    padding:14px 16px;
+                    border-radius:12px;
+                    border:1px solid rgba(255,255,255,0.08);
+                    background: rgba(255,255,255,0.03);
+                    color:white;
+                    outline:none;
+                ">
+            </div>
+
+            <div>
+                <label style="font-size:0.9rem; color:var(--slate);">Presupuesto</label>
+                <select style="
+                    width:100%;
+                    margin-top:6px;
+                    padding:14px 16px;
+                    border-radius:12px;
+                    border:1px solid rgba(255,255,255,0.08);
+                    background: rgba(255,255,255,0.03);
+                    color:white;
+                    outline:none;
+                ">
+                    <option>Elige tu rango de inversión...</option>
+                    <option>$1,000 — $3,000 USD</option>
+                    <option>$3,000 — $10,000 USD</option>
+                    <option>$10,000+ USD</option>
+                </select>
+            </div>
+
+            <div>
+                <label style="font-size:0.9rem; color:var(--slate);">Cuéntame sobre tu proyecto</label>
+                <textarea rows="4" placeholder="Comparte algunos detalles sobre lo que necesitas..." style="
+                    width:100%;
+                    margin-top:6px;
+                    padding:14px 16px;
+                    border-radius:12px;
+                    border:1px solid rgba(255,255,255,0.08);
+                    background: rgba(255,255,255,0.03);
+                    color:white;
+                    outline:none;
+                    resize:none;
+                "></textarea>
+            </div>
+
+            <button type="submit" class="cta-button" style="width:100%; margin-top:10px;">
+                Enviar solicitud
+            </button>
+
         </form>
     </div>
 </section>
@@ -276,8 +388,11 @@
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-AOS.init({ duration:800, once:true, offset:100 });
+    AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100
+    });
 </script>
-
 </body>
 </html>
