@@ -1,354 +1,240 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upcore AI | Automatización Inteligente</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcore AI | Automatización de Precisión</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000000;
+            --card-bg: #111112;
+            --text-main: #ffffff;
+            --text-dim: #86868b;
+            --accent: #0071e3;
+            --border: rgba(255, 255, 255, 0.1);
+            --font-family: 'Inter', -apple-system, sans-serif;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
 
-/* ==================================================
-   PALETA OFICIAL
-================================================== */
-:root{
---azul-profundo:#2B4257;
---cian-electrico:#2BC4E8;
---azul-acero:#4A6B8A;
---blanco:#ffffff;
---gris-claro:#f4f7fa;
-}
+        /* --- NAVEGACIÓN --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+        }
 
-/* ==================================================
-   BASE
-================================================== */
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:var(--blanco);color:#1a1a1a;line-height:1.6}
-.container{width:90%;max-width:1200px;margin:auto}
-section{padding:110px 0}
-h1,h2,h3{font-weight:600}
+        .logo {
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            font-size: 1.2rem;
+        }
 
-/* ==================================================
-   HEADER PREMIUM
-================================================== */
-header{
-position:fixed;top:0;width:100%;
-background:rgba(255,255,255,.85);
-backdrop-filter:blur(12px);
-border-bottom:1px solid #e8eef4;
-z-index:999;
-transition:.3s
-}
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-left: 30px;
+            transition: 0.3s;
+        }
 
-header.scrolled{box-shadow:0 10px 30px rgba(0,0,0,.08)}
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
 
-nav{display:flex;justify-content:space-between;align-items:center;height:70px}
-.logo{font-size:20px;font-weight:700;color:var(--azul-profundo)}
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
 
-.nav-btn{
-background:var(--cian-electrico);
-color:white;padding:10px 24px;
-border-radius:40px;text-decoration:none;
-transition:.3s;box-shadow:0 10px 20px rgba(43,196,232,.25)
-}
+        .hero span {
+            color: var(--accent);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: block;
+        }
 
-.nav-btn:hover{background:var(--azul-acero);transform:translateY(-2px)}
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 600;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            margin-bottom: 25px;
+        }
 
-/* ==================================================
-   HERO PREMIUM
-================================================== */
-.hero{min-height:100vh;display:flex;align-items:center;padding-top:70px}
-.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+        .hero p {
+            color: var(--text-dim);
+            max-width: 600px;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
 
-.hero h1{font-size:54px;color:var(--azul-profundo);margin-bottom:20px}
-.hero p{font-size:20px;color:#4b5b6b;margin-bottom:35px}
+        .btn {
+            background: var(--text-main);
+            color: var(--bg);
+            padding: 14px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
 
-.hero-buttons{display:flex;gap:15px;flex-wrap:wrap}
+        .btn:hover {
+            transform: scale(1.05);
+            background: #e2e2e2;
+        }
 
-.btn-primary{
-background:var(--cian-electrico);
-color:white;padding:16px 34px;
-border-radius:40px;text-decoration:none;
-transition:.3s;box-shadow:0 20px 40px rgba(43,196,232,.35)
-}
+        /* --- GRID DE SERVICIOS (SIMETRÍA) --- */
+        .section {
+            padding: 100px 10%;
+        }
 
-.btn-primary:hover{background:var(--azul-acero);transform:translateY(-3px)}
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
 
-.btn-secondary{
-border:2px solid var(--azul-profundo);
-color:var(--azul-profundo);
-padding:14px 30px;border-radius:40px;text-decoration:none;
-transition:.3s
-}
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
 
-.btn-secondary:hover{background:var(--azul-profundo);color:white}
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
 
-.hero-visual{
-height:420px;border-radius:22px;
-background:linear-gradient(135deg,var(--azul-profundo),var(--azul-acero));
-box-shadow:0 50px 100px rgba(0,0,0,.15);
-position:relative;overflow:hidden
-}
+        .card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-.hero-visual::after{
-content:"";position:absolute;
-inset:0;background:radial-gradient(circle at 30% 30%,rgba(43,196,232,.35),transparent 60%)
-}
+        .card:hover {
+            border-color: var(--text-dim);
+            transform: translateY(-5px);
+        }
 
-/* ==================================================
-   LOGOS / CONFIANZA
-================================================== */
-.trust{background:var(--gris-claro);text-align:center}
-.trust-bar{margin-top:35px;display:flex;gap:60px;justify-content:center;flex-wrap:wrap;opacity:.6}
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
 
-/* ==================================================
-   RESULTADOS RÁPIDOS
-================================================== */
-.stats{text-align:center}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:50px;margin-top:50px}
-.stat-number{font-size:48px;font-weight:700;color:var(--azul-profundo)}
+        .card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
 
-/* ==================================================
-   SOLUCIONES
-================================================== */
-.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:30px;margin-top:50px}
+        /* --- FOOTER --- */
+        footer {
+            padding: 60px 10%;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+        }
 
-.feature-card{
-border:1px solid #e6eef5;padding:35px;border-radius:16px;
-transition:.3s;background:white
-}
+        /* ANIMACIÓN DE ENTRADA */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 1s forwards cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-.feature-card:hover{
-transform:translateY(-8px);
-border-color:var(--azul-acero);
-box-shadow:0 20px 40px rgba(0,0,0,.08)
-}
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.feature-icon{font-size:30px;margin-bottom:15px;color:var(--cian-electrico)}
-
-/* ==================================================
-   INDUSTRIAS
-================================================== */
-.industries{background:var(--gris-claro)}
-
-/* ==================================================
-   PROCESO
-================================================== */
-.process{background:var(--azul-profundo);color:white;text-align:center}
-.process-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:50px;margin-top:50px}
-.step{font-size:46px;font-weight:700;color:var(--cian-electrico);margin-bottom:12px}
-
-/* ==================================================
-   TESTIMONIOS
-================================================== */
-.testimonials{text-align:center}
-.testimonial-card{
-max-width:700px;margin:40px auto;
-padding:40px;border-radius:18px;
-border:1px solid #e6eef5
-}
-
-/* ==================================================
-   FAQ
-================================================== */
-.faq{background:var(--gris-claro)}
-.faq-item{margin-bottom:25px}
-.faq-item h3{color:var(--azul-profundo);margin-bottom:8px}
-
-/* ==================================================
-   CTA FINAL PREMIUM
-================================================== */
-.cta{background:var(--azul-profundo);color:white;text-align:center}
-.cta h2{margin-bottom:15px}
-
-/* ==================================================
-   FORM
-================================================== */
-form{margin-top:40px;max-width:600px;margin-left:auto;margin-right:auto}
-input,textarea{
-width:100%;padding:15px;margin:10px 0;
-border-radius:10px;border:1px solid #ddd
-}
-
-button{
-background:var(--cian-electrico);
-color:white;border:none;
-padding:15px 34px;border-radius:40px;
-cursor:pointer;font-size:16px;
-box-shadow:0 15px 30px rgba(43,196,232,.35)
-}
-button:hover{background:var(--azul-acero)}
-
-/* ==================================================
-   FOOTER
-================================================== */
-footer{background:#0f1c26;color:white;text-align:center;padding:40px 0}
-
-/* ==================================================
-   ANIMACIONES
-================================================== */
-.fade{opacity:0;transform:translateY(30px);transition:.9s ease}
-.fade.show{opacity:1;transform:translateY(0)}
-
-/* ==================================================
-   RESPONSIVE
-================================================== */
-@media(max-width:900px){
-.hero-grid{grid-template-columns:1fr}
-.hero h1{font-size:38px}
-}
-
-</style>
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 3rem; }
+        }
+    </style>
 </head>
-
 <body>
 
-<header>
-<div class="container">
-<nav>
-<div class="logo">Upcore AI</div>
-<a href="#contacto" class="nav-btn">Solicitar demo</a>
-</nav>
-</div>
-</header>
+    <nav>
+        <div class="logo">UPCORE AI</div>
+        <div class="nav-links">
+            <a href="#sistemas">Sistemas</a>
+            <a href="#enfoque">Enfoque</a>
+            <a href="#contacto">Contacto</a>
+        </div>
+    </nav>
 
+    <section class="hero reveal">
+        <span>V.1.0 — 2026</span>
+        <h1>La inteligencia de<br>mañana, hoy.</h1>
+        <p>Diseñamos ecosistemas de automatización autónomos con una arquitectura impecable y resultados medibles.</p>
+        <a href="#contacto" class="btn">Iniciar Transformación</a>
+    </section>
 
-<!-- HERO -->
-<section class="hero">
-<div class="container hero-grid fade">
-<div>
-<h1>Automatiza pacientes, citas y ventas con inteligencia artificial</h1>
-<p>Sistemas diseñados para clínicas que quieren crecer más rápido, reducir trabajo manual y aumentar ingresos automáticamente.</p>
-<div class="hero-buttons">
-<a href="#contacto" class="btn-primary">Solicitar demo gratuita</a>
-<a href="#soluciones" class="btn-secondary">Ver cómo funciona</a>
-</div>
-</div>
-<div class="hero-visual"></div>
-</div>
-</section>
+    <section id="sistemas" class="section reveal" style="animation-delay: 0.2s;">
+        <div class="section-title">
+            <h2>The Core</h2>
+            <p style="color: var(--text-dim)">Nuestra triada de soluciones de alto rendimiento.</p>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <h3>Agentes Autónomos</h3>
+                <p>Entidades de IA que razonan y ejecutan tareas complejas sin supervisión constante, optimizando tu tiempo.</p>
+            </div>
+            <div class="card">
+                <h3>Infraestructura</h3>
+                <p>Conexión nativa entre tus datos y modelos de lenguaje de última generación. Simetría técnica absoluta.</p>
+            </div>
+            <div class="card">
+                <h3>Optimización</h3>
+                <p>Reducción de fricción operativa mediante flujos de trabajo inteligentes diseñados para escalar sin límites.</p>
+            </div>
+        </div>
+    </section>
 
+    <section id="contacto" class="section reveal" style="text-align: center; background: #050505;">
+        <h2>¿Listo para el siguiente nivel?</h2>
+        <p style="color: var(--text-dim); margin: 20px 0 40px;">Hablemos de cómo la IA puede redefinir tu flujo de trabajo.</p>
+        <a href="mailto:tuemail@upcoreai.com" class="btn" style="background: transparent; border: 1px solid var(--text-main); color: var(--text-main);">Contactar</a>
+    </section>
 
-<!-- CONFIANZA -->
-<section class="trust">
-<div class="container fade">
-<p>Las clínicas modernas automatizan procesos para escalar más rápido.</p>
-<div class="trust-bar">
-<span>Clínicas estéticas</span>
-<span>Clínicas dentales</span>
-<span>Centros médicos</span>
-</div>
-</div>
-</section>
-
-
-<!-- RESULTADOS -->
-<section class="stats">
-<div class="container fade">
-<h2>Resultados reales con automatización</h2>
-<div class="stats-grid">
-<div><div class="stat-number">+40%</div><p>Más citas confirmadas</p></div>
-<div><div class="stat-number">-60%</div><p>Cancelaciones</p></div>
-<div><div class="stat-number">24/7</div><p>Atención automática</p></div>
-<div><div class="stat-number">3x</div><p>Velocidad de respuesta</p></div>
-</div>
-</div>
-</section>
-
-
-<!-- SOLUCIONES -->
-<section id="soluciones">
-<div class="container fade">
-<h2 style="text-align:center">Sistema completo de automatización</h2>
-<div class="features-grid">
-<div class="feature-card"><div class="feature-icon">🤖</div><h3>Chatbot 24/7</h3><p>Responde pacientes automáticamente.</p></div>
-<div class="feature-card"><div class="feature-icon">📅</div><h3>Agenda automática</h3><p>Reservas y confirmaciones inteligentes.</p></div>
-<div class="feature-card"><div class="feature-icon">🔔</div><h3>Recordatorios</h3><p>Reduce ausencias de pacientes.</p></div>
-<div class="feature-card"><div class="feature-icon">📈</div><h3>Seguimiento</h3><p>Convierte interesados en citas.</p></div>
-<div class="feature-card"><div class="feature-icon">♻</div><h3>Reactivación</h3><p>Recupera pacientes antiguos.</p></div>
-<div class="feature-card"><div class="feature-icon">📊</div><h3>Panel de control</h3><p>Datos en tiempo real.</p></div>
-</div>
-</div>
-</section>
-
-
-<!-- PROCESO -->
-<section class="process">
-<div class="container fade">
-<h2>Cómo implementamos tu sistema</h2>
-<div class="process-grid">
-<div><div class="step">1</div><p>Diagnóstico</p></div>
-<div><div class="step">2</div><p>Diseño IA</p></div>
-<div><div class="step">3</div><p>Implementación</p></div>
-<div><div class="step">4</div><p>Optimización</p></div>
-</div>
-</div>
-</section>
-
-
-<!-- TESTIMONIOS -->
-<section class="testimonials">
-<div class="container fade">
-<h2>Resultados de nuestros clientes</h2>
-<div class="testimonial-card">
-<p>"Ahora confirmamos más citas que nunca y el personal ahorra horas cada semana."</p>
-</div>
-</div>
-</section>
-
-
-<!-- FAQ -->
-<section class="faq">
-<div class="container fade">
-<h2 style="text-align:center">Preguntas frecuentes</h2>
-<div class="faq-item"><h3>¿Cuánto tarda la implementación?</h3><p>Pocos días dependiendo de la clínica.</p></div>
-<div class="faq-item"><h3>¿Necesito conocimientos técnicos?</h3><p>No, nosotros configuramos todo.</p></div>
-<div class="faq-item"><h3>¿Se integra con mi sistema actual?</h3><p>Sí, conectamos tus herramientas.</p></div>
-</div>
-</section>
-
-
-<!-- CTA FINAL -->
-<section class="cta">
-<div class="container fade">
-<h2>Empieza a automatizar tu clínica hoy</h2>
-<p>Agenda una demostración gratuita y mira el sistema en acción.</p>
-</div>
-</section>
-
-
-<!-- CONTACTO -->
-<section id="contacto">
-<div class="container fade">
-<h2 style="text-align:center">Solicitar demostración</h2>
-<form>
-<input type="text" placeholder="Nombre">
-<input type="email" placeholder="Correo electrónico">
-<input type="text" placeholder="Nombre de la clínica">
-<textarea rows="4" placeholder="Cuéntanos sobre tu negocio"></textarea>
-<button>Solicitar demo</button>
-</form>
-</div>
-</section>
-
-
-<footer>
-Upcore AI © 2026 — Automatización Inteligente
-</footer>
-
-<script>
-const faders=document.querySelectorAll('.fade');
-const observer=new IntersectionObserver(entries=>{
-entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('show')}})
-});
-faders.forEach(el=>observer.observe(el));
-
-window.addEventListener('scroll',()=>{
-if(window.scrollY>20)document.querySelector('header').classList.add('scrolled');
-else document.querySelector('header').classList.remove('scrolled');
-});
-</script>
+    <footer>
+        <p>© 2026 Upcore AI. Simetría en el código. Perfección en el flujo.</p>
+    </footer>
 
 </body>
 </html>
