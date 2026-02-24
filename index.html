@@ -72,6 +72,7 @@
 
         .logo { font-weight: 600; font-size: 1.5rem; letter-spacing: -1px; }
 
+        /* HERO SECTION OPTIMIZADO */
         .hero {
             height: 100vh;
             display: flex;
@@ -83,36 +84,54 @@
         }
 
         h1 {
-            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 600;
             margin-bottom: 1.5rem;
-            letter-spacing: -2px;
-            background: linear-gradient(to bottom, #fff 60%, var(--slate));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -1.5px;
+            max-width: 900px;
+            line-height: 1.2;
+            color: var(--white);
         }
 
-        .hero p { color: var(--slate); font-size: 1.2rem; max-width: 650px; margin-bottom: 2.5rem; }
+        .hero p { color: var(--slate); font-size: 1.1rem; max-width: 750px; margin-bottom: 1.5rem; }
+
+        .hero-list {
+            list-style: none;
+            margin-bottom: 2.5rem;
+            text-align: left;
+            display: inline-block;
+        }
+
+        .hero-list li {
+            font-size: 1rem;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-list li span { color: var(--cyan); margin-right: 10px; font-weight: bold; }
 
         .cta-button {
             background-color: var(--cyan);
             color: var(--obsidian);
-            padding: 1rem 2.5rem;
+            padding: 1.2rem 2.5rem;
             border-radius: 100px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.4s ease;
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.2);
         }
 
         .cta-button:hover {
             transform: translateY(-3px);
             background: var(--gradient);
             color: var(--white);
-            box-shadow: 0 15px 35px rgba(0, 245, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 245, 255, 0.4);
         }
 
+        /* COMPONENTE: RECTÁNGULO OVALADO DINÁMICO */
         section { padding: 100px 10%; }
-
         h2 { font-size: 2.8rem; text-align: center; margin-bottom: 4rem; letter-spacing: -1px; }
 
         .grid {
@@ -121,7 +140,6 @@
             gap: 2.5rem;
         }
 
-        /* RECTÁNGULO OVALADO CON CONTORNO DINÁMICO */
         .card {
             position: relative;
             background: rgba(255, 255, 255, 0.015);
@@ -145,15 +163,12 @@
         }
 
         .card:hover::before { background: var(--gradient); }
-
         .card:hover { transform: translateY(-8px); background: rgba(255, 255, 255, 0.03); }
 
         .card h3 { margin-bottom: 1rem; color: var(--cyan); font-size: 1.4rem; }
         .card p { color: var(--white); font-weight: 300; margin-bottom: 1.5rem; font-size: 0.95rem; }
-        
         .card ul { list-style: none; }
         .card ul li { color: var(--slate); font-size: 0.9rem; margin-bottom: 0.5rem; }
-        .card ul li strong { color: var(--cyan); }
 
         .bonus-section {
             margin-top: 4rem;
@@ -171,11 +186,9 @@
             margin-top: 2rem;
         }
 
-        .bonus-item { color: var(--white); font-weight: 400; font-size: 1rem; }
-
         footer { padding: 4rem 10%; text-align: center; color: var(--slate); font-size: 0.9rem; }
 
-        @media (max-width: 768px) { section { padding: 60px 5%; } }
+        @media (max-width: 768px) { section { padding: 60px 5%; } h1 { font-size: 2.2rem; } }
     </style>
 </head>
 <body>
@@ -184,13 +197,21 @@
 
     <nav>
         <div class="logo">UPCORE AI</div>
-        <a href="#proceso" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.8rem;">Empezar</a>
+        <a href="#contacto" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.8rem;">Empezar</a>
     </nav>
 
     <header class="hero">
-        <h1>Tu negocio en piloto automático.</h1>
-        <p>Upcore AI diseña sistemas de inteligencia artificial que ejecutan, escalan y optimizan tu operación mientras tú te enfocas en liderar.</p>
-        <a href="#beneficios" class="cta-button">Ver Beneficios</a>
+        <h1>Automatiza tu negocio con IA y reduce hasta 60% de tus costos operativos.</h1>
+        <p>Implementamos sistemas inteligentes que trabajan 24/7, eliminan tareas manuales y convierten más clientes sin contratar más personal.</p>
+        
+        <ul class="hero-list">
+            <li><span>✔</span> Automatización completa de procesos</li>
+            <li><span>✔</span> Atención y ventas activas todo el día</li>
+            <li><span>✔</span> Decisiones basadas en datos en tiempo real</li>
+        </ul>
+
+        <p style="font-size: 1rem; margin-top: 1rem;">Descubre cuánto puedes automatizar hoy.</p>
+        <a href="#proceso" class="cta-button">Agendar auditoría estratégica gratuita</a>
     </header>
 
     <section id="beneficios">
@@ -198,7 +219,7 @@
         <div class="grid">
             <div class="card">
                 <h3>1. Eficiencia que reduce costos</h3>
-                <p>Eliminamos tareas manuales, cuellos de botella y trabajo repetitivo en toda tu operación. Tu empresa funciona más rápido.</p>
+                <p>Eliminamos tareas manuales, cuellos de botella y trabajo repetitivo en toda tu operación.</p>
                 <ul>
                     <li>✔ Hasta 60% menos carga operativa</li>
                     <li>✔ Procesos automatizados 24/7</li>
@@ -207,20 +228,20 @@
             </div>
             <div class="card">
                 <h3>2. Escalabilidad sin contratar más</h3>
-                <p>Tu negocio crece sin que tu estructura colapse. Maneja más clientes y operaciones sin aumentar costos proporcionalmente.</p>
+                <p>Tu negocio crece sin que tu estructura colapse. Maneja más clientes sin aumentar costos operativos.</p>
                 <ul>
-                    <li>✔ Crecimiento sin fricción operativa</li>
+                    <li>✔ Crecimiento sin fricción</li>
                     <li>✔ Sistemas para alto volumen</li>
                     <li>✔ Infraestructura lista para expansión</li>
                 </ul>
             </div>
             <div class="card">
                 <h3>3. Decisiones inteligentes</h3>
-                <p>Transformamos tus datos en acciones automáticas que optimizan ventas, operaciones y rendimiento real.</p>
+                <p>Transformamos datos en acciones automáticas que optimizan ventas y rendimiento real.</p>
                 <ul>
                     <li>✔ Análisis continuo sin intervención</li>
                     <li>✔ Menos errores, más precisión</li>
-                    <li>✔ Decisiones basadas en datos reales</li>
+                    <li>✔ Decisiones basadas en datos</li>
                 </ul>
             </div>
         </div>
@@ -231,11 +252,11 @@
         <div class="grid">
             <div class="card">
                 <h3>1. Automatización inteligente</h3>
-                <p>Sistemas que ejecutan procesos completos: gestión, seguimiento y ejecución autónoma. Tu negocio funciona incluso cuando tú no estás.</p>
+                <p>Sistemas que ejecutan procesos completos de forma autónoma. Tu negocio funciona incluso cuando tú no estás.</p>
             </div>
             <div class="card">
                 <h3>2. Agentes de IA 24/7</h3>
-                <p>Asistentes inteligentes que califican leads y gestionan solicitudes sin descanso. Más conversiones y cero oportunidades perdidas.</p>
+                <p>Asistentes inteligentes que califican leads y gestionan solicitudes sin descanso. Respuestas instantáneas siempre.</p>
             </div>
             <div class="card">
                 <h3>3. Inteligencia de Datos</h3>
@@ -250,28 +271,27 @@
             <div class="card">
                 <h3>Fase 01 — Diagnóstico</h3>
                 <p>Analizamos tu estructura e identificamos ineficiencias de alto impacto.</p>
-                <p><strong>Entregable:</strong> Mapa de optimización + estimación de impacto.</p>
+                <p><strong style="color: var(--cyan)">Entregable:</strong> Mapa de optimización + impacto.</p>
             </div>
             <div class="card">
                 <h3>Fase 02 — Arquitectura</h3>
                 <p>Construimos la estructura técnica: flujos, integraciones y lógica de decisión.</p>
-                <p><strong>Entregable:</strong> Sistema diseñado para eficiencia máxima.</p>
+                <p><strong style="color: var(--cyan)">Entregable:</strong> Sistema diseñado para eficiencia.</p>
             </div>
             <div class="card">
                 <h3>Fase 03 — Implementación</h3>
                 <p>Integramos las automatizaciones sin interrumpir tu funcionamiento actual.</p>
-                <p><strong>Resultado:</strong> Sistema funcionando en entorno real.</p>
+                <p><strong style="color: var(--cyan)">Resultado:</strong> Activación en entorno real.</p>
             </div>
             <div class="card">
                 <h3>Fase 04 — Optimización</h3>
                 <p>Evolucionamos el sistema para mejorar resultados constantemente.</p>
-                <p><strong>Resultado:</strong> Adaptación total al crecimiento.</p>
+                <p><strong style="color: var(--cyan)">Resultado:</strong> Adaptación al crecimiento.</p>
             </div>
         </div>
 
         <div class="bonus-section">
             <h2 style="margin-bottom: 1rem; font-size: 2rem;">💎 Resultados Esperados</h2>
-            <p style="color: var(--slate); margin-bottom: 2rem;">Nuestros clientes suelen lograr:</p>
             <div class="bonus-grid">
                 <div class="bonus-item">✔ Menos tareas manuales</div>
                 <div class="bonus-item">✔ Respuesta instantánea</div>
