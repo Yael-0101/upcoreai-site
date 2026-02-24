@@ -26,125 +26,109 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
 body{background:var(--blanco);color:#1a1a1a;line-height:1.6}
 .container{width:90%;max-width:1200px;margin:auto}
-section{padding:100px 0}
+section{padding:110px 0}
 h1,h2,h3{font-weight:600}
 
 /* ==================================================
-   HEADER
+   HEADER PREMIUM
 ================================================== */
 header{
-position:fixed;
-top:0;width:100%;
-background:white;
+position:fixed;top:0;width:100%;
+background:rgba(255,255,255,.85);
+backdrop-filter:blur(12px);
 border-bottom:1px solid #e8eef4;
-z-index:999
+z-index:999;
+transition:.3s
 }
 
-nav{display:flex;justify-content:space-between;align-items:center;height:70px}
+header.scrolled{box-shadow:0 10px 30px rgba(0,0,0,.08)}
 
+nav{display:flex;justify-content:space-between;align-items:center;height:70px}
 .logo{font-size:20px;font-weight:700;color:var(--azul-profundo)}
 
 .nav-btn{
 background:var(--cian-electrico);
-color:white;
-padding:10px 22px;
-border-radius:30px;
-text-decoration:none;
-font-size:14px;
-transition:.3s
+color:white;padding:10px 24px;
+border-radius:40px;text-decoration:none;
+transition:.3s;box-shadow:0 10px 20px rgba(43,196,232,.25)
 }
 
-.nav-btn:hover{background:var(--azul-acero)}
+.nav-btn:hover{background:var(--azul-acero);transform:translateY(-2px)}
 
 /* ==================================================
-   HERO (tipo agencia moderna)
+   HERO PREMIUM
 ================================================== */
-.hero{
-min-height:100vh;
-display:flex;
-align-items:center;
-padding-top:70px;
-}
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:70px}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
 
-.hero-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:60px;
-align-items:center
-}
-
-.hero h1{
-font-size:52px;
-color:var(--azul-profundo);
-margin-bottom:20px
-}
-
-.hero p{
-font-size:20px;
-color:#4b5b6b;
-margin-bottom:30px
-}
+.hero h1{font-size:54px;color:var(--azul-profundo);margin-bottom:20px}
+.hero p{font-size:20px;color:#4b5b6b;margin-bottom:35px}
 
 .hero-buttons{display:flex;gap:15px;flex-wrap:wrap}
 
 .btn-primary{
 background:var(--cian-electrico);
-color:white;
-padding:16px 32px;
-border-radius:40px;
-text-decoration:none;
-transition:.3s
+color:white;padding:16px 34px;
+border-radius:40px;text-decoration:none;
+transition:.3s;box-shadow:0 20px 40px rgba(43,196,232,.35)
 }
 
-.btn-primary:hover{background:var(--azul-acero)}
+.btn-primary:hover{background:var(--azul-acero);transform:translateY(-3px)}
 
 .btn-secondary{
 border:2px solid var(--azul-profundo);
 color:var(--azul-profundo);
-padding:14px 30px;
-border-radius:40px;
-text-decoration:none;
+padding:14px 30px;border-radius:40px;text-decoration:none;
+transition:.3s
 }
 
+.btn-secondary:hover{background:var(--azul-profundo);color:white}
+
 .hero-visual{
-height:420px;
-border-radius:18px;
+height:420px;border-radius:22px;
 background:linear-gradient(135deg,var(--azul-profundo),var(--azul-acero));
-box-shadow:0 40px 80px rgba(0,0,0,.15)
+box-shadow:0 50px 100px rgba(0,0,0,.15);
+position:relative;overflow:hidden
+}
+
+.hero-visual::after{
+content:"";position:absolute;
+inset:0;background:radial-gradient(circle at 30% 30%,rgba(43,196,232,.35),transparent 60%)
 }
 
 /* ==================================================
    LOGOS / CONFIANZA
 ================================================== */
 .trust{background:var(--gris-claro);text-align:center}
-.trust p{margin-bottom:25px;color:#5a6b7a}
+.trust-bar{margin-top:35px;display:flex;gap:60px;justify-content:center;flex-wrap:wrap;opacity:.6}
 
 /* ==================================================
-   QUE AUTOMATIZAMOS
+   RESULTADOS RÁPIDOS
 ================================================== */
-.features-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:30px;margin-top:50px
-}
+.stats{text-align:center}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:50px;margin-top:50px}
+.stat-number{font-size:48px;font-weight:700;color:var(--azul-profundo)}
+
+/* ==================================================
+   SOLUCIONES
+================================================== */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:30px;margin-top:50px}
 
 .feature-card{
-border:1px solid #e6eef5;
-padding:35px;border-radius:14px;
+border:1px solid #e6eef5;padding:35px;border-radius:16px;
 transition:.3s;background:white
 }
 
 .feature-card:hover{
-transform:translateY(-6px);
-border-color:var(--azul-acero)
+transform:translateY(-8px);
+border-color:var(--azul-acero);
+box-shadow:0 20px 40px rgba(0,0,0,.08)
 }
 
-.feature-icon{
-font-size:30px;margin-bottom:15px;color:var(--cian-electrico)
-}
+.feature-icon{font-size:30px;margin-bottom:15px;color:var(--cian-electrico)}
 
 /* ==================================================
-   INDUSTRIAS / CASOS DE USO
+   INDUSTRIAS
 ================================================== */
 .industries{background:var(--gris-claro)}
 
@@ -152,32 +136,17 @@ font-size:30px;margin-bottom:15px;color:var(--cian-electrico)
    PROCESO
 ================================================== */
 .process{background:var(--azul-profundo);color:white;text-align:center}
-
-.process-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:40px;margin-top:50px
-}
-
-.step{
-font-size:42px;
-font-weight:700;
-color:var(--cian-electrico);
-margin-bottom:10px
-}
+.process-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:50px;margin-top:50px}
+.step{font-size:46px;font-weight:700;color:var(--cian-electrico);margin-bottom:12px}
 
 /* ==================================================
-   RESULTADOS
+   TESTIMONIOS
 ================================================== */
-.stats{text-align:center}
-.stats-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:40px;margin-top:50px
-}
-
-.stat-number{
-font-size:42px;font-weight:700;color:var(--azul-profundo)
+.testimonials{text-align:center}
+.testimonial-card{
+max-width:700px;margin:40px auto;
+padding:40px;border-radius:18px;
+border:1px solid #e6eef5
 }
 
 /* ==================================================
@@ -188,25 +157,26 @@ font-size:42px;font-weight:700;color:var(--azul-profundo)
 .faq-item h3{color:var(--azul-profundo);margin-bottom:8px}
 
 /* ==================================================
-   CTA FINAL
+   CTA FINAL PREMIUM
 ================================================== */
-.cta{
-background:var(--azul-profundo);
-color:white;text-align:center
-}
+.cta{background:var(--azul-profundo);color:white;text-align:center}
+.cta h2{margin-bottom:15px}
 
 /* ==================================================
    FORM
 ================================================== */
-form{margin-top:40px}
+form{margin-top:40px;max-width:600px;margin-left:auto;margin-right:auto}
 input,textarea{
-width:100%;padding:14px;margin:10px 0;
-border-radius:8px;border:1px solid #ddd
+width:100%;padding:15px;margin:10px 0;
+border-radius:10px;border:1px solid #ddd
 }
+
 button{
 background:var(--cian-electrico);
 color:white;border:none;
-padding:14px 30px;border-radius:30px;cursor:pointer
+padding:15px 34px;border-radius:40px;
+cursor:pointer;font-size:16px;
+box-shadow:0 15px 30px rgba(43,196,232,.35)
 }
 button:hover{background:var(--azul-acero)}
 
@@ -218,7 +188,7 @@ footer{background:#0f1c26;color:white;text-align:center;padding:40px 0}
 /* ==================================================
    ANIMACIONES
 ================================================== */
-.fade{opacity:0;transform:translateY(30px);transition:.8s}
+.fade{opacity:0;transform:translateY(30px);transition:.9s ease}
 .fade.show{opacity:1;transform:translateY(0)}
 
 /* ==================================================
@@ -247,19 +217,15 @@ footer{background:#0f1c26;color:white;text-align:center;padding:40px 0}
 <!-- HERO -->
 <section class="hero">
 <div class="container hero-grid fade">
-
 <div>
-<h1>Automatización inteligente para clínicas modernas</h1>
-<p>Sistemas que responden pacientes, gestionan citas y generan ingresos automáticamente 24/7.</p>
-
+<h1>Automatiza pacientes, citas y ventas con inteligencia artificial</h1>
+<p>Sistemas diseñados para clínicas que quieren crecer más rápido, reducir trabajo manual y aumentar ingresos automáticamente.</p>
 <div class="hero-buttons">
 <a href="#contacto" class="btn-primary">Solicitar demo gratuita</a>
-<a href="#soluciones" class="btn-secondary">Ver soluciones</a>
+<a href="#soluciones" class="btn-secondary">Ver cómo funciona</a>
 </div>
 </div>
-
 <div class="hero-visual"></div>
-
 </div>
 </section>
 
@@ -267,83 +233,11 @@ footer{background:#0f1c26;color:white;text-align:center;padding:40px 0}
 <!-- CONFIANZA -->
 <section class="trust">
 <div class="container fade">
-<p>Empresas modernas automatizan sus procesos para crecer más rápido y reducir costos.</p>
-</div>
-</section>
-
-
-<!-- SOLUCIONES / QUE AUTOMATIZAMOS -->
-<section id="soluciones">
-<div class="container fade">
-<h2 style="text-align:center">Lo que automatizamos</h2>
-
-<div class="features-grid">
-
-<div class="feature-card">
-<div class="feature-icon">🤖</div>
-<h3>Atención automática</h3>
-<p>Respuestas instantáneas a pacientes en todos los canales.</p>
-</div>
-
-<div class="feature-card">
-<div class="feature-icon">📅</div>
-<h3>Gestión de citas</h3>
-<p>Reservas, confirmaciones y recordatorios automáticos.</p>
-</div>
-
-<div class="feature-card">
-<div class="feature-icon">📈</div>
-<h3>Seguimiento de prospectos</h3>
-<p>Convierte interesados en pacientes reales.</p>
-</div>
-
-<div class="feature-card">
-<div class="feature-icon">♻</div>
-<h3>Reactivación de pacientes</h3>
-<p>Recupera pacientes antiguos automáticamente.</p>
-</div>
-
-<div class="feature-card">
-<div class="feature-icon">📊</div>
-<h3>Panel de control</h3>
-<p>Datos en tiempo real del rendimiento de tu clínica.</p>
-</div>
-
-<div class="feature-card">
-<div class="feature-icon">⚙</div>
-<h3>Automatización de procesos</h3>
-<p>Elimina tareas manuales repetitivas.</p>
-</div>
-
-</div>
-</div>
-</section>
-
-
-<!-- INDUSTRIAS -->
-<section class="industries">
-<div class="container fade">
-<h2 style="text-align:center">Diseñado para clínicas que quieren escalar</h2>
-
-<div class="features-grid">
-<div class="feature-card">Clínicas estéticas</div>
-<div class="feature-card">Clínicas dentales</div>
-<div class="feature-card">Centros médicos privados</div>
-</div>
-</div>
-</section>
-
-
-<!-- PROCESO -->
-<section class="process">
-<div class="container fade">
-<h2>Cómo implementamos el sistema</h2>
-
-<div class="process-grid">
-<div><div class="step">1</div><p>Diagnóstico del negocio</p></div>
-<div><div class="step">2</div><p>Diseño del sistema IA</p></div>
-<div><div class="step">3</div><p>Implementación</p></div>
-<div><div class="step">4</div><p>Optimización continua</p></div>
+<p>Las clínicas modernas automatizan procesos para escalar más rápido.</p>
+<div class="trust-bar">
+<span>Clínicas estéticas</span>
+<span>Clínicas dentales</span>
+<span>Centros médicos</span>
 </div>
 </div>
 </section>
@@ -352,14 +246,54 @@ footer{background:#0f1c26;color:white;text-align:center;padding:40px 0}
 <!-- RESULTADOS -->
 <section class="stats">
 <div class="container fade">
-<h2>Impacto real en las clínicas</h2>
-
+<h2>Resultados reales con automatización</h2>
 <div class="stats-grid">
 <div><div class="stat-number">+40%</div><p>Más citas confirmadas</p></div>
 <div><div class="stat-number">-60%</div><p>Cancelaciones</p></div>
 <div><div class="stat-number">24/7</div><p>Atención automática</p></div>
+<div><div class="stat-number">3x</div><p>Velocidad de respuesta</p></div>
 </div>
+</div>
+</section>
 
+
+<!-- SOLUCIONES -->
+<section id="soluciones">
+<div class="container fade">
+<h2 style="text-align:center">Sistema completo de automatización</h2>
+<div class="features-grid">
+<div class="feature-card"><div class="feature-icon">🤖</div><h3>Chatbot 24/7</h3><p>Responde pacientes automáticamente.</p></div>
+<div class="feature-card"><div class="feature-icon">📅</div><h3>Agenda automática</h3><p>Reservas y confirmaciones inteligentes.</p></div>
+<div class="feature-card"><div class="feature-icon">🔔</div><h3>Recordatorios</h3><p>Reduce ausencias de pacientes.</p></div>
+<div class="feature-card"><div class="feature-icon">📈</div><h3>Seguimiento</h3><p>Convierte interesados en citas.</p></div>
+<div class="feature-card"><div class="feature-icon">♻</div><h3>Reactivación</h3><p>Recupera pacientes antiguos.</p></div>
+<div class="feature-card"><div class="feature-icon">📊</div><h3>Panel de control</h3><p>Datos en tiempo real.</p></div>
+</div>
+</div>
+</section>
+
+
+<!-- PROCESO -->
+<section class="process">
+<div class="container fade">
+<h2>Cómo implementamos tu sistema</h2>
+<div class="process-grid">
+<div><div class="step">1</div><p>Diagnóstico</p></div>
+<div><div class="step">2</div><p>Diseño IA</p></div>
+<div><div class="step">3</div><p>Implementación</p></div>
+<div><div class="step">4</div><p>Optimización</p></div>
+</div>
+</div>
+</section>
+
+
+<!-- TESTIMONIOS -->
+<section class="testimonials">
+<div class="container fade">
+<h2>Resultados de nuestros clientes</h2>
+<div class="testimonial-card">
+<p>"Ahora confirmamos más citas que nunca y el personal ahorra horas cada semana."</p>
+</div>
 </div>
 </section>
 
@@ -368,22 +302,9 @@ footer{background:#0f1c26;color:white;text-align:center;padding:40px 0}
 <section class="faq">
 <div class="container fade">
 <h2 style="text-align:center">Preguntas frecuentes</h2>
-
-<div class="faq-item">
-<h3>¿Cuánto tarda la implementación?</h3>
-<p>La mayoría de sistemas se instalan en pocos días.</p>
-</div>
-
-<div class="faq-item">
-<h3>¿Necesito conocimientos técnicos?</h3>
-<p>No. Nosotros configuramos todo por ti.</p>
-</div>
-
-<div class="faq-item">
-<h3>¿Funciona con mi software actual?</h3>
-<p>Integramos el sistema con tus herramientas existentes.</p>
-</div>
-
+<div class="faq-item"><h3>¿Cuánto tarda la implementación?</h3><p>Pocos días dependiendo de la clínica.</p></div>
+<div class="faq-item"><h3>¿Necesito conocimientos técnicos?</h3><p>No, nosotros configuramos todo.</p></div>
+<div class="faq-item"><h3>¿Se integra con mi sistema actual?</h3><p>Sí, conectamos tus herramientas.</p></div>
 </div>
 </section>
 
@@ -392,7 +313,7 @@ footer{background:#0f1c26;color:white;text-align:center;padding:40px 0}
 <section class="cta">
 <div class="container fade">
 <h2>Empieza a automatizar tu clínica hoy</h2>
-<p>Solicita una demostración gratuita y descubre el sistema en acción.</p>
+<p>Agenda una demostración gratuita y mira el sistema en acción.</p>
 </div>
 </section>
 
@@ -401,15 +322,13 @@ footer{background:#0f1c26;color:white;text-align:center;padding:40px 0}
 <section id="contacto">
 <div class="container fade">
 <h2 style="text-align:center">Solicitar demostración</h2>
-
 <form>
 <input type="text" placeholder="Nombre">
 <input type="email" placeholder="Correo electrónico">
 <input type="text" placeholder="Nombre de la clínica">
 <textarea rows="4" placeholder="Cuéntanos sobre tu negocio"></textarea>
-<button>Enviar solicitud</button>
+<button>Solicitar demo</button>
 </form>
-
 </div>
 </section>
 
@@ -424,6 +343,11 @@ const observer=new IntersectionObserver(entries=>{
 entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('show')}})
 });
 faders.forEach(el=>observer.observe(el));
+
+window.addEventListener('scroll',()=>{
+if(window.scrollY>20)document.querySelector('header').classList.add('scrolled');
+else document.querySelector('header').classList.remove('scrolled');
+});
 </script>
 
 </body>
