@@ -13,6 +13,7 @@
             --obsidian: #08080B;
             --cyan: #00F5FF;
             --slate: #64748B;
+            --purple: #7000FF;
             --gradient: linear-gradient(135deg, #00F5FF 0%, #7000FF 100%);
             --white: #FFFFFF;
         }
@@ -29,8 +30,53 @@
             color: var(--white);
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
         }
 
+        /* ANIMACIÓN DE FONDO MINIMALISTA */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: var(--obsidian);
+        }
+
+        .orb {
+            position: absolute;
+            filter: blur(120px);
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: move 20s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--cyan);
+            top: -10%;
+            left: -10%;
+        }
+
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: var(--purple);
+            bottom: -10%;
+            right: -10%;
+            animation-duration: 25s;
+        }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(100px, 100px) scale(1.2); }
+        }
+
+        /* NAVEGACIÓN */
         nav {
             padding: 1.5rem 10%;
             display: flex;
@@ -40,7 +86,7 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            background: rgba(8, 8, 11, 0.8);
+            background: rgba(8, 8, 11, 0.7);
             backdrop-filter: blur(20px);
         }
 
@@ -48,7 +94,6 @@
             font-weight: 600;
             font-size: 1.5rem;
             letter-spacing: -1px;
-            color: var(--white);
         }
 
         /* HERO SECTION */
@@ -67,6 +112,9 @@
             font-weight: 600;
             margin-bottom: 1.5rem;
             letter-spacing: -2px;
+            background: linear-gradient(to bottom, #fff 70%, var(--slate));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero p {
@@ -92,12 +140,11 @@
             transform: scale(1.05);
             background: var(--gradient);
             color: var(--white);
+            box-shadow: 0 10px 40px rgba(0, 245, 255, 0.3);
         }
 
         /* SECCIONES */
-        section {
-            padding: 100px 10%;
-        }
+        section { padding: 100px 10%; }
 
         h2 {
             font-size: 2.5rem;
@@ -105,7 +152,7 @@
             margin-bottom: 4rem;
         }
 
-        /* GRID Y RECTÁNGULOS OVALADOS */
+        /* RECTÁNGULOS OVALADOS CON CONTORNO */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -114,32 +161,28 @@
 
         .card {
             position: relative;
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.01);
             padding: 3rem;
-            border-radius: 40px; /* Forma de rectángulo ovalado */
+            border-radius: 40px;
             transition: all 0.4s ease;
-            text-align: left;
             z-index: 1;
         }
 
-        /* EFECTO DE CONTORNO (BORDE) ÚNICAMENTE */
         .card::before {
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 40px; 
-            padding: 2px; /* Grosor del borde */
-            background: rgba(100, 116, 139, 0.2); /* Borde original apagado */
-            -webkit-mask: 
-                linear-gradient(#fff 0 0) content-box, 
-                linear-gradient(#fff 0 0);
+            border-radius: 40px;
+            padding: 2px;
+            background: rgba(100, 116, 139, 0.15);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             transition: all 0.4s ease;
         }
 
         .card:hover::before {
-            background: var(--gradient); /* El contorno cambia a la paleta completa */
+            background: var(--gradient);
         }
 
         .card h3 {
@@ -153,7 +196,7 @@
             font-weight: 300;
         }
 
-        /* SECCIÓN PROCESO */
+        /* PROCESO */
         .process-grid {
             display: flex;
             justify-content: space-between;
@@ -162,25 +205,18 @@
 
         .process-item {
             flex: 1;
-            padding: 2rem;
+            padding: 2.5rem;
             border-radius: 30px;
             background: rgba(255, 255, 255, 0.02);
             text-align: center;
             border: 1px solid rgba(100, 116, 139, 0.1);
-            transition: 0.4s;
-        }
-
-        .process-item:hover {
-            border-color: var(--cyan);
-            transform: translateY(-5px);
         }
 
         footer {
             padding: 4rem 10%;
             text-align: center;
-            border-top: 1px solid rgba(100, 116, 139, 0.1);
+            border-top: 1px solid rgba(100, 116, 139, 0.05);
             color: var(--slate);
-            font-size: 0.9rem;
         }
 
         @media (max-width: 768px) {
@@ -190,6 +226,11 @@
 </head>
 <body>
 
+    <div class="bg-glow">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
     <nav>
         <div class="logo">UPCORE AI</div>
         <a href="#proceso" class="cta-button" style="padding: 0.5rem 1.5rem; font-size: 0.8rem;">Empezar</a>
@@ -197,7 +238,7 @@
 
     <header class="hero">
         <h1>Simetría Operativa.<br>Potenciada por IA.</h1>
-        <p>Diseñamos flujos de automatización con la precisión y el minimalismo que tu agencia merece.</p>
+        <p>Automatizamos el núcleo de tu agencia con la precisión y el minimalismo de la tecnología de vanguardia.</p>
         <a href="#beneficios" class="cta-button">Descubrir</a>
     </header>
 
@@ -206,15 +247,15 @@
         <div class="grid">
             <div class="card">
                 <h3>Eficiencia</h3>
-                <p>Elimina cuellos de botella manuales. Ejecución impecable en cada tarea.</p>
+                <p>Convertimos procesos complejos en flujos de trabajo autónomos y rápidos.</p>
             </div>
             <div class="card">
                 <h3>Escala</h3>
-                <p>Tu estructura crece sin fricción. La IA se adapta a tu volumen de trabajo.</p>
+                <p>Crecimiento sin límites técnicos. Tu infraestructura evoluciona contigo.</p>
             </div>
             <div class="card">
                 <h3>Precisión</h3>
-                <p>Sistemas libres de error humano, operando bajo lógica pura 24/7.</p>
+                <p>Eliminamos el error mediante agentes de inteligencia artificial pura.</p>
             </div>
         </div>
     </section>
@@ -224,21 +265,21 @@
         <div class="grid">
             <div class="card">
                 <h3>Agentes IA</h3>
-                <p>Sistemas de lenguaje inteligentes para atención y gestión interna.</p>
+                <p>Entrenamos modelos específicos para las necesidades de tu industria.</p>
             </div>
             <div class="card">
                 <h3>Automation</h3>
-                <p>Integración de procesos complejos en un solo ecosistema simétrico.</p>
+                <p>Integración total de herramientas en un ecosistema fluido y simétrico.</p>
             </div>
             <div class="card">
-                <h3>Core Data</h3>
-                <p>Análisis predictivo para anticipar el siguiente movimiento de tu negocio.</p>
+                <h3>Data Core</h3>
+                <p>Análisis de datos avanzado para una toma de decisiones inteligente.</p>
             </div>
         </div>
     </section>
 
     <section id="proceso">
-        <h2>Proceso Simétrico</h2>
+        <h2>El Proceso</h2>
         <div class="process-grid">
             <div class="process-item">
                 <h4 style="color: var(--cyan)">01. Auditoría</h4>
@@ -250,7 +291,7 @@
                 <h4 style="color: var(--cyan)">03. Despliegue</h4>
             </div>
             <div class="process-item">
-                <h4 style="color: var(--cyan)">04. Evolución</h4>
+                <h4 style="color: var(--cyan)">04. Optimización</h4>
             </div>
         </div>
     </section>
