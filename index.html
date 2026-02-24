@@ -3,219 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upcore AI | Líderes en Automatización de Habla Hispana</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <title>Upcore AI | Ingeniería en Automatización Avanzada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #030712;
-            --card: #0f172a;
-            --primary: #a855f7;
-            --secondary: #3b82f6;
-            --accent: #22d3ee;
-            --text-p: #f8fafc;
-            --text-s: #94a3b8;
-            --border: rgba(255, 255, 255, 0.08);
-            --gradient: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+            --bg-deep: #02040a;
+            --bg-card: rgba(13, 17, 23, 0.7);
+            --accent-blue: #0070f3;
+            --accent-glow: rgba(0, 112, 243, 0.3);
+            --text-p: #ffffff;
+            --text-s: #8b949e;
+            --border: rgba(48, 54, 61, 0.6);
+            --gradient: linear-gradient(180deg, rgba(0, 112, 243, 0.1) 0%, rgba(2, 4, 10, 0) 100%);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { background: var(--bg); color: var(--text-p); font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+        body { background-color: var(--bg-deep); color: var(--text-p); font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
 
-        /* --- BACKGROUND DECORATION --- */
-        .bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% -20%, rgba(168, 85, 247, 0.15), transparent 50%); z-index: -1; }
+        /* --- DECORACIONES DE FONDO (LAS ONDAS AZULES DE LAS CAPTURAS) --- */
+        .glow-top { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 600px; background: radial-gradient(circle at 50% 0%, rgba(0, 112, 243, 0.15), transparent 70%); z-index: -1; }
 
-        /* --- NAV --- */
-        nav { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 25px 8%; background: rgba(3, 7, 18, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); z-index: 1000; }
-        .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav-links a { color: var(--text-s); text-decoration: none; margin-left: 30px; font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
-        .nav-links a:hover { color: var(--accent); }
+        /* --- NAVEGACIÓN --- */
+        nav { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 20px 8%; background: rgba(2, 4, 10, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); z-index: 1000; }
+        .logo { font-weight: 800; font-size: 1.4rem; letter-spacing: -1px; display: flex; align-items: center; gap: 8px; }
+        .logo span { color: var(--accent-blue); }
+        .nav-links a { color: var(--text-s); text-decoration: none; margin-left: 30px; font-weight: 500; font-size: 0.9rem; transition: 0.3s; }
+        .nav-links a:hover { color: var(--text-p); }
+        .btn-nav { background: var(--accent-blue); color: white; padding: 10px 20px; border-radius: 8px; font-weight: 700; box-shadow: 0 4px 14px var(--accent-glow); }
 
-        /* --- HERO --- */
-        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 8%; }
-        .badge-hero { background: rgba(168, 85, 247, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 8px 20px; border-radius: 100px; font-size: 0.85rem; font-weight: 700; margin-bottom: 30px; }
-        .hero h1 { font-size: clamp(3rem, 10vw, 6rem); font-weight: 800; letter-spacing: -4px; line-height: 1; margin-bottom: 30px; }
-        .hero h1 span { display: block; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero p { font-size: 1.3rem; color: var(--text-s); max-width: 800px; margin-bottom: 50px; }
+        /* --- HERO SECTION --- */
+        .hero { min-height: 90vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 100px 8% 0; position: relative; }
+        .hero .badge { background: rgba(0, 112, 243, 0.1); border: 1px solid var(--accent-blue); color: var(--accent-blue); padding: 6px 16px; border-radius: 100px; font-size: 0.8rem; font-weight: 700; margin-bottom: 24px; text-transform: uppercase; }
+        .hero h1 { font-size: clamp(2.5rem, 8vw, 4.8rem); font-weight: 800; line-height: 1.1; margin-bottom: 24px; letter-spacing: -2px; }
+        .hero p { color: var(--text-s); max-width: 650px; font-size: 1.2rem; margin-bottom: 40px; }
+        .hero .btn-cta { background: var(--accent-blue); color: white; padding: 16px 36px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 1.1rem; box-shadow: 0 8px 30px var(--accent-glow); transition: 0.3s; }
+        .hero .btn-cta:hover { transform: translateY(-3px); box-shadow: 0 12px 40px var(--accent-glow); }
 
-        /* --- BUTTONS --- */
-        .btn-main { background: var(--gradient); color: white; padding: 18px 45px; border-radius: 12px; font-weight: 800; text-decoration: none; font-size: 1.1rem; box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4); transition: 0.4s; }
-        .btn-main:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(168, 85, 247, 0.6); }
+        /* --- SECCIÓN BENEFICIOS (GRID CON GRÁFICOS) --- */
+        .section { padding: 100px 8%; position: relative; }
+        .section-tag { background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 5px; font-size: 0.75rem; font-weight: 700; color: var(--text-s); text-transform: uppercase; margin-bottom: 20px; display: inline-block; }
+        .section-header { text-align: center; margin-bottom: 70px; }
+        .section-header h2 { font-size: 3rem; font-weight: 800; margin-bottom: 15px; }
 
-        /* --- SECTIONS --- */
-        .container { padding: 120px 8%; }
-        .tag-section { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 3px; font-size: 0.85rem; margin-bottom: 15px; display: block; }
-        .header-section { margin-bottom: 80px; }
-        .header-section h2 { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; line-height: 1.1; }
+        .b-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .b-card { background: var(--bg-card); border: 1px solid var(--border); padding: 40px; border-radius: 20px; transition: 0.4s; }
+        .b-card:hover { border-color: var(--accent-blue); background: rgba(0, 112, 243, 0.03); }
+        .b-card .visual { height: 120px; margin-bottom: 30px; background: linear-gradient(45deg, rgba(0,112,243,0.1), transparent); border-radius: 10px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        /* Simulación de gráfico de la captura */
+        .b-card .visual::after { content: ''; position: absolute; width: 80%; height: 2px; background: var(--accent-blue); box-shadow: 0 0 15px var(--accent-blue); transform: rotate(-10deg); }
 
-        /* --- BENEFICIOS (GRID ASIMÉTRICO) --- */
-        .beneficios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .b-card { background: var(--card); border: 1px solid var(--border); padding: 50px; border-radius: 32px; transition: 0.4s; }
-        .b-card:hover { border-color: var(--secondary); background: #131c33; }
-        .icon-box { width: 60px; height: 60px; background: rgba(59, 130, 246, 0.1); border-radius: 15px; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--secondary); }
+        /* --- SECCIÓN SERVICIOS --- */
+        .s-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
+        .s-card { background: var(--bg-card); border: 1px solid var(--border); padding: 50px; border-radius: 24px; text-align: center; position: relative; }
+        .s-card h3 { font-size: 1.8rem; margin: 20px 0; }
+        .s-card p { color: var(--text-s); line-height: 1.6; }
+        .icon-circle { width: 80px; height: 80px; border: 1px solid var(--accent-blue); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: var(--accent-blue); font-size: 2rem; }
 
-        /* --- SERVICIOS (LISTA DETALLADA) --- */
-        .s-card { display: flex; background: var(--card); border: 1px solid var(--border); border-radius: 40px; margin-bottom: 30px; overflow: hidden; align-items: center; transition: 0.4s; }
-        .s-card:hover { border-color: var(--primary); }
-        .s-info { padding: 60px; flex: 1; }
-        .s-visual { flex: 1; background: var(--gradient); height: 400px; opacity: 0.1; }
+        /* --- PROCESO --- */
+        .p-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 50px; }
+        .p-card { text-align: left; padding: 30px; border-left: 2px solid var(--border); transition: 0.3s; }
+        .p-card:hover { border-left-color: var(--accent-blue); }
+        .p-card h4 { font-size: 1.5rem; margin-bottom: 10px; }
 
-        /* --- PROCESO (LÍNEA DE TIEMPO) --- */
-        .process-row { display: flex; gap: 40px; margin-top: 60px; }
-        .p-step { flex: 1; padding: 40px; background: rgba(255,255,255,0.02); border-radius: 24px; position: relative; }
-        .p-num { font-size: 4rem; font-weight: 900; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.2; position: absolute; top: 10px; right: 20px; }
+        /* --- FORMULARIO DE CONVERSIÓN --- */
+        .form-wrapper { max-width: 700px; margin: 0 auto; background: var(--bg-card); padding: 60px; border-radius: 30px; border: 1px solid var(--border); position: relative; z-index: 10; }
+        .form-wrapper h2 { font-size: 2.5rem; text-align: center; margin-bottom: 10px; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-s); }
+        input, select, textarea { width: 100%; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; color: white; font-family: inherit; }
+        .btn-submit { width: 100%; background: var(--accent-blue); border: none; padding: 18px; color: white; font-weight: 800; border-radius: 10px; cursor: pointer; margin-top: 20px; font-size: 1.1rem; }
 
-        /* --- FORMULARIO --- */
-        .form-box { background: #0f172a; padding: 80px; border-radius: 48px; border: 1px solid var(--border); box-shadow: 0 40px 100px rgba(0,0,0,0.5); }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        input, select, textarea { width: 100%; background: #1e293b; border: 1px solid var(--border); padding: 20px; border-radius: 15px; color: white; font-family: inherit; font-size: 1rem; }
-        .trust-bar { margin-top: 40px; display: flex; justify-content: center; gap: 40px; color: var(--text-s); font-weight: 600; }
+        /* --- FOOTER --- */
+        footer { padding: 60px 8%; border-top: 1px solid var(--border); text-align: center; color: var(--text-s); }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 1024px) {
-            .beneficios-grid, .process-row, .form-grid { grid-template-columns: 1fr; }
-            .s-card { flex-direction: column; }
+        @media (max-width: 768px) {
+            .s-grid, .p-grid { grid-template-columns: 1fr; }
+            .form-wrapper { padding: 30px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
+    <div class="glow-top"></div>
 
     <nav>
-        <div class="logo">UPCORE AI</div>
+        <div class="logo">UPCORE<span>AI</span></div>
         <div class="nav-links">
             <a href="#beneficios">Beneficios</a>
             <a href="#servicios">Servicios</a>
             <a href="#proceso">Proceso</a>
-            <a href="#contacto" class="btn-main" style="padding: 10px 25px; font-size: 0.8rem;">Empezar</a>
+            <a href="#contacto" class="btn-nav">SOLICITAR SERVICIOS</a>
         </div>
     </nav>
 
     <header class="hero">
-        <div class="badge-hero">Líderes en Automatización de Habla Hispana</div>
-        <h1>Automatiza Hoy.<span>Lidera Mañana.</span></h1>
-        <p>Transformamos operaciones complejas en flujos simples, con soluciones de IA que trabajan por ti las 24 horas del día.</p>
-        <a href="#contacto" class="btn-main">Agendar Consultoría Gratuita</a>
+        <div class="badge">Estrategia de Automatización 2026</div>
+        <h1>Ingeniería de Flujos.<br><span>Resultados Impecables.</span></h1>
+        <p>Rediseñamos la operativa de tu empresa con ecosistemas de IA que eliminan la fricción y potencian la rentabilidad.</p>
+        <a href="#contacto" class="btn-cta">EMPIEZA LA TRANSFORMACIÓN</a>
     </header>
 
-    <section id="beneficios" class="container">
-        <div class="header-section">
-            <span class="tag-section">Beneficios</span>
-            <h2>Optimiza, Acelera y Automatiza</h2>
-            <p style="color: var(--text-s); margin-top: 20px; font-size: 1.2rem;">Elimina tareas repetitivas con soluciones inteligentes que mejoran la precisión en cada proceso.</p>
+    <section id="beneficios" class="section">
+        <div class="section-header">
+            <span class="section-tag">Beneficios</span>
+            <h2>Escale sin Límites Operativos</h2>
+            <p style="color: var(--text-s)">Soluciones que transforman el tiempo en impacto y los datos en decisiones automáticas.</p>
         </div>
-        <div class="beneficios-grid">
+        <div class="b-grid">
             <div class="b-card">
-                <div class="icon-box">⚡</div>
-                <h3>Reducción del Trabajo Manual</h3>
-                <p>La IA se encarga de la gestión de documentos y respuestas. Tu equipo se enfoca en la estrategia y el crecimiento.</p>
+                <div class="visual">📈</div>
+                <h3>Optimización del Talento</h3>
+                <p>Delegue la carga administrativa a sistemas autónomos. Su equipo recupera el tiempo para lo que realmente importa.</p>
             </div>
             <div class="b-card">
-                <div class="icon-box">🚀</div>
-                <h3>Mayor Velocidad Operativa</h3>
-                <p>Elimina cuellos de botella. Agentes inteligentes que procesan información en tiempo real sin pausas.</p>
+                <div class="visual">⚡</div>
+                <h3>Agilidad Estructural</h3>
+                <p>Procesos que no duermen. Implementamos flujos que responden y ejecutan en milisegundos, 24/7/365.</p>
             </div>
             <div class="b-card">
-                <div class="icon-box">🎯</div>
-                <h3>Menos Errores Humanos</h3>
-                <p>Decisiones estandarizadas basadas en datos. Automatizar significa menos fallos y más calidad operativa.</p>
+                <div class="visual">🛡️</div>
+                <h3>Precisión de Datos</h3>
+                <p>Reduzca el margen de error al mínimo absoluto. Automatización significa consistencia y trazabilidad total.</p>
             </div>
         </div>
     </section>
 
-    <section id="servicios" class="container">
-        <div class="header-section">
-            <span class="tag-section">Servicios</span>
-            <h2>Soluciones de IA de Próxima Generación</h2>
+    <section id="servicios" class="section" style="background: var(--gradient);">
+        <div class="section-header">
+            <span class="section-tag">Servicios</span>
+            <h2>Sistemas Inteligentes a Medida</h2>
         </div>
-
-        <div class="s-card">
-            <div class="s-info">
-                <span style="color: var(--accent); font-weight: 800;">01. VENTAS</span>
-                <h3 style="font-size: 2rem; margin: 15px 0;">Automatización de Leads</h3>
-                <p>Convierte más rápido. Automatiza la calificación de leads y la programación de citas con agentes de IA.</p>
+        <div class="s-grid">
+            <div class="s-card">
+                <div class="icon-circle">🎯</div>
+                <h3>Captación y Nutrición de Leads</h3>
+                <p>Agentes de IA que no solo contactan, sino que califican y cierran reuniones en su calendario de forma autónoma.</p>
             </div>
-            <div class="s-visual"></div>
-        </div>
-
-        <div class="s-card">
-            <div class="s-visual"></div>
-            <div class="s-info">
-                <span style="color: var(--primary); font-weight: 800;">02. CONOCIMIENTO</span>
-                <h3 style="font-size: 2rem; margin: 15px 0;">Base de Conocimientos RAG</h3>
-                <p>Implementa cerebros digitales que responden en tiempo real usando tus propios documentos y SOPs.</p>
+            <div class="s-card">
+                <div class="icon-circle">🧠</div>
+                <h3>Cerebros de Conocimiento RAG</h3>
+                <p>Centralice toda su documentación en una IA interna que responde consultas complejas sin margen de error.</p>
             </div>
-        </div>
-
-        <div class="s-card">
-            <div class="s-info">
-                <span style="color: var(--secondary); font-weight: 800;">03. OPERACIONES</span>
-                <h3 style="font-size: 2rem; margin: 15px 0;">Workflows Documentales</h3>
-                <p>Optimiza facturas, cotizaciones y contratos con flujos avanzados integrando n8n y GPT-4.</p>
-            </div>
-            <div class="s-visual"></div>
-        </div>
-    </section>
-
-    <section id="proceso" class="container">
-        <div class="header-section" style="text-align: center;">
-            <span class="tag-section">Método Upcore</span>
-            <h2>Un Camino Probado al Éxito</h2>
-        </div>
-        <div class="process-row">
-            <div class="p-step">
-                <span class="p-num">1</span>
-                <h3>Estudiamos</h3>
-                <p>Analizamos cada rincón de tu operativa para detectar fallas y oportunidades de automatización.</p>
-            </div>
-            <div class="p-step">
-                <span class="p-num">2</span>
-                <h3>Aplicamos</h3>
-                <p>Construimos el sistema a medida, integrando las mejores herramientas de IA del mercado.</p>
-            </div>
-            <div class="p-step">
-                <span class="p-num">3</span>
-                <h3>Optimizamos</h3>
-                <p>Refinamos los flujos basados en datos reales para garantizar el máximo ROI.</p>
+            <div class="s-card" style="grid-column: 1 / -1; max-width: 800px; margin: 0 auto;">
+                <div class="icon-circle">⚙️</div>
+                <h3>Automatización de Back-Office</h3>
+                <p>Desde facturación masiva hasta gestión de contratos. Integramos su stack tecnológico para que todo fluya sin clics manuales.</p>
             </div>
         </div>
     </section>
 
-    <section id="contacto" class="container">
-        <div class="form-box">
-            <div style="text-align: center; margin-bottom: 50px;">
-                <span class="tag-section">Solicita Servicios</span>
-                <h2>Haz Crecer tu Negocio Hoy</h2>
-                <div class="trust-bar">
-                    <span>⭐ 9,999+ Miembros</span>
-                    <span>✓ Expertos en IA</span>
-                    <span>✓ Soporte 24/7</span>
-                </div>
+    <section id="proceso" class="section">
+        <div class="section-header">
+            <span class="section-tag">Nuestro Método</span>
+            <h2>Tres Pasos hacia la Eficiencia</h2>
+        </div>
+        <div class="p-grid">
+            <div class="p-card">
+                <h4>01. Auditoría</h4>
+                <p>Mapeamos su flujo actual para encontrar las "fugas" de tiempo y dinero.</p>
             </div>
+            <div class="p-card">
+                <h4>02. Arquitectura</h4>
+                <p>Diseñamos y desplegamos la solución técnica más robusta para su caso.</p>
+            </div>
+            <div class="p-card">
+                <h4>03. Escalado</h4>
+                <p>Monitoreamos y refinamos el sistema para garantizar una mejora continua del ROI.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="section" style="text-align: center;">
+        <div class="form-wrapper">
+            <span class="section-tag">Solicitud</span>
+            <h2>Impulse su Negocio Hoy</h2>
+            <p style="color: var(--text-s); margin-bottom: 40px;">Cuéntenos su visión y diseñaremos la infraestructura para lograrla.</p>
             <form>
-                <div class="form-grid">
-                    <input type="text" placeholder="Nombre completo">
-                    <input type="text" placeholder="Empresa / Agencia">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" placeholder="Tu nombre">
                 </div>
-                <div class="form-grid">
-                    <input type="email" placeholder="Email corporativo">
+                <div class="form-group">
+                    <label>Empresa</label>
+                    <input type="text" placeholder="Nombre de tu proyecto">
+                </div>
+                <div class="form-group">
+                    <label>Presupuesto Estimado</label>
                     <select>
-                        <option>Starter (1.000 - 3.000 USD)</option>
-                        <option>Growth (3.000 - 5.000 USD)</option>
-                        <option>Premium (5.000 - 10.000 USD)</option>
+                        <option>Elige un rango de inversión...</option>
+                        <option>Proyectos Iniciales (1.000 - 3.000 USD)</option>
+                        <option>Transformación Completa (3.000 - 10.000 USD)</option>
+                        <option>Enterprise / Consultoría Continua</option>
                     </select>
                 </div>
-                <textarea rows="4" placeholder="Cuéntanos sobre los procesos que quieres automatizar..."></textarea>
-                <button type="submit" class="btn-main" style="width: 100%; border: none; cursor: pointer;">Enviar Solicitud de Auditoría</button>
+                <div class="form-group">
+                    <label>Idea del proyecto</label>
+                    <textarea rows="4" placeholder="¿Qué procesos quieres automatizar?"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">ENVIAR SOLICITUD DE AUDITORÍA</button>
             </form>
         </div>
     </section>
 
-    <footer style="padding: 60px 8%; border-top: 1px solid var(--border); text-align: center;">
-        <div class="logo" style="margin-bottom: 20px;">UPCORE AI</div>
-        <p style="color: var(--text-s);">El futuro ya está aquí. ¿Vas a liderar o a seguir?</p>
-        <p style="margin-top: 40px; font-size: 0.8rem; color: var(--text-s); opacity: 0.5;">© 2026 Upcore AI. Todos los derechos reservados.</p>
+    <footer>
+        <p>© 2026 Upcore AI. Ingeniería de automatización de alto impacto.</p>
     </footer>
 
 </body>
