@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upcore AI | Operando solo.</title>
+    <title>Upcore AI | Tu negocio. Operando solo.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@
             overflow-x: hidden;
         }
 
-        /* FONDO ANIMADO SUTIL */
+        /* FONDO ATMOSFÉRICO ANIMADO */
         .bg-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -57,6 +57,7 @@
             to { transform: translate(150px, 150px) scale(1.1); }
         }
 
+        /* NAVEGACIÓN */
         nav {
             padding: 1.5rem 10%;
             display: flex;
@@ -73,7 +74,7 @@
 
         .logo { font-weight: 600; font-size: 1.5rem; letter-spacing: -1.5px; }
 
-        /* HERO */
+        /* HERO SECTION */
         .hero {
             height: 100vh;
             display: flex;
@@ -101,9 +102,10 @@
             max-width: 650px; 
             margin-bottom: 3rem; 
             font-weight: 300;
+            letter-spacing: -0.5px;
         }
 
-        /* BOTÓN CON PULSO SUTIL */
+        /* BOTÓN CTA CON PULSO */
         .cta-button {
             background-color: var(--cyan);
             color: var(--obsidian);
@@ -112,7 +114,6 @@
             text-decoration: none;
             font-weight: 600;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
             display: inline-block;
             animation: pulse 4s infinite;
         }
@@ -128,9 +129,10 @@
             background: var(--gradient);
             color: var(--white);
             animation: none;
+            box-shadow: 0 20px 40px rgba(0, 245, 255, 0.3);
         }
 
-        /* RECTÁNGULOS OVALADOS */
+        /* RECTÁNGULOS OVALADOS (CARDS) */
         section { padding: 120px 10%; }
         h2 { font-size: 3rem; text-align: center; margin-bottom: 5rem; letter-spacing: -2px; }
 
@@ -144,11 +146,12 @@
             position: relative;
             background: rgba(255, 255, 255, 0.015);
             padding: 3.5rem 2.5rem;
-            border-radius: 40px;
+            border-radius: 40px; /* Rectángulo Ovalado */
             transition: all 0.4s ease;
             z-index: 1;
         }
 
+        /* Efecto de contorno dinámico */
         .card::before {
             content: "";
             position: absolute;
@@ -166,12 +169,13 @@
         .card:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.03); }
 
         .card h3 { margin-bottom: 1.5rem; color: var(--cyan); font-size: 1.6rem; letter-spacing: -1px; }
-        .card p { color: var(--white); font-weight: 300; margin-bottom: 1.5rem; }
+        .card p { color: var(--white); font-weight: 300; margin-bottom: 1.5rem; font-size: 0.95rem; }
         
         .card ul { list-style: none; }
         .card ul li { color: var(--slate); font-size: 0.95rem; margin-bottom: 0.8rem; display: flex; align-items: center; }
         .card ul li::before { content: "✔"; color: var(--cyan); margin-right: 10px; font-weight: bold; }
 
+        /* BONUS & FAQ SECTIONS */
         .bonus-section {
             margin-top: 5rem;
             text-align: center;
@@ -181,9 +185,9 @@
             border: 1px dashed rgba(0, 245, 255, 0.3);
         }
 
-        footer { padding: 5rem 10%; text-align: center; color: var(--slate); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; }
+        footer { padding: 5rem 10%; text-align: center; color: var(--slate); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; border-top: 1px solid rgba(100, 116, 139, 0.05); }
 
-        @media (max-width: 768px) { h1 { font-size: 2.8rem; } }
+        @media (max-width: 768px) { h1 { font-size: 2.8rem; } section { padding: 80px 5%; } }
     </style>
 </head>
 <body>
@@ -207,8 +211,8 @@
         <h2 data-aos="fade-up">Beneficios</h2>
         <div class="grid">
             <div class="card" data-aos="fade-up" data-aos-delay="100">
-                <h3>Eficiencia Directa</h3>
-                <p>Eliminamos tareas manuales y cuellos de botella para reducir gastos operativos.</p>
+                <h3>Eficiencia que reduce costos</h3>
+                <p>Eliminamos tareas manuales y cuellos de botella. Tu empresa funciona más rápido y con menos gasto operativo.</p>
                 <ul>
                     <li>Hasta 60% menos carga operativa</li>
                     <li>Procesos activos 24/7</li>
@@ -216,8 +220,8 @@
                 </ul>
             </div>
             <div class="card" data-aos="fade-up" data-aos-delay="200">
-                <h3>Escala Infinita</h3>
-                <p>Crece sin que tu estructura colapse. Maneja más clientes sin contratar más personal.</p>
+                <h3>Escalabilidad sin contratar más</h3>
+                <p>Tu negocio crece sin que tu estructura colapse. Maneja más clientes sin aumentar costos operativos.</p>
                 <ul>
                     <li>Crecimiento sin fricción</li>
                     <li>Sistemas para alto volumen</li>
@@ -225,12 +229,12 @@
                 </ul>
             </div>
             <div class="card" data-aos="fade-up" data-aos-delay="300">
-                <h3>Lógica de Datos</h3>
-                <p>Transformamos datos en acciones automáticas que optimizan rendimiento en tiempo real.</p>
+                <h3>Decisiones Inteligentes</h3>
+                <p>Transformamos datos en acciones automáticas que optimizan ventas y rendimiento real en tiempo real.</p>
                 <ul>
-                    <li>Análisis sin intervención</li>
+                    <li>Análisis sin intervención humana</li>
                     <li>Decisiones basadas en hechos</li>
-                    <li>Precisión estratégica</li>
+                    <li>Precisión estratégica absoluta</li>
                 </ul>
             </div>
         </div>
@@ -244,45 +248,72 @@
                 <p>Sistemas autónomos que ejecutan procesos de principio a fin de forma impecable.</p>
             </div>
             <div class="card" data-aos="zoom-in-up" data-aos-delay="100">
-                <h3>Agentes de IA</h3>
-                <p>Asistentes inteligentes para ventas y atención que califican leads sin descanso.</p>
+                <h3>Agentes de IA 24/7</h3>
+                <p>Asistentes inteligentes para ventas y atención que califican leads y cierran oportunidades.</p>
             </div>
             <div class="card" data-aos="zoom-in-up" data-aos-delay="200">
-                <h3>Inteligencia Aplicada</h3>
-                <p>Optimización continua mediante el uso de datos en tiempo real.</p>
+                <h3>Inteligencia de Datos</h3>
+                <p>Optimización continua de marketing y operaciones mediante el uso de datos reales.</p>
             </div>
         </div>
     </section>
 
     <section id="proceso">
-        <h2 data-aos="fade-up">El Proceso</h2>
+        <h2 data-aos="fade-up">Nuestro Proceso</h2>
         <div class="grid">
             <div class="card" data-aos="fade-right">
                 <h3>Fase 01 — Diagnóstico</h3>
-                <p><strong style="color: var(--cyan)">Entregable:</strong> Mapa de optimización.</p>
+                <p>Identificamos ineficiencias y oportunidades de alto impacto.</p>
+                <p><strong style="color: var(--cyan)">Entregable:</strong> Mapa de optimización estratégico.</p>
             </div>
             <div class="card" data-aos="fade-right" data-aos-delay="100">
                 <h3>Fase 02 — Arquitectura</h3>
+                <p>Diseñamos la estructura técnica y lógica de decisión de tu IA.</p>
                 <p><strong style="color: var(--cyan)">Entregable:</strong> Plano técnico escalable.</p>
             </div>
             <div class="card" data-aos="fade-right" data-aos-delay="200">
                 <h3>Fase 03 — Activación</h3>
+                <p>Integramos las automatizaciones sin detener tu operación actual.</p>
                 <p><strong style="color: var(--cyan)">Resultado:</strong> Funcionamiento en vivo.</p>
             </div>
             <div class="card" data-aos="fade-right" data-aos-delay="300">
                 <h3>Fase 04 — Evolución</h3>
+                <p>Ajustamos y mejoramos el sistema según el crecimiento de tu empresa.</p>
                 <p><strong style="color: var(--cyan)">Resultado:</strong> Mejora continua 24/7.</p>
             </div>
         </div>
 
         <div class="bonus-section" data-aos="flip-up">
-            <h2 style="font-size: 2rem; margin-bottom: 2rem;">Resultados Esperados</h2>
+            <h2 style="font-size: 2rem; margin-bottom: 2rem;">💎 Resultados Esperados</h2>
             <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
                 <span>✔ Menos tareas manuales</span>
                 <span>✔ Respuesta instantánea</span>
                 <span>✔ Eficiencia operativa</span>
                 <span>✔ Procesos escalables</span>
             </div>
+        </div>
+    </section>
+
+    <section id="faq">
+        <h2 data-aos="fade-up">Claridad Operativa</h2>
+        <div class="grid">
+            <div class="card" data-aos="fade-up">
+                <h3>¿Es compatible con mi software?</h3>
+                <p>Conectamos tus herramientas actuales (CRM, ERP, Slack) en un solo ecosistema sin interrumpir tu flujo actual.</p>
+            </div>
+            <div class="card" data-aos="fade-up" data-aos-delay="100">
+                <h3>¿Cuánto tarda el despliegue?</h3>
+                <p>Tras el diagnóstico inicial, el despliegue suele completarse en 2 a 4 semanas con resultados inmediatos.</p>
+            </div>
+            <div class="card" data-aos="fade-up" data-aos-delay="200">
+                <h3>¿Necesito saber de tecnología?</h3>
+                <p>Ninguno. Gestionamos la complejidad técnica; tú solo supervisas resultados desde un dashboard intuitivo.</p>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 5rem;" data-aos="zoom-in">
+            <p style="color: var(--slate); margin-bottom: 2.5rem;">Analicemos tu caso particular en una sesión de 15 minutos.</p>
+            <a href="#proceso" class="cta-button">Hablar con un consultor senior</a>
         </div>
     </section>
 
@@ -293,7 +324,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({
-            duration: 800,
+            duration: 900,
             once: true,
             offset: 100
         });
