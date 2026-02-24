@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upcore AI | Automatización de Alto Impacto</title>
+    <title>Upcore AI | Operando solo.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -70,9 +70,9 @@
             border-bottom: 1px solid rgba(100, 116, 139, 0.1);
         }
 
-        .logo { font-weight: 600; font-size: 1.5rem; letter-spacing: -1px; }
+        .logo { font-weight: 600; font-size: 1.5rem; letter-spacing: -1.5px; }
 
-        /* HERO SECTION OPTIMIZADO */
+        /* HERO MINIMALISTA */
         .hero {
             height: 100vh;
             display: flex;
@@ -84,55 +84,46 @@
         }
 
         h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-size: clamp(3rem, 8vw, 5.5rem);
             font-weight: 600;
-            margin-bottom: 1.5rem;
-            letter-spacing: -1.5px;
-            max-width: 900px;
-            line-height: 1.2;
-            color: var(--white);
+            margin-bottom: 1rem;
+            letter-spacing: -4px;
+            line-height: 1.1;
+            background: linear-gradient(to bottom, #fff 50%, var(--slate));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .hero p { color: var(--slate); font-size: 1.1rem; max-width: 750px; margin-bottom: 1.5rem; }
-
-        .hero-list {
-            list-style: none;
-            margin-bottom: 2.5rem;
-            text-align: left;
-            display: inline-block;
+        .hero p { 
+            color: var(--slate); 
+            font-size: 1.4rem; 
+            max-width: 650px; 
+            margin-bottom: 3rem; 
+            font-weight: 300;
+            letter-spacing: -0.5px;
         }
-
-        .hero-list li {
-            font-size: 1rem;
-            color: var(--white);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .hero-list li span { color: var(--cyan); margin-right: 10px; font-weight: bold; }
 
         .cta-button {
             background-color: var(--cyan);
             color: var(--obsidian);
-            padding: 1.2rem 2.5rem;
+            padding: 1.2rem 2.8rem;
             border-radius: 100px;
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.4s ease;
-            box-shadow: 0 0 20px rgba(0, 245, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
         }
 
         .cta-button:hover {
-            transform: translateY(-3px);
+            transform: scale(1.05);
             background: var(--gradient);
             color: var(--white);
-            box-shadow: 0 15px 35px rgba(0, 245, 255, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 245, 255, 0.3);
         }
 
-        /* COMPONENTE: RECTÁNGULO OVALADO DINÁMICO */
-        section { padding: 100px 10%; }
-        h2 { font-size: 2.8rem; text-align: center; margin-bottom: 4rem; letter-spacing: -1px; }
+        /* COMPONENTE: RECTÁNGULOS OVALADOS */
+        section { padding: 120px 10%; }
+        h2 { font-size: 3rem; text-align: center; margin-bottom: 5rem; letter-spacing: -2px; }
 
         .grid {
             display: grid;
@@ -143,7 +134,7 @@
         .card {
             position: relative;
             background: rgba(255, 255, 255, 0.015);
-            padding: 3rem 2rem;
+            padding: 3.5rem 2.5rem;
             border-radius: 40px;
             transition: all 0.4s ease;
             z-index: 1;
@@ -163,32 +154,34 @@
         }
 
         .card:hover::before { background: var(--gradient); }
-        .card:hover { transform: translateY(-8px); background: rgba(255, 255, 255, 0.03); }
+        .card:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.03); }
 
-        .card h3 { margin-bottom: 1rem; color: var(--cyan); font-size: 1.4rem; }
-        .card p { color: var(--white); font-weight: 300; margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .card h3 { margin-bottom: 1.5rem; color: var(--cyan); font-size: 1.6rem; letter-spacing: -1px; }
+        .card p { color: var(--white); font-weight: 300; margin-bottom: 1.5rem; }
+        
         .card ul { list-style: none; }
-        .card ul li { color: var(--slate); font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .card ul li { color: var(--slate); font-size: 0.95rem; margin-bottom: 0.8rem; display: flex; align-items: center; }
+        .card ul li::before { content: "✔"; color: var(--cyan); margin-right: 10px; font-weight: bold; }
 
         .bonus-section {
-            margin-top: 4rem;
+            margin-top: 5rem;
             text-align: center;
-            background: rgba(0, 245, 255, 0.03);
-            border-radius: 40px;
-            padding: 4rem;
-            border: 1px dashed var(--cyan);
+            background: rgba(0, 245, 255, 0.02);
+            border-radius: 50px;
+            padding: 5rem;
+            border: 1px dashed rgba(0, 245, 255, 0.3);
         }
 
         .bonus-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            margin-top: 3rem;
         }
 
-        footer { padding: 4rem 10%; text-align: center; color: var(--slate); font-size: 0.9rem; }
+        footer { padding: 5rem 10%; text-align: center; color: var(--slate); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; }
 
-        @media (max-width: 768px) { section { padding: 60px 5%; } h1 { font-size: 2.2rem; } }
+        @media (max-width: 768px) { h1 { font-size: 3rem; letter-spacing: -2px; } .hero p { font-size: 1.1rem; } }
     </style>
 </head>
 <body>
@@ -197,51 +190,43 @@
 
     <nav>
         <div class="logo">UPCORE AI</div>
-        <a href="#contacto" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.8rem;">Empezar</a>
+        <a href="#proceso" class="cta-button" style="padding: 0.6rem 1.8rem; font-size: 0.8rem;">Empezar ahora</a>
     </nav>
 
     <header class="hero">
-        <h1>Automatiza tu negocio con IA y reduce hasta 60% de tus costos operativos.</h1>
-        <p>Implementamos sistemas inteligentes que trabajan 24/7, eliminan tareas manuales y convierten más clientes sin contratar más personal.</p>
-        
-        <ul class="hero-list">
-            <li><span>✔</span> Automatización completa de procesos</li>
-            <li><span>✔</span> Atención y ventas activas todo el día</li>
-            <li><span>✔</span> Decisiones basadas en datos en tiempo real</li>
-        </ul>
-
-        <p style="font-size: 1rem; margin-top: 1rem;">Descubre cuánto puedes automatizar hoy.</p>
-        <a href="#proceso" class="cta-button">Agendar auditoría estratégica gratuita</a>
+        <h1>Tu negocio.<br>Operando solo.</h1>
+        <p>Automatización inteligente que ejecuta, optimiza y escala tu empresa 24/7.</p>
+        <a href="#proceso" class="cta-button">Agendar auditoría estratégica</a>
     </header>
 
     <section id="beneficios">
         <h2>Beneficios</h2>
         <div class="grid">
             <div class="card">
-                <h3>1. Eficiencia que reduce costos</h3>
-                <p>Eliminamos tareas manuales, cuellos de botella y trabajo repetitivo en toda tu operación.</p>
+                <h3>Eficiencia Directa</h3>
+                <p>Eliminamos tareas manuales y cuellos de botella. Tu empresa funciona más rápido y con menos gasto operativo.</p>
                 <ul>
-                    <li>✔ Hasta 60% menos carga operativa</li>
-                    <li>✔ Procesos automatizados 24/7</li>
-                    <li>✔ Enfoque en crecimiento estratégico</li>
+                    <li>Hasta 60% menos carga operativa</li>
+                    <li>Procesos activos 24/7</li>
+                    <li>Enfoque en estrategia pura</li>
                 </ul>
             </div>
             <div class="card">
-                <h3>2. Escalabilidad sin contratar más</h3>
-                <p>Tu negocio crece sin que tu estructura colapse. Maneja más clientes sin aumentar costos operativos.</p>
+                <h3>Escala Infinita</h3>
+                <p>Crece sin que tu estructura colapse. Maneja más clientes y operaciones sin contratar más personal.</p>
                 <ul>
-                    <li>✔ Crecimiento sin fricción</li>
-                    <li>✔ Sistemas para alto volumen</li>
-                    <li>✔ Infraestructura lista para expansión</li>
+                    <li>Crecimiento sin fricción</li>
+                    <li>Sistemas para alto volumen</li>
+                    <li>Infraestructura de expansión</li>
                 </ul>
             </div>
             <div class="card">
-                <h3>3. Decisiones inteligentes</h3>
-                <p>Transformamos datos en acciones automáticas que optimizan ventas y rendimiento real.</p>
+                <h3>Lógica de Datos</h3>
+                <p>Transformamos datos en acciones automáticas que optimizan ventas y rendimiento en tiempo real.</p>
                 <ul>
-                    <li>✔ Análisis continuo sin intervención</li>
-                    <li>✔ Menos errores, más precisión</li>
-                    <li>✔ Decisiones basadas en datos</li>
+                    <li>Análisis sin intervención humana</li>
+                    <li>Decisiones basadas en hechos</li>
+                    <li>Precisión estratégica absoluta</li>
                 </ul>
             </div>
         </div>
@@ -251,58 +236,58 @@
         <h2>Servicios</h2>
         <div class="grid">
             <div class="card">
-                <h3>1. Automatización inteligente</h3>
-                <p>Sistemas que ejecutan procesos completos de forma autónoma. Tu negocio funciona incluso cuando tú no estás.</p>
+                <h3>Automatización Operativa</h3>
+                <p>Sistemas autónomos que ejecutan procesos de principio a fin: gestión, seguimiento y ejecución impecable.</p>
             </div>
             <div class="card">
-                <h3>2. Agentes de IA 24/7</h3>
-                <p>Asistentes inteligentes que califican leads y gestionan solicitudes sin descanso. Respuestas instantáneas siempre.</p>
+                <h3>Agentes de IA</h3>
+                <p>Asistentes inteligentes para ventas y atención que califican leads y cierran oportunidades sin descanso.</p>
             </div>
             <div class="card">
-                <h3>3. Inteligencia de Datos</h3>
-                <p>Convertimos información en acciones automáticas que optimizan marketing y operaciones en tiempo real.</p>
+                <h3>Inteligencia Aplicada</h3>
+                <p>Optimización continua de marketing y operaciones mediante el uso de datos en tiempo real.</p>
             </div>
         </div>
     </section>
 
     <section id="proceso">
-        <h2>Nuestro Proceso</h2>
+        <h2>El Proceso</h2>
         <div class="grid">
             <div class="card">
                 <h3>Fase 01 — Diagnóstico</h3>
-                <p>Analizamos tu estructura e identificamos ineficiencias de alto impacto.</p>
-                <p><strong style="color: var(--cyan)">Entregable:</strong> Mapa de optimización + impacto.</p>
+                <p>Identificamos ineficiencias y oportunidades de alto impacto.</p>
+                <p><strong style="color: var(--cyan)">Entregable:</strong> Mapa de optimización.</p>
             </div>
             <div class="card">
                 <h3>Fase 02 — Arquitectura</h3>
-                <p>Construimos la estructura técnica: flujos, integraciones y lógica de decisión.</p>
-                <p><strong style="color: var(--cyan)">Entregable:</strong> Sistema diseñado para eficiencia.</p>
+                <p>Diseñamos la estructura técnica y lógica de decisión de tu IA.</p>
+                <p><strong style="color: var(--cyan)">Entregable:</strong> Plano técnico escalable.</p>
             </div>
             <div class="card">
-                <h3>Fase 03 — Implementación</h3>
-                <p>Integramos las automatizaciones sin interrumpir tu funcionamiento actual.</p>
-                <p><strong style="color: var(--cyan)">Resultado:</strong> Activación en entorno real.</p>
+                <h3>Fase 03 — Activación</h3>
+                <p>Integramos las automatizaciones sin detener tu operación actual.</p>
+                <p><strong style="color: var(--cyan)">Resultado:</strong> Funcionamiento en vivo.</p>
             </div>
             <div class="card">
-                <h3>Fase 04 — Optimización</h3>
-                <p>Evolucionamos el sistema para mejorar resultados constantemente.</p>
-                <p><strong style="color: var(--cyan)">Resultado:</strong> Adaptación al crecimiento.</p>
+                <h3>Fase 04 — Evolución</h3>
+                <p>Ajustamos y mejoramos el sistema según el crecimiento de tu empresa.</p>
+                <p><strong style="color: var(--cyan)">Resultado:</strong> Mejora continua 24/7.</p>
             </div>
         </div>
 
         <div class="bonus-section">
-            <h2 style="margin-bottom: 1rem; font-size: 2rem;">💎 Resultados Esperados</h2>
+            <h2 style="font-size: 2rem; margin-bottom: 0;">Resultados Esperados</h2>
             <div class="bonus-grid">
                 <div class="bonus-item">✔ Menos tareas manuales</div>
                 <div class="bonus-item">✔ Respuesta instantánea</div>
-                <div class="bonus-item">✔ Eficiencia operativa global</div>
+                <div class="bonus-item">✔ Eficiencia operativa</div>
                 <div class="bonus-item">✔ Procesos escalables</div>
             </div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 Upcore AI. Minimalismo • Perfección • Simetría</p>
+        <p>UPCORE AI • MINIMALISMO • PERFECCIÓN • SIMETRÍA</p>
     </footer>
 
 </body>
