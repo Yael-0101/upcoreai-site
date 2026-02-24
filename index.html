@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upcore AI | Automatización de Precisión</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Upcore AI | Automation Agency</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #000000;
-            --card-bg: #111112;
-            --text-main: #ffffff;
-            --text-dim: #86868b;
-            --accent: #0071e3;
-            --border: rgba(255, 255, 255, 0.1);
-            --font-family: 'Inter', -apple-system, sans-serif;
+            --bg-dark: #020617;
+            --card-bg: #0f172a;
+            --accent-purple: #9333ea;
+            --accent-blue: #3b82f6;
+            --text-white: #f8fafc;
+            --text-gray: #94a3b8;
+            --gradient: linear-gradient(90deg, #9333ea, #3b82f6);
+            --border-glow: rgba(147, 51, 234, 0.3);
         }
 
         * {
@@ -24,163 +24,169 @@
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: var(--font-family);
-            line-height: 1.6;
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.5;
             overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
+            /* Efecto de grid de fondo sutil como Lambda */
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
         }
 
         /* --- NAVEGACIÓN --- */
         nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 10%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
+            padding: 20px 8%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 1000;
         }
 
         .logo {
-            font-weight: 600;
-            letter-spacing: -0.5px;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .nav-links a {
-            color: var(--text-dim);
+            color: var(--text-gray);
             text-decoration: none;
+            margin-left: 25px;
             font-size: 0.9rem;
-            margin-left: 30px;
+            font-weight: 500;
             transition: 0.3s;
         }
 
-        .nav-links a:hover {
-            color: var(--text-main);
-        }
+        .nav-links a:hover { color: var(--text-white); }
 
         /* --- HERO SECTION --- */
         .hero {
-            height: 100vh;
+            padding: 160px 8% 100px;
+            text-align: center;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            text-align: center;
-            padding: 0 20px;
         }
 
-        .hero span {
-            color: var(--accent);
+        .badge {
+            background: rgba(147, 51, 234, 0.1);
+            border: 1px solid var(--accent-purple);
+            color: var(--accent-purple);
+            padding: 6px 16px;
+            border-radius: 100px;
             font-size: 0.8rem;
             font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            display: block;
+            margin-bottom: 24px;
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: 600;
-            letter-spacing: -2px;
-            line-height: 1.1;
-            margin-bottom: 25px;
+            font-size: clamp(2.5rem, 8vw, 5.5rem);
+            font-weight: 800;
+            letter-spacing: -3px;
+            line-height: 1;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero p {
-            color: var(--text-dim);
-            max-width: 600px;
+            color: var(--text-gray);
+            max-width: 650px;
             font-size: 1.2rem;
             margin-bottom: 40px;
         }
 
-        .btn {
-            background: var(--text-main);
-            color: var(--bg);
+        .cta-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
             padding: 14px 32px;
-            border-radius: 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 10px 25px var(--border-glow);
+            transition: 0.3s;
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
             transition: 0.3s;
         }
 
-        .btn:hover {
-            transform: scale(1.05);
-            background: #e2e2e2;
+        .btn-primary:hover { transform: translateY(-3px); opacity: 0.9; }
+
+        /* --- SERVICIOS (GRID) --- */
+        .services {
+            padding: 100px 8%;
         }
 
-        /* --- GRID DE SERVICIOS (SIMETRÍA) --- */
-        .section {
-            padding: 100px 10%;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-title h2 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .grid {
+        .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            gap: 25px;
         }
 
         .card {
             background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             padding: 40px;
             border-radius: 20px;
-            border: 1px solid var(--border);
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
         }
 
         .card:hover {
-            border-color: var(--text-dim);
-            transform: translateY(-5px);
+            border-color: var(--accent-purple);
+            transform: translateY(-10px);
+            background: rgba(15, 23, 42, 0.8);
         }
 
         .card h3 {
             font-size: 1.5rem;
             margin-bottom: 15px;
+            color: var(--text-white);
         }
 
         .card p {
-            color: var(--text-dim);
-            font-size: 0.95rem;
+            color: var(--text-gray);
+            font-size: 1rem;
         }
 
         /* --- FOOTER --- */
         footer {
-            padding: 60px 10%;
-            border-top: 1px solid var(--border);
+            padding: 60px 8%;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             text-align: center;
-            color: var(--text-dim);
-            font-size: 0.8rem;
+            color: var(--text-gray);
         }
 
-        /* ANIMACIÓN DE ENTRADA */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeIn 1s forwards cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
             .nav-links { display: none; }
             .hero h1 { font-size: 3rem; }
@@ -192,48 +198,41 @@
     <nav>
         <div class="logo">UPCORE AI</div>
         <div class="nav-links">
-            <a href="#sistemas">Sistemas</a>
-            <a href="#enfoque">Enfoque</a>
+            <a href="#soluciones">Soluciones</a>
+            <a href="#proceso">Proceso</a>
             <a href="#contacto">Contacto</a>
         </div>
     </nav>
 
-    <section class="hero reveal">
-        <span>V.1.0 — 2026</span>
-        <h1>La inteligencia de<br>mañana, hoy.</h1>
-        <p>Diseñamos ecosistemas de automatización autónomos con una arquitectura impecable y resultados medibles.</p>
-        <a href="#contacto" class="btn">Iniciar Transformación</a>
-    </section>
-
-    <section id="sistemas" class="section reveal" style="animation-delay: 0.2s;">
-        <div class="section-title">
-            <h2>The Core</h2>
-            <p style="color: var(--text-dim)">Nuestra triada de soluciones de alto rendimiento.</p>
-        </div>
-        <div class="grid">
-            <div class="card">
-                <h3>Agentes Autónomos</h3>
-                <p>Entidades de IA que razonan y ejecutan tareas complejas sin supervisión constante, optimizando tu tiempo.</p>
-            </div>
-            <div class="card">
-                <h3>Infraestructura</h3>
-                <p>Conexión nativa entre tus datos y modelos de lenguaje de última generación. Simetría técnica absoluta.</p>
-            </div>
-            <div class="card">
-                <h3>Optimización</h3>
-                <p>Reducción de fricción operativa mediante flujos de trabajo inteligentes diseñados para escalar sin límites.</p>
-            </div>
+    <section class="hero">
+        <div class="badge">Agencia de Automatización IA 2026</div>
+        <h1>Construye el <span>Futuro</span> de tu Negocio</h1>
+        <p>Ayudamos a empresas a escalar mediante sistemas de IA autónomos. Menos carga operativa, más crecimiento real.</p>
+        <div class="cta-group">
+            <a href="#" class="btn-primary">Agenda una Llamada</a>
+            <a href="#" class="btn-secondary">Ver Soluciones</a>
         </div>
     </section>
 
-    <section id="contacto" class="section reveal" style="text-align: center; background: #050505;">
-        <h2>¿Listo para el siguiente nivel?</h2>
-        <p style="color: var(--text-dim); margin: 20px 0 40px;">Hablemos de cómo la IA puede redefinir tu flujo de trabajo.</p>
-        <a href="mailto:tuemail@upcoreai.com" class="btn" style="background: transparent; border: 1px solid var(--text-main); color: var(--text-main);">Contactar</a>
+    <section id="soluciones" class="services">
+        <div class="services-grid">
+            <div class="card">
+                <h3>Ventas Autónomas</h3>
+                <p>Agentes de IA que prospectan, califican y agendan llamadas por ti 24/7.</p>
+            </div>
+            <div class="card">
+                <h3>Workflows de Datos</h3>
+                <p>Conectamos tus herramientas favoritas para que la información fluya sin errores humanos.</p>
+            </div>
+            <div class="card">
+                <h3>Soporte Inteligente</h3>
+                <p>Bots de atención al cliente que realmente entienden y resuelven problemas complejos.</p>
+            </div>
+        </div>
     </section>
 
     <footer>
-        <p>© 2026 Upcore AI. Simetría en el código. Perfección en el flujo.</p>
+        <p>&copy; 2026 Upcore AI. Inspirando la nueva era de la automatización.</p>
     </footer>
 
 </body>
