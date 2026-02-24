@@ -3,185 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upcore AI | High-End Automation</title>
+    <title>Upcore AI | High-Performance Automation</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #000000;
-            --titanium: #1c1c1e; /* Gris Apple/Upcore */
-            --titanium-light: #2c2c2e;
-            --accent: #ffffff; /* Blanco puro para contraste */
-            --text-main: #f5f5f7;
-            --text-dim: #86868b;
-            --border: rgba(255, 255, 255, 0.1);
+            --azul-profundo: #2B4257;
+            --cian-electrico: #2BC4E8;
+            --azul-acero: #4A6B8A;
+            --bg-dark: #0a0f14;
+            --text-white: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: rgba(74, 107, 138, 0.2);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body { 
-            background-color: var(--bg); 
-            color: var(--text-main); 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            letter-spacing: -0.02em;
+            background-color: var(--bg-dark); 
+            color: var(--text-white); 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.6;
         }
 
-        /* --- NAVBAR MINIMALISTA --- */
+        /* --- NAVEGACIÓN --- */
         nav { 
             position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; 
-            align-items: center; padding: 20px 8%; background: rgba(0,0,0,0.8); 
-            backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 1000; 
+            align-items: center; padding: 20px 8%; background: rgba(10, 15, 20, 0.9); 
+            backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); z-index: 1000; 
         }
-        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: 1px; color: var(--accent); }
-        .nav-links a { color: var(--text-dim); text-decoration: none; margin-left: 30px; font-size: 0.85rem; transition: 0.3s; }
-        .nav-links a:hover { color: var(--accent); }
-        .btn-nav { border: 1px solid var(--accent); color: var(--accent); padding: 8px 18px; border-radius: 6px; font-weight: 600; }
+        .logo { font-weight: 800; font-size: 1.3rem; letter-spacing: -0.5px; color: var(--text-white); }
+        .logo span { color: var(--cian-electrico); }
+        .nav-links a { color: var(--text-dim); text-decoration: none; margin-left: 30px; font-size: 0.9rem; font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: var(--cian-electrico); }
 
-        /* --- HERO (Estructura Lambda + Estilo Upcore) --- */
+        /* --- HERO --- */
         .hero { 
-            height: 90vh; display: flex; flex-direction: column; justify-content: center; 
+            height: 95vh; display: flex; flex-direction: column; justify-content: center; 
             align-items: center; text-align: center; padding: 0 8%;
-            background: radial-gradient(circle at center, #1c1c1e 0%, #000000 100%);
+            background: radial-gradient(circle at top right, var(--azul-profundo) -20%, transparent 50%);
         }
-        .hero .badge { 
-            font-size: 0.7rem; font-weight: 700; color: var(--text-dim); 
-            border: 1px solid var(--border); padding: 5px 15px; border-radius: 4px; 
-            margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px;
-        }
-        .hero h1 { font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; line-height: 1; margin-bottom: 25px; }
-        .hero h1 span { color: var(--text-dim); }
-        .hero p { color: var(--text-dim); max-width: 600px; font-size: 1.15rem; margin-bottom: 40px; }
+        .hero h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 25px; }
+        .hero h1 span { color: var(--cian-electrico); }
+        .hero p { color: var(--text-dim); max-width: 650px; font-size: 1.2rem; margin-bottom: 40px; }
         .btn-cta { 
-            background: var(--accent); color: var(--bg); padding: 16px 35px; 
-            border-radius: 6px; text-decoration: none; font-weight: 700; transition: 0.3s; 
+            background: var(--cian-electrico); color: var(--azul-profundo); padding: 18px 40px; 
+            border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 1.1rem;
+            box-shadow: 0 10px 25px rgba(43, 196, 232, 0.3); transition: 0.4s;
         }
-        .btn-cta:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-cta:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(43, 196, 232, 0.5); }
 
         /* --- SECCIONES --- */
-        .section { padding: 120px 8%; border-bottom: 1px solid var(--border); }
-        .tag { color: var(--text-dim); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 20px; }
-        .section h2 { font-size: 3rem; font-weight: 800; margin-bottom: 60px; }
+        .section { padding: 120px 8%; }
+        .section-header { text-align: center; margin-bottom: 80px; }
+        .section-header h2 { font-size: 2.8rem; font-weight: 800; margin-bottom: 15px; }
+        .section-tag { color: var(--cian-electrico); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; }
 
-        /* --- BENEFICIOS (Cards Titanio) --- */
-        .grid-b { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        /* --- BENEFICIOS (Minimalismo & Simetría) --- */
+        .grid-b { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
         .card-b { 
-            background: var(--titanium); padding: 50px; border-radius: 12px; 
-            border: 1px solid var(--border); transition: 0.4s;
+            background: rgba(43, 66, 87, 0.1); padding: 45px; border-radius: 15px; 
+            border: 1px solid var(--border); transition: 0.4s; position: relative; overflow: hidden;
         }
-        .card-b:hover { border-color: rgba(255,255,255,0.3); background: var(--titanium-light); }
-        .card-b h3 { margin-bottom: 15px; font-size: 1.4rem; }
-        .card-b p { color: var(--text-dim); line-height: 1.6; }
+        .card-b:hover { border-color: var(--cian-electrico); transform: translateY(-5px); }
+        .card-b h3 { margin-bottom: 15px; font-size: 1.5rem; color: var(--text-white); }
+        .card-b p { color: var(--text-dim); }
+        .card-b::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--azul-acero); opacity: 0.3; }
 
-        /* --- SERVICIOS (Minimalismo Técnico) --- */
-        .service-row { 
-            display: flex; align-items: center; gap: 60px; margin-bottom: 100px;
+        /* --- SERVICIOS (Uso de Azul Profundo y Cian) --- */
+        .s-card { 
+            display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; 
+            background: var(--azul-profundo); padding: 60px; border-radius: 24px; 
+            margin-bottom: 30px; align-items: center; border: 1px solid var(--azul-acero);
         }
-        .service-content { flex: 1; }
-        .service-visual { 
-            flex: 1; height: 350px; background: var(--titanium); 
-            border-radius: 8px; border: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: center; font-size: 4rem; opacity: 0.5;
+        .s-card h3 { font-size: 2.2rem; margin-bottom: 20px; }
+        .s-visual { 
+            height: 300px; background: rgba(43, 196, 232, 0.05); 
+            border: 1px dashed var(--cian-electrico); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; color: var(--cian-electrico); font-size: 5rem;
         }
 
         /* --- FORMULARIO (Diseño Upcore) --- */
-        .form-container { 
-            max-width: 800px; margin: 0 auto; background: var(--titanium); 
-            padding: 80px; border-radius: 20px; border: 1px solid var(--border);
+        .form-box { 
+            max-width: 800px; margin: 0 auto; background: #0f171f; 
+            padding: 70px; border-radius: 30px; border: 1px solid var(--border);
         }
         input, select, textarea { 
-            width: 100%; background: var(--bg); border: 1px solid var(--border); 
-            padding: 18px; color: white; margin-bottom: 20px; border-radius: 4px;
+            width: 100%; background: #0a0f14; border: 1px solid var(--azul-acero); 
+            padding: 18px; color: white; margin-bottom: 20px; border-radius: 8px; outline: none;
         }
-        .btn-form { 
-            width: 100%; background: var(--accent); color: var(--bg); 
-            border: none; padding: 20px; font-weight: 800; cursor: pointer; border-radius: 4px;
+        input:focus { border-color: var(--cian-electrico); }
+        .btn-submit { 
+            width: 100%; background: var(--cian-electrico); color: var(--azul-profundo); 
+            border: none; padding: 20px; font-weight: 800; cursor: pointer; border-radius: 8px; font-size: 1.1rem;
         }
 
-        footer { padding: 60px 8%; color: var(--text-dim); text-align: center; font-size: 0.8rem; }
+        footer { padding: 80px 8%; text-align: center; color: var(--text-dim); border-top: 1px solid var(--border); }
 
-        @media (max-width: 768px) {
-            .service-row { flex-direction: column; }
-            .section h2 { font-size: 2rem; }
-            .form-container { padding: 40px; }
+        @media (max-width: 1024px) {
+            .grid-b, .s-card { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 3rem; }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">UPCORE AI</div>
+        <div class="logo">UPCORE<span>AI</span></div>
         <div class="nav-links">
             <a href="#beneficios">Beneficios</a>
             <a href="#servicios">Servicios</a>
             <a href="#proceso">Proceso</a>
-            <a href="#contacto" class="btn-nav">GET STARTED</a>
+            <a href="#contacto" style="color: var(--cian-electrico); font-weight: 700;">PROBAR AHORA</a>
         </div>
     </nav>
 
     <header class="hero">
-        <div class="badge">Líderes en Automatización de Habla Hispana</div>
+        <span class="section-tag">Líderes en Automatización IA</span>
         <h1>Automatiza Hoy.<br><span>Lidera Mañana.</span></h1>
-        <p>Arquitectura de inteligencia artificial diseñada para convertir operaciones complejas en flujos de trabajo autónomos y precisos.</p>
-        <a href="#contacto" class="btn-cta">SOLICITAR SERVICIOS</a>
+        <p>Convertimos la complejidad operativa en flujos de trabajo autónomos y rentables usando ingeniería de inteligencia artificial avanzada.</p>
+        <a href="#contacto" class="btn-cta">SOLICITA TU AUDITORÍA</a>
     </header>
 
     <section id="beneficios" class="section">
-        <span class="tag">Beneficios</span>
-        <h2>Optimiza, Acelera y Automatiza</h2>
+        <div class="section-header">
+            <span class="section-tag">Beneficios</span>
+            <h2>Escale con Inteligencia</h2>
+        </div>
         <div class="grid-b">
             <div class="card-b">
-                <h3>Reducción de Trabajo Manual</h3>
-                <p>Elimine las tareas repetitivas. La IA gestiona el volumen operativo mientras su equipo se enfoca en decisiones estratégicas.</p>
+                <h3>Eficiencia Radical</h3>
+                <p>Reduzca el trabajo manual en un 80%. Deje que la IA procese la carga administrativa mientras usted escala el negocio.</p>
             </div>
             <div class="card-b">
-                <h3>Mayor Velocidad Operativa</h3>
-                <p>Sistemas que no descansan. Respuestas inmediatas y ejecución en tiempo real para una empresa que nunca se detiene.</p>
+                <h3>Operativa 24/7</h3>
+                <p>Sistemas que no duermen. Agentes que responden, califican y ejecutan tareas en segundos, sin interrupciones.</p>
             </div>
             <div class="card-b">
-                <h3>Menos Errores Humanos</h3>
-                <p>Estandarización absoluta. La automatización garantiza procesos precisos, consistentes y libres de fallos manuales.</p>
+                <h3>Cero Errores</h3>
+                <p>Estandarización absoluta. Elimine los fallos humanos y garantice la máxima calidad en cada proceso de su empresa.</p>
             </div>
         </div>
     </section>
 
     <section id="servicios" class="section">
-        <span class="tag">Servicios</span>
-        <div class="service-row">
-            <div class="service-content">
-                <h2>Automatización de Leads</h2>
-                <p style="color: var(--text-dim); font-size: 1.2rem;">Captación, calificación y agendamiento autónomo. Escale sus ventas sin incrementar su plantilla.</p>
+        <div class="s-card">
+            <div>
+                <span class="section-tag">Estrategia</span>
+                <h3>Automatización de Leads</h3>
+                <p>Implementamos sistemas que encuentran, califican y agendan llamadas por usted. Un equipo de ventas que nunca se agota.</p>
             </div>
-            <div class="service-visual">⚡</div>
+            <div class="s-visual">🎯</div>
         </div>
-        <div class="service-row" style="flex-direction: row-reverse;">
-            <div class="service-content">
-                <h2>Base de Conocimientos</h2>
-                <p style="color: var(--text-dim); font-size: 1.2rem;">Sistemas RAG que procesan sus documentos internos para ofrecer respuestas instantáneas y precisas.</p>
+
+        <div class="s-card" style="background: transparent;">
+            <div class="s-visual">🧠</div>
+            <div>
+                <span class="section-tag">Datos</span>
+                <h3>Sistemas RAG Avanzados</h3>
+                <p>Cree una base de conocimientos inteligente que responde dudas de clientes o empleados basada exclusivamente en su documentación oficial.</p>
             </div>
-            <div class="service-visual">🧠</div>
         </div>
     </section>
 
     <section id="contacto" class="section">
-        <div class="form-container">
-            <span class="tag">Contacto</span>
-            <h2 style="margin-bottom: 40px;">Haz Crecer tu Negocio Hoy</h2>
+        <div class="form-box">
+            <div style="text-align: center; margin-bottom: 50px;">
+                <span class="section-tag">Contacto Directo</span>
+                <h2>Inicie su Transformación</h2>
+            </div>
             <form>
-                <input type="text" placeholder="Nombre completo">
-                <input type="text" placeholder="Empresa">
-                <input type="email" placeholder="Email corporativo">
+                <input type="text" placeholder="Su Nombre">
+                <input type="text" placeholder="Empresa / Organización">
+                <input type="email" placeholder="Correo corporativo">
                 <select>
                     <option>Presupuesto: Starter (1k-3k USD)</option>
                     <option>Presupuesto: Growth (3k-5k USD)</option>
                     <option>Presupuesto: Premium (+5k USD)</option>
                 </select>
-                <textarea rows="5" placeholder="Cuéntanos sobre tu idea o proceso actual"></textarea>
-                <button type="submit" class="btn-form">ENVIAR SOLICITUD</button>
+                <textarea rows="4" placeholder="¿Qué procesos desea optimizar?"></textarea>
+                <button type="submit" class="btn-submit">ENVIAR SOLICITUD</button>
             </form>
         </div>
     </section>
 
     <footer>
-        <p>UPCORE AI © 2026 | High-End Systems. No Clutter. Just Performance.</p>
+        <div class="logo" style="margin-bottom: 20px;">UPCORE<span>AI</span></div>
+        <p>© 2026 Upcore AI. La perfección técnica aplicada a la automatización empresarial.</p>
     </footer>
 
 </body>
