@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upcore AI | Minimalismo & Perfección</title>
+    <title>Upcore AI | Perfección en Automatización</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* PALETA OFICIAL UPCORE AI */
+        /* PALETA UPCORE AI */
         :root {
             --obsidian: #08080B;
             --cyan: #00F5FF;
             --slate: #64748B;
-            --purple: #7000FF;
             --gradient: linear-gradient(135deg, #00F5FF 0%, #7000FF 100%);
             --white: #FFFFFF;
         }
@@ -29,10 +28,9 @@
             background-color: var(--obsidian);
             color: var(--white);
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* NAVEGACIÓN */
         nav {
             padding: 1.5rem 10%;
             display: flex;
@@ -48,11 +46,12 @@
 
         .logo {
             font-weight: 600;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             letter-spacing: -1px;
+            color: var(--white);
         }
 
-        /* HERO */
+        /* HERO SECTION */
         .hero {
             height: 100vh;
             display: flex;
@@ -79,40 +78,26 @@
 
         /* BOTÓN OVALADO */
         .cta-button {
-            position: relative;
             background-color: var(--cyan);
             color: var(--obsidian);
-            padding: 1.2rem 3rem;
-            border-radius: 100px; /* Completamente ovalado */
+            padding: 1rem 2.5rem;
+            border-radius: 100px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.4s ease;
             border: none;
-            z-index: 1;
-            overflow: hidden;
         }
 
         .cta-button:hover {
-            color: var(--white);
             transform: scale(1.05);
-        }
-
-        .cta-button::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
             background: var(--gradient);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: -1;
-        }
-
-        .cta-button:hover::before {
-            opacity: 1;
+            color: var(--white);
         }
 
         /* SECCIONES */
-        section { padding: 100px 10%; }
+        section {
+            padding: 100px 10%;
+        }
 
         h2 {
             font-size: 2.5rem;
@@ -120,7 +105,7 @@
             margin-bottom: 4rem;
         }
 
-        /* RECTÁNGULOS OVALADOS (CARDS) */
+        /* GRID Y RECTÁNGULOS OVALADOS */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -128,49 +113,33 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 3rem;
-            border-radius: 40px; /* Rectángulo ovalado estilo Apple */
-            border: 2px solid rgba(100, 116, 139, 0.2);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 3rem;
+            border-radius: 40px; /* Forma de rectángulo ovalado */
+            transition: all 0.4s ease;
             text-align: left;
+            z-index: 1;
         }
 
-        /* Efecto de contorno con la paleta completa al hacer hover */
-        .card:hover {
-            transform: translateY(-10px);
-            background: rgba(8, 8, 11, 0.8);
-            border: 2px solid transparent;
-            border-color: var(--cyan); /* Fallback */
-            box-shadow: 0 0 20px rgba(0, 245, 255, 0.2);
-            /* Para el borde con gradiente manteniendo la forma ovalada */
-            border-image: var(--gradient) 1; 
-            border-radius: 40px; 
-        }
-
-        /* Corrección para border-image con border-radius */
-        .card:hover {
-            border: 2px solid;
-            border-image-source: var(--gradient);
-            border-image-slice: 1;
-            border-radius: 40px;
-        }
-
-        /* Técnica alternativa para asegurar el ovalado con gradiente */
-        .card::after {
+        /* EFECTO DE CONTORNO (BORDE) ÚNICAMENTE */
+        .card::before {
             content: "";
             position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: var(--gradient);
-            border-radius: 42px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 40px; 
+            padding: 2px; /* Grosor del borde */
+            background: rgba(100, 116, 139, 0.2); /* Borde original apagado */
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            transition: all 0.4s ease;
         }
 
-        .card:hover::after {
-            opacity: 1;
+        .card:hover::before {
+            background: var(--gradient); /* El contorno cambia a la paleta completa */
         }
 
         .card h3 {
@@ -182,38 +151,28 @@
         .card p {
             color: var(--slate);
             font-weight: 300;
-            line-height: 1.8;
         }
 
-        /* PROCESO SIMÉTRICO */
-        .process-steps {
+        /* SECCIÓN PROCESO */
+        .process-grid {
             display: flex;
             justify-content: space-between;
-            gap: 20px;
+            gap: 1.5rem;
         }
 
-        .step {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 2.5rem;
-            border-radius: 35px; /* Rectángulo ovalado más pequeño */
+        .process-item {
             flex: 1;
+            padding: 2rem;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.02);
             text-align: center;
             border: 1px solid rgba(100, 116, 139, 0.1);
             transition: 0.4s;
         }
 
-        .step:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--purple);
-        }
-
-        .step-num {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--cyan);
-            margin-bottom: 10px;
-            display: block;
-            text-transform: uppercase;
+        .process-item:hover {
+            border-color: var(--cyan);
+            transform: translateY(-5px);
         }
 
         footer {
@@ -221,6 +180,11 @@
             text-align: center;
             border-top: 1px solid rgba(100, 116, 139, 0.1);
             color: var(--slate);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .process-grid { flex-direction: column; }
         }
     </style>
 </head>
@@ -232,9 +196,9 @@
     </nav>
 
     <header class="hero">
-        <h1>Inteligencia Humana.<br>Ejecución Artificial.</h1>
-        <p>Creamos sistemas de automatización simétricos que liberan el potencial de tu agencia.</p>
-        <a href="#servicios" class="cta-button">Ver Servicios</a>
+        <h1>Simetría Operativa.<br>Potenciada por IA.</h1>
+        <p>Diseñamos flujos de automatización con la precisión y el minimalismo que tu agencia merece.</p>
+        <a href="#beneficios" class="cta-button">Descubrir</a>
     </header>
 
     <section id="beneficios">
@@ -242,15 +206,15 @@
         <div class="grid">
             <div class="card">
                 <h3>Eficiencia</h3>
-                <p>Convertimos procesos manuales de horas en ejecuciones de segundos.</p>
+                <p>Elimina cuellos de botella manuales. Ejecución impecable en cada tarea.</p>
             </div>
             <div class="card">
                 <h3>Escala</h3>
-                <p>Tu negocio crece sin necesidad de aumentar la carga operativa.</p>
+                <p>Tu estructura crece sin fricción. La IA se adapta a tu volumen de trabajo.</p>
             </div>
             <div class="card">
-                <h3>Control</h3>
-                <p>Data centralizada y decisiones precisas con agentes de IA 24/7.</p>
+                <h3>Precisión</h3>
+                <p>Sistemas libres de error humano, operando bajo lógica pura 24/7.</p>
             </div>
         </div>
     </section>
@@ -260,43 +224,39 @@
         <div class="grid">
             <div class="card">
                 <h3>Agentes IA</h3>
-                <p>Cerebros digitales que gestionan tu conocimiento corporativo.</p>
+                <p>Sistemas de lenguaje inteligentes para atención y gestión interna.</p>
             </div>
             <div class="card">
-                <h3>Workflows</h3>
-                <p>Conectamos tus herramientas en una arquitectura impecable.</p>
+                <h3>Automation</h3>
+                <p>Integración de procesos complejos en un solo ecosistema simétrico.</p>
             </div>
             <div class="card">
-                <h3>Data Core</h3>
-                <p>Análisis profundo de métricas para optimización continua.</p>
+                <h3>Core Data</h3>
+                <p>Análisis predictivo para anticipar el siguiente movimiento de tu negocio.</p>
             </div>
         </div>
     </section>
 
     <section id="proceso">
-        <h2>El Proceso</h2>
-        <div class="process-steps">
-            <div class="step">
-                <span class="step-num">Fase 01</span>
-                <h4>Discovery</h4>
+        <h2>Proceso Simétrico</h2>
+        <div class="process-grid">
+            <div class="process-item">
+                <h4 style="color: var(--cyan)">01. Auditoría</h4>
             </div>
-            <div class="step">
-                <span class="step-num">Fase 02</span>
-                <h4>Design</h4>
+            <div class="process-item">
+                <h4 style="color: var(--cyan)">02. Arquitectura</h4>
             </div>
-            <div class="step">
-                <span class="step-num">Fase 03</span>
-                <h4>Build</h4>
+            <div class="process-item">
+                <h4 style="color: var(--cyan)">03. Despliegue</h4>
             </div>
-            <div class="step">
-                <span class="step-num">Fase 04</span>
-                <h4>Scale</h4>
+            <div class="process-item">
+                <h4 style="color: var(--cyan)">04. Evolución</h4>
             </div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 Upcore AI. La perfección es nuestro estándar.</p>
+        <p>&copy; 2026 Upcore AI. Minimalismo, Perfección, Simetría.</p>
     </footer>
 
 </body>
