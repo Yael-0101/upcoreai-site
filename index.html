@@ -76,7 +76,6 @@
             border-bottom: 1px solid rgba(100, 116, 139, 0.1);
         }
 
-        /* LOGO CON UP Y AI EN CIAN */
         .logo { 
             font-weight: 600; 
             font-size: 1.5rem; 
@@ -85,6 +84,10 @@
             color: var(--white);
         }
         .logo span { color: var(--cyan); }
+
+        /* SECCIONES */
+        section { padding: 120px 10%; }
+        h2 { font-size: 3rem; text-align: center; margin-bottom: 5rem; letter-spacing: -2px; }
 
         /* HERO */
         .hero {
@@ -143,10 +146,7 @@
             animation: none;
         }
 
-        /* SECCIONES Y CARDS */
-        section { padding: 120px 10%; }
-        h2 { font-size: 3rem; text-align: center; margin-bottom: 5rem; letter-spacing: -2px; }
-
+        /* GRID Y CARDS */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -246,24 +246,6 @@
     </div>
 </header>
 
-<section id="servicios">
-    <h2 data-aos="fade-up">Servicios</h2>
-    <div class="grid">
-        <div class="card" data-aos="zoom-in-up">
-            <h3>Automatización Operativa</h3>
-            <p>Sistemas autónomos que ejecutan procesos de principio a fin de forma impecable.</p>
-        </div>
-        <div class="card" data-aos="zoom-in-up" data-aos-delay="100">
-            <h3>Agentes de IA</h3>
-            <p>Asistentes inteligentes para ventas y atención que califican leads sin descanso.</p>
-        </div>
-        <div class="card" data-aos="zoom-in-up" data-aos-delay="200">
-            <h3>Inteligencia Aplicada</h3>
-            <p>Optimización continua mediante el uso de datos en tiempo real.</p>
-        </div>
-    </div>
-</section>
-
 <section id="beneficios">
     <h2 data-aos="fade-up">Beneficios</h2>
     <div class="grid">
@@ -293,6 +275,24 @@
                 <li>Decisiones basadas en hechos</li>
                 <li>Precisión estratégica</li>
             </ul>
+        </div>
+    </div>
+</section>
+
+<section id="servicios">
+    <h2 data-aos="fade-up">Servicios</h2>
+    <div class="grid">
+        <div class="card" data-aos="zoom-in-up">
+            <h3>Automatización Operativa</h3>
+            <p>Sistemas autónomos que ejecutan procesos de principio a fin de forma impecable.</p>
+        </div>
+        <div class="card" data-aos="zoom-in-up" data-aos-delay="100">
+            <h3>Agentes de IA</h3>
+            <p>Asistentes inteligentes para ventas y atención que califican leads sin descanso.</p>
+        </div>
+        <div class="card" data-aos="zoom-in-up" data-aos-delay="200">
+            <h3>Inteligencia Aplicada</h3>
+            <p>Optimización continua mediante el uso de datos en tiempo real.</p>
         </div>
     </div>
 </section>
