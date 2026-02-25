@@ -76,18 +76,31 @@
             border-bottom: 1px solid rgba(100, 116, 139, 0.1);
         }
 
+        /* ANIMACIÓN DEL LOGO SOLICITADA */
         .logo { 
             font-weight: 600; 
             font-size: 1.5rem; 
             letter-spacing: -1.5px; 
             text-decoration: none; 
             color: var(--white);
+            transition: all 0.4s ease;
+            display: flex;
+            gap: 2px;
         }
-        .logo span { color: var(--cyan); }
 
-        /* SECCIONES */
-        section { padding: 120px 10%; }
-        h2 { font-size: 3rem; text-align: center; margin-bottom: 5rem; letter-spacing: -2px; }
+        .logo .part-side { transition: all 0.4s ease; }
+        .logo .part-core { transition: all 0.4s ease; color: var(--white); }
+
+        /* Estado Hover del Logo */
+        .logo:hover .part-side {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logo:hover .part-core {
+            color: var(--cyan);
+        }
 
         /* HERO */
         .hero {
@@ -147,6 +160,9 @@
         }
 
         /* GRID Y CARDS */
+        section { padding: 120px 10%; }
+        h2 { font-size: 3rem; text-align: center; margin-bottom: 5rem; letter-spacing: -2px; }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -234,7 +250,11 @@
 <div class="bg-glow"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
 
 <nav>
-    <a href="index.html" class="logo"><span>UP</span>CORE <span>AI</span></a>
+    <a href="index.html" class="logo">
+        <span class="part-side">UP</span>
+        <span class="part-core">CORE</span>
+        <span class="part-side">AI</span>
+    </a>
     <a href="#" class="cta-button" style="padding: 0.6rem 1.8rem; font-size: 0.8rem; animation: none;">Agendar una llamada</a>
 </nav>
 
