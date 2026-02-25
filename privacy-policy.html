@@ -6,35 +6,135 @@
     <title>Privacy Policy | Upcore AI</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --obsidian: #08080B;
+            --cyan: #00F5FF;
+            --slate: #64748B;
+            --purple: #7000FF;
+            --white: #FFFFFF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background-color: #000; /* Fondo negro */
-            color: #fff; /* Texto blanco */
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
+            background-color: var(--obsidian);
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             padding: 40px 20px;
         }
-        h1 { color: #00f2ff; border-bottom: 2px solid #7000ff; padding-bottom: 10px; }
-        a { color: #00f2ff; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        .last-updated { color: #888; font-size: 0.9em; margin-bottom: 30px; }
+
+        /* FONDO DINÁMICO IDENTICO AL HOME */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: var(--obsidian);
+        }
+
+        .orb {
+            position: absolute;
+            filter: blur(140px);
+            border-radius: 50%;
+            opacity: 0.12;
+            animation: move 25s infinite alternate ease-in-out;
+        }
+
+        .orb-1 { width: 500px; height: 500px; background: var(--cyan); top: -10%; left: -10%; }
+        .orb-2 { width: 600px; height: 600px; background: var(--purple); bottom: -10%; right: -10%; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(100px, 100px) scale(1.1); }
+        }
+
+        /* CONTENEDOR GLASSMORPHISM */
+        .legal-container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 40px;
+            padding: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+            background: linear-gradient(to bottom, #fff 50%, var(--slate));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .last-updated {
+            color: var(--slate);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p {
+            margin-bottom: 25px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 300;
+        }
+
+        a {
+            color: var(--cyan);
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        a:hover { opacity: 0.7; }
+
+        .back-link {
+            margin-top: 40px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            .legal-container { padding: 30px; border-radius: 25px; }
+            h1 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
-    <h1>Privacy Policy</h1>
-    <p class="last-updated">Last updated: February 2026</p>
-    
-    <p>Upcore AI respects the privacy of its users. This application uses Google OAuth to authenticate users and access only the data explicitly authorized by the user through Google's permission system.</p>
-    
-    <p>Upcore AI does not sell, rent, or share personal data with third parties. All collected data is used solely to provide, maintain, and improve the functionality of the service.</p>
-    
-    <p>Users may revoke access at any time through their Google Account security settings.</p>
-    
-    <p>If you have any questions regarding this Privacy Policy, you may contact us at: <a href="mailto:yael67089@gmail.com">yael67089@gmail.com</a></p>
-    
-    <br><br>
-    <a href="index.html">← Back to Home</a>
+
+    <div class="bg-glow"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+
+    <div class="legal-container">
+        <h1>Privacy Policy</h1>
+        <span class="last-updated">Last updated: February 2026</span>
+        
+        <p>Upcore AI respects the privacy of its users. This application uses Google OAuth to authenticate users and access only the data explicitly authorized by the user through Google's permission system.</p>
+        
+        <p>Upcore AI does not sell, rent, or share personal data with third parties. All collected data is used solely to provide, maintain, and improve the functionality of the service.</p>
+        
+        <p>Users may revoke access at any time through their Google Account security settings.</p>
+        
+        <p>If you have any questions regarding this Privacy Policy, you may contact us at: <a href="mailto:yael67089@gmail.com">yael67089@gmail.com</a></p>
+        
+        <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
+
 </body>
 </html>
