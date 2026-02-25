@@ -7,7 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         :root {
             --obsidian: #08080B;
@@ -33,6 +32,7 @@
             overflow-x: hidden;
         }
 
+        /* FONDO ANIMADO SUTIL */
         .bg-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -72,6 +72,7 @@
 
         .logo { font-weight: 600; font-size: 1.5rem; letter-spacing: -1.5px; }
 
+        /* HERO MINIMALISTA */
         .hero {
             height: 100vh;
             display: flex;
@@ -99,6 +100,7 @@
             max-width: 650px; 
             margin-bottom: 3rem; 
             font-weight: 300;
+            letter-spacing: -0.5px;
         }
 
         .cta-button {
@@ -110,23 +112,16 @@
             font-weight: 600;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
-            display: inline-block;
-            animation: pulse 4s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 245, 255, 0.4); }
-            70% { box-shadow: 0 0 0 20px rgba(0, 245, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 245, 255, 0); }
         }
 
         .cta-button:hover {
             transform: scale(1.05);
             background: var(--gradient);
             color: var(--white);
-            animation: none;
+            box-shadow: 0 20px 40px rgba(0, 245, 255, 0.3);
         }
 
+        /* COMPONENTE: RECTÁNGULOS OVALADOS */
         section { padding: 120px 10%; }
         h2 { font-size: 3rem; text-align: center; margin-bottom: 5rem; letter-spacing: -2px; }
 
@@ -177,222 +172,123 @@
             border: 1px dashed rgba(0, 245, 255, 0.3);
         }
 
-        footer { padding: 5rem 10%; text-align: center; color: var(--slate); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; }
+        .bonus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            margin-top: 3rem;
+        }
 
-        @media (max-width: 768px) { h1 { font-size: 2.8rem; } }
+        footer { padding: 5rem 10%; text-align: center; color: var(--slate); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; }
+
+        @media (max-width: 768px) { h1 { font-size: 3rem; letter-spacing: -2px; } .hero p { font-size: 1.1rem; } }
     </style>
 </head>
 <body>
 
-<div class="bg-glow"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    <div class="bg-glow"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
 
-<nav>
-    <div class="logo">UPCORE AI</div>
-    <a href="#proceso" class="cta-button" style="padding: 0.6rem 1.8rem; font-size: 0.8rem; animation: none;">Empezar</a>
-</nav>
+    <nav>
+        <div class="logo">UPCORE AI</div>
+        <a href="#proceso" class="cta-button" style="padding: 0.6rem 1.8rem; font-size: 0.8rem;">Empezar ahora</a>
+    </nav>
 
-<header class="hero">
-    <h1 data-aos="fade-up" data-aos-duration="1000">Tu negocio.<br>Operando solo.</h1>
-    <p data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">Automatización inteligente que ejecuta, optimiza y escala tu empresa 24/7.</p>
-    <div data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
+    <header class="hero">
+        <h1>Tu negocio.<br>Operando solo.</h1>
+        <p>Automatización inteligente que ejecuta, optimiza y escala tu empresa 24/7.</p>
         <a href="#proceso" class="cta-button">Agendar auditoría estratégica</a>
-    </div>
-</header>
+    </header>
 
-<section id="beneficios">
-    <h2 data-aos="fade-up">Beneficios</h2>
-    <div class="grid">
-        <div class="card" data-aos="fade-up" data-aos-delay="100">
-            <h3>Eficiencia Directa</h3>
-            <p>Eliminamos tareas manuales y cuellos de botella para reducir gastos operativos.</p>
-            <ul>
-                <li>Hasta 60% menos carga operativa</li>
-                <li>Procesos activos 24/7</li>
-                <li>Enfoque en estrategia pura</li>
-            </ul>
-        </div>
-        <div class="card" data-aos="fade-up" data-aos-delay="200">
-            <h3>Escala Infinita</h3>
-            <p>Crece sin que tu estructura colapse. Maneja más clientes sin contratar más personal.</p>
-            <ul>
-                <li>Crecimiento sin fricción</li>
-                <li>Sistemas para alto volumen</li>
-                <li>Infraestructura de expansión</li>
-            </ul>
-        </div>
-        <div class="card" data-aos="fade-up" data-aos-delay="300">
-            <h3>Lógica de Datos</h3>
-            <p>Transformamos datos en acciones automáticas que optimizan rendimiento en tiempo real.</p>
-            <ul>
-                <li>Análisis sin intervención</li>
-                <li>Decisiones basadas en hechos</li>
-                <li>Precisión estratégica</li>
-            </ul>
-        </div>
-    </div>
-</section>
-
-<section id="servicios">
-    <h2 data-aos="fade-up">Servicios</h2>
-    <div class="grid">
-        <div class="card" data-aos="zoom-in-up">
-            <h3>Automatización Operativa</h3>
-            <p>Sistemas autónomos que ejecutan procesos de principio a fin de forma impecable.</p>
-        </div>
-        <div class="card" data-aos="zoom-in-up" data-aos-delay="100">
-            <h3>Agentes de IA</h3>
-            <p>Asistentes inteligentes para ventas y atención que califican leads sin descanso.</p>
-        </div>
-        <div class="card" data-aos="zoom-in-up" data-aos-delay="200">
-            <h3>Inteligencia Aplicada</h3>
-            <p>Optimización continua mediante el uso de datos en tiempo real.</p>
-        </div>
-    </div>
-</section>
-
-<section id="proceso">
-    <h2 data-aos="fade-up">El Proceso</h2>
-    <div class="grid">
-        <div class="card" data-aos="fade-right">
-            <h3>Fase 01 — Diagnóstico</h3>
-            <p><strong style="color: var(--cyan)">Entregable:</strong> Mapa de optimización.</p>
-        </div>
-        <div class="card" data-aos="fade-right" data-aos-delay="100">
-            <h3>Fase 02 — Arquitectura</h3>
-            <p><strong style="color: var(--cyan)">Entregable:</strong> Plano técnico escalable.</p>
-        </div>
-        <div class="card" data-aos="fade-right" data-aos-delay="200">
-            <h3>Fase 03 — Activación</h3>
-            <p><strong style="color: var(--cyan)">Resultado:</strong> Funcionamiento en vivo.</p>
-        </div>
-        <div class="card" data-aos="fade-right" data-aos-delay="300">
-            <h3>Fase 04 — Evolución</h3>
-            <p><strong style="color: var(--cyan)">Resultado:</strong> Mejora continua 24/7.</p>
-        </div>
-    </div>
-
-    <div class="bonus-section" data-aos="flip-up">
-        <h2 style="font-size: 2rem; margin-bottom: 2rem;">Resultados Esperados</h2>
-        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
-            <span>✔ Menos tareas manuales</span>
-            <span>✔ Respuesta instantánea</span>
-            <span>✔ Eficiencia operativa</span>
-            <span>✔ Procesos escalables</span>
-        </div>
-    </div>
-</section>
-
-<!-- NUEVA SECCIÓN FORMULARIO -->
-<section id="contacto">
-    <h2 data-aos="fade-up">Solicita una auditoría estratégica</h2>
-
-    <div data-aos="zoom-in" style="
-        max-width: 720px;
-        margin: 0 auto;
-        background: rgba(255,255,255,0.02);
-        border-radius: 30px;
-        padding: 3rem;
-        border: 1px solid rgba(0,245,255,0.15);
-        backdrop-filter: blur(20px);
-    ">
-
-        <form style="display:flex; flex-direction:column; gap:1.4rem;">
-
-            <div>
-                <label style="font-size:0.9rem; color:var(--slate);">Nombre</label>
-                <input type="text" placeholder="Tu nombre" required style="
-                    width:100%;
-                    margin-top:6px;
-                    padding:14px 16px;
-                    border-radius:12px;
-                    border:1px solid rgba(255,255,255,0.08);
-                    background: rgba(255,255,255,0.03);
-                    color:white;
-                    outline:none;
-                ">
+    <section id="beneficios">
+        <h2>Beneficios</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Eficiencia Directa</h3>
+                <p>Eliminamos tareas manuales y cuellos de botella. Tu empresa funciona más rápido y con menos gasto operativo.</p>
+                <ul>
+                    <li>Hasta 60% menos carga operativa</li>
+                    <li>Procesos activos 24/7</li>
+                    <li>Enfoque en estrategia pura</li>
+                </ul>
             </div>
-
-            <div>
-                <label style="font-size:0.9rem; color:var(--slate);">Empresa</label>
-                <input type="text" placeholder="Nombre de tu empresa o proyecto" style="
-                    width:100%;
-                    margin-top:6px;
-                    padding:14px 16px;
-                    border-radius:12px;
-                    border:1px solid rgba(255,255,255,0.08);
-                    background: rgba(255,255,255,0.03);
-                    color:white;
-                    outline:none;
-                ">
+            <div class="card">
+                <h3>Escala Infinita</h3>
+                <p>Crece sin que tu estructura colapse. Maneja más clientes y operaciones sin contratar más personal.</p>
+                <ul>
+                    <li>Crecimiento sin fricción</li>
+                    <li>Sistemas para alto volumen</li>
+                    <li>Infraestructura de expansión</li>
+                </ul>
             </div>
-
-            <div>
-                <label style="font-size:0.9rem; color:var(--slate);">Email</label>
-                <input type="email" placeholder="Tu correo electrónico de contacto" required style="
-                    width:100%;
-                    margin-top:6px;
-                    padding:14px 16px;
-                    border-radius:12px;
-                    border:1px solid rgba(255,255,255,0.08);
-                    background: rgba(255,255,255,0.03);
-                    color:white;
-                    outline:none;
-                ">
+            <div class="card">
+                <h3>Lógica de Datos</h3>
+                <p>Transformamos datos en acciones automáticas que optimizan ventas y rendimiento en tiempo real.</p>
+                <ul>
+                    <li>Análisis sin intervención humana</li>
+                    <li>Decisiones basadas en hechos</li>
+                    <li>Precisión estratégica absoluta</li>
+                </ul>
             </div>
+        </div>
+    </section>
 
-            <div>
-                <label style="font-size:0.9rem; color:var(--slate);">Presupuesto</label>
-                <select style="
-                    width:100%;
-                    margin-top:6px;
-                    padding:14px 16px;
-                    border-radius:12px;
-                    border:1px solid rgba(255,255,255,0.08);
-                    background: rgba(255,255,255,0.03);
-                    color:white;
-                    outline:none;
-                ">
-                    <option>Elige tu rango de inversión...</option>
-                    <option>$1,000 — $3,000 USD</option>
-                    <option>$3,000 — $10,000 USD</option>
-                    <option>$10,000+ USD</option>
-                </select>
+    <section id="servicios">
+        <h2>Servicios</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Automatización Operativa</h3>
+                <p>Sistemas autónomos que ejecutan procesos de principio a fin: gestión, seguimiento y ejecución impecable.</p>
             </div>
-
-            <div>
-                <label style="font-size:0.9rem; color:var(--slate);">Cuéntame sobre tu proyecto</label>
-                <textarea rows="4" placeholder="Comparte algunos detalles sobre lo que necesitas..." style="
-                    width:100%;
-                    margin-top:6px;
-                    padding:14px 16px;
-                    border-radius:12px;
-                    border:1px solid rgba(255,255,255,0.08);
-                    background: rgba(255,255,255,0.03);
-                    color:white;
-                    outline:none;
-                    resize:none;
-                "></textarea>
+            <div class="card">
+                <h3>Agentes de IA</h3>
+                <p>Asistentes inteligentes para ventas y atención que califican leads y cierran oportunidades sin descanso.</p>
             </div>
+            <div class="card">
+                <h3>Inteligencia Aplicada</h3>
+                <p>Optimización continua de marketing y operaciones mediante el uso de datos en tiempo real.</p>
+            </div>
+        </div>
+    </section>
 
-            <button type="submit" class="cta-button" style="width:100%; margin-top:10px;">
-                Enviar solicitud
-            </button>
+    <section id="proceso">
+        <h2>El Proceso</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Fase 01 — Diagnóstico</h3>
+                <p>Identificamos ineficiencias y oportunidades de alto impacto.</p>
+                <p><strong style="color: var(--cyan)">Entregable:</strong> Mapa de optimización.</p>
+            </div>
+            <div class="card">
+                <h3>Fase 02 — Arquitectura</h3>
+                <p>Diseñamos la estructura técnica y lógica de decisión de tu IA.</p>
+                <p><strong style="color: var(--cyan)">Entregable:</strong> Plano técnico escalable.</p>
+            </div>
+            <div class="card">
+                <h3>Fase 03 — Activación</h3>
+                <p>Integramos las automatizaciones sin detener tu operación actual.</p>
+                <p><strong style="color: var(--cyan)">Resultado:</strong> Funcionamiento en vivo.</p>
+            </div>
+            <div class="card">
+                <h3>Fase 04 — Evolución</h3>
+                <p>Ajustamos y mejoramos el sistema según el crecimiento de tu empresa.</p>
+                <p><strong style="color: var(--cyan)">Resultado:</strong> Mejora continua 24/7.</p>
+            </div>
+        </div>
 
-        </form>
-    </div>
-</section>
+        <div class="bonus-section">
+            <h2 style="font-size: 2rem; margin-bottom: 0;">Resultados Esperados</h2>
+            <div class="bonus-grid">
+                <div class="bonus-item">✔ Menos tareas manuales</div>
+                <div class="bonus-item">✔ Respuesta instantánea</div>
+                <div class="bonus-item">✔ Eficiencia operativa</div>
+                <div class="bonus-item">✔ Procesos escalables</div>
+            </div>
+        </div>
+    </section>
 
-<footer>
-    <p>UPCORE AI • MINIMALISMO • PERFECCIÓN • SIMETRÍA</p>
-</footer>
+    <footer>
+        <p>UPCORE AI • MINIMALISMO • PERFECCIÓN • SIMETRÍA</p>
+    </footer>
 
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-    AOS.init({
-        duration: 800,
-        once: true,
-        offset: 100
-    });
-</script>
 </body>
 </html>
