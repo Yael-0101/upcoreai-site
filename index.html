@@ -15,7 +15,7 @@
     <style>
         :root {
             --obsidian: #08080B;
-            --cyan: #00F5FF; /* Color del favicon y botones en estado normal */
+            --cyan: #00F5FF;
             --slate: #64748B;
             --purple: #7000FF;
             --gradient: linear-gradient(135deg, #00F5FF 0%, #7000FF 100%);
@@ -76,7 +76,7 @@
             border-bottom: 1px solid rgba(100, 116, 139, 0.1);
         }
 
-        /* LOGO CON UP Y AI EN CIAN (COLOR FAVICON) */
+        /* LOGO CON UP Y AI EN COLOR CIAN */
         .logo { 
             font-weight: 600; 
             font-size: 1.5rem; 
@@ -118,9 +118,9 @@
             font-weight: 300;
         }
 
-        /* BOTONES CON LÓGICA DE COLOR Y HOVER */
+        /* BOTONES CON LÓGICA DE COLOR Y HOVER RESTAURADA */
         .cta-button {
-            background-color: var(--cyan); /* Color normal: Cian */
+            background-color: var(--cyan);
             color: var(--obsidian);
             padding: 1.2rem 2.8rem;
             border-radius: 100px;
@@ -140,7 +140,7 @@
 
         .cta-button:hover {
             transform: scale(1.05);
-            background: var(--gradient); /* Color al pasar el cursor: Degradado */
+            background: var(--gradient);
             color: var(--white);
             animation: none;
         }
@@ -278,6 +278,34 @@
                 <li>Precisión estratégica</li>
             </ul>
         </div>
+    </div>
+</section>
+
+<section id="proceso">
+    <h2 data-aos="fade-up">El Proceso</h2>
+    <div class="grid">
+        <div class="card" data-aos="fade-right">
+            <h3>Fase 01 — Diagnóstico</h3>
+            <p><strong style="color: var(--cyan)">Entregable:</strong> Mapa de optimización.</p>
+        </div>
+        <div class="card" data-aos="fade-right" data-aos-delay="100">
+            <h3>Fase 02 — Arquitectura</h3>
+            <p><strong style="color: var(--cyan)">Entregable:</strong> Plano técnico escalable.</p>
+        </div>
+        <div class="card" data-aos="fade-right" data-aos-delay="200">
+            <h3>Fase 03 — Activación</h3>
+            <p><strong style="color: var(--cyan)">Resultado:</strong> Funcionamiento en vivo.</p>
+        </div>
+    </div>
+
+    <div class="bonus-section" data-aos="flip-up">
+        <h2 style="font-size: 2rem; margin-bottom: 2rem;">Resultados Esperados</h2>
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; margin-bottom: 2rem;">
+            <span>✔ Menos tareas manuales</span>
+            <span>✔ Respuesta instantánea</span>
+            <span>✔ Procesos escalables</span>
+        </div>
+        <a href="#" class="cta-button">Agendar una llamada</a>
     </div>
 </section>
 
