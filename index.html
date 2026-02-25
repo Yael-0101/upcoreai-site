@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upcore AI | Operando solo.</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -33,6 +37,7 @@
             overflow-x: hidden;
         }
 
+        /* FONDO ANIMADO */
         .bg-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -56,6 +61,7 @@
             to { transform: translate(150px, 150px) scale(1.1); }
         }
 
+        /* NAVEGACIÓN */
         nav {
             padding: 1.5rem 10%;
             display: flex;
@@ -72,6 +78,7 @@
 
         .logo { font-weight: 600; font-size: 1.5rem; letter-spacing: -1.5px; }
 
+        /* HERO */
         .hero {
             height: 100vh;
             display: flex;
@@ -101,6 +108,7 @@
             font-weight: 300;
         }
 
+        /* BOTONES */
         .cta-button {
             background-color: var(--cyan);
             color: var(--obsidian);
@@ -127,6 +135,7 @@
             animation: none;
         }
 
+        /* SECCIONES Y CARDS */
         section { padding: 120px 10%; }
         h2 { font-size: 3rem; text-align: center; margin-bottom: 5rem; letter-spacing: -2px; }
 
@@ -177,9 +186,38 @@
             border: 1px dashed rgba(0, 245, 255, 0.3);
         }
 
-        footer { padding: 5rem 10%; text-align: center; color: var(--slate); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; }
+        /* FOOTER SIMÉTRICO */
+        footer { 
+            padding: 5rem 10% 3rem; 
+            text-align: center; 
+            color: var(--slate); 
+            font-size: 0.75rem; 
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-        @media (max-width: 768px) { h1 { font-size: 2.8rem; } }
+        .footer-logo { font-weight: 600; color: var(--white); letter-spacing: 2px; margin-bottom: 1.5rem; display: block; }
+
+        .legal-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .legal-links a {
+            color: var(--slate);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .legal-links a:hover { color: var(--cyan); }
+
+        @media (max-width: 768px) { 
+            h1 { font-size: 2.8rem; } 
+            .legal-links { flex-direction: column; gap: 1rem; }
+        }
     </style>
 </head>
 <body>
@@ -204,7 +242,7 @@
     <div class="grid">
         <div class="card" data-aos="fade-up" data-aos-delay="100">
             <h3>Eficiencia Directa</h3>
-            <p>Eliminamos tareas manuales y cuellos de botella para reducir gastos operativos.</p>
+            <p>Eliminamos tareas manuales para reducir gastos operativos drásticamente.</p>
             <ul>
                 <li>Hasta 60% menos carga operativa</li>
                 <li>Procesos activos 24/7</li>
@@ -213,7 +251,7 @@
         </div>
         <div class="card" data-aos="fade-up" data-aos-delay="200">
             <h3>Escala Infinita</h3>
-            <p>Crece sin que tu estructura colapse. Maneja más clientes sin contratar más personal.</p>
+            <p>Crece sin que tu estructura colapse. Maneja más clientes sin más personal.</p>
             <ul>
                 <li>Crecimiento sin fricción</li>
                 <li>Sistemas para alto volumen</li>
@@ -222,30 +260,12 @@
         </div>
         <div class="card" data-aos="fade-up" data-aos-delay="300">
             <h3>Lógica de Datos</h3>
-            <p>Transformamos datos en acciones automáticas que optimizan rendimiento en tiempo real.</p>
+            <p>Transformamos datos en acciones automáticas que optimizan el rendimiento.</p>
             <ul>
                 <li>Análisis sin intervención</li>
                 <li>Decisiones basadas en hechos</li>
                 <li>Precisión estratégica</li>
             </ul>
-        </div>
-    </div>
-</section>
-
-<section id="servicios">
-    <h2 data-aos="fade-up">Servicios</h2>
-    <div class="grid">
-        <div class="card" data-aos="zoom-in-up">
-            <h3>Automatización Operativa</h3>
-            <p>Sistemas autónomos que ejecutan procesos de principio a fin de forma impecable.</p>
-        </div>
-        <div class="card" data-aos="zoom-in-up" data-aos-delay="100">
-            <h3>Agentes de IA</h3>
-            <p>Asistentes inteligentes para ventas y atención que califican leads sin descanso.</p>
-        </div>
-        <div class="card" data-aos="zoom-in-up" data-aos-delay="200">
-            <h3>Inteligencia Aplicada</h3>
-            <p>Optimización continua mediante el uso de datos en tiempo real.</p>
         </div>
     </div>
 </section>
@@ -265,35 +285,31 @@
             <h3>Fase 03 — Activación</h3>
             <p><strong style="color: var(--cyan)">Resultado:</strong> Funcionamiento en vivo.</p>
         </div>
-        <div class="card" data-aos="fade-right" data-aos-delay="300">
-            <h3>Fase 04 — Evolución</h3>
-            <p><strong style="color: var(--cyan)">Resultado:</strong> Mejora continua 24/7.</p>
-        </div>
     </div>
 
     <div class="bonus-section" data-aos="flip-up">
         <h2 style="font-size: 2rem; margin-bottom: 2rem;">Resultados Esperados</h2>
-        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; margin-bottom: 2rem;">
             <span>✔ Menos tareas manuales</span>
             <span>✔ Respuesta instantánea</span>
-            <span>✔ Eficiencia operativa</span>
             <span>✔ Procesos escalables</span>
         </div>
-        <a href="#" class="cta-button" style="margin-top: 2rem;">Agendar una llamada</a>
+        <a href="#" class="cta-button">Agendar una llamada</a>
     </div>
 </section>
 
 <footer>
-    <p>UPCORE AI • MINIMALISMO • PERFECCIÓN • SIMETRÍA</p>
+    <span class="footer-logo">UPCORE AI</span>
+    <div class="legal-links">
+        <a href="privacy-policy.html">Política de Privacidad</a>
+        <a href="terms-of-service.html">Términos de Servicio</a>
+    </div>
+    <div style="opacity: 0.5;">© 2026 UPCORE AI. TODOS LOS DERECHOS RESERVADOS.</div>
 </footer>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-    AOS.init({
-        duration: 800,
-        once: true,
-        offset: 100
-    });
+    AOS.init({ duration: 800, once: true, offset: 100 });
 </script>
 </body>
 </html>
