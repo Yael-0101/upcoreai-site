@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upcore AI | Automatización de Alto Impacto</title>
+    <title>Upcore AI | Operando solo.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         :root {
             --obsidian: #08080B;
@@ -32,7 +33,6 @@
             overflow-x: hidden;
         }
 
-        /* FONDO ANIMADO SUTIL */
         .bg-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -70,7 +70,7 @@
             border-bottom: 1px solid rgba(100, 116, 139, 0.1);
         }
 
-        .logo { font-weight: 600; font-size: 1.5rem; letter-spacing: -1px; }
+        .logo { font-weight: 600; font-size: 1.5rem; letter-spacing: -1.5px; }
 
         .hero {
             height: 100vh;
@@ -83,37 +83,52 @@
         }
 
         h1 {
-            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-size: clamp(3rem, 8vw, 5.5rem);
             font-weight: 600;
-            margin-bottom: 1.5rem;
-            letter-spacing: -2px;
-            background: linear-gradient(to bottom, #fff 60%, var(--slate));
+            margin-bottom: 1rem;
+            letter-spacing: -4px;
+            line-height: 1.1;
+            background: linear-gradient(to bottom, #fff 50%, var(--slate));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero p { color: var(--slate); font-size: 1.2rem; max-width: 650px; margin-bottom: 2.5rem; }
+        .hero p { 
+            color: var(--slate); 
+            font-size: 1.4rem; 
+            max-width: 650px; 
+            margin-bottom: 3rem; 
+            font-weight: 300;
+        }
 
         .cta-button {
             background-color: var(--cyan);
             color: var(--obsidian);
-            padding: 1rem 2.5rem;
+            padding: 1.2rem 2.8rem;
             border-radius: 100px;
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            display: inline-block;
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 245, 255, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(0, 245, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 245, 255, 0); }
         }
 
         .cta-button:hover {
-            transform: translateY(-3px);
+            transform: scale(1.05);
             background: var(--gradient);
             color: var(--white);
-            box-shadow: 0 15px 35px rgba(0, 245, 255, 0.3);
+            animation: none;
         }
 
-        section { padding: 100px 10%; }
-
-        h2 { font-size: 2.8rem; text-align: center; margin-bottom: 4rem; letter-spacing: -1px; }
+        section { padding: 120px 10%; }
+        h2 { font-size: 3rem; text-align: center; margin-bottom: 5rem; letter-spacing: -2px; }
 
         .grid {
             display: grid;
@@ -121,11 +136,10 @@
             gap: 2.5rem;
         }
 
-        /* RECTÁNGULO OVALADO CON CONTORNO DINÁMICO */
         .card {
             position: relative;
             background: rgba(255, 255, 255, 0.015);
-            padding: 3rem 2rem;
+            padding: 3.5rem 2.5rem;
             border-radius: 40px;
             transition: all 0.4s ease;
             z-index: 1;
@@ -145,145 +159,240 @@
         }
 
         .card:hover::before { background: var(--gradient); }
+        .card:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.03); }
 
-        .card:hover { transform: translateY(-8px); background: rgba(255, 255, 255, 0.03); }
-
-        .card h3 { margin-bottom: 1rem; color: var(--cyan); font-size: 1.4rem; }
-        .card p { color: var(--white); font-weight: 300; margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .card h3 { margin-bottom: 1.5rem; color: var(--cyan); font-size: 1.6rem; letter-spacing: -1px; }
+        .card p { color: var(--white); font-weight: 300; margin-bottom: 1.5rem; }
         
         .card ul { list-style: none; }
-        .card ul li { color: var(--slate); font-size: 0.9rem; margin-bottom: 0.5rem; }
-        .card ul li strong { color: var(--cyan); }
+        .card ul li { color: var(--slate); font-size: 0.95rem; margin-bottom: 0.8rem; display: flex; align-items: center; }
+        .card ul li::before { content: "✔"; color: var(--cyan); margin-right: 10px; font-weight: bold; }
 
         .bonus-section {
-            margin-top: 4rem;
+            margin-top: 5rem;
             text-align: center;
-            background: rgba(0, 245, 255, 0.03);
-            border-radius: 40px;
-            padding: 4rem;
-            border: 1px dashed var(--cyan);
+            background: rgba(0, 245, 255, 0.02);
+            border-radius: 50px;
+            padding: 5rem;
+            border: 1px dashed rgba(0, 245, 255, 0.3);
         }
 
-        .bonus-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 2rem;
-        }
+        footer { padding: 5rem 10%; text-align: center; color: var(--slate); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; }
 
-        .bonus-item { color: var(--white); font-weight: 400; font-size: 1rem; }
-
-        footer { padding: 4rem 10%; text-align: center; color: var(--slate); font-size: 0.9rem; }
-
-        @media (max-width: 768px) { section { padding: 60px 5%; } }
+        @media (max-width: 768px) { h1 { font-size: 2.8rem; } }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+<div class="bg-glow"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
 
-    <nav>
-        <div class="logo">UPCORE AI</div>
-        <a href="#proceso" class="cta-button" style="padding: 0.6rem 1.5rem; font-size: 0.8rem;">Empezar</a>
-    </nav>
+<nav>
+    <div class="logo">UPCORE AI</div>
+    <a href="#proceso" class="cta-button" style="padding: 0.6rem 1.8rem; font-size: 0.8rem; animation: none;">Empezar</a>
+</nav>
 
-    <header class="hero">
-        <h1>Tu negocio en piloto automático.</h1>
-        <p>Upcore AI diseña sistemas de inteligencia artificial que ejecutan, escalan y optimizan tu operación mientras tú te enfocas en liderar.</p>
-        <a href="#beneficios" class="cta-button">Ver Beneficios</a>
-    </header>
+<header class="hero">
+    <h1 data-aos="fade-up" data-aos-duration="1000">Tu negocio.<br>Operando solo.</h1>
+    <p data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">Automatización inteligente que ejecuta, optimiza y escala tu empresa 24/7.</p>
+    <div data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
+        <a href="#proceso" class="cta-button">Agendar auditoría estratégica</a>
+    </div>
+</header>
 
-    <section id="beneficios">
-        <h2>Beneficios</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>1. Eficiencia que reduce costos</h3>
-                <p>Eliminamos tareas manuales, cuellos de botella y trabajo repetitivo en toda tu operación. Tu empresa funciona más rápido.</p>
-                <ul>
-                    <li>✔ Hasta 60% menos carga operativa</li>
-                    <li>✔ Procesos automatizados 24/7</li>
-                    <li>✔ Enfoque en crecimiento estratégico</li>
-                </ul>
-            </div>
-            <div class="card">
-                <h3>2. Escalabilidad sin contratar más</h3>
-                <p>Tu negocio crece sin que tu estructura colapse. Maneja más clientes y operaciones sin aumentar costos proporcionalmente.</p>
-                <ul>
-                    <li>✔ Crecimiento sin fricción operativa</li>
-                    <li>✔ Sistemas para alto volumen</li>
-                    <li>✔ Infraestructura lista para expansión</li>
-                </ul>
-            </div>
-            <div class="card">
-                <h3>3. Decisiones inteligentes</h3>
-                <p>Transformamos tus datos en acciones automáticas que optimizan ventas, operaciones y rendimiento real.</p>
-                <ul>
-                    <li>✔ Análisis continuo sin intervención</li>
-                    <li>✔ Menos errores, más precisión</li>
-                    <li>✔ Decisiones basadas en datos reales</li>
-                </ul>
-            </div>
+<section id="beneficios">
+    <h2 data-aos="fade-up">Beneficios</h2>
+    <div class="grid">
+        <div class="card" data-aos="fade-up" data-aos-delay="100">
+            <h3>Eficiencia Directa</h3>
+            <p>Eliminamos tareas manuales y cuellos de botella para reducir gastos operativos.</p>
+            <ul>
+                <li>Hasta 60% menos carga operativa</li>
+                <li>Procesos activos 24/7</li>
+                <li>Enfoque en estrategia pura</li>
+            </ul>
         </div>
-    </section>
-
-    <section id="servicios">
-        <h2>Servicios</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>1. Automatización inteligente</h3>
-                <p>Sistemas que ejecutan procesos completos: gestión, seguimiento y ejecución autónoma. Tu negocio funciona incluso cuando tú no estás.</p>
-            </div>
-            <div class="card">
-                <h3>2. Agentes de IA 24/7</h3>
-                <p>Asistentes inteligentes que califican leads y gestionan solicitudes sin descanso. Más conversiones y cero oportunidades perdidas.</p>
-            </div>
-            <div class="card">
-                <h3>3. Inteligencia de Datos</h3>
-                <p>Convertimos información en acciones automáticas que optimizan marketing y operaciones en tiempo real.</p>
-            </div>
+        <div class="card" data-aos="fade-up" data-aos-delay="200">
+            <h3>Escala Infinita</h3>
+            <p>Crece sin que tu estructura colapse. Maneja más clientes sin contratar más personal.</p>
+            <ul>
+                <li>Crecimiento sin fricción</li>
+                <li>Sistemas para alto volumen</li>
+                <li>Infraestructura de expansión</li>
+            </ul>
         </div>
-    </section>
-
-    <section id="proceso">
-        <h2>Nuestro Proceso</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>Fase 01 — Diagnóstico</h3>
-                <p>Analizamos tu estructura e identificamos ineficiencias de alto impacto.</p>
-                <p><strong>Entregable:</strong> Mapa de optimización + estimación de impacto.</p>
-            </div>
-            <div class="card">
-                <h3>Fase 02 — Arquitectura</h3>
-                <p>Construimos la estructura técnica: flujos, integraciones y lógica de decisión.</p>
-                <p><strong>Entregable:</strong> Sistema diseñado para eficiencia máxima.</p>
-            </div>
-            <div class="card">
-                <h3>Fase 03 — Implementación</h3>
-                <p>Integramos las automatizaciones sin interrumpir tu funcionamiento actual.</p>
-                <p><strong>Resultado:</strong> Sistema funcionando en entorno real.</p>
-            </div>
-            <div class="card">
-                <h3>Fase 04 — Optimización</h3>
-                <p>Evolucionamos el sistema para mejorar resultados constantemente.</p>
-                <p><strong>Resultado:</strong> Adaptación total al crecimiento.</p>
-            </div>
+        <div class="card" data-aos="fade-up" data-aos-delay="300">
+            <h3>Lógica de Datos</h3>
+            <p>Transformamos datos en acciones automáticas que optimizan rendimiento en tiempo real.</p>
+            <ul>
+                <li>Análisis sin intervención</li>
+                <li>Decisiones basadas en hechos</li>
+                <li>Precisión estratégica</li>
+            </ul>
         </div>
+    </div>
+</section>
 
-        <div class="bonus-section">
-            <h2 style="margin-bottom: 1rem; font-size: 2rem;">💎 Resultados Esperados</h2>
-            <p style="color: var(--slate); margin-bottom: 2rem;">Nuestros clientes suelen lograr:</p>
-            <div class="bonus-grid">
-                <div class="bonus-item">✔ Menos tareas manuales</div>
-                <div class="bonus-item">✔ Respuesta instantánea</div>
-                <div class="bonus-item">✔ Eficiencia operativa global</div>
-                <div class="bonus-item">✔ Procesos escalables</div>
-            </div>
+<section id="servicios">
+    <h2 data-aos="fade-up">Servicios</h2>
+    <div class="grid">
+        <div class="card" data-aos="zoom-in-up">
+            <h3>Automatización Operativa</h3>
+            <p>Sistemas autónomos que ejecutan procesos de principio a fin de forma impecable.</p>
         </div>
-    </section>
+        <div class="card" data-aos="zoom-in-up" data-aos-delay="100">
+            <h3>Agentes de IA</h3>
+            <p>Asistentes inteligentes para ventas y atención que califican leads sin descanso.</p>
+        </div>
+        <div class="card" data-aos="zoom-in-up" data-aos-delay="200">
+            <h3>Inteligencia Aplicada</h3>
+            <p>Optimización continua mediante el uso de datos en tiempo real.</p>
+        </div>
+    </div>
+</section>
 
-    <footer>
-        <p>&copy; 2026 Upcore AI. Minimalismo • Perfección • Simetría</p>
-    </footer>
+<section id="proceso">
+    <h2 data-aos="fade-up">El Proceso</h2>
+    <div class="grid">
+        <div class="card" data-aos="fade-right">
+            <h3>Fase 01 — Diagnóstico</h3>
+            <p><strong style="color: var(--cyan)">Entregable:</strong> Mapa de optimización.</p>
+        </div>
+        <div class="card" data-aos="fade-right" data-aos-delay="100">
+            <h3>Fase 02 — Arquitectura</h3>
+            <p><strong style="color: var(--cyan)">Entregable:</strong> Plano técnico escalable.</p>
+        </div>
+        <div class="card" data-aos="fade-right" data-aos-delay="200">
+            <h3>Fase 03 — Activación</h3>
+            <p><strong style="color: var(--cyan)">Resultado:</strong> Funcionamiento en vivo.</p>
+        </div>
+        <div class="card" data-aos="fade-right" data-aos-delay="300">
+            <h3>Fase 04 — Evolución</h3>
+            <p><strong style="color: var(--cyan)">Resultado:</strong> Mejora continua 24/7.</p>
+        </div>
+    </div>
 
+    <div class="bonus-section" data-aos="flip-up">
+        <h2 style="font-size: 2rem; margin-bottom: 2rem;">Resultados Esperados</h2>
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
+            <span>✔ Menos tareas manuales</span>
+            <span>✔ Respuesta instantánea</span>
+            <span>✔ Eficiencia operativa</span>
+            <span>✔ Procesos escalables</span>
+        </div>
+    </div>
+</section>
+
+<!-- NUEVA SECCIÓN FORMULARIO -->
+<section id="contacto">
+    <h2 data-aos="fade-up">Solicita una auditoría estratégica</h2>
+
+    <div data-aos="zoom-in" style="
+        max-width: 720px;
+        margin: 0 auto;
+        background: rgba(255,255,255,0.02);
+        border-radius: 30px;
+        padding: 3rem;
+        border: 1px solid rgba(0,245,255,0.15);
+        backdrop-filter: blur(20px);
+    ">
+
+        <form style="display:flex; flex-direction:column; gap:1.4rem;">
+
+            <div>
+                <label style="font-size:0.9rem; color:var(--slate);">Nombre</label>
+                <input type="text" placeholder="Tu nombre" required style="
+                    width:100%;
+                    margin-top:6px;
+                    padding:14px 16px;
+                    border-radius:12px;
+                    border:1px solid rgba(255,255,255,0.08);
+                    background: rgba(255,255,255,0.03);
+                    color:white;
+                    outline:none;
+                ">
+            </div>
+
+            <div>
+                <label style="font-size:0.9rem; color:var(--slate);">Empresa</label>
+                <input type="text" placeholder="Nombre de tu empresa o proyecto" style="
+                    width:100%;
+                    margin-top:6px;
+                    padding:14px 16px;
+                    border-radius:12px;
+                    border:1px solid rgba(255,255,255,0.08);
+                    background: rgba(255,255,255,0.03);
+                    color:white;
+                    outline:none;
+                ">
+            </div>
+
+            <div>
+                <label style="font-size:0.9rem; color:var(--slate);">Email</label>
+                <input type="email" placeholder="Tu correo electrónico de contacto" required style="
+                    width:100%;
+                    margin-top:6px;
+                    padding:14px 16px;
+                    border-radius:12px;
+                    border:1px solid rgba(255,255,255,0.08);
+                    background: rgba(255,255,255,0.03);
+                    color:white;
+                    outline:none;
+                ">
+            </div>
+
+            <div>
+                <label style="font-size:0.9rem; color:var(--slate);">Presupuesto</label>
+                <select style="
+                    width:100%;
+                    margin-top:6px;
+                    padding:14px 16px;
+                    border-radius:12px;
+                    border:1px solid rgba(255,255,255,0.08);
+                    background: rgba(255,255,255,0.03);
+                    color:white;
+                    outline:none;
+                ">
+                    <option>Elige tu rango de inversión...</option>
+                    <option>$1,000 — $3,000 USD</option>
+                    <option>$3,000 — $10,000 USD</option>
+                    <option>$10,000+ USD</option>
+                </select>
+            </div>
+
+            <div>
+                <label style="font-size:0.9rem; color:var(--slate);">Cuéntame sobre tu proyecto</label>
+                <textarea rows="4" placeholder="Comparte algunos detalles sobre lo que necesitas..." style="
+                    width:100%;
+                    margin-top:6px;
+                    padding:14px 16px;
+                    border-radius:12px;
+                    border:1px solid rgba(255,255,255,0.08);
+                    background: rgba(255,255,255,0.03);
+                    color:white;
+                    outline:none;
+                    resize:none;
+                "></textarea>
+            </div>
+
+            <button type="submit" class="cta-button" style="width:100%; margin-top:10px;">
+                Enviar solicitud
+            </button>
+
+        </form>
+    </div>
+</section>
+
+<footer>
+    <p>UPCORE AI • MINIMALISMO • PERFECCIÓN • SIMETRÍA</p>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100
+    });
+</script>
 </body>
 </html>
