@@ -17,7 +17,7 @@
             --obsidian: #08080B;
             --cyan: #00F5FF;
             --slate: #64748B;
-            --purple: #7000FF;
+            --purple: #7000FF; /* Este es el color del botón donde estaba tu cursor */
             --gradient: linear-gradient(135deg, #00F5FF 0%, #7000FF 100%);
             --white: #FFFFFF;
         }
@@ -76,7 +76,7 @@
             border-bottom: 1px solid rgba(100, 116, 139, 0.1);
         }
 
-        /* LOGO CON COLOR CIAN EN UP Y AI */
+        /* LOGO CON COLOR PÚRPURA EN UP Y AI */
         .logo { 
             font-weight: 600; 
             font-size: 1.5rem; 
@@ -86,7 +86,7 @@
             transition: opacity 0.3s ease;
         }
         .logo:hover { opacity: 0.8; }
-        .logo span { color: var(--cyan); }
+        .logo span { color: var(--purple); } /* Color del cursor aplicado aquí */
 
         /* HERO */
         .hero {
@@ -120,8 +120,8 @@
 
         /* BOTONES */
         .cta-button {
-            background-color: var(--cyan);
-            color: var(--obsidian);
+            background: var(--gradient);
+            color: var(--white);
             padding: 1.2rem 2.8rem;
             border-radius: 100px;
             text-decoration: none;
@@ -133,15 +133,14 @@
         }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 245, 255, 0.4); }
-            70% { box-shadow: 0 0 0 20px rgba(0, 245, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 245, 255, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(112, 0, 255, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(112, 0, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(112, 0, 255, 0); }
         }
 
         .cta-button:hover {
             transform: scale(1.05);
-            background: var(--gradient);
-            color: var(--white);
+            filter: brightness(1.1);
             animation: none;
         }
 
@@ -190,10 +189,10 @@
         .bonus-section {
             margin-top: 5rem;
             text-align: center;
-            background: rgba(0, 245, 255, 0.02);
+            background: rgba(112, 0, 255, 0.03);
             border-radius: 50px;
             padding: 5rem;
-            border: 1px dashed rgba(0, 245, 255, 0.3);
+            border: 1px dashed rgba(112, 0, 255, 0.3);
         }
 
         /* FOOTER */
@@ -206,7 +205,7 @@
         }
 
         .footer-logo { font-weight: 600; color: var(--white); letter-spacing: 2px; margin-bottom: 1.5rem; display: block; text-decoration: none; }
-        .footer-logo span { color: var(--cyan); }
+        .footer-logo span { color: var(--purple); }
 
         .legal-links {
             display: flex;
@@ -223,7 +222,7 @@
             letter-spacing: 1px;
         }
 
-        .legal-links a:hover { color: var(--cyan); }
+        .legal-links a:hover { color: var(--purple); }
 
         @media (max-width: 768px) { 
             h1 { font-size: 2.8rem; } 
