@@ -37,7 +37,6 @@
             overflow-x: hidden;
         }
 
-        /* FONDO ANIMADO */
         .bg-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -61,7 +60,6 @@
             to { transform: translate(150px, 150px) scale(1.1); }
         }
 
-        /* NAVEGACIÓN */
         nav {
             padding: 1.5rem 10%;
             display: flex;
@@ -76,7 +74,6 @@
             border-bottom: 1px solid rgba(100, 116, 139, 0.1);
         }
 
-        /* LOGO INTERACTIVO */
         .logo { 
             font-weight: 600; 
             font-size: 1.5rem; 
@@ -96,11 +93,8 @@
             -webkit-text-fill-color: transparent;
         }
         
-        .logo:hover .part-core {
-            color: var(--cyan);
-        }
+        .logo:hover .part-core { color: var(--cyan); }
 
-        /* HERO */
         .hero {
             height: 100vh;
             display: flex;
@@ -130,7 +124,6 @@
             font-weight: 300;
         }
 
-        /* BOTONES */
         .cta-button {
             background-color: var(--cyan);
             color: var(--obsidian);
@@ -157,7 +150,6 @@
             animation: none;
         }
 
-        /* SECCIONES */
         section { padding: 120px 10%; }
         h2 { font-size: 3rem; text-align: center; margin-bottom: 5rem; letter-spacing: -2px; }
 
@@ -194,6 +186,8 @@
 
         .card h3 { margin-bottom: 1.5rem; color: var(--cyan); font-size: 1.6rem; letter-spacing: -1px; }
         .card p { color: var(--white); font-weight: 300; margin-bottom: 1.5rem; }
+        /* FIX: Servicios cards sin lista — elimina margen huérfano en el último párrafo */
+        .card p:last-child { margin-bottom: 0; }
         
         .card ul { list-style: none; }
         .card ul li { color: var(--slate); font-size: 0.95rem; margin-bottom: 0.8rem; display: flex; align-items: center; }
@@ -208,7 +202,6 @@
             border: 1px dashed rgba(0, 245, 255, 0.3);
         }
 
-        /* FOOTER */
         footer { 
             padding: 5rem 10% 3rem; 
             text-align: center; 
@@ -246,7 +239,7 @@
         }
 
         /* =====================================================
-           CALCULADORA DE ROI — Nueva sección
+           CALCULADORA DE ROI
            ===================================================== */
 
         #calculadora h2 { margin-bottom: 1rem; }
@@ -261,7 +254,6 @@
 
         .calc-wrapper { max-width: 740px; margin: 0 auto; }
 
-        /* Progress */
         .calc-progress {
             display: flex;
             flex-direction: column;
@@ -295,7 +287,6 @@
             letter-spacing: 2px;
         }
 
-        /* Card principal */
         .calc-card {
             position: relative;
             background: rgba(255, 255, 255, 0.015);
@@ -317,7 +308,6 @@
             pointer-events: none;
         }
 
-        /* Paneles de pasos */
         .calc-panel { display: none; }
 
         .calc-panel.active {
@@ -347,7 +337,6 @@
             margin-bottom: 2.2rem;
         }
 
-        /* Grillas de opciones */
         .calc-opts { display: grid; gap: 0.85rem; margin-bottom: 2rem; }
         .g5 { grid-template-columns: repeat(5, 1fr); }
         .g4 { grid-template-columns: repeat(4, 1fr); }
@@ -393,7 +382,6 @@
         .calc-opt-ic { font-size: 1.55rem; display: block; margin-bottom: 0.4rem; }
         .calc-opt-lb { font-size: 0.78rem; font-weight: 400; color: var(--white); line-height: 1.3; }
 
-        /* Inputs de volumen */
         .calc-fields { display: flex; flex-direction: column; gap: 1.3rem; margin-bottom: 2rem; }
 
         .calc-field-row { display: flex; flex-direction: column; gap: 0.4rem; }
@@ -426,7 +414,6 @@
 
         .calc-num::placeholder { color: rgba(100, 116, 139, 0.45); font-weight: 300; }
 
-        /* Email step */
         .calc-email-center {
             display: flex;
             flex-direction: column;
@@ -471,7 +458,6 @@
 
         .calc-skip-btn:hover { color: var(--slate); }
 
-        /* Navegación pasos */
         .calc-nav { display: flex; justify-content: space-between; align-items: center; }
         .calc-nav.only-next { justify-content: flex-end; }
 
@@ -511,7 +497,6 @@
 
         .btn-next[disabled] { opacity: 0.28; cursor: not-allowed; }
 
-        /* Resultados */
         .calc-results { display: none; }
 
         .calc-results.visible {
@@ -530,9 +515,10 @@
 
         .res-head p { color: var(--slate); font-size: 0.85rem; font-weight: 300; }
 
+        /* FIX: minmax 140px (era 120px) para que los rangos de texto no desborden */
         .res-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 0.8rem;
             margin-bottom: 0.8rem;
         }
@@ -561,12 +547,15 @@
 
         .res-ic { font-size: 1.3rem; margin-bottom: 0.4rem; }
 
+        /* FIX: font-size reducido + word-break para rangos largos */
         .res-val {
-            font-size: 1.05rem;
+            font-size: 0.88rem;
             font-weight: 600;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.3px;
             color: var(--cyan);
             margin-bottom: 0.2rem;
+            word-break: break-word;
+            line-height: 1.3;
         }
 
         .res-lbl {
@@ -646,12 +635,15 @@
             .g5 { grid-template-columns: repeat(3, 1fr); }
             .g4 { grid-template-columns: repeat(2, 1fr); }
             .calc-q { font-size: 1.45rem; }
+            /* FIX mobile: 2 columnas de resultados para dar espacio al texto */
+            .res-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 480px) {
             .calc-card { padding: 1.8rem 1.2rem; }
             .g5 { grid-template-columns: repeat(2, 1fr); }
             .g3 { grid-template-columns: repeat(2, 1fr); }
+            .res-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -728,7 +720,7 @@
 </section>
 
 <!-- ======================================================
-     CALCULADORA DE ROI — Nueva sección
+     CALCULADORA DE ROI
      ====================================================== -->
 <section id="calculadora">
     <h2 data-aos="fade-up">¿Cuánto puedes ahorrar?</h2>
@@ -736,7 +728,6 @@
 
     <div class="calc-wrapper" data-aos="fade-up" data-aos-delay="150">
 
-        <!-- Indicador de progreso -->
         <div class="calc-progress">
             <div class="calc-dots">
                 <div class="calc-dot active"></div>
@@ -747,772 +738,6 @@
             <div class="calc-progress-text" id="calcProgressText">Paso 1 de 4</div>
         </div>
 
-        <!-- Card principal -->
-        <div class="calc-card">
-
-            <!-- PASO 1: Tipo de negocio -->
-            <div class="calc-panel active" id="calcStep1">
-                <div class="calc-q">¿Qué tipo de negocio tienes?</div>
-                <div class="calc-hint">Selecciona la opción que mejor describe tu empresa</div>
-                <div class="calc-opts g5">
-                    <button class="calc-opt" data-val="inmobiliaria" onclick="CALC.pick('business',this)">
-                        <span class="calc-opt-ic">🏠</span>
-                        <span class="calc
-El archivo no está en el repo — el usuario me lo pasó en el chat. Trabajo directamente desde el código de la conversación anterior. Solo cambiaré las funciones calculate() y renderResults() dentro del IIFE CALC, y agregaré 3 helpers nuevos. Todo lo demás queda idéntico.
-
-Aquí el código completo:
-
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upcore AI | Operando solo.</title>
-    
-    <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <style>
-        :root {
-            --obsidian: #08080B;
-            --cyan: #00F5FF;
-            --slate: #64748B;
-            --purple: #7000FF;
-            --gradient: linear-gradient(135deg, #00F5FF 0%, #7000FF 100%);
-            --white: #FFFFFF;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--obsidian);
-            color: var(--white);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* FONDO ANIMADO */
-        .bg-glow {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            background: var(--obsidian);
-        }
-
-        .orb {
-            position: absolute;
-            filter: blur(140px);
-            border-radius: 50%;
-            opacity: 0.12;
-            animation: move 25s infinite alternate ease-in-out;
-        }
-
-        .orb-1 { width: 600px; height: 600px; background: var(--cyan); top: -20%; left: -10%; }
-        .orb-2 { width: 700px; height: 700px; background: var(--purple); bottom: -20%; right: -10%; animation-duration: 30s; }
-
-        @keyframes move {
-            from { transform: translate(0, 0) scale(1); }
-            to { transform: translate(150px, 150px) scale(1.1); }
-        }
-
-        /* NAVEGACIÓN */
-        nav {
-            padding: 1.5rem 10%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            background: rgba(8, 8, 11, 0.7);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(100, 116, 139, 0.1);
-        }
-
-        /* LOGO INTERACTIVO */
-        .logo { 
-            font-weight: 600; 
-            font-size: 1.5rem; 
-            letter-spacing: -1.5px; 
-            text-decoration: none; 
-            display: flex;
-            gap: 2px;
-            cursor: pointer;
-        }
-
-        .logo .part-side { color: var(--cyan); transition: all 0.4s ease; }
-        .logo .part-core { color: var(--white); transition: all 0.4s ease; }
-
-        .logo:hover .part-side {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .logo:hover .part-core {
-            color: var(--cyan);
-        }
-
-        /* HERO */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 10%;
-        }
-
-        h1 {
-            font-size: clamp(3rem, 8vw, 5.5rem);
-            font-weight: 600;
-            margin-bottom: 1rem;
-            letter-spacing: -4px;
-            line-height: 1.1;
-            background: linear-gradient(to bottom, #fff 50%, var(--slate));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p { 
-            color: var(--slate); 
-            font-size: 1.4rem; 
-            max-width: 650px; 
-            margin-bottom: 3rem; 
-            font-weight: 300;
-        }
-
-        /* BOTONES */
-        .cta-button {
-            background-color: var(--cyan);
-            color: var(--obsidian);
-            padding: 1.2rem 2.8rem;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
-            display: inline-block;
-            animation: pulse 4s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 245, 255, 0.4); }
-            70% { box-shadow: 0 0 0 20px rgba(0, 245, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 245, 255, 0); }
-        }
-
-        .cta-button:hover {
-            transform: scale(1.05);
-            background: var(--gradient);
-            color: var(--white);
-            animation: none;
-        }
-
-        /* SECCIONES */
-        section { padding: 120px 10%; }
-        h2 { font-size: 3rem; text-align: center; margin-bottom: 5rem; letter-spacing: -2px; }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .card {
-            position: relative;
-            background: rgba(255, 255, 255, 0.015);
-            padding: 3.5rem 2.5rem;
-            border-radius: 40px;
-            transition: all 0.4s ease;
-            z-index: 1;
-        }
-
-        .card::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 40px;
-            padding: 2px;
-            background: rgba(100, 116, 139, 0.2);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            transition: background 0.4s ease;
-        }
-
-        .card:hover::before { background: var(--gradient); }
-        .card:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.03); }
-
-        .card h3 { margin-bottom: 1.5rem; color: var(--cyan); font-size: 1.6rem; letter-spacing: -1px; }
-        .card p { color: var(--white); font-weight: 300; margin-bottom: 1.5rem; }
-        
-        .card ul { list-style: none; }
-        .card ul li { color: var(--slate); font-size: 0.95rem; margin-bottom: 0.8rem; display: flex; align-items: center; }
-        .card ul li::before { content: "✔"; color: var(--cyan); margin-right: 10px; font-weight: bold; }
-
-        .bonus-section {
-            margin-top: 5rem;
-            text-align: center;
-            background: rgba(0, 245, 255, 0.02);
-            border-radius: 50px;
-            padding: 5rem;
-            border: 1px dashed rgba(0, 245, 255, 0.3);
-        }
-
-        /* FOOTER */
-        footer { 
-            padding: 5rem 10% 3rem; 
-            text-align: center; 
-            color: var(--slate); 
-            font-size: 0.75rem; 
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .footer-logo-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .legal-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .legal-links a {
-            color: var(--slate);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .legal-links a:hover { color: var(--cyan); }
-
-        @media (max-width: 768px) { 
-            h1 { font-size: 2.8rem; } 
-            .legal-links { flex-direction: column; gap: 1rem; }
-        }
-
-        /* =====================================================
-           CALCULADORA DE ROI — Nueva sección
-           ===================================================== */
-
-        #calculadora h2 { margin-bottom: 1rem; }
-
-        .calc-sub-title {
-            color: var(--slate);
-            font-size: 1rem;
-            font-weight: 300;
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .calc-wrapper { max-width: 740px; margin: 0 auto; }
-
-        /* Progress */
-        .calc-progress {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.7rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .calc-dots { display: flex; align-items: center; gap: 0.5rem; }
-
-        .calc-dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: rgba(100, 116, 139, 0.25);
-            transition: all 0.4s ease;
-        }
-
-        .calc-dot.active {
-            width: 26px;
-            border-radius: 4px;
-            background: var(--cyan);
-            box-shadow: 0 0 12px rgba(0, 245, 255, 0.4);
-        }
-
-        .calc-dot.done { background: rgba(0, 245, 255, 0.35); }
-
-        .calc-progress-text {
-            color: var(--slate);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* Card principal */
-        .calc-card {
-            position: relative;
-            background: rgba(255, 255, 255, 0.015);
-            border-radius: 40px;
-            padding: 3.5rem 3rem;
-            z-index: 1;
-        }
-
-        .calc-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: 40px;
-            padding: 1.5px;
-            background: rgba(100, 116, 139, 0.2);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
-
-        /* Paneles de pasos */
-        .calc-panel { display: none; }
-
-        .calc-panel.active {
-            display: block;
-            animation: calcIn 0.35s ease forwards;
-        }
-
-        @keyframes calcIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .calc-q {
-            font-size: 1.7rem;
-            font-weight: 600;
-            letter-spacing: -1.5px;
-            text-align: center;
-            margin-bottom: 0.6rem;
-            line-height: 1.2;
-        }
-
-        .calc-hint {
-            color: var(--slate);
-            font-size: 0.88rem;
-            font-weight: 300;
-            text-align: center;
-            margin-bottom: 2.2rem;
-        }
-
-        /* Grillas de opciones */
-        .calc-opts { display: grid; gap: 0.85rem; margin-bottom: 2rem; }
-        .g5 { grid-template-columns: repeat(5, 1fr); }
-        .g4 { grid-template-columns: repeat(4, 1fr); }
-        .g3 { grid-template-columns: repeat(3, 1fr); }
-
-        .calc-opt {
-            position: relative;
-            background: rgba(255, 255, 255, 0.02);
-            border: none;
-            border-radius: 18px;
-            padding: 1.3rem 0.8rem;
-            color: var(--white);
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.3s ease;
-            z-index: 1;
-        }
-
-        .calc-opt::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: 18px;
-            padding: 1.5px;
-            background: rgba(100, 116, 139, 0.2);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            transition: background 0.3s ease;
-            pointer-events: none;
-        }
-
-        .calc-opt:hover::before,
-        .calc-opt.sel::before { background: var(--gradient); }
-
-        .calc-opt:hover,
-        .calc-opt.sel {
-            background: rgba(0, 245, 255, 0.04);
-            transform: translateY(-3px);
-        }
-
-        .calc-opt-ic { font-size: 1.55rem; display: block; margin-bottom: 0.4rem; }
-        .calc-opt-lb { font-size: 0.78rem; font-weight: 400; color: var(--white); line-height: 1.3; }
-
-        /* Inputs de volumen */
-        .calc-fields { display: flex; flex-direction: column; gap: 1.3rem; margin-bottom: 2rem; }
-
-        .calc-field-row { display: flex; flex-direction: column; gap: 0.4rem; }
-
-        .calc-field-row label { color: var(--slate); font-size: 0.82rem; font-weight: 400; }
-
-        .calc-num {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1.5px solid rgba(100, 116, 139, 0.22);
-            border-radius: 14px;
-            padding: 0.9rem 1.3rem;
-            color: var(--white);
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            width: 100%;
-            outline: none;
-            transition: all 0.3s ease;
-            -moz-appearance: textfield;
-        }
-
-        .calc-num::-webkit-outer-spin-button,
-        .calc-num::-webkit-inner-spin-button { -webkit-appearance: none; }
-
-        .calc-num:focus {
-            border-color: var(--cyan);
-            background: rgba(0, 245, 255, 0.03);
-            box-shadow: 0 0 0 4px rgba(0, 245, 255, 0.07);
-        }
-
-        .calc-num::placeholder { color: rgba(100, 116, 139, 0.45); font-weight: 300; }
-
-        /* Email step */
-        .calc-email-center {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.7rem;
-            margin-bottom: 2rem;
-        }
-
-        .calc-email-in {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1.5px solid rgba(100, 116, 139, 0.22);
-            border-radius: 100px;
-            padding: 0.9rem 2rem;
-            color: var(--white);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            width: 100%;
-            max-width: 380px;
-            outline: none;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .calc-email-in:focus {
-            border-color: var(--cyan);
-            background: rgba(0, 245, 255, 0.03);
-            box-shadow: 0 0 0 4px rgba(0, 245, 255, 0.07);
-        }
-
-        .calc-email-in::placeholder { color: rgba(100, 116, 139, 0.5); }
-
-        .calc-skip-btn {
-            background: none;
-            border: none;
-            color: rgba(100, 116, 139, 0.6);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.78rem;
-            cursor: pointer;
-            text-decoration: underline;
-            transition: color 0.3s ease;
-        }
-
-        .calc-skip-btn:hover { color: var(--slate); }
-
-        /* Navegación pasos */
-        .calc-nav { display: flex; justify-content: space-between; align-items: center; }
-        .calc-nav.only-next { justify-content: flex-end; }
-
-        .btn-back {
-            background: transparent;
-            border: 1.5px solid rgba(100, 116, 139, 0.22);
-            color: var(--slate);
-            padding: 0.75rem 1.8rem;
-            border-radius: 100px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-back:hover { border-color: rgba(100, 116, 139, 0.5); color: var(--white); }
-
-        .btn-next {
-            background: var(--cyan);
-            color: var(--obsidian);
-            padding: 0.75rem 2.2rem;
-            border-radius: 100px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .btn-next:hover:not([disabled]) {
-            transform: scale(1.05);
-            background: var(--gradient);
-            color: var(--white);
-        }
-
-        .btn-next[disabled] { opacity: 0.28; cursor: not-allowed; }
-
-        /* Resultados */
-        .calc-results { display: none; }
-
-        .calc-results.visible {
-            display: block;
-            animation: calcIn 0.5s ease forwards;
-        }
-
-        .res-head { text-align: center; margin-bottom: 2rem; }
-
-        .res-head h3 {
-            font-size: 1.7rem;
-            font-weight: 600;
-            letter-spacing: -1.5px;
-            margin-bottom: 0.3rem;
-        }
-
-        .res-head p { color: var(--slate); font-size: 0.85rem; font-weight: 300; }
-
-        .res-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 0.8rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .res-item {
-            position: relative;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 20px;
-            padding: 1.5rem 0.8rem;
-            text-align: center;
-            z-index: 1;
-        }
-
-        .res-item::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: 20px;
-            padding: 1.5px;
-            background: var(--gradient);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
-
-        .res-ic { font-size: 1.3rem; margin-bottom: 0.4rem; }
-
-        .res-val {
-            font-size: 1.05rem;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-            color: var(--cyan);
-            margin-bottom: 0.2rem;
-        }
-
-        .res-lbl {
-            color: var(--slate);
-            font-size: 0.62rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            line-height: 1.4;
-        }
-
-        .res-payback {
-            text-align: center;
-            color: var(--slate);
-            font-size: 0.82rem;
-            font-weight: 300;
-            margin-bottom: 2rem;
-            min-height: 1.2rem;
-        }
-
-        .res-payback strong { color: var(--cyan); font-weight: 600; }
-
-        .res-suggest {
-            background: rgba(0, 245, 255, 0.02);
-            border-radius: 24px;
-            padding: 2rem 2.2rem;
-            border: 1px dashed rgba(0, 245, 255, 0.3);
-            margin-bottom: 2rem;
-        }
-
-        .res-suggest h4 {
-            color: var(--cyan);
-            font-size: 0.92rem;
-            font-weight: 600;
-            letter-spacing: -0.3px;
-            margin-bottom: 1rem;
-        }
-
-        .res-suggest ul { list-style: none; }
-
-        .res-suggest ul li {
-            color: var(--white);
-            font-weight: 300;
-            font-size: 0.9rem;
-            margin-bottom: 0.7rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-        }
-
-        .res-suggest ul li::before {
-            content: "→";
-            color: var(--cyan);
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .res-cta { text-align: center; }
-
-        .calc-reset-btn {
-            display: block;
-            margin: 1.2rem auto 0;
-            background: none;
-            border: none;
-            color: rgba(100, 116, 139, 0.5);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.75rem;
-            cursor: pointer;
-            text-decoration: underline;
-            transition: color 0.3s ease;
-        }
-
-        .calc-reset-btn:hover { color: var(--slate); }
-
-        /* Responsive — Calculadora */
-        @media (max-width: 768px) {
-            .calc-card { padding: 2.2rem 1.6rem; }
-            .g5 { grid-template-columns: repeat(3, 1fr); }
-            .g4 { grid-template-columns: repeat(2, 1fr); }
-            .calc-q { font-size: 1.45rem; }
-        }
-
-        @media (max-width: 480px) {
-            .calc-card { padding: 1.8rem 1.2rem; }
-            .g5 { grid-template-columns: repeat(2, 1fr); }
-            .g3 { grid-template-columns: repeat(2, 1fr); }
-        }
-    </style>
-</head>
-<body>
-
-<div class="bg-glow"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
-
-<nav>
-    <a href="index.html" class="logo">
-        <span class="part-side">UP</span>
-        <span class="part-core">CORE</span>
-        <span class="part-side">AI</span>
-    </a>
-    <a href="#" class="cta-button" style="padding: 0.6rem 1.8rem; font-size: 0.8rem; animation: none;">Agendar una llamada</a>
-</nav>
-
-<header class="hero">
-    <h1 data-aos="fade-up" data-aos-duration="1000">Tu negocio.<br>Operando solo.</h1>
-    <p data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">Automatización inteligente que ejecuta, optimiza y escala tu empresa 24/7.</p>
-    <div data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
-        <a href="#" class="cta-button">Agendar una llamada</a>
-    </div>
-</header>
-
-<section id="beneficios">
-    <h2 data-aos="fade-up">Beneficios</h2>
-    <div class="grid">
-        <div class="card" data-aos="fade-up" data-aos-delay="100">
-            <h3>Eficiencia Directa</h3>
-            <p>Eliminamos tareas manuales para reducir gastos operativos drásticamente.</p>
-            <ul>
-                <li>Hasta 60% menos carga operativa</li>
-                <li>Procesos activos 24/7</li>
-                <li>Enfoque en estrategia pura</li>
-            </ul>
-        </div>
-        <div class="card" data-aos="fade-up" data-aos-delay="200">
-            <h3>Escala Infinita</h3>
-            <p>Crece sin que tu estructura colapse. Maneja más clientes sin más personal.</p>
-            <ul>
-                <li>Crecimiento sin fricción</li>
-                <li>Sistemas para alto volumen</li>
-                <li>Infraestructura de expansión</li>
-            </ul>
-        </div>
-        <div class="card" data-aos="fade-up" data-aos-delay="300">
-            <h3>Lógica de Datos</h3>
-            <p>Transformamos datos en acciones automáticas que optimizan el rendimiento.</p>
-            <ul>
-                <li>Análisis sin intervención</li>
-                <li>Decisiones basadas en hechos</li>
-                <li>Precisión estratégica</li>
-            </ul>
-        </div>
-    </div>
-</section>
-
-<section id="servicios">
-    <h2 data-aos="fade-up">Servicios</h2>
-    <div class="grid">
-        <div class="card" data-aos="zoom-in-up">
-            <h3>Automatización Operativa</h3>
-            <p>Sistemas autónomos que ejecutan procesos de principio a fin de forma impecable.</p>
-        </div>
-        <div class="card" data-aos="zoom-in-up" data-aos-delay="100">
-            <h3>Agentes de IA</h3>
-            <p>Asistentes inteligentes para ventas y atención que califican leads sin descanso.</p>
-        </div>
-        <div class="card" data-aos="zoom-in-up" data-aos-delay="200">
-            <h3>Inteligencia Aplicada</h3>
-            <p>Optimización continua mediante el uso de datos en tiempo real.</p>
-        </div>
-    </div>
-</section>
-
-<!-- ======================================================
-     CALCULADORA DE ROI — Nueva sección
-     ====================================================== -->
-<section id="calculadora">
-    <h2 data-aos="fade-up">¿Cuánto puedes ahorrar?</h2>
-    <p class="calc-sub-title" data-aos="fade-up" data-aos-delay="50">Calcula el ROI de automatizar tu negocio con IA en menos de 2 minutos.</p>
-
-    <div class="calc-wrapper" data-aos="fade-up" data-aos-delay="150">
-
-        <!-- Indicador de progreso -->
-        <div class="calc-progress">
-            <div class="calc-dots">
-                <div class="calc-dot active"></div>
-                <div class="calc-dot"></div>
-                <div class="calc-dot"></div>
-                <div class="calc-dot"></div>
-            </div>
-            <div class="calc-progress-text" id="calcProgressText">Paso 1 de 4</div>
-        </div>
-
-        <!-- Card principal -->
         <div class="calc-card">
 
             <!-- PASO 1: Tipo de negocio -->
@@ -1638,8 +863,8 @@ Aquí el código completo:
                 </div>
             </div>
 
-        </div><!-- /.calc-card -->
-    </div><!-- /.calc-wrapper -->
+        </div>
+    </div>
 </section>
 
 <section id="proceso">
@@ -1694,19 +919,14 @@ Aquí el código completo:
 <script>
     AOS.init({ duration: 800, once: true, offset: 100 });
 
-    /* =====================================================
-       CALCULADORA DE ROI
-       ===================================================== */
     var CALC = (function () {
 
-        /* Estado interno */
         var s = {
             step: 1,
             business: null, area: null, problem: null,
             leads: '', msgs: '', emp: '', email: ''
         };
 
-        /* Data: problemas por área */
         var PROBLEMS = {
             ventas: [
                 { id: 'calificar_leads', label: 'Calificar leads',         icon: '🎯', min: 12 },
@@ -1730,7 +950,6 @@ Aquí el código completo:
             ]
         };
 
-        /* Data: sugerencias por área + problema */
         var SUGGESTIONS = {
             ventas: {
                 calificar_leads: [
@@ -1802,14 +1021,8 @@ Aquí el código completo:
             }
         };
 
-        /* -------------------------------------------------------
-           NUEVOS HELPERS DE CÁLCULO — únicos cambios funcionales
-           ------------------------------------------------------- */
+        /* --- Helpers de cálculo --- */
 
-        /**
-         * Redondea a un múltiplo "limpio" según la magnitud del número.
-         * Evita valores raros como $1372 o $87.
-         */
         function roundNice(n) {
             if (n < 200)  return Math.round(n / 25)  * 25;
             if (n < 1000) return Math.round(n / 50)  * 50;
@@ -1817,53 +1030,34 @@ Aquí el código completo:
             return            Math.round(n / 500) * 500;
         }
 
-        /**
-         * Acumula puntos de complejidad según cada respuesta del usuario.
-         * Cuanto mayor el score, más grande y costosa la solución esperada.
-         */
         function getComplexityScore() {
             var score = 0;
-
-            /* Tipo de negocio */
-            var bizPoints = { ecommerce: 2, agencia: 1, clinica: 1, inmobiliaria: 1, otro: 1 };
-            score += bizPoints[s.business] || 0;
-
-            /* Área */
+            var bizPoints  = { ecommerce: 2, agencia: 1, clinica: 1, inmobiliaria: 1, otro: 1 };
             var areaPoints = { ventas: 2, operaciones: 2, atencion: 1, marketing: 1 };
-            score += areaPoints[s.area] || 0;
-
-            /* Problema específico */
             var probPoints = {
                 calificar_leads: 2, seguimiento: 2, documentos: 2,
                 propuestas: 1, responder: 1, agendar: 1,
                 soporte: 1, reportes: 1, publicaciones: 1,
                 campanas: 1, coordinacion: 1, inventario: 1
             };
-            score += probPoints[s.problem] || 0;
-
-            /* Volumen */
+            score += bizPoints[s.business]  || 0;
+            score += areaPoints[s.area]     || 0;
+            score += probPoints[s.problem]  || 0;
             var leads = parseInt(s.leads) || 0;
             var msgs  = parseInt(s.msgs)  || 0;
             var emp   = parseInt(s.emp)   || 0;
             if (leads > 100) score += 2;
             if (msgs  > 50)  score += 2;
             if (emp   > 3)   score += 1;
-
             return score;
         }
 
-        /**
-         * Devuelve una etiqueta legible según el score acumulado.
-         */
         function getComplexityLabel(score) {
             if (score <= 3) return 'Automatización básica';
             if (score <= 6) return 'Sistema de automatización avanzado';
             return 'Infraestructura completa de IA';
         }
 
-        /* -------------------------------------------------------
-           CÁLCULO PRINCIPAL — ahora completamente dinámico
-           ------------------------------------------------------- */
         function calculate() {
             var leads = Math.max(parseInt(s.leads) || 30, 0);
             var msgs  = Math.max(parseInt(s.msgs)  || 15, 0);
@@ -1871,46 +1065,39 @@ Aquí el código completo:
 
             var score = getComplexityScore();
 
-            /* Horas ahorradas */
             var probs      = PROBLEMS[s.area] || [];
             var prob       = probs.filter(function (p) { return p.id === s.problem; })[0];
             var tMin       = prob ? prob.min : 10;
             var tasks      = leads + msgs * 22;
             var hoursSaved = Math.round((tasks * tMin) / 60);
-
-            /* Ahorro monetario (USD $8/hr promedio) */
             var moneySaved = Math.round(hoursSaved * 8 * emp);
 
-            /* ---- Setup: dinámico según complejidad ---- */
+            /* Setup dinámico */
             var setupMin = roundNice(500  + score * 150);
             var setupMax = roundNice(1000 + score * 400);
 
-            /* ---- Costo mensual: dinámico según volumen de mensajes ---- */
-            var rawMonthly = Math.max(msgs, 10); // mínimo razonable
+            /* Mensual dinámico según volumen */
+            var rawMonthly = Math.max(msgs, 10);
             var mthMin = roundNice(Math.min(50  + rawMonthly * 0.5, 600));
             var mthMax = roundNice(Math.min(100 + rawMonthly * 1.5, 1800));
-
-            /* Garantizar gap mínimo entre min y max */
             if (mthMax <= mthMin) mthMax = roundNice(mthMin * 1.6);
 
-            var mthAvg = (mthMin + mthMax) / 2;
-
-            /* ROI y payback */
+            var mthAvg  = (mthMin + mthMax) / 2;
             var roi     = mthAvg > 0 ? Math.round((moneySaved / mthAvg) * 10) / 10 : 0;
             var payback = moneySaved > 0 ? Math.round((setupMin / moneySaved) * 30) : 0;
 
+            /* FIX: sin sufijo "USD" — el rango ya es legible sin él */
             return {
                 hoursSaved     : hoursSaved + ' hrs',
                 moneySaved     : '$' + moneySaved.toLocaleString(),
-                setupRange     : '$' + setupMin.toLocaleString() + ' – $' + setupMax.toLocaleString() + ' USD',
-                mthRange       : '$' + mthMin.toLocaleString() + ' – $' + mthMax.toLocaleString() + ' USD',
+                setupRange     : '$' + setupMin.toLocaleString() + ' – $' + setupMax.toLocaleString(),
+                mthRange       : '$' + mthMin.toLocaleString() + ' – $' + mthMax.toLocaleString(),
                 roi            : roi + 'x',
                 payback        : payback,
                 complexityLabel: getComplexityLabel(score)
             };
         }
 
-        /* ---------- Helpers de UI (sin cambios) ---------- */
         function getSuggestions() {
             try {
                 return SUGGESTIONS[s.area][s.problem];
@@ -1922,6 +1109,8 @@ Aquí el código completo:
                 ];
             }
         }
+
+        /* --- UI helpers --- */
 
         function showPanel(id) {
             document.querySelectorAll('.calc-panel').forEach(function (el) {
@@ -1962,9 +1151,6 @@ Aquí el código completo:
             document.getElementById('next3').disabled = !s.problem;
         }
 
-        /* -------------------------------------------------------
-           renderResults — muestra etiqueta de complejidad y disclaimer
-           ------------------------------------------------------- */
         function renderResults() {
             var r    = calculate();
             var sugg = getSuggestions();
@@ -1985,7 +1171,6 @@ Aquí el código completo:
                     '</div>';
             }).join('');
 
-            /* Etiqueta de complejidad + payback */
             var paybackHtml = r.payback > 0
                 ? 'Recuperas tu inversión en aproximadamente <strong>' + r.payback + ' días</strong>'
                 : '';
@@ -1995,28 +1180,24 @@ Aquí el código completo:
                 'letter-spacing:1.5px;margin-bottom:0.5rem;">' + r.complexityLabel + '</span>' +
                 paybackHtml;
 
-            /* Sugerencias + disclaimer */
             document.getElementById('resSuggest').innerHTML =
                 '<h4>Basado en tus respuestas, construiríamos:</h4><ul>' +
                 sugg.map(function (x) { return '<li>' + x + '</li>'; }).join('') +
                 '</ul>' +
                 '<p style="color:var(--slate);font-size:0.75rem;font-weight:300;margin-top:1.2rem;' +
                 'opacity:0.65;line-height:1.5;">* Estos resultados son estimaciones basadas en los datos ' +
-                'proporcionados. Los valores reales pueden variar según la complejidad específica del proyecto.</p>';
+                'proporcionados. Los valores reales pueden variar según la complejidad del proyecto.</p>';
         }
 
-        /* ---------- API pública (sin cambios) ---------- */
+        /* --- API pública --- */
+
         function pick(field, btn) {
             btn.parentElement.querySelectorAll('.calc-opt').forEach(function (b) {
                 b.classList.remove('sel');
             });
             btn.classList.add('sel');
-
-            if (field === 'area' && s.area !== btn.getAttribute('data-val')) {
-                s.problem = null;
-            }
+            if (field === 'area' && s.area !== btn.getAttribute('data-val')) s.problem = null;
             s[field] = btn.getAttribute('data-val');
-
             var map = { business: 'next1', area: 'next2', problem: 'next3' };
             if (map[field]) document.getElementById(map[field]).disabled = false;
         }
@@ -2058,9 +1239,7 @@ Aquí el código completo:
         }
 
         function showResults() {
-            document.querySelectorAll('.calc-panel').forEach(function (el) {
-                el.classList.remove('active');
-            });
+            document.querySelectorAll('.calc-panel').forEach(function (el) { el.classList.remove('active'); });
             document.querySelectorAll('.calc-dot').forEach(function (d) {
                 d.classList.remove('active');
                 d.classList.add('done');
@@ -2073,7 +1252,6 @@ Aquí el código completo:
         function reset() {
             s.step = 1; s.business = null; s.area = null; s.problem = null;
             s.leads = ''; s.msgs = ''; s.emp = ''; s.email = '';
-
             document.getElementById('calcResults').classList.remove('visible');
             document.querySelectorAll('.calc-opt').forEach(function (b) { b.classList.remove('sel'); });
             ['inputLeads', 'inputMsgs', 'inputEmp', 'inputEmail'].forEach(function (id) {
