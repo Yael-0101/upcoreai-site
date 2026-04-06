@@ -90,7 +90,6 @@
         .logo .part-side { color: var(--cyan); transition: all 0.4s ease; }
         .logo .part-core { color: var(--white); transition: all 0.4s ease; }
 
-        /* Efecto Hover del Logo */
         .logo:hover .part-side {
             background: var(--gradient);
             -webkit-background-clip: text;
@@ -245,6 +244,415 @@
             h1 { font-size: 2.8rem; } 
             .legal-links { flex-direction: column; gap: 1rem; }
         }
+
+        /* =====================================================
+           CALCULADORA DE ROI — Nueva sección
+           ===================================================== */
+
+        #calculadora h2 { margin-bottom: 1rem; }
+
+        .calc-sub-title {
+            color: var(--slate);
+            font-size: 1rem;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .calc-wrapper { max-width: 740px; margin: 0 auto; }
+
+        /* Progress */
+        .calc-progress {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .calc-dots { display: flex; align-items: center; gap: 0.5rem; }
+
+        .calc-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: rgba(100, 116, 139, 0.25);
+            transition: all 0.4s ease;
+        }
+
+        .calc-dot.active {
+            width: 26px;
+            border-radius: 4px;
+            background: var(--cyan);
+            box-shadow: 0 0 12px rgba(0, 245, 255, 0.4);
+        }
+
+        .calc-dot.done { background: rgba(0, 245, 255, 0.35); }
+
+        .calc-progress-text {
+            color: var(--slate);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Card principal */
+        .calc-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.015);
+            border-radius: 40px;
+            padding: 3.5rem 3rem;
+            z-index: 1;
+        }
+
+        .calc-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 40px;
+            padding: 1.5px;
+            background: rgba(100, 116, 139, 0.2);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        /* Paneles de pasos */
+        .calc-panel { display: none; }
+
+        .calc-panel.active {
+            display: block;
+            animation: calcIn 0.35s ease forwards;
+        }
+
+        @keyframes calcIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .calc-q {
+            font-size: 1.7rem;
+            font-weight: 600;
+            letter-spacing: -1.5px;
+            text-align: center;
+            margin-bottom: 0.6rem;
+            line-height: 1.2;
+        }
+
+        .calc-hint {
+            color: var(--slate);
+            font-size: 0.88rem;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 2.2rem;
+        }
+
+        /* Grillas de opciones */
+        .calc-opts { display: grid; gap: 0.85rem; margin-bottom: 2rem; }
+        .g5 { grid-template-columns: repeat(5, 1fr); }
+        .g4 { grid-template-columns: repeat(4, 1fr); }
+        .g3 { grid-template-columns: repeat(3, 1fr); }
+
+        .calc-opt {
+            position: relative;
+            background: rgba(255, 255, 255, 0.02);
+            border: none;
+            border-radius: 18px;
+            padding: 1.3rem 0.8rem;
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .calc-opt::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 18px;
+            padding: 1.5px;
+            background: rgba(100, 116, 139, 0.2);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            transition: background 0.3s ease;
+            pointer-events: none;
+        }
+
+        .calc-opt:hover::before,
+        .calc-opt.sel::before { background: var(--gradient); }
+
+        .calc-opt:hover,
+        .calc-opt.sel {
+            background: rgba(0, 245, 255, 0.04);
+            transform: translateY(-3px);
+        }
+
+        .calc-opt-ic { font-size: 1.55rem; display: block; margin-bottom: 0.4rem; }
+        .calc-opt-lb { font-size: 0.78rem; font-weight: 400; color: var(--white); line-height: 1.3; }
+
+        /* Inputs de volumen */
+        .calc-fields { display: flex; flex-direction: column; gap: 1.3rem; margin-bottom: 2rem; }
+
+        .calc-field-row { display: flex; flex-direction: column; gap: 0.4rem; }
+
+        .calc-field-row label { color: var(--slate); font-size: 0.82rem; font-weight: 400; }
+
+        .calc-num {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1.5px solid rgba(100, 116, 139, 0.22);
+            border-radius: 14px;
+            padding: 0.9rem 1.3rem;
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            outline: none;
+            transition: all 0.3s ease;
+            -moz-appearance: textfield;
+        }
+
+        .calc-num::-webkit-outer-spin-button,
+        .calc-num::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+        .calc-num:focus {
+            border-color: var(--cyan);
+            background: rgba(0, 245, 255, 0.03);
+            box-shadow: 0 0 0 4px rgba(0, 245, 255, 0.07);
+        }
+
+        .calc-num::placeholder { color: rgba(100, 116, 139, 0.45); font-weight: 300; }
+
+        /* Email step */
+        .calc-email-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 2rem;
+        }
+
+        .calc-email-in {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1.5px solid rgba(100, 116, 139, 0.22);
+            border-radius: 100px;
+            padding: 0.9rem 2rem;
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            width: 100%;
+            max-width: 380px;
+            outline: none;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .calc-email-in:focus {
+            border-color: var(--cyan);
+            background: rgba(0, 245, 255, 0.03);
+            box-shadow: 0 0 0 4px rgba(0, 245, 255, 0.07);
+        }
+
+        .calc-email-in::placeholder { color: rgba(100, 116, 139, 0.5); }
+
+        .calc-skip-btn {
+            background: none;
+            border: none;
+            color: rgba(100, 116, 139, 0.6);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            cursor: pointer;
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+
+        .calc-skip-btn:hover { color: var(--slate); }
+
+        /* Navegación pasos */
+        .calc-nav { display: flex; justify-content: space-between; align-items: center; }
+        .calc-nav.only-next { justify-content: flex-end; }
+
+        .btn-back {
+            background: transparent;
+            border: 1.5px solid rgba(100, 116, 139, 0.22);
+            color: var(--slate);
+            padding: 0.75rem 1.8rem;
+            border-radius: 100px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover { border-color: rgba(100, 116, 139, 0.5); color: var(--white); }
+
+        .btn-next {
+            background: var(--cyan);
+            color: var(--obsidian);
+            padding: 0.75rem 2.2rem;
+            border-radius: 100px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-next:hover:not([disabled]) {
+            transform: scale(1.05);
+            background: var(--gradient);
+            color: var(--white);
+        }
+
+        .btn-next[disabled] { opacity: 0.28; cursor: not-allowed; }
+
+        /* Resultados */
+        .calc-results { display: none; }
+
+        .calc-results.visible {
+            display: block;
+            animation: calcIn 0.5s ease forwards;
+        }
+
+        .res-head { text-align: center; margin-bottom: 2rem; }
+
+        .res-head h3 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            letter-spacing: -1.5px;
+            margin-bottom: 0.3rem;
+        }
+
+        .res-head p { color: var(--slate); font-size: 0.85rem; font-weight: 300; }
+
+        .res-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .res-item {
+            position: relative;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            padding: 1.5rem 0.8rem;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .res-item::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1.5px;
+            background: var(--gradient);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .res-ic { font-size: 1.3rem; margin-bottom: 0.4rem; }
+
+        .res-val {
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: var(--cyan);
+            margin-bottom: 0.2rem;
+        }
+
+        .res-lbl {
+            color: var(--slate);
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            line-height: 1.4;
+        }
+
+        .res-payback {
+            text-align: center;
+            color: var(--slate);
+            font-size: 0.82rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            min-height: 1.2rem;
+        }
+
+        .res-payback strong { color: var(--cyan); font-weight: 600; }
+
+        .res-suggest {
+            background: rgba(0, 245, 255, 0.02);
+            border-radius: 24px;
+            padding: 2rem 2.2rem;
+            border: 1px dashed rgba(0, 245, 255, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .res-suggest h4 {
+            color: var(--cyan);
+            font-size: 0.92rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            margin-bottom: 1rem;
+        }
+
+        .res-suggest ul { list-style: none; }
+
+        .res-suggest ul li {
+            color: var(--white);
+            font-weight: 300;
+            font-size: 0.9rem;
+            margin-bottom: 0.7rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .res-suggest ul li::before {
+            content: "→";
+            color: var(--cyan);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .res-cta { text-align: center; }
+
+        .calc-reset-btn {
+            display: block;
+            margin: 1.2rem auto 0;
+            background: none;
+            border: none;
+            color: rgba(100, 116, 139, 0.5);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+
+        .calc-reset-btn:hover { color: var(--slate); }
+
+        /* Responsive — Calculadora */
+        @media (max-width: 768px) {
+            .calc-card { padding: 2.2rem 1.6rem; }
+            .g5 { grid-template-columns: repeat(3, 1fr); }
+            .g4 { grid-template-columns: repeat(2, 1fr); }
+            .calc-q { font-size: 1.45rem; }
+        }
+
+        @media (max-width: 480px) {
+            .calc-card { padding: 1.8rem 1.2rem; }
+            .g5 { grid-template-columns: repeat(2, 1fr); }
+            .g3 { grid-template-columns: repeat(2, 1fr); }
+        }
     </style>
 </head>
 <body>
@@ -319,6 +727,156 @@
     </div>
 </section>
 
+<!-- ======================================================
+     CALCULADORA DE ROI — Nueva sección
+     ====================================================== -->
+<section id="calculadora">
+    <h2 data-aos="fade-up">¿Cuánto puedes ahorrar?</h2>
+    <p class="calc-sub-title" data-aos="fade-up" data-aos-delay="50">Calcula el ROI de automatizar tu negocio con IA en menos de 2 minutos.</p>
+
+    <div class="calc-wrapper" data-aos="fade-up" data-aos-delay="150">
+
+        <!-- Indicador de progreso -->
+        <div class="calc-progress">
+            <div class="calc-dots">
+                <div class="calc-dot active"></div>
+                <div class="calc-dot"></div>
+                <div class="calc-dot"></div>
+                <div class="calc-dot"></div>
+            </div>
+            <div class="calc-progress-text" id="calcProgressText">Paso 1 de 4</div>
+        </div>
+
+        <!-- Card principal -->
+        <div class="calc-card">
+
+            <!-- PASO 1: Tipo de negocio -->
+            <div class="calc-panel active" id="calcStep1">
+                <div class="calc-q">¿Qué tipo de negocio tienes?</div>
+                <div class="calc-hint">Selecciona la opción que mejor describe tu empresa</div>
+                <div class="calc-opts g5">
+                    <button class="calc-opt" data-val="inmobiliaria" onclick="CALC.pick('business',this)">
+                        <span class="calc-opt-ic">🏠</span>
+                        <span class="calc-opt-lb">Inmobiliaria</span>
+                    </button>
+                    <button class="calc-opt" data-val="ecommerce" onclick="CALC.pick('business',this)">
+                        <span class="calc-opt-ic">🛒</span>
+                        <span class="calc-opt-lb">E-commerce</span>
+                    </button>
+                    <button class="calc-opt" data-val="clinica" onclick="CALC.pick('business',this)">
+                        <span class="calc-opt-ic">🏥</span>
+                        <span class="calc-opt-lb">Clínica</span>
+                    </button>
+                    <button class="calc-opt" data-val="agencia" onclick="CALC.pick('business',this)">
+                        <span class="calc-opt-ic">📊</span>
+                        <span class="calc-opt-lb">Agencia</span>
+                    </button>
+                    <button class="calc-opt" data-val="otro" onclick="CALC.pick('business',this)">
+                        <span class="calc-opt-ic">⚡</span>
+                        <span class="calc-opt-lb">Otro</span>
+                    </button>
+                </div>
+                <div class="calc-nav only-next">
+                    <button class="btn-next" id="next1" disabled onclick="CALC.next()">Siguiente →</button>
+                </div>
+            </div>
+
+            <!-- PASO 2: Área -->
+            <div class="calc-panel" id="calcStep2">
+                <div class="calc-q">¿Qué área quieres automatizar?</div>
+                <div class="calc-hint">Elige el proceso que más tiempo consume en tu equipo</div>
+                <div class="calc-opts g4">
+                    <button class="calc-opt" data-val="ventas" onclick="CALC.pick('area',this)">
+                        <span class="calc-opt-ic">💰</span>
+                        <span class="calc-opt-lb">Ventas</span>
+                    </button>
+                    <button class="calc-opt" data-val="atencion" onclick="CALC.pick('area',this)">
+                        <span class="calc-opt-ic">💬</span>
+                        <span class="calc-opt-lb">Atención al Cliente</span>
+                    </button>
+                    <button class="calc-opt" data-val="marketing" onclick="CALC.pick('area',this)">
+                        <span class="calc-opt-ic">📣</span>
+                        <span class="calc-opt-lb">Marketing</span>
+                    </button>
+                    <button class="calc-opt" data-val="operaciones" onclick="CALC.pick('area',this)">
+                        <span class="calc-opt-ic">⚙️</span>
+                        <span class="calc-opt-lb">Operaciones</span>
+                    </button>
+                </div>
+                <div class="calc-nav">
+                    <button class="btn-back" onclick="CALC.back()">← Atrás</button>
+                    <button class="btn-next" id="next2" disabled onclick="CALC.next()">Siguiente →</button>
+                </div>
+            </div>
+
+            <!-- PASO 3: Problema (dinámico) -->
+            <div class="calc-panel" id="calcStep3">
+                <div class="calc-q">¿Cuál es el problema principal?</div>
+                <div class="calc-hint">Selecciona la tarea que más repites sin valor real</div>
+                <div class="calc-opts g3" id="problemOpts"></div>
+                <div class="calc-nav">
+                    <button class="btn-back" onclick="CALC.back()">← Atrás</button>
+                    <button class="btn-next" id="next3" disabled onclick="CALC.next()">Siguiente →</button>
+                </div>
+            </div>
+
+            <!-- PASO 4: Volumen -->
+            <div class="calc-panel" id="calcStep4">
+                <div class="calc-q">Cuéntanos tu volumen</div>
+                <div class="calc-hint">Cifras aproximadas son más que suficientes</div>
+                <div class="calc-fields">
+                    <div class="calc-field-row">
+                        <label for="inputLeads">Leads o contactos nuevos por mes</label>
+                        <input type="number" class="calc-num" id="inputLeads" placeholder="Ej: 50" min="0" oninput="CALC.onVolume()">
+                    </div>
+                    <div class="calc-field-row">
+                        <label for="inputMsgs">Mensajes o consultas por día</label>
+                        <input type="number" class="calc-num" id="inputMsgs" placeholder="Ej: 20" min="0" oninput="CALC.onVolume()">
+                    </div>
+                    <div class="calc-field-row">
+                        <label for="inputEmp">Personas involucradas en este proceso</label>
+                        <input type="number" class="calc-num" id="inputEmp" placeholder="Ej: 2" min="1" oninput="CALC.onVolume()">
+                    </div>
+                </div>
+                <div class="calc-nav">
+                    <button class="btn-back" onclick="CALC.back()">← Atrás</button>
+                    <button class="btn-next" id="next4" disabled onclick="CALC.next()">Ver mi ROI →</button>
+                </div>
+            </div>
+
+            <!-- PASO Email (opcional) -->
+            <div class="calc-panel" id="calcStepEmail">
+                <div class="calc-q">Un último paso</div>
+                <div class="calc-hint">Recibe el análisis completo en tu correo — completamente opcional</div>
+                <div class="calc-email-center">
+                    <input type="email" class="calc-email-in" id="inputEmail" placeholder="tu@empresa.com">
+                    <button class="calc-skip-btn" onclick="CALC.showResults()">Omitir y ver resultados →</button>
+                </div>
+                <div class="calc-nav">
+                    <button class="btn-back" onclick="CALC.back()">← Atrás</button>
+                    <button class="btn-next" onclick="CALC.onEmail()">Ver mi ROI →</button>
+                </div>
+            </div>
+
+            <!-- RESULTADOS -->
+            <div class="calc-results" id="calcResults">
+                <div class="res-head">
+                    <h3>Tu estimación de ROI</h3>
+                    <p>Basado en negocios similares al tuyo</p>
+                </div>
+                <div class="res-grid" id="resGrid"></div>
+                <div class="res-payback" id="resPayback"></div>
+                <div class="res-suggest" id="resSuggest"></div>
+                <div class="res-cta">
+                    <a href="#" class="cta-button" style="animation: pulse 4s infinite;">Agendar llamada estratégica</a>
+                    <button class="calc-reset-btn" onclick="CALC.reset()">Calcular de nuevo</button>
+                </div>
+            </div>
+
+        </div><!-- /.calc-card -->
+    </div><!-- /.calc-wrapper -->
+</section>
+
 <section id="proceso">
     <h2 data-aos="fade-up">El Proceso</h2>
     <div class="grid">
@@ -370,6 +928,350 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
     AOS.init({ duration: 800, once: true, offset: 100 });
+
+    /* =====================================================
+       CALCULADORA DE ROI — Lógica completa
+       ===================================================== */
+    var CALC = (function () {
+
+        /* Estado interno */
+        var s = {
+            step: 1,
+            business: null, area: null, problem: null,
+            leads: '', msgs: '', emp: '', email: ''
+        };
+
+        /* Data: problemas por área */
+        var PROBLEMS = {
+            ventas: [
+                { id: 'calificar_leads', label: 'Calificar leads',         icon: '🎯', min: 12 },
+                { id: 'seguimiento',     label: 'Seguimiento de clientes', icon: '🔄', min: 10 },
+                { id: 'propuestas',      label: 'Enviar propuestas',       icon: '📋', min: 15 }
+            ],
+            atencion: [
+                { id: 'responder',       label: 'Responder mensajes',      icon: '💬', min: 5  },
+                { id: 'agendar',         label: 'Agendar citas',           icon: '📅', min: 8  },
+                { id: 'soporte',         label: 'Soporte recurrente',      icon: '🛠️', min: 10 }
+            ],
+            marketing: [
+                { id: 'reportes',        label: 'Generar reportes',        icon: '📊', min: 15 },
+                { id: 'publicaciones',   label: 'Publicaciones en redes',  icon: '📱', min: 12 },
+                { id: 'campanas',        label: 'Gestión de campañas',     icon: '🎯', min: 15 }
+            ],
+            operaciones: [
+                { id: 'documentos',      label: 'Procesar documentos',     icon: '📄', min: 10 },
+                { id: 'coordinacion',    label: 'Coordinación interna',    icon: '🔗', min: 8  },
+                { id: 'inventario',      label: 'Control de inventario',   icon: '📦', min: 12 }
+            ]
+        };
+
+        /* Data: sugerencias por área + problema */
+        var SUGGESTIONS = {
+            ventas: {
+                calificar_leads: [
+                    'Agente de IA para calificación automática de leads en WhatsApp e Instagram',
+                    'Pipeline de CRM con scoring inteligente y asignación automática al equipo',
+                    'Notificaciones en tiempo real cuando un lead está listo para cerrar'
+                ],
+                seguimiento: [
+                    'Secuencia multicanal automatizada (Email + WhatsApp) sin intervención humana',
+                    'Re-engagement automático de leads fríos con IA conversacional',
+                    'Pipeline con etapas, recordatorios y escalamientos automáticos'
+                ],
+                propuestas: [
+                    'Generador automático de propuestas personalizadas desde tu CRM',
+                    'Sistema de firma electrónica con seguimiento hasta la respuesta',
+                    'Agente de seguimiento proactivo hasta el cierre o descarte del lead'
+                ]
+            },
+            atencion: {
+                responder: [
+                    'Agente conversacional 24/7 en WhatsApp, Instagram y chat web',
+                    'Escalamiento inteligente a humanos solo para casos complejos',
+                    'Base de conocimiento auto-actualizable desde tus procesos internos'
+                ],
+                agendar: [
+                    'Bot de agendamiento integrado con Google Calendar y Calendly',
+                    'Confirmaciones, recordatorios y reagendamientos completamente automáticos',
+                    'Recopilación de información del cliente antes de cada cita'
+                ],
+                soporte: [
+                    'Agente de IA entrenado en tus FAQs, políticas y productos',
+                    'Resolución automática del 80% de tickets sin intervención humana',
+                    'Dashboard de satisfacción y seguimiento de casos abiertos'
+                ]
+            },
+            marketing: {
+                reportes: [
+                    'Pipeline que consolida métricas de todos tus canales automáticamente',
+                    'Reportes semanales generados y distribuidos sin intervención humana',
+                    'Alertas automáticas cuando KPIs salen del rango objetivo'
+                ],
+                publicaciones: [
+                    'Motor de contenido automatizado con revisión y aprobación humana',
+                    'Programador multi-plataforma con variaciones por canal y audiencia',
+                    'Reciclaje inteligente de contenido evergreen de alto rendimiento'
+                ],
+                campanas: [
+                    'Automatización de audiencias y segmentación dinámica en tiempo real',
+                    'A/B testing automatizado con optimización continua de creativos',
+                    'Reportes de rendimiento consolidados y recomendaciones por campaña'
+                ]
+            },
+            operaciones: {
+                documentos: [
+                    'Extracción y clasificación automática de datos desde cualquier documento',
+                    'Flujo de aprobaciones digitalizado sin emails ni seguimientos manuales',
+                    'Archivo inteligente con búsqueda avanzada y trazabilidad completa'
+                ],
+                coordinacion: [
+                    'Automatización de comunicación y handoffs entre áreas de tu empresa',
+                    'Sistema de tareas con asignación y seguimiento automático por contexto',
+                    'Actualizaciones de estado en tiempo real vía Slack, Teams o correo'
+                ],
+                inventario: [
+                    'Alertas automáticas de stock bajo con órdenes de reposición pre-aprobadas',
+                    'Sincronización en tiempo real entre todos tus canales de venta',
+                    'Reportes de rotación, proyección de demanda y análisis de tendencias'
+                ]
+            }
+        };
+
+        /* ---------- Lógica de cálculo ---------- */
+        function calculate() {
+            var leads = Math.max(parseInt(s.leads) || 30, 0);
+            var msgs  = Math.max(parseInt(s.msgs)  || 15, 0);
+            var emp   = Math.max(parseInt(s.emp)   || 2,  1);
+
+            var probs   = PROBLEMS[s.area] || [];
+            var prob    = probs.filter(function (p) { return p.id === s.problem; })[0];
+            var tMin    = prob ? prob.min : 10;
+
+            /* Tareas totales/mes y horas ahorradas */
+            var tasks      = leads + msgs * 22;
+            var hoursSaved = Math.round((tasks * tMin) / 60);
+
+            /* Ahorro monetario (USD $8/hr promedio) */
+            var rate       = 8;
+            var moneySaved = Math.round(hoursSaved * rate * emp);
+
+            /* Factor de complejidad */
+            var cx = 1;
+            if (s.area === 'operaciones')   cx = Math.max(cx, 1.4);
+            if (s.business === 'ecommerce') cx = Math.max(cx, 1.2);
+            if (emp >= 5)                   cx = Math.max(cx, 1.5);
+
+            /* Rangos de costo */
+            var setupMin = Math.round(500  * cx / 100) * 100;
+            var setupMax = Math.round(3000 * cx / 100) * 100;
+            var mthMin   = Math.round(50   * cx / 10)  * 10;
+            var mthMax   = Math.round(300  * cx / 10)  * 10;
+            var mthAvg   = (mthMin + mthMax) / 2;
+
+            /* ROI y payback */
+            var roi     = mthAvg > 0 ? Math.round((moneySaved / mthAvg) * 10) / 10 : 0;
+            var payback = moneySaved > 0 ? Math.round((setupMin / moneySaved) * 30) : 0;
+
+            return {
+                hoursSaved : hoursSaved + ' hrs',
+                moneySaved : '$' + moneySaved.toLocaleString(),
+                setupRange : '$' + setupMin.toLocaleString() + ' – $' + setupMax.toLocaleString(),
+                mthRange   : '$' + mthMin + ' – $' + mthMax,
+                roi        : roi + 'x',
+                payback    : payback
+            };
+        }
+
+        function getSuggestions() {
+            try {
+                return SUGGESTIONS[s.area][s.problem];
+            } catch (e) {
+                return [
+                    'Agente de IA personalizado para tu industria y procesos específicos',
+                    'Sistema de automatización del flujo de trabajo de principio a fin',
+                    'Dashboard de métricas e indicadores clave en tiempo real'
+                ];
+            }
+        }
+
+        /* ---------- Helpers de UI ---------- */
+        function showPanel(id) {
+            document.querySelectorAll('.calc-panel').forEach(function (el) {
+                el.classList.remove('active');
+            });
+            document.getElementById(id).classList.add('active');
+        }
+
+        function updateDots(step) {
+            document.querySelectorAll('.calc-dot').forEach(function (d, i) {
+                d.classList.remove('active', 'done');
+                if (i + 1 < step)   d.classList.add('done');
+                if (i + 1 === step) d.classList.add('active');
+            });
+            document.getElementById('calcProgressText').textContent =
+                (typeof step === 'number' && step <= 4) ? 'Paso ' + step + ' de 4' : 'Último paso';
+        }
+
+        function restoreOpts(stepId, field) {
+            document.querySelectorAll('#' + stepId + ' .calc-opt').forEach(function (b) {
+                b.classList.toggle('sel', b.getAttribute('data-val') === s[field]);
+            });
+        }
+
+        function renderProblems() {
+            var c = document.getElementById('problemOpts');
+            c.innerHTML = '';
+            (PROBLEMS[s.area] || []).forEach(function (p) {
+                var b = document.createElement('button');
+                b.className = 'calc-opt' + (s.problem === p.id ? ' sel' : '');
+                b.setAttribute('data-val', p.id);
+                b.innerHTML =
+                    '<span class="calc-opt-ic">' + p.icon + '</span>' +
+                    '<span class="calc-opt-lb">' + p.label + '</span>';
+                b.onclick = function () { CALC.pick('problem', b); };
+                c.appendChild(b);
+            });
+            document.getElementById('next3').disabled = !s.problem;
+        }
+
+        function renderResults() {
+            var r    = calculate();
+            var sugg = getSuggestions();
+
+            var metrics = [
+                { ic: '💰', val: r.setupRange, lbl: 'Inversión<br>Estimada'   },
+                { ic: '⚙️', val: r.mthRange,   lbl: 'Costo<br>Mensual'        },
+                { ic: '⏱️', val: r.hoursSaved, lbl: 'Horas<br>Ahorradas/mes'  },
+                { ic: '💵', val: r.moneySaved, lbl: 'Ahorro<br>Mensual'       },
+                { ic: '🚀', val: r.roi,        lbl: 'ROI<br>Estimado'         }
+            ];
+
+            document.getElementById('resGrid').innerHTML = metrics.map(function (m) {
+                return '<div class="res-item">' +
+                    '<div class="res-ic">' + m.ic + '</div>' +
+                    '<div class="res-val">' + m.val + '</div>' +
+                    '<div class="res-lbl">' + m.lbl + '</div>' +
+                    '</div>';
+            }).join('');
+
+            document.getElementById('resPayback').innerHTML = r.payback > 0
+                ? 'Recuperas tu inversión en aproximadamente <strong>' + r.payback + ' días</strong>'
+                : '';
+
+            document.getElementById('resSuggest').innerHTML =
+                '<h4>Basado en tus respuestas, construiríamos:</h4><ul>' +
+                sugg.map(function (x) { return '<li>' + x + '</li>'; }).join('') +
+                '</ul>';
+        }
+
+        /* ---------- API pública ---------- */
+        function pick(field, btn) {
+            btn.parentElement.querySelectorAll('.calc-opt').forEach(function (b) {
+                b.classList.remove('sel');
+            });
+            btn.classList.add('sel');
+
+            /* Si cambia el área, resetear problema */
+            if (field === 'area' && s.area !== btn.getAttribute('data-val')) {
+                s.problem = null;
+            }
+            s[field] = btn.getAttribute('data-val');
+
+            var map = { business: 'next1', area: 'next2', problem: 'next3' };
+            if (map[field]) document.getElementById(map[field]).disabled = false;
+        }
+
+        function onVolume() {
+            s.leads = document.getElementById('inputLeads').value;
+            s.msgs  = document.getElementById('inputMsgs').value;
+            s.emp   = document.getElementById('inputEmp').value;
+            document.getElementById('next4').disabled = !(s.leads || s.msgs) || !s.emp;
+        }
+
+        function next() {
+            if (s.step === 1) {
+                s.step = 2;
+                showPanel('calcStep2');
+                restoreOpts('calcStep2', 'area');
+                updateDots(2);
+            } else if (s.step === 2) {
+                s.step = 3;
+                renderProblems();
+                showPanel('calcStep3');
+                updateDots(3);
+            } else if (s.step === 3) {
+                s.step = 4;
+                showPanel('calcStep4');
+                updateDots(4);
+            } else if (s.step === 4) {
+                s.step = 'email';
+                showPanel('calcStepEmail');
+                updateDots(5);
+            }
+        }
+
+        function back() {
+            if (s.step === 2) {
+                s.step = 1;
+                showPanel('calcStep1');
+                restoreOpts('calcStep1', 'business');
+                updateDots(1);
+            } else if (s.step === 3) {
+                s.step = 2;
+                showPanel('calcStep2');
+                restoreOpts('calcStep2', 'area');
+                updateDots(2);
+            } else if (s.step === 4) {
+                s.step = 3;
+                renderProblems();
+                showPanel('calcStep3');
+                updateDots(3);
+            } else if (s.step === 'email') {
+                s.step = 4;
+                showPanel('calcStep4');
+                updateDots(4);
+            }
+        }
+
+        function onEmail() {
+            s.email = document.getElementById('inputEmail').value;
+            showResults();
+        }
+
+        function showResults() {
+            document.querySelectorAll('.calc-panel').forEach(function (el) {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('.calc-dot').forEach(function (d) {
+                d.classList.remove('active');
+                d.classList.add('done');
+            });
+            document.getElementById('calcProgressText').textContent = 'Tu análisis personalizado';
+            renderResults();
+            document.getElementById('calcResults').classList.add('visible');
+        }
+
+        function reset() {
+            s.step = 1; s.business = null; s.area = null; s.problem = null;
+            s.leads = ''; s.msgs = ''; s.emp = ''; s.email = '';
+
+            document.getElementById('calcResults').classList.remove('visible');
+            document.querySelectorAll('.calc-opt').forEach(function (b) { b.classList.remove('sel'); });
+            ['inputLeads', 'inputMsgs', 'inputEmp', 'inputEmail'].forEach(function (id) {
+                var el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            ['next1', 'next2', 'next3', 'next4'].forEach(function
+
+(id) {
+                document.getElementById(id).disabled = true;
+            });
+            showPanel('calcStep1');
+            updateDots(1);
+        }
+
+        return { pick: pick, onVolume: onVolume, onEmail: onEmail, next: next, back: back, showResults: showResults, reset: reset };
+    })();
 </script>
 </body>
 </html>
