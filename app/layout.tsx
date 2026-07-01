@@ -7,10 +7,6 @@ export const metadata: Metadata = {
   title: "Upcore AI | Operando solo.",
   description:
     "Automatización inteligente que ejecuta, optimiza y escala tu empresa 24/7.",
-  icons: {
-    icon: "/favicon.png",
-    apple: "/apple-touch-icon.png",
-  },
   openGraph: {
     title: "Upcore AI | Operando solo.",
     description:

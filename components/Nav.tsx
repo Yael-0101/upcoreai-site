@@ -1,16 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-function Logo() {
-  return (
-    <a href="#top" className="group flex items-center text-[1.4rem] font-semibold tracking-tight">
-      <span className="text-clay transition-colors group-hover:text-clay-bright">UP</span>
-      <span className="text-sand transition-colors group-hover:text-clay">CORE</span>
-      <span className="text-clay transition-colors group-hover:text-clay-bright">AI</span>
-    </a>
-  );
-}
+import { Logo } from "./Logo";
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -30,7 +21,9 @@ export function Nav() {
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      <Logo />
+      <a href="#top" aria-label="Upcore AI — inicio" className="inline-flex">
+        <Logo markClass="h-7 w-7" textClass="text-[1.25rem]" />
+      </a>
       <a
         href="#calculadora"
         className="btn-shine rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-semibold text-sand transition-all duration-300 hover:border-clay hover:bg-clay hover:text-obsidian"

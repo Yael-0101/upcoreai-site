@@ -1,18 +1,12 @@
-function Logo() {
-  return (
-    <a href="#top" className="flex items-center justify-center text-[1.4rem] font-semibold tracking-tight">
-      <span className="text-clay">UP</span>
-      <span className="text-sand">CORE</span>
-      <span className="text-clay">AI</span>
-    </a>
-  );
-}
+import { Logo } from "./Logo";
 
 export function Footer() {
   return (
     <footer className="border-t border-[rgba(242,231,219,0.06)] px-[6%] pb-12 pt-20 text-center md:px-[10%]">
-      <div className="mb-6">
-        <Logo />
+      <div className="mb-6 flex justify-center">
+        <a href="#top" aria-label="Upcore AI — inicio" className="inline-flex">
+          <Logo />
+        </a>
       </div>
       <div className="mb-8 flex flex-col items-center justify-center gap-4 md:flex-row md:gap-8">
         <a
