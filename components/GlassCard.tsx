@@ -1,21 +1,53 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useRef, type ReactNode, type MouseEvent } from "react";
 
 export function GlassCard({
   children,
   className = "",
-  interactive = true,
+  liquid = false,
+  tilt = true,
+  spotlight = true,
 }: {
   children: ReactNode;
   className?: string;
-  interactive?: boolean;
+  liquid?: boolean;
+  tilt?: boolean;
+  spotlight?: boolean;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const onMove = (e: MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    el.style.setProperty("--mx", `${px * 100}%`);
+    el.style.setProperty("--my", `${py * 100}%`);
+    if (tilt) {
+      const rx = (py - 0.5) * -5;
+      const ry = (px - 0.5) * 5;
+      el.style.transform = `perspective(900px) translateY(-6px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    }
+  };
+
+  const onLeave = () => {
+    const el = ref.current;
+    if (el && tilt) el.style.transform = "";
+  };
+
   return (
     <div
-      className={`glass ${
-        interactive ? "glass-interactive" : ""
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className={`glass ${liquid ? "glass-liquid" : ""} ${
+        tilt ? "glass-tilt" : ""
       } rounded-[28px] ${className}`}
     >
-      {children}
+      {spotlight && <span className="glass-spot" aria-hidden />}
+      <div className="glass-body">{children}</div>
     </div>
   );
 }

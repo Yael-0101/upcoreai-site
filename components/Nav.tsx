@@ -33,7 +33,7 @@ export function Nav() {
       <Logo />
       <a
         href="#calculadora"
-        className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-semibold text-sand transition-all duration-300 hover:border-clay hover:bg-clay hover:text-obsidian"
+        className="btn-shine rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-semibold text-sand transition-all duration-300 hover:border-clay hover:bg-clay hover:text-obsidian"
       >
         Agendar una llamada
       </a>

@@ -123,8 +123,8 @@ export function Calculadora() {
         <div className="mx-auto max-w-[740px]">
           {step !== "results" && <ProgressDots step={step} />}
 
-          <div className="glass rounded-[36px] p-8 md:p-12">
-            <div className="relative">
+          <div className="glass glass-liquid rounded-[36px] p-8 md:p-12">
+            <div className="glass-body">
               {step === 1 && (
                 <motion.div key="s1" {...panelAnim}>
                   <StepHeader

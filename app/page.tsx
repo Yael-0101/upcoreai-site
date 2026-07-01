@@ -1,4 +1,5 @@
 import { Backdrop } from "@/components/Backdrop";
+import { LiquidGlassFilter } from "@/components/LiquidGlassFilter";
 import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
 import { Beneficios } from "@/components/Beneficios";
@@ -10,6 +11,7 @@ import { Footer } from "@/components/Footer";
 export default function Home() {
   return (
     <>
+      <LiquidGlassFilter />
       <Backdrop />
       <Nav />
       <main className="relative z-[2]">

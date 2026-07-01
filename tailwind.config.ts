@@ -26,10 +26,15 @@ const config: Config = {
           "70%": { boxShadow: "0 0 0 18px rgba(200,98,61,0)" },
           "100%": { boxShadow: "0 0 0 0 rgba(200,98,61,0)" },
         },
+        float: {
+          "0%": { transform: "translateY(0px)" },
+          "100%": { transform: "translateY(-16px)" },
+        },
       },
       animation: {
         "orb-drift": "orb-drift 26s infinite alternate ease-in-out",
         "pulse-ring": "pulse-ring 4s infinite",
+        float: "float 6s ease-in-out infinite alternate",
       },
     },
   },
