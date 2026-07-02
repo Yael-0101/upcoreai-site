@@ -154,11 +154,13 @@ function NavBtns({
 function MetricCard({
   label,
   value,
+  usd,
   note,
   accent = false,
 }: {
   label: string;
   value: string;
+  usd?: string;
   note?: string;
   accent?: boolean;
 }) {
@@ -173,7 +175,12 @@ function MetricCard({
       <div className="mb-1 text-[0.66rem] font-medium uppercase tracking-wide text-mocha">
         {label}
       </div>
-      <div className="text-lg font-semibold leading-tight text-clay">{value}</div>
+      <div className="text-base font-semibold leading-tight text-clay">{value}</div>
+      {usd && (
+        <div className="mt-0.5 text-[0.68rem] font-medium leading-tight text-mocha/70">
+          {usd}
+        </div>
+      )}
       {note && <div className="mt-1 text-[0.68rem] leading-tight text-mocha/80">{note}</div>}
     </div>
   );
@@ -390,36 +397,36 @@ export function Calculadora() {
                   <div className="mb-3 grid gap-3 sm:grid-cols-3">
                     <MetricCard
                       label="Inversión (construcción)"
-                      value={result.inversion}
+                      value={result.inversion.mxn}
+                      usd={result.inversion.usd}
                       note={result.inversionNota}
                     />
                     <MetricCard
                       label="Costos que pagas tú"
-                      value={result.costosCliente}
-                      note="APIs, tokens y hosting — en tus cuentas"
+                      value={result.costosCliente.mxn}
+                      usd={result.costosCliente.usd}
+                      note={result.costosNota}
                     />
                     <MetricCard
                       label="Mensualidad de Upcore"
-                      value={result.mensualidadUpcore}
-                      note={
-                        s.operacion === "upcore"
-                          ? "Operación y mantenimiento"
-                          : "Tú lo operas"
-                      }
+                      value={result.mensualidadUpcore.mxn}
+                      usd={result.mensualidadUpcore.usd}
+                      note={result.upcoreNota}
                     />
                   </div>
 
                   <div className="mb-6 grid gap-3 sm:grid-cols-2">
                     <MetricCard
                       label="Ahorro estimado"
-                      value={result.ahorro}
-                      note={`≈ ${result.horas} recuperadas`}
+                      value={result.ahorro.mxn}
+                      usd={result.ahorro.usd}
+                      note={result.ahorroNota}
                       accent
                     />
                     <MetricCard
                       label="Retorno estimado"
                       value={result.roi}
-                      note="Sobre tu costo mensual"
+                      note={result.roiNota}
                       accent
                     />
                   </div>
@@ -439,6 +446,7 @@ export function Calculadora() {
                     <p className="mt-5 text-xs font-light leading-relaxed text-mocha/70">
                       * Estimaciones para orientarte. Todo (cuentas, APIs, tokens, hosting)
                       queda a tu nombre. El precio final sale de tu diagnóstico gratis.
+                      Tipo de cambio aprox. $18.5 MXN/USD.
                     </p>
                   </div>
 

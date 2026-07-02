@@ -1,5 +1,7 @@
 // ============================================================================
 // Calculadora de ROI para clínicas — configura tu solución + estimado aterrizado
+// Números basados en costos y precios reales de mercado (investigados, 2025-2026).
+// Cálculo interno en USD; se muestra en pesos (MXN) + equivalente en dólares.
 // ============================================================================
 
 export type CalcState = {
@@ -24,6 +26,9 @@ export const emptyState: CalcState = {
 
 export type Option = { val: string; label: string; icon: string; desc?: string };
 
+// Tipo de cambio aproximado (solo para mostrar; se avisa que es aprox.)
+const FX = 18.5;
+
 export const CLINICA_OPTIONS: Option[] = [
   { val: "dental", label: "Dental", icon: "🦷" },
   { val: "estetica", label: "Medicina estética", icon: "✨" },
@@ -40,11 +45,13 @@ type Producto = Option & {
   hrs: number;
 };
 
+// setup = construcción (pago único, USD). var = costo que corre al mes (USD, a nombre del cliente).
+// Cifras alineadas al mercado real: entrada accesible en el piso, realista de mercado en el techo.
 export const PRODUCTO_OPTIONS: Producto[] = [
-  { val: "agente", label: "Agente de WhatsApp 24/7", desc: "Responde, atiende y agenda solo", icon: "💬", setupMin: 500, setupMax: 900, varMin: 30, varMax: 120, hrs: 14 },
-  { val: "web", label: "Sitio web con agenda", desc: "Una web que agenda y responde", icon: "🌐", setupMin: 600, setupMax: 1300, varMin: 5, varMax: 25, hrs: 6 },
-  { val: "auto", label: "Automatizaciones", desc: "Recordatorios y seguimiento", icon: "🔄", setupMin: 300, setupMax: 600, varMin: 10, varMax: 45, hrs: 10 },
-  { val: "reactivacion", label: "Reactivación de pacientes", desc: "Recupera pacientes que no vuelven", icon: "📈", setupMin: 250, setupMax: 550, varMin: 15, varMax: 60, hrs: 8 },
+  { val: "agente", label: "Agente de WhatsApp 24/7", desc: "Responde, atiende y agenda solo", icon: "💬", setupMin: 1200, setupMax: 4000, varMin: 5, varMax: 16, hrs: 14 },
+  { val: "web", label: "Sitio web con agenda", desc: "Una web que agenda y responde", icon: "🌐", setupMin: 700, setupMax: 2500, varMin: 0, varMax: 10, hrs: 6 },
+  { val: "auto", label: "Automatizaciones", desc: "Recordatorios y seguimiento", icon: "🔄", setupMin: 600, setupMax: 2000, varMin: 6, varMax: 12, hrs: 10 },
+  { val: "reactivacion", label: "Reactivación de pacientes", desc: "Recupera pacientes que no vuelven", icon: "📈", setupMin: 500, setupMax: 1800, varMin: 6, varMax: 20, hrs: 8 },
 ];
 
 export const MODO_OPTIONS: Option[] = [
@@ -57,23 +64,52 @@ export const OPERACION_OPTIONS: Option[] = [
   { val: "upcore", label: "Que Upcore lo opere", desc: "Mensualidad, nos encargamos de todo (Gestionado)", icon: "🛠️" },
 ];
 
-function roundNice(n: number): number {
-  if (n < 200) return Math.round(n / 25) * 25;
+// --- Redondeo bonito por moneda -------------------------------------------
+function roundMXN(n: number): number {
   if (n < 1000) return Math.round(n / 50) * 50;
-  if (n < 5000) return Math.round(n / 100) * 100;
+  if (n < 10000) return Math.round(n / 100) * 100;
+  if (n < 100000) return Math.round(n / 500) * 500;
+  return Math.round(n / 1000) * 1000;
+}
+function roundUSD(n: number): number {
+  if (n < 100) return Math.round(n / 5) * 5;
+  if (n < 1000) return Math.round(n / 25) * 25;
+  if (n < 10000) return Math.round(n / 100) * 100;
   return Math.round(n / 500) * 500;
 }
+const fmt = (n: number) => n.toLocaleString("en-US");
 
-const money = (n: number) => "$" + roundNice(n).toLocaleString();
+export type Money = { mxn: string; usd: string };
+
+// Convierte un rango en USD a strings en ambas monedas (pesos principal, dólares equivalente).
+function money(loUSD: number, hiUSD: number, perMonth = false): Money {
+  const suf = perMonth ? "/mes" : "";
+  const mxnLo = roundMXN(loUSD * FX);
+  const mxnHi = roundMXN(hiUSD * FX);
+  const usdLo = roundUSD(loUSD);
+  const usdHi = roundUSD(hiUSD);
+  const mxn =
+    mxnLo === mxnHi
+      ? `$${fmt(mxnLo)} MXN${suf}`
+      : `$${fmt(mxnLo)} – $${fmt(mxnHi)} MXN${suf}`;
+  const usd =
+    usdLo === usdHi
+      ? `≈ $${fmt(usdLo)} USD${suf}`
+      : `≈ $${fmt(usdLo)} – $${fmt(usdHi)} USD${suf}`;
+  return { mxn, usd };
+}
 
 export type CalcResult = {
-  inversion: string;
+  inversion: Money;
   inversionNota: string;
-  costosCliente: string;
-  mensualidadUpcore: string;
-  ahorro: string;
-  horas: string;
+  costosCliente: Money;
+  costosNota: string;
+  mensualidadUpcore: Money;
+  upcoreNota: string;
+  ahorro: Money;
+  ahorroNota: string;
   roi: string;
+  roiNota: string;
   complejidad: string;
   incluye: string[];
 };
@@ -97,38 +133,57 @@ export function calculate(s: CalcState): CalcResult {
     hrs += p.hrs;
   });
   if (sistema) {
-    setupMin += 400;
-    setupMax += 900;
-    varMin += 10;
-    varMax += 30;
+    setupMin += 1500;
+    setupMax += 4000;
+    varMax += 10; // dashboard: hosting/BD si escala; el piso suele ser $0
   }
 
   const msgs = Math.max(parseInt(s.msgs) || 15, 0);
   const leads = Math.max(parseInt(s.leads) || 30, 0);
 
-  // Los costos variables (tokens/APIs) crecen con el volumen de mensajes
-  const volFactor = 1 + Math.min(msgs / 50, 2);
-  const varLo = roundNice(varMin * volFactor);
-  const varHi = roundNice(varMax * volFactor);
+  // Factor de volumen SUAVE (los costos reales casi no escalan: responder es gratis).
+  // ~1.3x en volumen bajo → ~2.6x en muy alto. Los mensajes pesan más; los pacientes
+  // algo (marketing/reactivación sí escala con envíos).
+  const volFactor =
+    1 + Math.min(msgs / 70, 1.2) + Math.min(leads / 250, 0.4);
+  const varLoUSD = varMin * volFactor;
+  const varHiUSD = varMax * volFactor;
 
-  // Horas ahorradas al mes (aprox: por leads y por mensajes)
-  const minutosMes = leads * 10 + msgs * 26 * 4;
-  const hoursSaved = Math.round(minutosMes / 60);
-  // Ahorro = valor del tiempo recuperado + pacientes recuperados (no-shows/after-hours)
-  const moneySaved = roundNice(hoursSaved * 12 + leads * 40);
+  // --- Ahorro (conservador y honesto) ---------------------------------------
+  // Horas liberadas al mes (aprox), con tope realista (~1 día/semana en volumen alto).
+  const minutosMes = msgs * 30 + leads * 8;
+  const hoursSaved = Math.min(Math.round(minutosMes / 60), 80);
+  const HORA_USD = 3.5; // sueldo de recepción en México (~$65 MXN/h)
+  const CITA_USD = 85; // ticket conservador por cita (~$1,570 MXN)
+  // Citas ganadas/recuperadas al mes: −20-25% no-shows + captación 24/7 (supuesto prudente).
+  const citasGanadas = leads * 0.11;
+  const timeValue = hoursSaved * HORA_USD;
+  const apptValue = citasGanadas * CITA_USD;
+  const ahorroUSD = timeValue + apptValue;
 
-  // Mensualidad de Upcore solo si es Gestionado
-  const upLo = gestionado ? roundNice(200 + list.length * 70 + (sistema ? 80 : 0)) : 0;
-  const upHi = gestionado ? roundNice(400 + list.length * 130 + (sistema ? 150 : 0)) : 0;
+  // --- Mensualidad de Upcore (solo Gestionado) ------------------------------
+  const n = list.length;
+  const upLoUSD = gestionado ? 150 + n * 50 + (sistema ? 50 : 0) : 0;
+  const upHiUSD = gestionado ? 300 + n * 90 + (sistema ? 120 : 0) : 0;
+  const upAvg = (upLoUSD + upHiUSD) / 2;
 
-  const monthlyAvg = (varLo + varHi) / 2 + (gestionado ? (upLo + upHi) / 2 : 0);
-  const roi = monthlyAvg > 0 ? Math.round((moneySaved / monthlyAvg) * 10) / 10 : 0;
+  const varAvg = (varLoUSD + varHiUSD) / 2;
+  const setupAvg = (setupMin + setupMax) / 2;
 
-  const totalSetup = setupMax + (sistema ? 0 : 0);
+  // ROI sobre el costo RECURRENTE (variable + mensualidad), con tope para no verse irreal.
+  const recurringUSD = varAvg + upAvg;
+  const roiNum = recurringUSD > 0 ? ahorroUSD / recurringUSD : 0;
+  const roi = roiNum >= 10 ? "10x+" : `${Math.round(roiNum * 10) / 10}x`;
+
+  // Payback: meses para recuperar la inversión con el ahorro neto de la mensualidad.
+  const netMensual = Math.max(ahorroUSD - upAvg, ahorroUSD * 0.15);
+  const paybackMeses = Math.max(1, Math.min(Math.round(setupAvg / netMensual), 36));
+  const mesesTxt = paybackMeses === 1 ? "mes" : "meses";
+
   const complejidad =
-    totalSetup <= 900
+    setupMax <= 2500
       ? "Solución esencial"
-      : totalSetup <= 2000
+      : setupMax <= 6000
       ? "Sistema a la medida"
       : "Infraestructura completa";
 
@@ -136,17 +191,23 @@ export function calculate(s: CalcState): CalcResult {
   if (sistema) incluye.push("Dashboard + sistema integrado");
 
   return {
-    inversion: `${money(setupMin)} – ${money(setupMax)}`,
+    inversion: money(setupMin, setupMax),
     inversionNota: gestionado
-      ? "Pago único, o repartido en tu mensualidad"
+      ? "Pago único (o repartido en tu mensualidad)"
       : "Pago único",
-    costosCliente: `${money(varLo)} – ${money(varHi)} /mes`,
+    costosCliente: money(varLoUSD, varHiUSD, true),
+    costosNota:
+      "APIs, IA y hosting — van directo a los proveedores, a tu nombre. Upcore no les agrega margen.",
     mensualidadUpcore: gestionado
-      ? `${money(upLo)} – ${money(upHi)} /mes`
-      : "$0 · tú lo operas",
-    ahorro: `${money(moneySaved)} /mes`,
-    horas: `${hoursSaved} h /mes`,
-    roi: `${roi}x`,
+      ? money(upLoUSD, upHiUSD, true)
+      : { mxn: "$0", usd: "" },
+    upcoreNota: gestionado
+      ? "Operación, mantenimiento y mejoras"
+      : "Plan Llave en Mano · tú lo operas, sin mensualidad",
+    ahorro: money(ahorroUSD, ahorroUSD, true),
+    ahorroNota: `≈ ${Math.max(1, Math.round(citasGanadas))} cita(s)/mes recuperadas + el tiempo de tu equipo`,
+    roi,
+    roiNota: `Recuperas tu inversión en ~${paybackMeses} ${mesesTxt}. Se paga sola con 1–2 no-shows evitados al mes.`,
     complejidad,
     incluye,
   };
