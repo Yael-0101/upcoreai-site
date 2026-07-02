@@ -2,10 +2,16 @@ import { Backdrop } from "@/components/Backdrop";
 import { LiquidGlassFilter } from "@/components/LiquidGlassFilter";
 import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
-import { Beneficios } from "@/components/Beneficios";
-import { Servicios } from "@/components/Servicios";
+import { Problema } from "@/components/Problema";
+import { ComoFunciona } from "@/components/ComoFunciona";
+import { Sistema } from "@/components/Sistema";
+import { Resultados } from "@/components/Resultados";
 import { Calculadora } from "@/components/Calculadora";
-import { Proceso } from "@/components/Proceso";
+import { Garantia } from "@/components/Garantia";
+import { Planes } from "@/components/Planes";
+import { FAQ } from "@/components/FAQ";
+import { SobreUpcore } from "@/components/SobreUpcore";
+import { CTAFinal } from "@/components/CTAFinal";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
@@ -16,10 +22,16 @@ export default function Home() {
       <Nav />
       <main className="relative z-[2]">
         <Hero />
-        <Beneficios />
-        <Servicios />
+        <Problema />
+        <ComoFunciona />
+        <Sistema />
+        <Resultados />
         <Calculadora />
-        <Proceso />
+        <Garantia />
+        <Planes />
+        <FAQ />
+        <SobreUpcore />
+        <CTAFinal />
       </main>
       <Footer />
     </>

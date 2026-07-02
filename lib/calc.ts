@@ -23,11 +23,11 @@ export const emptyState: CalcState = {
 export type Option = { val: string; label: string; icon: string };
 
 export const BUSINESS_OPTIONS: Option[] = [
-  { val: "inmobiliaria", label: "Inmobiliaria", icon: "🏠" },
-  { val: "ecommerce", label: "E-commerce", icon: "🛒" },
-  { val: "clinica", label: "Clínica", icon: "🏥" },
-  { val: "agencia", label: "Agencia", icon: "📊" },
-  { val: "otro", label: "Otro", icon: "⚡" },
+  { val: "dental", label: "Dental", icon: "🦷" },
+  { val: "estetica", label: "Medicina estética", icon: "✨" },
+  { val: "medica", label: "Consultorio médico", icon: "🩺" },
+  { val: "spa", label: "Spa / Belleza", icon: "💆" },
+  { val: "otro", label: "Otra clínica", icon: "⚕️" },
 ];
 
 export const AREA_OPTIONS: Option[] = [
@@ -143,10 +143,10 @@ function roundNice(n: number): number {
 function getComplexityScore(s: CalcState): number {
   let score = 0;
   const bizPoints: Record<string, number> = {
-    ecommerce: 2,
-    agencia: 1,
-    clinica: 1,
-    inmobiliaria: 1,
+    estetica: 2,
+    dental: 1,
+    medica: 1,
+    spa: 1,
     otro: 1,
   };
   const areaPoints: Record<string, number> = {

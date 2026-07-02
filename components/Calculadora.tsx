@@ -128,8 +128,8 @@ export function Calculadora() {
               {step === 1 && (
                 <motion.div key="s1" {...panelAnim}>
                   <StepHeader
-                    q="¿Qué tipo de negocio tienes?"
-                    hint="Selecciona la opción que mejor describe tu empresa"
+                    q="¿Qué tipo de clínica tienes?"
+                    hint="Selecciona la opción que mejor describe tu clínica"
                   />
                   <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
                     {BUSINESS_OPTIONS.map((o) => (
