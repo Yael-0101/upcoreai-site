@@ -43,15 +43,16 @@ type Producto = Option & {
   varMin: number;
   varMax: number;
   hrs: number;
+  alcance: string; // qué incluye concretamente (para dejar claro el alcance)
 };
 
 // setup = construcción (pago único, USD). var = costo que corre al mes (USD, a nombre del cliente).
 // Cifras alineadas al mercado real: entrada accesible en el piso, realista de mercado en el techo.
 export const PRODUCTO_OPTIONS: Producto[] = [
-  { val: "agente", label: "Agente de WhatsApp 24/7", desc: "Responde, atiende y agenda solo", icon: "💬", setupMin: 1200, setupMax: 4000, varMin: 5, varMax: 16, hrs: 14 },
-  { val: "web", label: "Sitio web con agenda", desc: "Una web que agenda y responde", icon: "🌐", setupMin: 700, setupMax: 2500, varMin: 0, varMax: 10, hrs: 6 },
-  { val: "auto", label: "Automatizaciones", desc: "Recordatorios y seguimiento", icon: "🔄", setupMin: 600, setupMax: 2000, varMin: 6, varMax: 12, hrs: 10 },
-  { val: "reactivacion", label: "Reactivación de pacientes", desc: "Recupera pacientes que no vuelven", icon: "📈", setupMin: 500, setupMax: 1800, varMin: 6, varMax: 20, hrs: 8 },
+  { val: "agente", label: "Agente de WhatsApp 24/7", desc: "Responde, atiende y agenda solo", icon: "💬", setupMin: 1000, setupMax: 3000, varMin: 5, varMax: 16, hrs: 14, alcance: "responde WhatsApp 24/7, agenda, confirma citas y califica pacientes" },
+  { val: "web", label: "Sitio web con agenda", desc: "Una web que agenda y responde", icon: "🌐", setupMin: 800, setupMax: 2500, varMin: 0, varMax: 10, hrs: 6, alcance: "sitio con agenda online que responde y capta pacientes" },
+  { val: "auto", label: "Automatizaciones", desc: "Recordatorios y seguimiento", icon: "🔄", setupMin: 700, setupMax: 2200, varMin: 6, varMax: 12, hrs: 10, alcance: "recordatorios, confirmaciones y seguimientos que corren solos" },
+  { val: "reactivacion", label: "Reactivación de pacientes", desc: "Recupera pacientes que no vuelven", icon: "📈", setupMin: 500, setupMax: 2000, varMin: 6, varMax: 20, hrs: 8, alcance: "campaña para recuperar pacientes que dejaron de venir" },
 ];
 
 export const MODO_OPTIONS: Option[] = [
@@ -217,8 +218,9 @@ export function calculate(s: CalcState): CalcResult {
       ? "Sistema a la medida"
       : "Infraestructura completa";
 
-  const incluye = list.map((p) => p.label);
-  if (sistema) incluye.push("Dashboard + sistema integrado");
+  const incluye = list.map((p) => `${p.label} — ${p.alcance}`);
+  if (sistema)
+    incluye.push("Dashboard + sistema integrado — todo operando junto, con tu ROI a la vista");
 
   return {
     inversion: money(setupMin, setupMax),
