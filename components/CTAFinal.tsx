@@ -5,7 +5,7 @@ export function CTAFinal() {
   return (
     <section id="contacto" className="px-[6%] py-28 md:px-[10%] md:py-36">
       <Reveal variant="scaleIn">
-        <div className="glass glass-liquid mx-auto max-w-3xl rounded-[40px] p-12 text-center md:p-16">
+        <div className="glass mx-auto max-w-3xl rounded-[40px] p-12 text-center md:p-16">
           <div className="glass-body">
             <h2 className="text-[clamp(2rem,5vw,3rem)] font-semibold tracking-[-0.03em]">
               {CTA_FINAL.heading}

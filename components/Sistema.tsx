@@ -14,7 +14,7 @@ export function Sistema() {
 
       {/* Dashboard destacado — el centro */}
       <Reveal variant="blurIn">
-        <GlassCard variant="liquid" className="mx-auto mb-6 max-w-5xl p-8 md:p-10">
+        <GlassCard variant="glass" className="mx-auto mb-6 max-w-5xl p-8 md:p-10">
           <div className="grid gap-8 md:grid-cols-2 md:items-center">
             <div>
               <span className="mb-4 inline-flex items-center rounded-full border border-[rgba(200,98,61,0.35)] bg-[rgba(200,98,61,0.1)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-clay">

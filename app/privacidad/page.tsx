@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     "Cómo Upcore AI recopila, usa y protege tus datos. No vendemos ni compartimos tu información.",
 };
 
-const EMAIL = "yael67089@gmail.com";
+const EMAIL = "upcoreai.com@gmail.com";
 
 export default function PrivacidadPage() {
   return (

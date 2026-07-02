@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     "Los términos que rigen el uso del sitio y los servicios de Upcore AI.",
 };
 
-const EMAIL = "yael67089@gmail.com";
+const EMAIL = "upcoreai.com@gmail.com";
 
 export default function TerminosPage() {
   return (
