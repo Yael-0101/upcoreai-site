@@ -9,7 +9,7 @@ export function SobreUpcore() {
     <section id="sobre" className="px-[6%] py-24 md:px-[10%] md:py-32">
       <SectionTitle title={SOBRE.heading} variant="blurIn" />
       <Reveal variant="scaleIn">
-        <GlassCard className="mx-auto max-w-3xl p-10 text-center md:p-12">
+        <GlassCard variant="soft" className="mx-auto max-w-3xl p-10 text-center md:p-12">
           <p className="mx-auto max-w-2xl text-lg font-light leading-relaxed text-sand/90">
             {SOBRE.body}
           </p>

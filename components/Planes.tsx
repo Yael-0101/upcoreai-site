@@ -11,7 +11,7 @@ export function Planes() {
         {PLANES.items.map((p, i) => (
           <Reveal key={p.name} variant="fadeUp" delay={i * 0.1} className="h-full">
             <GlassCard
-              liquid={p.destacado}
+              variant={p.destacado ? "glass" : "soft"}
               className={`relative flex h-full flex-col p-8 ${
                 p.destacado ? "border-clay/50" : ""
               }`}

@@ -11,7 +11,7 @@ export function Sistema() {
 
       {/* Dashboard destacado — el centro */}
       <Reveal variant="blurIn">
-        <GlassCard liquid className="mx-auto mb-6 max-w-5xl p-8 md:p-10">
+        <GlassCard variant="liquid" className="mx-auto mb-6 max-w-5xl p-8 md:p-10">
           <div className="grid gap-8 md:grid-cols-2 md:items-center">
             <div>
               <span className="mb-4 inline-flex items-center rounded-full border border-[rgba(200,98,61,0.35)] bg-[rgba(200,98,61,0.1)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-clay">
@@ -63,7 +63,7 @@ export function Sistema() {
             variant={i % 2 === 0 ? "slideLeft" : "slideRight"}
             delay={(i % 3) * 0.08}
           >
-            <GlassCard className="h-full p-7">
+            <GlassCard variant="soft" className="h-full p-7">
               <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(138,154,133,0.35)] bg-[rgba(138,154,133,0.12)] text-sage">
                 <Icon name={it.icon} className="h-5 w-5" />
               </span>

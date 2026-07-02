@@ -6,7 +6,7 @@ export function Garantia() {
   return (
     <section className="px-[6%] py-16 md:px-[10%]">
       <Reveal variant="scaleIn">
-        <div className="glass glass-liquid mx-auto max-w-3xl rounded-[36px] p-10 text-center md:p-12">
+        <div className="glass mx-auto max-w-3xl rounded-[36px] p-10 text-center md:p-12">
           <div className="glass-body">
             <span className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-[rgba(200,98,61,0.35)] bg-[rgba(200,98,61,0.1)] text-clay">
               <Icon name="IconShield" className="h-7 w-7" />

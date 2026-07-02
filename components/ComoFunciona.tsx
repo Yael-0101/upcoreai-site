@@ -10,7 +10,7 @@ export function ComoFunciona() {
       <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3">
         {PASOS.items.map((s, i) => (
           <Reveal key={s.n} variant="scaleIn" delay={i * 0.12}>
-            <GlassCard className="h-full p-8">
+            <GlassCard variant="soft" className="h-full p-8">
               <div className="mb-5 text-4xl font-semibold tracking-tight text-clay/90">
                 {s.n}
               </div>

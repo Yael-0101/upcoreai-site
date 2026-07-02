@@ -11,7 +11,7 @@ export function Problema() {
       <div className="mx-auto grid max-w-5xl gap-6 sm:grid-cols-2">
         {PROBLEMAS.items.map((p, i) => (
           <Reveal key={p.title} variant="fadeUp" delay={i * 0.1}>
-            <GlassCard className="flex h-full items-start gap-4 p-7">
+            <GlassCard variant="soft" className="flex h-full items-start gap-4 p-7">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[rgba(200,98,61,0.3)] bg-[rgba(200,98,61,0.1)] text-clay">
                 <Icon name={p.icon} className="h-5 w-5" />
               </span>

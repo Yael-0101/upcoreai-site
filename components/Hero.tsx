@@ -23,7 +23,7 @@ export function Hero() {
           key={i}
           aria-hidden
           style={{ animationDelay: c.delay }}
-          className={`glass glass-liquid animate-float absolute z-0 hidden h-16 w-16 items-center justify-center rounded-3xl text-clay/70 md:flex ${c.className}`}
+          className={`card-soft animate-float absolute z-0 hidden h-16 w-16 items-center justify-center rounded-3xl text-clay/70 md:flex ${c.className}`}
         >
           <c.Icon className="h-7 w-7" />
         </div>

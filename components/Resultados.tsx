@@ -13,7 +13,7 @@ export function Resultados() {
       <div className="mx-auto grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {RESULTADOS.stats.map((s, i) => (
           <Reveal key={s.label} variant="scaleIn" delay={i * 0.1}>
-            <div className="glass rounded-[28px] p-8 text-center">
+            <div className="card-soft rounded-[28px] p-8 text-center">
               <div className="glass-body">
                 <div className="text-gradient text-[clamp(2rem,5vw,2.8rem)] font-semibold tracking-tight">
                   {s.value}

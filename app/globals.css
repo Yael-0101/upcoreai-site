@@ -131,6 +131,24 @@ body {
     background: rgba(242, 231, 219, 0.06);
   }
 
+  /* Tarjeta ligera: sutil, elegante y SIN backdrop-filter (rápida). Para el grueso
+     del contenido; el liquid glass se reserva para los acentos. */
+  .card-soft {
+    position: relative;
+    isolation: isolate;
+    background: rgba(242, 231, 219, 0.04);
+    border: 1px solid rgba(242, 231, 219, 0.1);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 18px 40px -30px rgba(0, 0, 0, 0.55);
+    transition: border-color 0.4s ease, background 0.4s ease,
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .card-soft:hover {
+    border-color: rgba(200, 98, 61, 0.32);
+    background: rgba(242, 231, 219, 0.055);
+  }
+
   .text-gradient {
     background: linear-gradient(to bottom, #ffffff 42%, var(--mocha));
     -webkit-background-clip: text;

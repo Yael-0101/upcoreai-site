@@ -5,16 +5,19 @@ import { useRef, type ReactNode, type MouseEvent } from "react";
 export function GlassCard({
   children,
   className = "",
-  liquid = false,
+  variant = "glass",
   tilt = true,
   spotlight = true,
 }: {
   children: ReactNode;
   className?: string;
-  liquid?: boolean;
+  variant?: "liquid" | "glass" | "soft";
   tilt?: boolean;
   spotlight?: boolean;
 }) {
+  const soft = variant === "soft";
+  const base =
+    variant === "liquid" ? "glass glass-liquid" : soft ? "card-soft" : "glass";
   const ref = useRef<HTMLDivElement>(null);
 
   const onMove = (e: MouseEvent<HTMLDivElement>) => {
@@ -42,11 +45,9 @@ export function GlassCard({
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className={`glass ${liquid ? "glass-liquid" : ""} ${
-        tilt ? "glass-tilt" : ""
-      } rounded-[28px] ${className}`}
+      className={`${base} ${tilt ? "glass-tilt" : ""} rounded-[28px] ${className}`}
     >
-      {spotlight && <span className="glass-spot" aria-hidden />}
+      {spotlight && !soft && <span className="glass-spot" aria-hidden />}
       <div className="glass-body">{children}</div>
     </div>
   );
