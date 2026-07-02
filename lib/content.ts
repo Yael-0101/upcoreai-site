@@ -71,19 +71,27 @@ export const PASOS = {
 };
 
 export const SISTEMA = {
-  heading: "Lo que construimos para tu clínica",
-  sub: "No son automatizaciones sueltas. Es un sistema completo —hecho a la medida de tu clínica— que atiende, trabaja y te muestra todo en un solo lugar.",
+  heading: "Construimos sistemas, no piezas sueltas",
+  sub: "Más que automatizaciones sueltas: construimos la infraestructura completa —el sistema— que atiende, trabaja y te muestra todo en un solo lugar, hecha a la medida de tu clínica.",
   dashboard: {
     tag: "El centro de todo",
     title: "Dashboard inteligente",
-    body: "Tu panel para verlo todo en tiempo real, en un solo lugar y sin complicaciones.",
+    body: "Un panel simple donde ves todo en tiempo real y ajustas lo esencial tú mismo — sin depender de nadie y sin tocar nada que pueda romper el sistema.",
     views: [
       "Tus automatizaciones",
       "Pacientes",
       "Pendientes",
       "A quién llamar",
-      "Base de datos",
+      "Gastos de tu agente",
       "Tu ROI",
+    ],
+    ajustesTitle: "Y ajustas lo esencial tú mismo:",
+    ajustes: [
+      "Cómo responde tu agente (su tono y qué dice)",
+      "Tus mensajes y recordatorios",
+      "Tus horarios de atención",
+      "Los precios y servicios que menciona",
+      "Activar o pausar cuando quieras",
     ],
   },
   items: [
@@ -117,7 +125,7 @@ export const SISTEMA = {
 
 export const RESULTADOS = {
   heading: "Lo que puedes esperar",
-  sub: "Estimaciones basadas en clínicas que automatizan su WhatsApp. Los resultados reales varían según tu clínica.",
+  sub: "Estimaciones del sector para clínicas que automatizan. Varían según el producto que elijas (un agente, una automatización o un sitio web) y según tu clínica.",
   stats: [
     { value: "−80%", label: "en no-shows" },
     { value: "+30–40", label: "pacientes al mes" },
@@ -125,7 +133,7 @@ export const RESULTADOS = {
     { value: "24/7", label: "atención sin descanso" },
   ],
   disclaimer:
-    "* Cifras estimadas del sector, no una garantía de resultados individuales. Tu estimación personalizada sale de la calculadora de arriba y de tu diagnóstico gratis.",
+    "* Cifras estimadas del sector, no una garantía de resultados individuales. Cambian según el producto (agente, automatización o sitio web) y tu clínica. Tu estimación personalizada sale de la calculadora de arriba y de tu diagnóstico gratis.",
 };
 
 export const GARANTIA = {
@@ -135,34 +143,31 @@ export const GARANTIA = {
 };
 
 export const PLANES = {
-  heading: "Planes a tu medida",
-  sub: "Cada clínica es distinta. Por eso tu precio se ajusta a lo que necesitas — lo calculamos juntos en tu diagnóstico gratis.",
+  heading: "Dos formas de trabajar juntos",
+  sub: "La diferencia es una sola: ¿quieres operarlo tú, o que nosotros lo operemos y mantengamos por ti? Todo lo demás es igual, y todo queda a tu nombre.",
   items: [
     {
       name: "Llave en Mano",
       tagline: "Tú lo operas.",
       pago: "Pago único",
-      desc: "Lo construimos, te lo entregamos con capacitación y video, y tú lo manejas. Todo queda en tus cuentas.",
-      incluye: ["Construcción completa", "Capacitación + guía", "Es 100% tuyo"],
+      desc: "Lo construimos y te lo entregamos con capacitación y video. De ahí en adelante lo manejas tú (o tu equipo).",
+      incluye: ["Construcción completa", "Capacitación + guía", "Sin mensualidad"],
       destacado: false,
     },
     {
       name: "Gestionado",
       tagline: "Nosotros lo operamos.",
-      pago: "Proyecto inicial + mensualidad",
-      desc: "Lo construimos, lo mantenemos y lo mejoramos por ti. Tú te olvidas de la parte técnica.",
-      incluye: ["Todo lo anterior", "Monitoreo y mejoras continuas", "Soporte prioritario"],
+      pago: "Mensualidad (con o sin inversión inicial)",
+      desc: "Lo construimos y nosotros lo operamos, mantenemos y mejoramos por ti — para siempre. Tú no te preocupas de nada.",
+      incluye: [
+        "Todo lo de Llave en Mano",
+        "Operación y mantenimiento",
+        "Mejoras y soporte prioritario",
+      ],
       destacado: true,
     },
-    {
-      name: "Todo Incluido",
-      tagline: "Nosotros hacemos todo.",
-      pago: "Una sola mensualidad",
-      desc: "Creamos tus cuentas, operamos el 100% y tú solo ves los resultados. Cero involucramiento.",
-      incluye: ["Operación total", "Cuentas y APIs incluidas", "Solo ves resultados"],
-      destacado: false,
-    },
   ],
+  nota: "En ambos planes, todo es tuyo: tus cuentas, tu servidor, tus APIs y tokens quedan a tu nombre. ¿Cuentas nuevas o las que ya tienes? ¿Las creas tú o las creamos nosotros? Como prefieras — siempre con tus datos seguros.",
   precioNota: "Precio personalizado según tu clínica",
   cta: "Agenda tu diagnóstico",
 };

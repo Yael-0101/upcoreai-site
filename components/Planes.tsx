@@ -7,7 +7,7 @@ export function Planes() {
   return (
     <section id="planes" className="px-[6%] py-24 md:px-[10%] md:py-32">
       <SectionTitle title={PLANES.heading} sub={PLANES.sub} />
-      <div className="mx-auto grid max-w-5xl items-stretch gap-6 md:grid-cols-3">
+      <div className="mx-auto grid max-w-3xl items-stretch gap-6 md:grid-cols-2">
         {PLANES.items.map((p, i) => (
           <Reveal key={p.name} variant="fadeUp" delay={i * 0.1} className="h-full">
             <GlassCard
@@ -60,6 +60,11 @@ export function Planes() {
           </Reveal>
         ))}
       </div>
+      <Reveal delay={0.2}>
+        <p className="mx-auto mt-8 max-w-2xl text-center text-sm font-light leading-relaxed text-mocha">
+          {PLANES.nota}
+        </p>
+      </Reveal>
     </section>
   );
 }

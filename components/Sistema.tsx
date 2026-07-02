@@ -37,6 +37,21 @@ export function Sistema() {
               ))}
             </div>
           </div>
+          <div className="mt-8 border-t border-[rgba(242,231,219,0.1)] pt-6">
+            <p className="mb-3 text-sm font-semibold text-clay">
+              {SISTEMA.dashboard.ajustesTitle}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {SISTEMA.dashboard.ajustes.map((a) => (
+                <span
+                  key={a}
+                  className="rounded-full border border-[rgba(242,231,219,0.14)] bg-[rgba(242,231,219,0.04)] px-3 py-1.5 text-xs text-mocha"
+                >
+                  {a}
+                </span>
+              ))}
+            </div>
+          </div>
         </GlassCard>
       </Reveal>
 
