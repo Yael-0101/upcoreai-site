@@ -431,6 +431,16 @@ export function Calculadora() {
                     />
                   </div>
 
+                  {result.recomendacion && (
+                    <div className="mb-6 flex items-start gap-3 rounded-2xl border border-[rgba(138,154,133,0.32)] bg-[rgba(138,154,133,0.08)] p-5">
+                      <span className="shrink-0 text-lg leading-none">💡</span>
+                      <p className="text-sm font-light leading-relaxed text-sand/90">
+                        <span className="font-medium text-sand">Nuestro consejo honesto:</span>{" "}
+                        {result.recomendacion}
+                      </p>
+                    </div>
+                  )}
+
                   <div className="mb-8 rounded-3xl border border-dashed border-[rgba(200,98,61,0.35)] bg-[rgba(200,98,61,0.03)] p-7">
                     <h4 className="mb-4 text-sm font-semibold text-clay">
                       Esto construiríamos para ti:

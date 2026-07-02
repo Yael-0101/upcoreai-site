@@ -110,6 +110,7 @@ export type CalcResult = {
   ahorroNota: string;
   roi: string;
   roiNota: string;
+  recomendacion: string;
   complejidad: string;
   incluye: string[];
 };
@@ -150,16 +151,32 @@ export function calculate(s: CalcState): CalcResult {
   const varHiUSD = varMax * volFactor;
 
   // --- Ahorro (conservador y honesto) ---------------------------------------
+  const has = (v: string) => list.some((p) => p.val === v);
+  const capta24_7 = has("agente") || has("web"); // responde e invita a agendar al instante
+  const hasReact = has("reactivacion");
+
+  const HORA_USD = 3.5; // sueldo de recepción en México (~$65 MXN/h)
+  const CITA_USD = 85; // cita recuperada / no-show (~$1,570 MXN, conservador)
+  const NUEVO_USD = 150; // paciente NUEVO captado — MUY por debajo del real ($400-500)
+
   // Horas liberadas al mes (aprox), con tope realista (~1 día/semana en volumen alto).
   const minutosMes = msgs * 30 + leads * 8;
   const hoursSaved = Math.min(Math.round(minutosMes / 60), 80);
-  const HORA_USD = 3.5; // sueldo de recepción en México (~$65 MXN/h)
-  const CITA_USD = 85; // ticket conservador por cita (~$1,570 MXN)
-  // Citas ganadas/recuperadas al mes: −20-25% no-shows + captación 24/7 (supuesto prudente).
-  const citasGanadas = leads * 0.11;
   const timeValue = hoursSaved * HORA_USD;
-  const apptValue = citasGanadas * CITA_USD;
-  const ahorroUSD = timeValue + apptValue;
+
+  // No-shows evitados por recordatorios (−22% conservador).
+  const noShowsSaved = leads * 0.06;
+  // Pacientes NUEVOS captados 24/7 (el mayor valor del agente/web: responder al instante).
+  const nuevosCaptados = leads * (capta24_7 ? 0.1 : 0.03);
+  // Pacientes que regresan si hay reactivación.
+  const reactivados = hasReact ? leads * 0.1 : 0;
+
+  const citasGanadas = noShowsSaved + nuevosCaptados + reactivados;
+  const ahorroUSD =
+    timeValue +
+    noShowsSaved * CITA_USD +
+    nuevosCaptados * NUEVO_USD +
+    reactivados * CITA_USD;
 
   // --- Mensualidad de Upcore (solo Gestionado) ------------------------------
   const n = list.length;
@@ -174,6 +191,19 @@ export function calculate(s: CalcState): CalcResult {
   const recurringUSD = varAvg + upAvg;
   const roiNum = recurringUSD > 0 ? ahorroUSD / recurringUSD : 0;
   const roi = roiNum >= 10 ? "10x+" : `${Math.round(roiNum * 10) / 10}x`;
+
+  // Asesor honesto: si a este volumen no sale bien rentable, recomendar la opción ligera
+  // en vez de empujar el plan caro. Nunca forzamos la venta.
+  const netRatio = recurringUSD > 0 ? ahorroUSD / recurringUSD : 99;
+  let recomendacion = "";
+  if (netRatio < 1) {
+    recomendacion = gestionado
+      ? "A tu volumen de ahora, el plan Gestionado todavía no se paga solo. Te conviene empezar en Llave en Mano (sin mensualidad) o con solo la pieza esencial, y pasar a Gestionado cuando crezca tu volumen."
+      : "A tu volumen de ahora los números salen justos. En tu diagnóstico gratis vemos si te conviene arrancar más ligero o esperar a tener un poco más de movimiento.";
+  } else if (gestionado && netRatio < 1.6) {
+    recomendacion =
+      "Ya es rentable, pero a tu volumen quizá te convenga empezar en Llave en Mano (sin mensualidad) y subir a Gestionado más adelante.";
+  }
 
   // Payback: meses para recuperar la inversión con el ahorro neto de la mensualidad.
   const netMensual = Math.max(ahorroUSD - upAvg, ahorroUSD * 0.15);
@@ -207,7 +237,11 @@ export function calculate(s: CalcState): CalcResult {
     ahorro: money(ahorroUSD, ahorroUSD, true),
     ahorroNota: `≈ ${Math.max(1, Math.round(citasGanadas))} cita(s)/mes recuperadas + el tiempo de tu equipo`,
     roi,
-    roiNota: `Recuperas tu inversión en ~${paybackMeses} ${mesesTxt}. Se paga sola con 1–2 no-shows evitados al mes.`,
+    roiNota:
+      netRatio < 1
+        ? `A tu volumen de ahora tardaría ~${paybackMeses} ${mesesTxt} en recuperarse.`
+        : `Recuperas tu inversión en ~${paybackMeses} ${mesesTxt}. Se paga sola con 1–2 no-shows evitados al mes.`,
+    recomendacion,
     complejidad,
     incluye,
   };
