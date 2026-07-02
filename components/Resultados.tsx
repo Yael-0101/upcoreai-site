@@ -10,20 +10,20 @@ export function Resultados() {
         sub={RESULTADOS.sub}
         variant="fadeUp"
       />
-      <div className="mx-auto grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {RESULTADOS.stats.map((s, i) => (
-          <Reveal key={s.label} variant="scaleIn" delay={i * 0.1}>
-            <div className="card-soft rounded-[28px] p-8 text-center">
-              <div className="glass-body">
-                <div className="text-gradient text-[clamp(2rem,5vw,2.8rem)] font-semibold tracking-tight">
-                  {s.value}
-                </div>
-                <div className="mt-2 text-sm font-light text-mocha">{s.label}</div>
+      <Reveal variant="fadeUp">
+        <div className="mx-auto grid max-w-5xl grid-cols-2 gap-px overflow-hidden rounded-[28px] border border-[rgba(242,231,219,0.1)] bg-[rgba(242,231,219,0.08)] sm:grid-cols-4">
+          {RESULTADOS.stats.map((s) => (
+            <div key={s.label} className="bg-[#1c1613] px-4 py-10 text-center">
+              <div className="text-gradient text-[clamp(1.9rem,5vw,2.7rem)] font-semibold tracking-tight">
+                {s.value}
+              </div>
+              <div className="mt-2 text-xs font-light uppercase tracking-[0.08em] text-mocha">
+                {s.label}
               </div>
             </div>
-          </Reveal>
-        ))}
-      </div>
+          ))}
+        </div>
+      </Reveal>
       <Reveal delay={0.2}>
         <p className="mx-auto mt-8 max-w-2xl text-center text-xs font-light leading-relaxed text-mocha/60">
           {RESULTADOS.disclaimer}

@@ -10,13 +10,13 @@ export function Footer() {
       </div>
       <div className="mb-8 flex flex-col items-center justify-center gap-4 md:flex-row md:gap-8">
         <a
-          href="/privacy-policy.html"
+          href="/privacidad"
           className="text-xs uppercase tracking-[0.1em] text-mocha transition-colors hover:text-clay"
         >
           Política de Privacidad
         </a>
         <a
-          href="/terms-of-service.html"
+          href="/terminos"
           className="text-xs uppercase tracking-[0.1em] text-mocha transition-colors hover:text-clay"
         >
           Términos de Servicio

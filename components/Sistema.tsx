@@ -4,10 +4,13 @@ import { GlassCard } from "./GlassCard";
 import { Icon } from "./Icons";
 import { SISTEMA } from "@/lib/content";
 
+// Bento: tamaños variados para romper la rejilla uniforme (solo aplica en lg).
+const BENTO = ["lg:col-span-2", "", "", "lg:col-span-2", "lg:col-span-3"];
+
 export function Sistema() {
   return (
     <section id="sistema" className="px-[6%] py-24 md:px-[10%] md:py-32">
-      <SectionTitle title={SISTEMA.heading} sub={SISTEMA.sub} />
+      <SectionTitle title={SISTEMA.heading} sub={SISTEMA.sub} align="left" />
 
       {/* Dashboard destacado — el centro */}
       <Reveal variant="blurIn">
@@ -62,6 +65,7 @@ export function Sistema() {
             key={it.title}
             variant={i % 2 === 0 ? "slideLeft" : "slideRight"}
             delay={(i % 3) * 0.08}
+            className={BENTO[i] ?? ""}
           >
             <GlassCard variant="soft" className="h-full p-7">
               <span className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(138,154,133,0.35)] bg-[rgba(138,154,133,0.12)] text-sage">

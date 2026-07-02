@@ -181,8 +181,8 @@ export function calculate(s: CalcState): CalcResult {
 
   // --- Mensualidad de Upcore (solo Gestionado) ------------------------------
   const n = list.length;
-  const upLoUSD = gestionado ? 150 + n * 50 + (sistema ? 50 : 0) : 0;
-  const upHiUSD = gestionado ? 300 + n * 90 + (sistema ? 120 : 0) : 0;
+  const upLoUSD = gestionado ? 120 + n * 40 + (sistema ? 30 : 0) : 0;
+  const upHiUSD = gestionado ? 220 + n * 70 + (sistema ? 90 : 0) : 0;
   const upAvg = (upLoUSD + upHiUSD) / 2;
 
   const varAvg = (varLoUSD + varHiUSD) / 2;
@@ -196,11 +196,16 @@ export function calculate(s: CalcState): CalcResult {
   // Asesor honesto: si a este volumen no sale bien rentable, recomendar la opción ligera
   // en vez de empujar el plan caro. Nunca forzamos la venta.
   const netRatio = recurringUSD > 0 ? ahorroUSD / recurringUSD : 99;
+  const gananciaNetaUSD = Math.max(ahorroUSD - recurringUSD, 0);
+  const combo = sistema && gestionado; // el combo más caro: solo rinde con buen volumen
   let recomendacion = "";
   if (netRatio < 1) {
     recomendacion = gestionado
       ? "A tu volumen de ahora, el plan Gestionado todavía no se paga solo. Te conviene empezar en Llave en Mano (sin mensualidad) o con solo la pieza esencial, y pasar a Gestionado cuando crezca tu volumen."
       : "A tu volumen de ahora los números salen justos. En tu diagnóstico gratis vemos si te conviene arrancar más ligero o esperar a tener un poco más de movimiento.";
+  } else if (combo && netRatio < 2) {
+    recomendacion =
+      "El sistema completo + Gestionado rinde de verdad cuando ya tienes buen volumen. A tu nivel de ahora te conviene empezar más ligero (solo el agente, o Llave en Mano) y crecer hacia el sistema gestionado cuando el volumen lo pida — así te sale rentable desde el primer día.";
   } else if (gestionado && netRatio < 1.6) {
     recomendacion =
       "Ya es rentable, pero a tu volumen quizá te convenga empezar en Llave en Mano (sin mensualidad) y subir a Gestionado más adelante.";
@@ -210,6 +215,19 @@ export function calculate(s: CalcState): CalcResult {
   const netMensual = Math.max(ahorroUSD - upAvg, ahorroUSD * 0.15);
   const paybackMeses = Math.max(1, Math.min(Math.round(setupAvg / netMensual), 36));
   const mesesTxt = paybackMeses === 1 ? "mes" : "meses";
+
+  // Reencuadre del retorno: además del múltiplo, la ganancia neta al mes y (si es Gestionado)
+  // el valor de que Upcore lo opere.
+  const netaMXN = `$${roundMXN(gananciaNetaUSD * FX).toLocaleString("en-US")} MXN`;
+  let roiNota: string;
+  if (netRatio < 1) {
+    roiNota = `A tu volumen de ahora tardaría ~${paybackMeses} ${mesesTxt} en recuperarse.`;
+  } else {
+    const neta =
+      gananciaNetaUSD > 0 ? ` Te quedan ~${netaMXN} limpios al mes.` : "";
+    const manos = gestionado ? " Y nosotros lo operamos por ti." : "";
+    roiNota = `Recuperas tu inversión en ~${paybackMeses} ${mesesTxt}.${neta}${manos}`;
+  }
 
   const complejidad =
     setupMax <= 2500
@@ -239,10 +257,7 @@ export function calculate(s: CalcState): CalcResult {
     ahorro: money(ahorroUSD, ahorroUSD, true),
     ahorroNota: `≈ ${Math.max(1, Math.round(citasGanadas))} cita(s)/mes recuperadas + el tiempo de tu equipo`,
     roi,
-    roiNota:
-      netRatio < 1
-        ? `A tu volumen de ahora tardaría ~${paybackMeses} ${mesesTxt} en recuperarse.`
-        : `Recuperas tu inversión en ~${paybackMeses} ${mesesTxt}. Se paga sola con 1–2 no-shows evitados al mes.`,
+    roiNota,
     recomendacion,
     complejidad,
     incluye,
