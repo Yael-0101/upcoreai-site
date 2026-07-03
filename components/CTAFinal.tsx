@@ -23,14 +23,20 @@ export function CTAFinal() {
                 {CTA_FINAL.ctaCalendly}
               </a>
               <a
-                href={CONTACT.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/empezar"
                 className="w-full rounded-full border border-[rgba(242,231,219,0.25)] px-8 py-4 font-semibold text-sand transition-all duration-300 hover:border-clay hover:text-clay sm:w-auto"
               >
-                {CTA_FINAL.ctaWhatsapp}
+                {CTA_FINAL.ctaEmpezar}
               </a>
             </div>
+            <a
+              href={CONTACT.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-block text-sm text-mocha underline-offset-4 transition-colors hover:text-clay hover:underline"
+            >
+              {CTA_FINAL.ctaWhatsapp}
+            </a>
           </div>
         </div>
       </Reveal>

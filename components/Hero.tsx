@@ -80,6 +80,16 @@ export function Hero() {
         </a>
       </motion.div>
 
+      <motion.a
+        href="/empezar"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.6 }}
+        className="relative z-10 mt-6 text-sm text-mocha underline-offset-4 transition-colors hover:text-clay hover:underline"
+      >
+        ¿No te gustan las llamadas? Empieza aquí →
+      </motion.a>
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
