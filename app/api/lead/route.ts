@@ -14,7 +14,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "bad_request" }, { status: 400 });
   }
 
-  const { nombre, clinica, tipo_clinica, productos, volumen, mensaje, contacto, correo } = body;
+  const {
+    nombre,
+    clinica,
+    tipo_clinica,
+    productos,
+    agenda_hoy,
+    detalle,
+    volumen,
+    mensaje,
+    contacto,
+    correo,
+  } = body;
   if (!nombre || !contacto) {
     return NextResponse.json({ ok: false, error: "missing_fields" }, { status: 400 });
   }
@@ -28,6 +39,8 @@ export async function POST(req: Request) {
         clinica,
         tipo_clinica,
         productos,
+        agenda_hoy,
+        detalle,
         volumen,
         mensaje,
         contacto,

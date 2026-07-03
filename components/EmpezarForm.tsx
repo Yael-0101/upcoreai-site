@@ -3,7 +3,15 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Reveal } from "./Reveal";
-import { OptionBtn, ProgressDots, StepHeader, Field, TextArea, NavBtns } from "./WizardUI";
+import {
+  OptionBtn,
+  ProgressDots,
+  StepHeader,
+  Field,
+  TextArea,
+  NavBtns,
+  type Option,
+} from "./WizardUI";
 import { CLINICA_OPTIONS, PRODUCTO_OPTIONS } from "@/lib/calc";
 import { CONTACT } from "@/lib/content";
 
@@ -16,12 +24,79 @@ const panelAnim = {
   transition: { duration: 0.35, ease },
 };
 
+// --- Mini-diagnóstico del paso 3 (adaptativo según lo elegido en el paso 2) ---
+
+// Universal: cómo agendan hoy → clave para "integrar antes que reemplazar".
+const AGENDA_OPTIONS: Option[] = [
+  { val: "whatsapp", label: "WhatsApp a mano", icon: "📱" },
+  { val: "telefono", label: "Teléfono", icon: "☎️" },
+  { val: "software", label: "Un software o sistema", icon: "💻" },
+  { val: "papel", label: "Papel o Excel", icon: "📒" },
+];
+
+// Una pregunta específica por producto (una sola, de un toque).
+const PREGUNTAS_POR_PRODUCTO: Record<string, { q: string; options: Option[] }> = {
+  agente: {
+    q: "¿Cuándo pierden más pacientes o mensajes?",
+    options: [
+      { val: "fuera", label: "Fuera de horario", icon: "🌙" },
+      { val: "findes", label: "Fines de semana", icon: "📆" },
+      { val: "siempre", label: "A toda hora, no damos abasto", icon: "🔥" },
+      { val: "nose", label: "No sé, solo sé que se pierden", icon: "🤷" },
+    ],
+  },
+  web: {
+    q: "¿Tienes sitio web hoy?",
+    options: [
+      { val: "no", label: "No tengo", icon: "❌" },
+      { val: "viejo", label: "Tengo, pero viejo o sin agenda", icon: "🕸️" },
+      { val: "si", label: "Tengo y funciona, quiero algo mejor", icon: "✅" },
+    ],
+  },
+  auto: {
+    q: "¿Cuántas citas pierden a la semana (pacientes que no llegan)?",
+    options: [
+      { val: "1-2", label: "1 – 2", icon: "🟢" },
+      { val: "3-5", label: "3 – 5", icon: "🟠" },
+      { val: "5+", label: "Más de 5", icon: "🔴" },
+      { val: "nose", label: "No lo medimos", icon: "🤷" },
+    ],
+  },
+  reactivacion: {
+    q: "¿Dónde guardan los datos de sus pacientes anteriores?",
+    options: [
+      { val: "software", label: "En un software", icon: "💻" },
+      { val: "excel", label: "Excel o papel", icon: "📒" },
+      { val: "no", label: "No tenemos registro ordenado", icon: "🤷" },
+    ],
+  },
+};
+
+// Si eligió "no estoy seguro": preguntamos qué le duele y nosotros recomendamos.
+const DOLORES_OPTIONS: Option[] = [
+  { val: "noshows", label: "Pacientes que no llegan a su cita", icon: "📉" },
+  { val: "whatsapp", label: "WhatsApp sin responder", icon: "💬" },
+  { val: "recepcion", label: "Recepción saturada", icon: "😰" },
+  { val: "huecos", label: "Huecos en la agenda / no vuelven", icon: "🕳️" },
+  { val: "nuevos", label: "Atraer más pacientes nuevos", icon: "🌱" },
+];
+
+function BlockLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="mb-3 text-sm font-medium text-sand">{children}</p>
+  );
+}
+
 type LeadState = {
   clinicaNombre: string;
   tipoClinica: string | null;
   productos: string[];
   sinPreferencia: boolean;
   volumen: string;
+  agendaHoy: string | null;
+  agendaSoftware: string;
+  respuestas: Record<string, string>; // producto -> respuesta elegida
+  dolores: string[];
   mensaje: string;
   nombre: string;
   contacto: string;
@@ -35,6 +110,10 @@ const empty: LeadState = {
   productos: [],
   sinPreferencia: false,
   volumen: "",
+  agendaHoy: null,
+  agendaSoftware: "",
+  respuestas: {},
+  dolores: [],
   mensaje: "",
   nombre: "",
   contacto: "",
@@ -57,10 +136,23 @@ export function EmpezarForm() {
         ? p.productos.filter((x) => x !== val)
         : [...p.productos, val],
     }));
+  const toggleDolor = (val: string) =>
+    setS((p) => ({
+      ...p,
+      dolores: p.dolores.includes(val)
+        ? p.dolores.filter((x) => x !== val)
+        : [...p.dolores, val],
+    }));
 
   const step1Ready = s.clinicaNombre.trim() !== "" && !!s.tipoClinica;
   const step2Ready = s.productos.length > 0 || s.sinPreferencia;
+  const step3Ready = !!s.agendaHoy; // solo la universal es obligatoria
   const step4Ready = s.nombre.trim() !== "" && s.contacto.trim() !== "" && s.acepta;
+
+  // Productos elegidos que tienen pregunta propia (en el orden del catálogo).
+  const preguntasActivas = PRODUCTO_OPTIONS.filter(
+    (p) => s.productos.includes(p.val) && PREGUNTAS_POR_PRODUCTO[p.val]
+  );
 
   const submit = async () => {
     setLoading(true);
@@ -70,6 +162,32 @@ export function EmpezarForm() {
       : PRODUCTO_OPTIONS.filter((p) => s.productos.includes(p.val))
           .map((p) => p.label)
           .join(", ");
+
+    // agenda_hoy legible, con el nombre del software si lo dio.
+    const agendaLabel = AGENDA_OPTIONS.find((o) => o.val === s.agendaHoy)?.label ?? "";
+    const agendaTxt =
+      s.agendaHoy === "software" && s.agendaSoftware.trim()
+        ? `${agendaLabel} (${s.agendaSoftware.trim()})`
+        : agendaLabel;
+
+    // detalle legible: respuestas por producto, o dolores si pidió recomendación.
+    const detalleTxt = s.sinPreferencia
+      ? s.dolores.length
+        ? "Le duele: " +
+          DOLORES_OPTIONS.filter((d) => s.dolores.includes(d.val))
+            .map((d) => d.label)
+            .join("; ")
+        : ""
+      : preguntasActivas
+          .filter((p) => s.respuestas[p.val])
+          .map((p) => {
+            const resp = PREGUNTAS_POR_PRODUCTO[p.val].options.find(
+              (o) => o.val === s.respuestas[p.val]
+            );
+            return `${p.label}: ${resp?.label ?? ""}`;
+          })
+          .join(" · ");
+
     try {
       const res = await fetch("/api/lead", {
         method: "POST",
@@ -79,6 +197,8 @@ export function EmpezarForm() {
           clinica: s.clinicaNombre,
           tipo_clinica: s.tipoClinica,
           productos: productosTxt,
+          agenda_hoy: agendaTxt,
+          detalle: detalleTxt,
           volumen: s.volumen,
           mensaje: s.mensaje,
           contacto: s.contacto,
@@ -193,17 +313,96 @@ export function EmpezarForm() {
               <motion.div key="s3" {...panelAnim}>
                 <StepHeader
                   q="Cuéntanos tu situación"
-                  hint="Opcional — lo que nos ayude a entender mejor tu clínica"
+                  hint="Un par de toques nos ayudan a darte la mejor solución"
                 />
+
+                {/* Universal: cómo agendan hoy */}
+                <div className="mb-7">
+                  <BlockLabel>¿Cómo manejan las citas hoy?</BlockLabel>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    {AGENDA_OPTIONS.map((o) => (
+                      <OptionBtn
+                        key={o.val}
+                        opt={o}
+                        selected={s.agendaHoy === o.val}
+                        onClick={() => set({ agendaHoy: o.val })}
+                      />
+                    ))}
+                  </div>
+                  {s.agendaHoy === "software" && (
+                    <div className="mt-4">
+                      <Field
+                        label="¿Cuál software o sistema? (opcional)"
+                        type="text"
+                        value={s.agendaSoftware}
+                        placeholder="Ej: Dentalink, AgendaPro, Doctoralia…"
+                        onChange={(v) => set({ agendaSoftware: v })}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Adaptativo: una pregunta por producto elegido, o dolores si pidió recomendación */}
+                {s.sinPreferencia ? (
+                  <div className="mb-7">
+                    <BlockLabel>¿Qué es lo que más te duele hoy? (elige una o varias)</BlockLabel>
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                      {DOLORES_OPTIONS.map((o) => (
+                        <OptionBtn
+                          key={o.val}
+                          opt={o}
+                          selected={s.dolores.includes(o.val)}
+                          onClick={() => toggleDolor(o.val)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  preguntasActivas.map((p) => {
+                    const preg = PREGUNTAS_POR_PRODUCTO[p.val];
+                    return (
+                      <div key={p.val} className="mb-7">
+                        <BlockLabel>
+                          <span className="mr-1.5">{p.icon}</span>
+                          {preguntasActivas.length > 1 && (
+                            <span className="text-mocha">{p.label} — </span>
+                          )}
+                          {preg.q}
+                        </BlockLabel>
+                        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                          {preg.options.map((o) => (
+                            <OptionBtn
+                              key={o.val}
+                              opt={o}
+                              selected={s.respuestas[p.val] === o.val}
+                              onClick={() =>
+                                setS((prev) => ({
+                                  ...prev,
+                                  respuestas: { ...prev.respuestas, [p.val]: o.val },
+                                }))
+                              }
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+
                 <div className="mb-8">
                   <TextArea
-                    label="Tu situación (opcional)"
+                    label="¿Algo más que quieras contarnos? (opcional)"
                     value={s.mensaje}
-                    placeholder="Ej: Perdemos pacientes porque no alcanzamos a responder WhatsApp fuera de horario..."
+                    placeholder="Ej: Somos 2 doctoras y una recepcionista, abrimos hace un año…"
                     onChange={(v) => set({ mensaje: v })}
                   />
                 </div>
-                <NavBtns onBack={() => setStep(2)} onNext={() => setStep(4)} nextEnabled nextLabel="Siguiente →" />
+                <NavBtns
+                  onBack={() => setStep(2)}
+                  onNext={() => setStep(4)}
+                  nextEnabled={step3Ready}
+                  nextLabel="Siguiente →"
+                />
               </motion.div>
             )}
 
