@@ -55,6 +55,12 @@ export function Planes() {
                 >
                   {PLANES.cta}
                 </a>
+                <a
+                  href="/empezar"
+                  className="mt-3 block text-center text-xs text-mocha underline-offset-4 transition-colors hover:text-clay hover:underline"
+                >
+                  o empieza sin llamada →
+                </a>
               </div>
             </GlassCard>
           </Reveal>

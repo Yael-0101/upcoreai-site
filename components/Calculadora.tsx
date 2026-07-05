@@ -347,10 +347,16 @@ export function Calculadora() {
                     >
                       Agenda tu diagnóstico gratis
                     </a>
+                    <a
+                      href="/empezar"
+                      className="mx-auto mt-4 block text-sm text-mocha underline-offset-4 transition-colors hover:text-clay hover:underline"
+                    >
+                      ¿Prefieres sin llamada? Empieza aquí →
+                    </a>
                     <button
                       type="button"
                       onClick={reset}
-                      className="mx-auto mt-5 block text-xs text-mocha/60 underline transition-colors hover:text-mocha"
+                      className="mx-auto mt-4 block text-xs text-mocha/60 underline transition-colors hover:text-mocha"
                     >
                       Calcular de nuevo
                     </button>
