@@ -9,21 +9,36 @@ export function OptionBtn({
   opt,
   selected,
   onClick,
+  check = false,
 }: {
   opt: Option;
   selected: boolean;
   onClick: () => void;
+  check?: boolean; // circulito tipo casilla: deja claro que la opción se toca/selecciona
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`glass-interactive flex flex-col items-center gap-1.5 rounded-2xl border px-3 py-5 text-center transition-all ${
+      aria-pressed={selected}
+      className={`glass-interactive relative flex flex-col items-center gap-1.5 rounded-2xl border px-3 py-5 text-center transition-all ${
         selected
           ? "border-clay bg-[rgba(200,98,61,0.1)]"
           : "border-[rgba(242,231,219,0.14)] bg-[rgba(242,231,219,0.03)]"
       }`}
     >
+      {check && (
+        <span
+          aria-hidden
+          className={`absolute right-2.5 top-2.5 flex h-5 w-5 items-center justify-center rounded-full border text-[0.7rem] font-bold transition-all duration-200 ${
+            selected
+              ? "border-clay bg-clay text-obsidian"
+              : "border-[rgba(242,231,219,0.3)] bg-transparent text-transparent"
+          }`}
+        >
+          ✓
+        </span>
+      )}
       <span className="text-2xl">{opt.icon}</span>
       <span className="text-[0.82rem] font-medium leading-tight text-sand">
         {opt.label}

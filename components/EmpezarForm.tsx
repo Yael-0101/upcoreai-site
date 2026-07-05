@@ -81,9 +81,18 @@ const DOLORES_OPTIONS: Option[] = [
   { val: "nuevos", label: "Atraer más pacientes nuevos", icon: "🌱" },
 ];
 
-function BlockLabel({ children }: { children: React.ReactNode }) {
+function BlockLabel({
+  children,
+  hint,
+}: {
+  children: React.ReactNode;
+  hint?: string;
+}) {
   return (
-    <p className="mb-3 text-sm font-medium text-sand">{children}</p>
+    <div className="mb-3">
+      <p className="text-sm font-medium text-sand">{children}</p>
+      {hint && <p className="mt-0.5 text-xs font-light text-mocha/80">{hint}</p>}
+    </div>
   );
 }
 
@@ -93,9 +102,9 @@ type LeadState = {
   productos: string[];
   sinPreferencia: boolean;
   volumen: string;
-  agendaHoy: string | null;
+  agendaHoy: string[]; // multi: una clínica real agenda por varios canales a la vez
   agendaSoftware: string;
-  respuestas: Record<string, string>; // producto -> respuesta elegida
+  respuestas: Record<string, string[]>; // producto -> respuestas elegidas (multi)
   dolores: string[];
   mensaje: string;
   nombre: string;
@@ -110,7 +119,7 @@ const empty: LeadState = {
   productos: [],
   sinPreferencia: false,
   volumen: "",
-  agendaHoy: null,
+  agendaHoy: [],
   agendaSoftware: "",
   respuestas: {},
   dolores: [],
@@ -143,10 +152,30 @@ export function EmpezarForm() {
         ? p.dolores.filter((x) => x !== val)
         : [...p.dolores, val],
     }));
+  const toggleAgenda = (val: string) =>
+    setS((p) => ({
+      ...p,
+      agendaHoy: p.agendaHoy.includes(val)
+        ? p.agendaHoy.filter((x) => x !== val)
+        : [...p.agendaHoy, val],
+    }));
+  const toggleRespuesta = (producto: string, val: string) =>
+    setS((p) => {
+      const actual = p.respuestas[producto] ?? [];
+      return {
+        ...p,
+        respuestas: {
+          ...p.respuestas,
+          [producto]: actual.includes(val)
+            ? actual.filter((x) => x !== val)
+            : [...actual, val],
+        },
+      };
+    });
 
   const step1Ready = s.clinicaNombre.trim() !== "" && !!s.tipoClinica;
   const step2Ready = s.productos.length > 0 || s.sinPreferencia;
-  const step3Ready = !!s.agendaHoy; // solo la universal es obligatoria
+  const step3Ready = s.agendaHoy.length > 0; // solo la universal es obligatoria
   const step4Ready = s.nombre.trim() !== "" && s.contacto.trim() !== "" && s.acepta;
 
   // Productos elegidos que tienen pregunta propia (en el orden del catálogo).
@@ -163,14 +192,16 @@ export function EmpezarForm() {
           .map((p) => p.label)
           .join(", ");
 
-    // agenda_hoy legible, con el nombre del software si lo dio.
-    const agendaLabel = AGENDA_OPTIONS.find((o) => o.val === s.agendaHoy)?.label ?? "";
-    const agendaTxt =
-      s.agendaHoy === "software" && s.agendaSoftware.trim()
-        ? `${agendaLabel} (${s.agendaSoftware.trim()})`
-        : agendaLabel;
+    // agenda_hoy legible (multi), con el nombre del software si lo dio.
+    const agendaTxt = AGENDA_OPTIONS.filter((o) => s.agendaHoy.includes(o.val))
+      .map((o) =>
+        o.val === "software" && s.agendaSoftware.trim()
+          ? `${o.label} (${s.agendaSoftware.trim()})`
+          : o.label
+      )
+      .join(" + ");
 
-    // detalle legible: respuestas por producto, o dolores si pidió recomendación.
+    // detalle legible: respuestas (multi) por producto, o dolores si pidió recomendación.
     const detalleTxt = s.sinPreferencia
       ? s.dolores.length
         ? "Le duele: " +
@@ -179,12 +210,13 @@ export function EmpezarForm() {
             .join("; ")
         : ""
       : preguntasActivas
-          .filter((p) => s.respuestas[p.val])
+          .filter((p) => (s.respuestas[p.val] ?? []).length > 0)
           .map((p) => {
-            const resp = PREGUNTAS_POR_PRODUCTO[p.val].options.find(
-              (o) => o.val === s.respuestas[p.val]
-            );
-            return `${p.label}: ${resp?.label ?? ""}`;
+            const elegidas = s.respuestas[p.val];
+            const labels = PREGUNTAS_POR_PRODUCTO[p.val].options
+              .filter((o) => elegidas.includes(o.val))
+              .map((o) => o.label);
+            return `${p.label}: ${labels.join(", ")}`;
           })
           .join(" · ");
 
@@ -253,6 +285,7 @@ export function EmpezarForm() {
                     <OptionBtn
                       key={o.val}
                       opt={o}
+                      check
                       selected={s.tipoClinica === o.val}
                       onClick={() => set({ tipoClinica: o.val })}
                     />
@@ -273,6 +306,7 @@ export function EmpezarForm() {
                     <OptionBtn
                       key={o.val}
                       opt={o}
+                      check
                       selected={s.productos.includes(o.val)}
                       onClick={() => toggleProducto(o.val)}
                     />
@@ -313,23 +347,26 @@ export function EmpezarForm() {
               <motion.div key="s3" {...panelAnim}>
                 <StepHeader
                   q="Cuéntanos tu situación"
-                  hint="Un par de toques nos ayudan a darte la mejor solución"
+                  hint="Toca las opciones que apliquen — puedes elegir varias"
                 />
 
-                {/* Universal: cómo agendan hoy */}
+                {/* Universal: cómo agendan hoy (multi) */}
                 <div className="mb-7">
-                  <BlockLabel>¿Cómo manejan las citas hoy?</BlockLabel>
+                  <BlockLabel hint="Elige todas las que usen — casi nadie usa una sola">
+                    ¿Cómo manejan las citas hoy?
+                  </BlockLabel>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                     {AGENDA_OPTIONS.map((o) => (
                       <OptionBtn
                         key={o.val}
                         opt={o}
-                        selected={s.agendaHoy === o.val}
-                        onClick={() => set({ agendaHoy: o.val })}
+                        check
+                        selected={s.agendaHoy.includes(o.val)}
+                        onClick={() => toggleAgenda(o.val)}
                       />
                     ))}
                   </div>
-                  {s.agendaHoy === "software" && (
+                  {s.agendaHoy.includes("software") && (
                     <div className="mt-4">
                       <Field
                         label="¿Cuál software o sistema? (opcional)"
@@ -345,12 +382,15 @@ export function EmpezarForm() {
                 {/* Adaptativo: una pregunta por producto elegido, o dolores si pidió recomendación */}
                 {s.sinPreferencia ? (
                   <div className="mb-7">
-                    <BlockLabel>¿Qué es lo que más te duele hoy? (elige una o varias)</BlockLabel>
+                    <BlockLabel hint="Puedes elegir varias">
+                      ¿Qué es lo que más te duele hoy?
+                    </BlockLabel>
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                       {DOLORES_OPTIONS.map((o) => (
                         <OptionBtn
                           key={o.val}
                           opt={o}
+                          check
                           selected={s.dolores.includes(o.val)}
                           onClick={() => toggleDolor(o.val)}
                         />
@@ -362,7 +402,7 @@ export function EmpezarForm() {
                     const preg = PREGUNTAS_POR_PRODUCTO[p.val];
                     return (
                       <div key={p.val} className="mb-7">
-                        <BlockLabel>
+                        <BlockLabel hint="Puedes elegir varias">
                           <span className="mr-1.5">{p.icon}</span>
                           {preguntasActivas.length > 1 && (
                             <span className="text-mocha">{p.label} — </span>
@@ -374,13 +414,9 @@ export function EmpezarForm() {
                             <OptionBtn
                               key={o.val}
                               opt={o}
-                              selected={s.respuestas[p.val] === o.val}
-                              onClick={() =>
-                                setS((prev) => ({
-                                  ...prev,
-                                  respuestas: { ...prev.respuestas, [p.val]: o.val },
-                                }))
-                              }
+                              check
+                              selected={(s.respuestas[p.val] ?? []).includes(o.val)}
+                              onClick={() => toggleRespuesta(p.val, o.val)}
                             />
                           ))}
                         </div>
