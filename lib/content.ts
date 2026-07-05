@@ -220,7 +220,6 @@ export const SOBRE = {
 export const CTA_FINAL = {
   heading: "¿Listo para llenar tu agenda?",
   sub: "Agenda tu diagnóstico gratis. Te decimos exactamente qué automatizar y cuánto puedes recuperar — sin compromiso.",
-  ctaCalendly: "Agendar por videollamada",
-  ctaEmpezar: "Empezar sin llamada",
+  ctaAgenda: "Agenda tu diagnóstico gratis",
   ctaWhatsapp: "Escríbenos por WhatsApp",
 };

@@ -13,7 +13,7 @@ import {
   emptyState,
   type CalcState,
 } from "@/lib/calc";
-import { CONTACT } from "@/lib/content";
+import { AgendarCTA } from "./AgendarCTA";
 
 type Step = 1 | 2 | 3 | 4 | 5 | "email" | "results";
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -339,24 +339,14 @@ export function Calculadora() {
                   </div>
 
                   <div className="text-center">
-                    <a
-                      href={CONTACT.calendly}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <AgendarCTA
+                      label="Agenda tu diagnóstico gratis"
                       className="btn-shine inline-block animate-pulse-ring rounded-full bg-clay px-8 py-3.5 font-semibold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright"
-                    >
-                      Agenda tu diagnóstico gratis
-                    </a>
-                    <a
-                      href="/empezar"
-                      className="mx-auto mt-4 block text-sm text-mocha underline-offset-4 transition-colors hover:text-clay hover:underline"
-                    >
-                      ¿Prefieres sin llamada? Empieza aquí →
-                    </a>
+                    />
                     <button
                       type="button"
                       onClick={reset}
-                      className="mx-auto mt-4 block text-xs text-mocha/60 underline transition-colors hover:text-mocha"
+                      className="mx-auto mt-5 block text-xs text-mocha/60 underline transition-colors hover:text-mocha"
                     >
                       Calcular de nuevo
                     </button>

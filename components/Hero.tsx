@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { IconSparkle, IconCalendar, IconChat } from "./Icons";
-import { HERO, CONTACT } from "@/lib/content";
+import { HERO } from "@/lib/content";
+import { AgendarCTA } from "./AgendarCTA";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -64,14 +65,10 @@ export function Hero() {
         transition={{ duration: 0.95, ease, delay: 0.42 }}
         className="relative z-10 mt-10 flex flex-col items-center gap-4 sm:flex-row"
       >
-        <a
-          href={CONTACT.calendly}
-          target="_blank"
-          rel="noopener noreferrer"
+        <AgendarCTA
+          label={HERO.ctaPrimary}
           className="btn-shine animate-pulse-ring rounded-full bg-clay px-9 py-4 font-semibold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright"
-        >
-          {HERO.ctaPrimary}
-        </a>
+        />
         <a
           href="#calculadora"
           className="rounded-full border border-[rgba(242,231,219,0.2)] px-7 py-4 text-sm font-semibold text-sand transition-all duration-300 hover:border-clay hover:text-clay"
@@ -79,16 +76,6 @@ export function Hero() {
           {HERO.ctaSecondary}
         </a>
       </motion.div>
-
-      <motion.a
-        href="/empezar"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.6 }}
-        className="relative z-10 mt-6 text-sm text-mocha underline-offset-4 transition-colors hover:text-clay hover:underline"
-      >
-        ¿No te gustan las llamadas? Empieza aquí →
-      </motion.a>
 
       <motion.div
         initial={{ opacity: 0 }}

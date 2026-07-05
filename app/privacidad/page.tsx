@@ -33,7 +33,7 @@ export default function PrivacidadPage() {
           </strong>{" "}
           tu nombre, correo, teléfono o WhatsApp, el nombre de tu clínica y los
           detalles que compartas cuando llenas un formulario, agendas una
-          videollamada o nos escribes por WhatsApp.
+          llamada o nos escribes por WhatsApp.
         </p>
         <p>
           <strong className="font-medium text-sand">Datos de uso:</strong>{" "}

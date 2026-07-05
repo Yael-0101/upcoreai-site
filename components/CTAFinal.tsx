@@ -1,5 +1,6 @@
 import { Reveal } from "./Reveal";
 import { CTA_FINAL, CONTACT } from "@/lib/content";
+import { AgendarCTA } from "./AgendarCTA";
 
 export function CTAFinal() {
   return (
@@ -13,21 +14,11 @@ export function CTAFinal() {
             <p className="mx-auto mt-4 max-w-xl font-light leading-relaxed text-mocha">
               {CTA_FINAL.sub}
             </p>
-            <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <a
-                href={CONTACT.calendly}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-shine w-full rounded-full bg-clay px-8 py-4 font-semibold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright sm:w-auto"
-              >
-                {CTA_FINAL.ctaCalendly}
-              </a>
-              <a
-                href="/empezar"
-                className="w-full rounded-full border border-[rgba(242,231,219,0.25)] px-8 py-4 font-semibold text-sand transition-all duration-300 hover:border-clay hover:text-clay sm:w-auto"
-              >
-                {CTA_FINAL.ctaEmpezar}
-              </a>
+            <div className="mt-9 flex justify-center">
+              <AgendarCTA
+                label={CTA_FINAL.ctaAgenda}
+                className="btn-shine w-full rounded-full bg-clay px-9 py-4 font-semibold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright sm:w-auto"
+              />
             </div>
             <a
               href={CONTACT.whatsapp}

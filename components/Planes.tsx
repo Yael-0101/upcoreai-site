@@ -1,7 +1,8 @@
 import { SectionTitle } from "./SectionTitle";
 import { Reveal } from "./Reveal";
 import { GlassCard } from "./GlassCard";
-import { PLANES, CONTACT } from "@/lib/content";
+import { PLANES } from "@/lib/content";
+import { AgendarCTA } from "./AgendarCTA";
 
 export function Planes() {
   return (
@@ -43,24 +44,14 @@ export function Planes() {
                 <p className="mb-4 text-center text-[0.7rem] font-medium uppercase tracking-[0.12em] text-mocha/70">
                   {PLANES.precioNota}
                 </p>
-                <a
-                  href={CONTACT.calendly}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`block rounded-full px-6 py-3 text-center text-sm font-semibold transition-all duration-300 hover:scale-[1.03] ${
+                <AgendarCTA
+                  label={PLANES.cta}
+                  className={`block w-full rounded-full px-6 py-3 text-center text-sm font-semibold transition-all duration-300 hover:scale-[1.03] ${
                     p.destacado
                       ? "bg-clay text-obsidian hover:bg-clay-bright"
                       : "border border-[rgba(242,231,219,0.2)] text-sand hover:border-clay hover:text-clay"
                   }`}
-                >
-                  {PLANES.cta}
-                </a>
-                <a
-                  href="/empezar"
-                  className="mt-3 block text-center text-xs text-mocha underline-offset-4 transition-colors hover:text-clay hover:underline"
-                >
-                  o empieza sin llamada →
-                </a>
+                />
               </div>
             </GlassCard>
           </Reveal>
