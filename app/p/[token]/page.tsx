@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CONTACT } from "@/lib/content";
+import { DescargarPDF } from "@/components/DescargarPDF";
 
 // Propuesta personalizada con link secreto: upcoreai.com/p/[token].
 // Los datos vienen congelados desde el panel (tabla `propuestas` de n8n) — así la
@@ -43,6 +44,8 @@ type Snapshot = {
   recomendacion: string;
 };
 
+const VIGENCIA_DIAS = 15;
+
 async function getPropuesta(token: string): Promise<Snapshot | null> {
   const url = process.env.N8N_PROPUESTA_WEBHOOK_URL;
   const secret = process.env.N8N_PANEL_SECRET;
@@ -57,7 +60,14 @@ async function getPropuesta(token: string): Promise<Snapshot | null> {
     const fila = (Array.isArray(items) ? items : []).find(
       (i) => i && i.token === token && i.estado === "activa" && i.datos
     );
-    return fila ? (JSON.parse(fila.datos as string) as Snapshot) : null;
+    if (!fila) return null;
+    const snap = JSON.parse(fila.datos as string) as Snapshot;
+    // Vencimiento automático: la propuesta muere sola a los 15 días.
+    const edadMs = Date.now() - new Date(snap.fecha).getTime();
+    if (!snap.fecha || Number.isNaN(edadMs) || edadMs > VIGENCIA_DIAS * 24 * 60 * 60 * 1000) {
+      return null;
+    }
+    return snap;
   } catch {
     return null;
   }
@@ -171,15 +181,18 @@ export default async function PropuestaPublica({
       `Hola Yael, vi la propuesta para ${p.lead.clinica || "mi clínica"} y me interesa.`
     );
 
+  const vence = new Date(new Date(p.fecha).getTime() + 15 * 24 * 60 * 60 * 1000);
+  const venceTxt = vence.toLocaleDateString("es-MX", { day: "numeric", month: "long" });
+
   return (
-    <main className="min-h-screen bg-obsidian px-[6%] py-12 text-sand md:px-[10%]">
+    <main className="pagina-propuesta min-h-screen bg-obsidian px-[6%] py-12 text-sand md:px-[10%]">
       <div className="mx-auto max-w-[860px]">
         <div className="mb-14 text-lg font-semibold tracking-tight">
           Upcore <span className="text-clay">AI</span>
         </div>
 
         <span className="mb-6 inline-block rounded-full border border-clay/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-clay">
-          Propuesta personalizada · válida 15 días
+          Propuesta personalizada · válida hasta el {venceTxt}
         </span>
         <h1 className="mb-3 text-[clamp(2rem,5vw,3.1rem)] font-semibold leading-[1.1] tracking-[-0.03em]">
           {nombreCorto ? `${nombreCorto}, ` : ""}así trabajaría{" "}
@@ -261,7 +274,7 @@ export default async function PropuestaPublica({
           </div>
         )}
 
-        <div className="my-16 text-center">
+        <div className="no-print my-16 text-center">
           <a
             href={waPropuesta}
             className="inline-block animate-pulse-ring rounded-full bg-clay px-9 py-4 text-lg font-bold text-obsidian transition-all duration-300 hover:scale-[1.03] hover:bg-clay-bright"
@@ -280,6 +293,9 @@ export default async function PropuestaPublica({
             </a>{" "}
             · Esta propuesta no te compromete a nada
           </p>
+          <div className="mt-6">
+            <DescargarPDF />
+          </div>
         </div>
 
         <footer className="border-t border-[rgba(242,231,219,0.08)] pt-7 text-center text-xs font-light text-mocha/60">

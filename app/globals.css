@@ -212,3 +212,26 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Impresión de la propuesta (/p/[token]): documento claro, tinta oscura, sin botones. */
+@media print {
+  .pagina-propuesta {
+    background: #ffffff !important;
+    color: #1a1512 !important;
+    padding: 0 !important;
+  }
+  .pagina-propuesta * {
+    color: #1a1512 !important;
+    background: transparent !important;
+    border-color: #d8cec2 !important;
+    box-shadow: none !important;
+    animation: none !important;
+  }
+  .pagina-propuesta .text-clay,
+  .pagina-propuesta em {
+    color: #c8623d !important;
+  }
+  .pagina-propuesta .no-print {
+    display: none !important;
+  }
+}
