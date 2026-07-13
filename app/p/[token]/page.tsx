@@ -176,7 +176,7 @@ export default async function PropuestaPublica({
     p.diag.mensaje && `“${p.diag.mensaje}”`,
   ].filter(Boolean) as string[];
   const waPropuesta =
-    "https://wa.me/523541172800?text=" +
+    "https://wa.me/14244472698?text=" +
     encodeURIComponent(
       `Hola Yael, vi la propuesta para ${p.lead.clinica || "mi clínica"} y me interesa.`
     );

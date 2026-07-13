@@ -63,9 +63,8 @@ export default function PrivacidadPage() {
         <p>
           Nos apoyamos en servicios de confianza para operar, cada uno con su
           propia política de privacidad: alojamiento y estadísticas del sitio
-          (Vercel), agendado de citas (Calendly) y mensajería (la API oficial de
-          WhatsApp de Meta). Solo comparten con nosotros lo necesario para prestar
-          su función.
+          (Vercel), agendado de citas (Cal.com) y mensajería (WhatsApp). Solo
+          comparten con nosotros lo necesario para prestar su función.
         </p>
       </LegalSection>
 

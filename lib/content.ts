@@ -4,11 +4,11 @@
 // ============================================================================
 
 export const CONTACT = {
-  // OJO: en México WhatsApp a veces necesita "521" en vez de "52". Probar el botón.
-  whatsapp: "https://wa.me/523541172800?text=" +
+  // Número de negocio de Upcore (EEUU): entra a la bandeja Chatwoot y al asistente IA.
+  whatsapp: "https://wa.me/14244472698?text=" +
     encodeURIComponent("Hola Upcore AI, quiero automatizar mi clínica. ¿Me ayudan?"),
-  whatsappDisplay: "+52 354 117 2800",
-  calendly: "https://calendly.com/upcoreai",
+  whatsappDisplay: "+1 424 447 2698",
+  calendly: "https://cal.com/yael-upcore-ai/diagnostico-gratis",
 };
 
 export const HERO = {
@@ -197,7 +197,7 @@ export const FAQ = {
     },
     {
       q: "¿Funciona con mi WhatsApp actual?",
-      a: "Sí, usamos la API oficial de WhatsApp Business, así que todo queda bajo tu control.",
+      a: "Sí. Conectamos la automatización a tu número de WhatsApp actual y todo queda en tus propias cuentas, bajo tu control.",
     },
     {
       q: "¿Cuánto cuesta?",
@@ -213,7 +213,7 @@ export const SOBRE = {
   badges: [
     { icon: "IconLock", label: "Datos cifrados" },
     { icon: "IconShield", label: "Aislados en tus cuentas" },
-    { icon: "IconChat", label: "API oficial de WhatsApp" },
+    { icon: "IconChat", label: "WhatsApp en tu propio número" },
   ],
 };
 

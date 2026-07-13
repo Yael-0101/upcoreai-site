@@ -52,7 +52,7 @@ const jsonLd = {
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "sales",
-    url: "https://calendly.com/upcoreai",
+    url: "https://cal.com/yael-upcore-ai/diagnostico-gratis",
   },
 };
 
