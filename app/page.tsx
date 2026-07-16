@@ -5,6 +5,7 @@ import { Hero } from "@/components/Hero";
 import { Problema } from "@/components/Problema";
 import { ComoFunciona } from "@/components/ComoFunciona";
 import { Sistema } from "@/components/Sistema";
+import { DemoTeaser } from "@/components/DemoTeaser";
 import { Resultados } from "@/components/Resultados";
 import { Calculadora } from "@/components/Calculadora";
 import { Garantia } from "@/components/Garantia";
@@ -25,6 +26,7 @@ export default function Home() {
         <Problema />
         <ComoFunciona />
         <Sistema />
+        <DemoTeaser />
         <Resultados />
         <Calculadora />
         <Garantia />
