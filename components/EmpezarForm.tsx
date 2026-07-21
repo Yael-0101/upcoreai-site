@@ -125,6 +125,31 @@ const HORARIO_OPTIONS: Option[] = [
   { val: "cualquiera", label: "Cualquier hora", icon: "🤙" },
 ];
 
+// Diagnóstico 2.0: con estas dos preguntas el diagnóstico calcula la pérdida REAL
+// (citas perdidas × ticket) en lugar de estimar a ciegas.
+const CITAS_PERDIDAS_OPTIONS: Option[] = [
+  { val: "0", label: "Casi ninguna", icon: "🟢" },
+  { val: "1-2", label: "1 – 2 por semana", icon: "🟡" },
+  { val: "3-5", label: "3 – 5 por semana", icon: "🟠" },
+  { val: "6-10", label: "6 – 10 o más", icon: "🔴" },
+  { val: "nose", label: "No lo medimos", icon: "🤷" },
+];
+
+const TICKET_OPTIONS: Option[] = [
+  { val: "150-300", label: "$150 – $300", icon: "💵" },
+  { val: "300-800", label: "$300 – $800", icon: "💰" },
+  { val: "800-2000", label: "$800 – $2,000", icon: "💎" },
+  { val: "2000", label: "Más de $2,000", icon: "👑" },
+  { val: "nose", label: "Varía mucho / no sé", icon: "🤷" },
+];
+
+const OBJETIVO_OPTIONS: Option[] = [
+  { val: "llenar-agenda", label: "Llenar mi agenda", icon: "📈" },
+  { val: "no-perder-citas", label: "Dejar de perder citas", icon: "🛑" },
+  { val: "recuperar-pacientes", label: "Recuperar pacientes", icon: "🔄" },
+  { val: "imagen", label: "Verse más profesional", icon: "✨" },
+];
+
 function BlockLabel({
   children,
   hint,
@@ -150,6 +175,9 @@ type LeadState = {
   tipoClinica: string | null;
   tamano: string | null;
   pacientesSemana: string | null;
+  citasPerdidas: string | null;
+  ticket: string | null;
+  objetivo: string | null;
   canales: string[];
   productos: string[];
   sinPreferencia: boolean;
@@ -172,6 +200,9 @@ const empty: LeadState = {
   tipoClinica: null,
   tamano: null,
   pacientesSemana: null,
+  citasPerdidas: null,
+  ticket: null,
+  objetivo: null,
   canales: [],
   productos: [],
   sinPreferencia: false,
@@ -194,6 +225,7 @@ export function EmpezarForm() {
   const [s, setS] = useState<LeadState>(empty);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [propuestaUrl, setPropuestaUrl] = useState<string | null>(null);
 
   const set = (patch: Partial<LeadState>) => setS((p) => ({ ...p, ...patch }));
   const toggleIn = (key: "canales" | "agendaHoy" | "dolores" | "productos") => (val: string) =>
@@ -220,10 +252,10 @@ export function EmpezarForm() {
 
   const step1Ready =
     s.clinicaNombre.trim() !== "" && !!s.tipoClinica && !!s.tamano;
-  const step2Ready = !!s.pacientesSemana;
+  const step2Ready = !!s.pacientesSemana && !!s.citasPerdidas && !!s.ticket;
   const step3Ready = s.productos.length > 0 || s.sinPreferencia;
   const step4Ready = s.agendaHoy.length > 0;
-  const step5Ready = !!s.urgencia && !!s.papel;
+  const step5Ready = !!s.urgencia && !!s.papel && !!s.objetivo;
   const step6Ready = s.nombre.trim() !== "" && s.contacto.trim() !== "" && s.acepta;
 
   const preguntasActivas = PRODUCTO_OPTIONS.filter(
@@ -283,9 +315,17 @@ export function EmpezarForm() {
           mensaje: s.mensaje,
           contacto: s.contacto,
           correo: s.correo,
+          citas_perdidas:
+            s.citasPerdidas && s.citasPerdidas !== "nose" ? `${s.citasPerdidas} por semana` : "",
+          ticket_promedio: s.ticket && s.ticket !== "nose" ? `${s.ticket} MXN por cita` : "",
+          objetivo: s.objetivo ?? "",
         }),
       });
       if (!res.ok) throw new Error("fail");
+      const data = (await res.json().catch(() => null)) as { propuesta_url?: string } | null;
+      if (data?.propuesta_url?.startsWith("https://upcoreai.com/p/")) {
+        setPropuestaUrl(data.propuesta_url);
+      }
       setStep("enviado");
     } catch {
       setError(true);
@@ -376,6 +416,38 @@ export function EmpezarForm() {
                         check
                         selected={s.pacientesSemana === o.val}
                         onClick={() => set({ pacientesSemana: o.val })}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="mb-7">
+                  <BlockLabel hint="Con esto calculamos cuánto se está yendo — es la pregunta que más vale">
+                    ¿Cuántas citas se pierden o no llegan por semana?
+                  </BlockLabel>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+                    {CITAS_PERDIDAS_OPTIONS.map((o) => (
+                      <OptionBtn
+                        key={o.val}
+                        opt={o}
+                        check
+                        selected={s.citasPerdidas === o.val}
+                        onClick={() => set({ citasPerdidas: o.val })}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="mb-7">
+                  <BlockLabel hint="Aproximado en pesos — cuánto deja una cita o tratamiento típico">
+                    ¿De cuánto es una cita promedio en tu clínica?
+                  </BlockLabel>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+                    {TICKET_OPTIONS.map((o) => (
+                      <OptionBtn
+                        key={o.val}
+                        opt={o}
+                        check
+                        selected={s.ticket === o.val}
+                        onClick={() => set({ ticket: o.val })}
                       />
                     ))}
                   </div>
@@ -545,8 +617,24 @@ export function EmpezarForm() {
               <motion.div key="s5" {...panelAnim}>
                 <StepHeader
                   q="Para cerrar"
-                  hint="Dos toques y pasamos a tus datos"
+                  hint="Tres toques y pasamos a tus datos"
                 />
+                <div className="mb-7">
+                  <BlockLabel hint="Define hacia dónde apuntamos tu diagnóstico">
+                    Si esto funciona, ¿qué es lo que más quieres lograr?
+                  </BlockLabel>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    {OBJETIVO_OPTIONS.map((o) => (
+                      <OptionBtn
+                        key={o.val}
+                        opt={o}
+                        check
+                        selected={s.objetivo === o.val}
+                        onClick={() => set({ objetivo: o.val })}
+                      />
+                    ))}
+                  </div>
+                </div>
                 <div className="mb-7">
                   <BlockLabel>¿Qué tan pronto te gustaría empezar?</BlockLabel>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -664,20 +752,51 @@ export function EmpezarForm() {
                 transition={{ duration: 0.5, ease }}
                 className="py-6 text-center"
               >
-                <div className="mb-5 text-5xl">✅</div>
-                <h2 className="mb-3 text-2xl font-semibold tracking-tight">¡Gracias, {s.nombre}!</h2>
-                <p className="mx-auto mb-8 max-w-md font-light leading-relaxed text-mocha">
-                  Ya tenemos tu información. Te contactamos pronto por WhatsApp con tu diagnóstico —
-                  sin compromiso.
-                </p>
-                <a
-                  href={CONTACT.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-shine inline-block rounded-full bg-clay px-8 py-3.5 font-semibold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright"
-                >
-                  Escríbenos ahora por WhatsApp
-                </a>
+                <div className="mb-5 text-5xl">{propuestaUrl ? "🎉" : "✅"}</div>
+                <h2 className="mb-3 text-2xl font-semibold tracking-tight">
+                  {propuestaUrl ? `¡Listo, ${s.nombre}! Tu diagnóstico ya existe` : `¡Gracias, ${s.nombre}!`}
+                </h2>
+                {propuestaUrl ? (
+                  <>
+                    <p className="mx-auto mb-8 max-w-md font-light leading-relaxed text-mocha">
+                      Lo calculamos con tus números en este momento: qué se te está escapando,
+                      cuánto vale y cómo lo arreglamos. {s.correo.trim() ? "También te lo mandamos por correo." : ""}
+                    </p>
+                    <a
+                      href={propuestaUrl}
+                      className="btn-shine inline-block rounded-full bg-clay px-9 py-4 text-lg font-bold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright"
+                    >
+                      Ver mi diagnóstico ahora →
+                    </a>
+                    <p className="mt-5 text-xs font-light text-mocha">
+                      ¿Dudas? Escríbenos por{" "}
+                      <a
+                        href={CONTACT.whatsapp}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sand underline hover:text-clay"
+                      >
+                        WhatsApp
+                      </a>{" "}
+                      — te contesta nuestro asistente al momento, a cualquier hora.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="mx-auto mb-8 max-w-md font-light leading-relaxed text-mocha">
+                      Ya tenemos tu información. Te contactamos pronto por WhatsApp con tu
+                      diagnóstico — sin compromiso.
+                    </p>
+                    <a
+                      href={CONTACT.whatsapp}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-shine inline-block rounded-full bg-clay px-8 py-3.5 font-semibold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright"
+                    >
+                      Escríbenos ahora por WhatsApp
+                    </a>
+                  </>
+                )}
               </motion.div>
             )}
           </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { Analytics } from "@vercel/analytics/react";
+import { JsonLd } from "@/components/JsonLd";
 import "./globals.css";
 
 const title = "Upcore AI | Automatización con IA para clínicas";
@@ -22,7 +23,9 @@ export const metadata: Metadata = {
     "dashboard para clínicas",
   ],
   authors: [{ name: "Upcore AI" }],
-  alternates: { canonical: "https://upcoreai.com" },
+  // "./" se resuelve a la URL de cada ruta (con metadataBase); un valor fijo
+  // haría que todas las páginas declaren la home como su canonical.
+  alternates: { canonical: "./" },
   openGraph: {
     title,
     description,
@@ -30,7 +33,7 @@ export const metadata: Metadata = {
     siteName: "Upcore AI",
     images: ["/social.png"],
     type: "website",
-    locale: "es_ES",
+    locale: "es_MX",
   },
   twitter: {
     card: "summary_large_image",
@@ -42,18 +45,37 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Upcore AI",
-  url: "https://upcoreai.com",
-  logo: "https://upcoreai.com/apple-icon",
-  description:
-    "Automatización con IA para clínicas privadas de salud y estética: agentes de WhatsApp, reducción de no-shows, sistemas y dashboards a la medida.",
-  areaServed: "MX",
-  contactPoint: {
-    "@type": "ContactPoint",
-    contactType: "sales",
-    url: "https://cal.com/yael-upcore-ai/diagnostico-gratis",
-  },
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://upcoreai.com/#organizacion",
+      name: "Upcore AI",
+      url: "https://upcoreai.com",
+      logo: "https://upcoreai.com/apple-icon",
+      description:
+        "Automatización con IA para clínicas privadas de salud y estética: agentes de WhatsApp, reducción de no-shows, sistemas y dashboards a la medida.",
+      areaServed: { "@type": "Country", name: "México" },
+      knowsAbout: [
+        "automatización para clínicas",
+        "agentes de WhatsApp con IA",
+        "reducción de no-shows",
+        "dashboards para clínicas",
+      ],
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        url: "https://cal.com/yael-upcore-ai/diagnostico-gratis",
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://upcoreai.com/#sitio",
+      url: "https://upcoreai.com",
+      name: "Upcore AI",
+      inLanguage: "es-MX",
+      publisher: { "@id": "https://upcoreai.com/#organizacion" },
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -65,10 +87,7 @@ export default function RootLayout({
     <html lang="es" className={GeistSans.variable}>
       <body className="font-sans antialiased">
         {children}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <JsonLd data={jsonLd} />
         <Analytics />
       </body>
     </html>

@@ -1,4 +1,5 @@
 import { Logo } from "./Logo";
+import { SOLUCIONES } from "@/lib/soluciones";
 
 export function Footer() {
   return (
@@ -8,6 +9,28 @@ export function Footer() {
           <Logo />
         </a>
       </div>
+      <nav aria-label="Soluciones" className="mb-8">
+        <div className="mb-4 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-mocha/60">
+          Soluciones
+        </div>
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+          {SOLUCIONES.map((s) => (
+            <a
+              key={s.slug}
+              href={`/soluciones/${s.slug}`}
+              className="text-xs text-mocha transition-colors hover:text-clay"
+            >
+              {s.nombreCorto}
+            </a>
+          ))}
+          <a
+            href="/casos/clinica-dental-ejemplo"
+            className="text-xs text-mocha transition-colors hover:text-clay"
+          >
+            Caso de ejemplo
+          </a>
+        </div>
+      </nav>
       <div className="mb-8 flex flex-col items-center justify-center gap-4 md:flex-row md:gap-8">
         <a
           href="/privacidad"

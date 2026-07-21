@@ -1,18 +1,10 @@
 import type { MetadataRoute } from "next";
+import { RUTAS_INDEXABLES, SITE_URL } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: "https://upcoreai.com",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 1,
-    },
-    {
-      url: "https://upcoreai.com/demo",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-  ];
+  return RUTAS_INDEXABLES.map((ruta) => ({
+    url: ruta.path === "/" ? SITE_URL : `${SITE_URL}${ruta.path}`,
+    changeFrequency: ruta.changeFrequency,
+    priority: ruta.priority,
+  }));
 }
