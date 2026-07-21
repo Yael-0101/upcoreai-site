@@ -250,17 +250,23 @@ export function EmpezarForm() {
       };
     });
 
+  const preguntasActivas = PRODUCTO_OPTIONS.filter(
+    (p) => s.productos.includes(p.val) && PREGUNTAS_POR_PRODUCTO[p.val]
+  );
+
   const step1Ready =
     s.clinicaNombre.trim() !== "" && !!s.tipoClinica && !!s.tamano;
   const step2Ready = !!s.pacientesSemana && !!s.citasPerdidas && !!s.ticket;
   const step3Ready = s.productos.length > 0 || s.sinPreferencia;
-  const step4Ready = s.agendaHoy.length > 0;
+  // Candado de completitud: las preguntas de dolor/producto dejan de ser opcionales —
+  // sin ellas el diagnóstico sale flaco.
+  const step4Ready =
+    s.agendaHoy.length > 0 &&
+    (s.sinPreferencia
+      ? s.dolores.length > 0
+      : preguntasActivas.every((p) => (s.respuestas[p.val] ?? []).length > 0));
   const step5Ready = !!s.urgencia && !!s.papel && !!s.objetivo;
   const step6Ready = s.nombre.trim() !== "" && s.contacto.trim() !== "" && s.acepta;
-
-  const preguntasActivas = PRODUCTO_OPTIONS.filter(
-    (p) => s.productos.includes(p.val) && PREGUNTAS_POR_PRODUCTO[p.val]
-  );
 
   const submit = async () => {
     setLoading(true);
@@ -520,7 +526,7 @@ export function EmpezarForm() {
               <motion.div key="s4" {...panelAnim}>
                 <StepHeader
                   q="Cuéntanos tu situación"
-                  hint="Toca las opciones que apliquen — puedes elegir varias"
+                  hint="Toca al menos una opción en cada pregunta — de aquí sale tu diagnóstico"
                 />
 
                 <div className="mb-7">
