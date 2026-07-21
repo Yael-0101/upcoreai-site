@@ -54,8 +54,8 @@ export const PASOS = {
   items: [
     {
       n: "01",
-      title: "Diagnóstico gratis",
-      body: "Analizamos tu clínica y te decimos exactamente qué automatizar y cuánto puedes recuperar.",
+      title: "Diagnóstico gratis al instante",
+      body: "Contesta unas preguntas (aquí o por WhatsApp) y recibe tu diagnóstico en el momento: cuánto pierdes hoy, con tus números, y cómo lo arreglamos.",
     },
     {
       n: "02",
@@ -201,7 +201,7 @@ export const FAQ = {
     },
     {
       q: "¿Cuánto cuesta?",
-      a: "Depende de tu clínica y de lo que necesites. Lo calculamos en tu diagnóstico gratis, o usa la calculadora de arriba para un estimado al instante.",
+      a: "Depende de tu clínica y de lo que necesites. Haz tu diagnóstico gratis (tarda 3 minutos y el resultado te llega al instante, con los números de TU clínica) o usa la calculadora de arriba para un estimado rápido.",
     },
   ],
 };
@@ -219,7 +219,7 @@ export const SOBRE = {
 
 export const CTA_FINAL = {
   heading: "¿Listo para llenar tu agenda?",
-  sub: "Agenda tu diagnóstico gratis. Te decimos exactamente qué automatizar y cuánto puedes recuperar — sin compromiso.",
+  sub: "Haz tu diagnóstico gratis: 3 minutos de preguntas y al instante ves cuánto pierde hoy tu clínica y cómo lo arreglamos — sin llamadas ni compromiso.",
   ctaAgenda: "Agenda tu diagnóstico gratis",
   ctaWhatsapp: "Escríbenos por WhatsApp",
 };

@@ -347,8 +347,9 @@ export function EmpezarForm() {
           Empieza sin llamada
         </h1>
         <p className="mb-14 text-center font-light text-mocha">
-          Cuéntanos de tu clínica en 3 minutos — puro toque de botón. Te escribimos
-          por WhatsApp con tu diagnóstico, sin agendar nada.
+          Cuéntanos de tu clínica en 3 minutos — puro toque de botón. Al terminar, tu
+          diagnóstico aparece <span className="text-sand">al instante</span>, con los
+          números de tu clínica.
         </p>
       </Reveal>
 
