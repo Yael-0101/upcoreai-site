@@ -83,13 +83,15 @@ async function getPropuesta(token: string): Promise<Snapshot | null> {
     if (!snap.fecha || Number.isNaN(edadMs) || edadMs > VIGENCIA_DIAS * 24 * 60 * 60 * 1000) {
       return null;
     }
-    // Marca "vista" para el seguimiento (primera vez; sin bloquear el render).
+    // Marca "vista" para el seguimiento (primera vez). Se espera la llamada porque
+    // en Vercel un fetch sin await muere al congelarse la función (lección 2026-07-21).
     const vistaUrl = process.env.N8N_PROPUESTA_VISTA_URL;
     if (vistaUrl && fila.estado === "activa") {
-      fetch(vistaUrl, {
+      await fetch(vistaUrl, {
         method: "POST",
         headers: { "X-Panel-Secret": secret, "Content-Type": "application/json" },
         body: JSON.stringify({ token }),
+        signal: AbortSignal.timeout(4000),
       }).catch(() => {});
     }
     return snap;
