@@ -158,10 +158,18 @@ export default function NosotrosPage() {
               </a>
             </Reveal>
             <Reveal delay={0.06}>
-              <a href={`mailto:${ORGANIZACION.email}`} className="card-soft block h-full rounded-2xl p-6 transition-colors hover:border-clay">
+              {/* Gmail compose en vez de mailto: en compus sin app de correo
+                  configurada el mailto "no hace nada" (reporte de Yael 2026-07-23). */}
+              <a
+                href={`https://mail.google.com/mail/?view=cm&fs=1&to=${ORGANIZACION.email}&su=${encodeURIComponent("Consulta para Upcore AI")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="card-soft block h-full rounded-2xl p-6 transition-colors hover:border-clay"
+              >
                 <div className="glass-body">
                   <h3 className="mb-1 font-semibold text-sand">Correo</h3>
                   <p className="break-all text-sm font-light text-mocha">{ORGANIZACION.email}</p>
+                  <p className="mt-1 text-xs font-light text-mocha/70">Clic para escribirnos →</p>
                 </div>
               </a>
             </Reveal>

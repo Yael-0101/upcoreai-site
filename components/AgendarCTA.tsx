@@ -4,9 +4,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { CONTACT } from "@/lib/content";
 
-// Botón único "Agenda tu diagnóstico": al hacer clic abre las 2 formas de empezar
-// (con llamada → Calendly, sin llamada → /empezar). Un solo CTA en todo el sitio,
-// y el cliente elige el camino que le acomode.
+// Botón único "Agenda tu diagnóstico": al hacer clic abre los caminos para empezar
+// (llamada normal → WhatsApp con el asistente, videollamada → cal.com,
+// sin llamada → /empezar, demo → /demo). Un solo CTA en todo el sitio.
 export function AgendarCTA({
   label = "Agenda tu diagnóstico",
   className = "",
@@ -59,16 +59,39 @@ export function AgendarCTA({
 
               <div className="flex flex-col gap-3">
                 <a
-                  href={CONTACT.calendly}
+                  href={
+                    "https://wa.me/14244472698?text=" +
+                    encodeURIComponent(
+                      "Hola, quiero agendar una llamada para mi diagnóstico gratis."
+                    )
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="card-soft group flex items-center gap-4 rounded-2xl p-4 text-left"
                 >
                   <span className="text-2xl">📞</span>
                   <span className="flex-1">
-                    <span className="block font-semibold text-sand">Con llamada</span>
+                    <span className="block font-semibold text-sand">Llamada normal</span>
                     <span className="block text-xs font-light leading-relaxed text-mocha">
-                      Elige día y hora en el calendario y platicamos.
+                      Te llamamos por WhatsApp — escríbenos y eliges el día y la hora al momento.
+                    </span>
+                  </span>
+                  <span className="text-clay transition-transform duration-300 group-hover:translate-x-1">
+                    →
+                  </span>
+                </a>
+
+                <a
+                  href={CONTACT.calendly}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="card-soft group flex items-center gap-4 rounded-2xl p-4 text-left"
+                >
+                  <span className="text-2xl">🎥</span>
+                  <span className="flex-1">
+                    <span className="block font-semibold text-sand">Videollamada</span>
+                    <span className="block text-xs font-light leading-relaxed text-mocha">
+                      Elige día y hora en el calendario — platicamos por Google Meet.
                     </span>
                   </span>
                   <span className="text-clay transition-transform duration-300 group-hover:translate-x-1">
