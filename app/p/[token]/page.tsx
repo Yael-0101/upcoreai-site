@@ -11,7 +11,8 @@ import { DescargarPDF } from "@/components/DescargarPDF";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Tu diagnóstico — Upcore AI",
+  // El template del layout agrega "| Upcore AI".
+  title: "Tu diagnóstico",
   robots: { index: false, follow: false },
 };
 
@@ -177,32 +178,147 @@ function PlanCard({
   );
 }
 
-const PROCESO = [
-  {
-    n: "1",
-    t: "Me confirmas por WhatsApp",
-    d: "Un mensaje basta: “va”. Te mando un acuerdo simple de 1 página con todo lo que incluye — sin letras chiquitas.",
+// ── Sección 6: "Así trabajaríamos juntos" (línea de tiempo + requisitos) ──────
+// Días hábiles aproximados desde el anticipo, escalados por la complejidad del
+// proyecto (viene en el snapshot). Estimado honesto, nunca promesa cerrada.
+const TIEMPOS: Record<
+  string,
+  { construccion: string; pruebas: string; entrega: string; total: string }
+> = {
+  "Solución esencial": {
+    construccion: "Días 2–6",
+    pruebas: "Días 7–9",
+    entrega: "≈ Día 10",
+    total: "≈ 2 semanas",
   },
-  {
-    n: "2",
-    t: "Anticipo del 50%",
-    d: "Por transferencia. En cuanto llega, empiezo a construir ese mismo día.",
+  "Sistema a la medida": {
+    construccion: "Días 2–10",
+    pruebas: "Días 11–14",
+    entrega: "≈ Día 15",
+    total: "≈ 3 semanas",
   },
-  {
-    n: "3",
-    t: "Construcción con avances",
-    d: "Te voy mandando avances por WhatsApp o video corto — tú no tienes que hacer nada, solo opinar si quieres.",
+  "Infraestructura completa": {
+    construccion: "Días 2–14",
+    pruebas: "Días 15–18",
+    entrega: "≈ Día 20",
+    total: "3–4 semanas",
   },
-  {
-    n: "4",
-    t: "Entrega y capacitación",
-    d: "Todo funcionando, con un video de cómo usarlo + una guía de 1 página. Queda a TU nombre y en TUS cuentas. Ahí se liquida el resto.",
-  },
-  {
-    n: "5",
-    t: "Acompañamiento",
-    d: "30 días de ajustes incluidos. Y si elegiste Gestionado, nosotros lo operamos, vigilamos y mejoramos por ti cada mes.",
-  },
+};
+const TIEMPO_DEFAULT = TIEMPOS["Solución esencial"];
+
+function lineaDeTiempo(t: (typeof TIEMPOS)[string]) {
+  return [
+    {
+      n: "Día 0",
+      t: "Aceptas y das el anticipo (50%)",
+      d: "Me confirmas por WhatsApp con un “va”, te mando el acuerdo simple de 1 página (sin letras chiquitas) y, en cuanto llega tu anticipo por transferencia, arranco ese mismo día.",
+    },
+    {
+      n: "Día 1",
+      t: "Recibes tu Portal de Arranque",
+      d: "Un link privado donde haces tu parte a tu ritmo: el checklist de tu clínica (15 min), la decisión de tu número y las guías para crear tus cuentas — a TU nombre y con tus propios clics. Todo se guarda solo.",
+    },
+    {
+      n: t.construccion,
+      t: "Construcción con avances",
+      d: "Construyo todo y lo conecto con tus herramientas. Te comparto avances por WhatsApp o video corto — tú solo opinas si quieres.",
+    },
+    {
+      n: t.pruebas,
+      t: "TÚ lo pruebas",
+      d: "Lo usas como si fueras tu propio paciente y ajustamos lo que pidas antes de salir en vivo.",
+    },
+    {
+      n: t.entrega,
+      t: "Entrega y capacitación",
+      d: "Todo funcionando y a tu nombre, con video de cómo usarlo + guía de 1 página. Aquí se liquida el resto.",
+    },
+    {
+      n: "+30 días",
+      t: "Acompañamiento",
+      d: "Ajustes incluidos por mi cuenta. Y si elegiste Gestionado, lo operamos, vigilamos y mejoramos por ti cada mes.",
+    },
+  ];
+}
+
+// "Tu parte": lo que necesitamos del cliente, por pieza del proyecto. Las claves
+// son los mismos prefijos de `incluye[]` que usa PIEZA_ICONS (startsWith).
+const TU_PARTE: Record<string, { t: string; min: string }[]> = {
+  Agente: [
+    { t: "Contestar el checklist de tu clínica: servicios, precios, horarios y tu tono", min: "15 min" },
+    { t: "Decidir qué número de WhatsApp usará el asistente — te explico la diferencia antes", min: "5 min" },
+    { t: "Crear tus cuentas viendo nuestro video — tú das los clics; contraseñas por chat, jamás", min: "20–30 min" },
+    { t: "Darme acceso a tu calendario o agenda", min: "5 min" },
+    { t: "Probarlo como si fueras tu paciente antes de salir en vivo", min: "15 min" },
+  ],
+  Sitio: [
+    { t: "Pasarme los textos, fotos y logo que ya tengas de tu clínica", min: "20 min" },
+    { t: "Tu dominio (o lo compramos juntos, a tu nombre)", min: "10 min" },
+    { t: "Revisar el borrador y pedirme cambios", min: "15 min" },
+  ],
+  Automatizaciones: [
+    { t: "Darme acceso a tu calendario o agenda", min: "5 min" },
+    { t: "Aprobar los textos de recordatorios y confirmaciones (van con tu tono)", min: "10 min" },
+    { t: "Probar el flujo completo con una cita de mentira", min: "10 min" },
+  ],
+  Reactivación: [
+    { t: "Sacar tu lista de pacientes inactivos — te digo exactamente cómo exportarla", min: "15 min" },
+    { t: "Aprobar los mensajes de reactivación", min: "10 min" },
+  ],
+  Dashboard: [
+    { t: "Una revisión corta de avances para dejar tu panel a tu gusto", min: "15 min" },
+  ],
+};
+const TU_PARTE_GENERICA = [
+  { t: "Contestar el checklist de tu clínica", min: "15 min" },
+  { t: "Crear tus cuentas viendo nuestro video — tú das los clics", min: "20–30 min" },
+  { t: "Probar el sistema antes de la entrega", min: "15 min" },
+];
+
+function tuParte(incluye: string[]) {
+  const items: { t: string; min: string }[] = [];
+  const vistos = new Set<string>();
+  for (const clave of Object.keys(TU_PARTE)) {
+    if (!incluye.some((x) => x.startsWith(clave))) continue;
+    for (const item of TU_PARTE[clave]) {
+      if (vistos.has(item.t)) continue; // dedup entre piezas (ej. acceso al calendario)
+      vistos.add(item.t);
+      items.push(item);
+    }
+  }
+  return items.length > 0 ? items : TU_PARTE_GENERICA;
+}
+
+// Personalización ligera: qué dijo el cliente sobre cómo maneja su agenda hoy.
+// El nombre de su software viene embebido entre paréntesis en `agenda_hoy`
+// (ej. "Un software o sistema (Dentalink)").
+function lineaAgenda(agendaHoy: string): string | null {
+  const a = (agendaHoy || "").trim();
+  if (!a) return null;
+  const software = a.match(/\(([^)]+)\)/)?.[1]?.trim();
+  if (software)
+    return `Integrarnos a tu ${software} — tus datos y tu expediente se quedan donde están`;
+  if (/software|sistema/i.test(a))
+    return "Integrarnos al sistema que ya usas — tus datos se quedan donde están";
+  if (/papel|excel/i.test(a))
+    return "Dejarte la agenda ordenada en un calendario digital (hoy la llevas en papel/Excel) — sin costo extra";
+  return "Conectarnos a tu forma actual de agendar — sin obligarte a cambiar nada";
+}
+
+const NUESTRA_PARTE = [
+  "Construir el sistema completo, de punta a punta",
+  "Probarlo contigo hasta que quede como acordamos",
+  "Capacitarte con un video corto + guía de 1 página",
+  "La garantía: si no entrego lo acordado funcionando, te devuelvo tu anticipo",
+  "30 días de ajustes después de la entrega, por mi cuenta",
+];
+
+const NO_NECESITAS = [
+  "Saber de tecnología",
+  "Cambiar tu software o tu forma de trabajar",
+  "Contratar a alguien más",
+  "Pagar todo por adelantado",
+  "Compartir contraseñas por chat (eso jamás)",
 ];
 
 const FAQ = [
@@ -277,6 +393,13 @@ export default async function PropuestaPublica({
     p.diag.mensaje && `“${p.diag.mensaje}”`,
   ].filter(Boolean) as string[];
   const n = p.numeros;
+  // Sección 6 (fusionada): tiempos por complejidad + requisitos por pieza.
+  const tiempos = TIEMPOS[p.complejidad] ?? TIEMPO_DEFAULT;
+  const pasos = lineaDeTiempo(tiempos);
+  const parte = tuParte(p.incluye ?? []);
+  const horasTuParte = parte.length <= 5 ? "~1 hora" : "~1 a 2 horas";
+  const agendaTxt = lineaAgenda(p.diag.agenda_hoy);
+  const nuestraParte = agendaTxt ? [NUESTRA_PARTE[0], agendaTxt, ...NUESTRA_PARTE.slice(1)] : NUESTRA_PARTE;
   const waPropuesta =
     "https://wa.me/14244472698?text=" +
     encodeURIComponent(
@@ -419,14 +542,15 @@ export default async function PropuestaPublica({
           </div>
         </Seccion>
 
-        <Seccion titulo="6 · Si dices que sí, así es el proceso completo">
-          <div className="mb-12 grid gap-3">
-            {PROCESO.map((paso) => (
+        <Seccion titulo="6 · Si dices que sí, así trabajaríamos juntos">
+          {/* Línea de tiempo con días */}
+          <div className="mb-3 grid gap-3">
+            {pasos.map((paso) => (
               <div
-                key={paso.n}
+                key={paso.t}
                 className="flex items-start gap-4 rounded-2xl bg-[rgba(242,231,219,0.03)] p-5"
               >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-clay text-sm font-bold text-obsidian">
+                <span className="mt-0.5 inline-flex min-w-[5.2rem] shrink-0 items-center justify-center rounded-full bg-clay px-3 py-1 text-xs font-bold text-obsidian">
                   {paso.n}
                 </span>
                 <div>
@@ -435,6 +559,55 @@ export default async function PropuestaPublica({
                 </div>
               </div>
             ))}
+          </div>
+          <p className="mb-8 text-xs font-light text-mocha/70">
+            * Días hábiles aproximados desde tu anticipo — entrega total {tiempos.total}. También
+            dependen de tus tiempos de respuesta: si tú vas rápido, esto vuela.
+          </p>
+
+          {/* Tu parte / Nuestra parte */}
+          <div className="mb-5 grid gap-5 md:grid-cols-2">
+            <div className="rounded-3xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-7">
+              <h3 className="mb-1 font-semibold text-sand">🤝 Tu parte</h3>
+              <p className="mb-4 text-sm font-light text-mocha">
+                {horasTuParte} en total, repartida en los primeros días:
+              </p>
+              <div className="grid gap-2.5">
+                {parte.map((item) => (
+                  <div key={item.t} className="flex gap-2.5 text-sm font-light">
+                    <span className="text-sage">✓</span>
+                    <span>
+                      {item.t} <span className="text-mocha">({item.min})</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-3xl border border-clay/40 bg-[rgba(200,98,61,0.06)] p-7">
+              <h3 className="mb-1 font-semibold text-sand">🏗️ Nuestra parte</h3>
+              <p className="mb-4 text-sm font-light text-mocha">Todo lo demás:</p>
+              <div className="grid gap-2.5">
+                {nuestraParte.map((x) => (
+                  <div key={x} className="flex gap-2.5 text-sm font-light">
+                    <span className="text-clay">✓</span>
+                    <span>{x}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Lo que NO necesitas */}
+          <div className="mb-12 rounded-3xl border border-[rgba(242,231,219,0.1)] bg-[rgba(242,231,219,0.04)] p-7">
+            <h3 className="mb-3 font-semibold text-sand">Y lo que NO vas a necesitar:</h3>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {NO_NECESITAS.map((x) => (
+                <div key={x} className="flex gap-2.5 text-sm font-light text-mocha">
+                  <span className="text-clay">✗</span>
+                  <span>{x}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </Seccion>
 

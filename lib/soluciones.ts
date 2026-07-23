@@ -9,7 +9,7 @@ import type { Giro } from "./demo-config";
 
 export type Solucion = {
   slug: string;
-  /** Título SEO (pestaña y Google) */
+  /** Título SEO SIN "| Upcore AI" — el layout agrega la marca */
   title: string;
   metaDescription: string;
   eyebrow: string;
@@ -22,12 +22,22 @@ export type Solucion = {
   stats: { value: string; label: string }[];
   faqs: { q: string; a: string }[];
   giroDemo: Giro;
+  /** "Cómo funciona, paso a paso" (opcional) */
+  pasos?: { title: string; body: string }[];
+  /** "Nos integramos a lo que ya usas" (opcional) */
+  integraciones?: { nombre: string; detalle: string }[];
+  /** "Tus datos y tus cuentas son tuyos" (opcional) */
+  seguridad?: { title: string; body: string }[];
+  /** Slugs de otras soluciones → enlaces internos (opcional) */
+  relacionadas?: string[];
+  /** ISO "2026-07-22" → lastModified del sitemap (solo fechas reales) */
+  actualizado?: string;
 };
 
 export const SOLUCIONES: Solucion[] = [
   {
     slug: "chatbot-whatsapp-para-clinicas",
-    title: "Chatbot de WhatsApp para clínicas: responde y agenda 24/7 | Upcore AI",
+    title: "Chatbot de WhatsApp para clínicas: responde y agenda 24/7",
     metaDescription:
       "Un chatbot de WhatsApp con IA para tu clínica: responde a tus pacientes al instante, agenda citas y confirma asistencia 24/7. Hecho para clínicas en México.",
     eyebrow: "Chatbot de WhatsApp para clínicas",
@@ -88,10 +98,66 @@ export const SOLUCIONES: Solucion[] = [
       },
     ],
     giroDemo: "dental",
+    pasos: [
+      {
+        title: "Diagnóstico gratis (3 minutos)",
+        body: "Nos cuentas cómo maneja hoy tu clínica el WhatsApp y las citas — por chat o en nuestra web. Al instante recibes tu diagnóstico con números: cuánto se te está yendo y qué conviene automatizar primero.",
+      },
+      {
+        title: "Lo construimos por ti",
+        body: "Cargamos tu información real — servicios, precios, horarios, tono — y conectamos tu número con la API oficial de WhatsApp. Tú no configuras nada ni aprendes ninguna herramienta.",
+      },
+      {
+        title: "Lo pruebas antes de salir en vivo",
+        body: "Chateas con tu asistente como si fueras tu propio paciente y ajustamos lo que pidas: frases, límites, y en qué momentos debe pasar la conversación a una persona.",
+      },
+      {
+        title: "Sale a producción en 1–2 semanas",
+        body: "Empieza a contestar de verdad. Tu equipo ve cada conversación y puede tomar el control de cualquier chat en el momento que quiera.",
+      },
+      {
+        title: "Mejora con tu operación",
+        body: "Lo afinamos con las preguntas reales de tus pacientes. Y si eliges el plan Gestionado, nosotros lo vigilamos y lo mejoramos por ti todos los meses.",
+      },
+    ],
+    integraciones: [
+      {
+        nombre: "Google Calendar",
+        detalle: "El asistente agenda directo en tu calendario y lee los horarios que de verdad tienes libres.",
+      },
+      {
+        nombre: "Tu agenda o software actual",
+        detalle: "¿Ya usas un sistema para tus citas? Nos integramos encima — no te hacemos migrar ni cambiar tu forma de trabajar.",
+      },
+      {
+        nombre: "WhatsApp Business API oficial",
+        detalle: "Tu número conectado por la vía autorizada de Meta. Nada de apps piratas que ponen en riesgo tu línea.",
+      },
+      {
+        nombre: "Tu hoja de cálculo o CRM",
+        detalle: "Cada paciente y cada cita quedan registrados donde tú ya llevas tu información.",
+      },
+    ],
+    seguridad: [
+      {
+        title: "Tus cuentas, tus llaves",
+        body: "El número, las APIs y los datos viven en cuentas a TU nombre. Si un día dejamos de trabajar juntos, todo sigue funcionando y sigue siendo tuyo.",
+      },
+      {
+        title: "Conversaciones protegidas",
+        body: "WhatsApp cifra los mensajes y usamos exclusivamente la API oficial de Meta — la vía autorizada, no atajos que arriesgan tu número.",
+      },
+      {
+        title: "Sin sorpresas de consumo",
+        body: "Las APIs se contratan a tu nombre y con tope de gasto activado. Ves tu consumo real, sin intermediarios que revendan de más.",
+      },
+    ],
+    relacionadas: ["recepcionista-virtual-clinica", "reducir-no-shows-clinica"],
+    actualizado: "2026-07-22",
   },
   {
     slug: "recepcionista-virtual-clinica",
-    title: "Recepcionista virtual con IA para tu clínica | Upcore AI",
+    title: "Recepcionista virtual con IA para tu clínica",
     metaDescription:
       "Una recepcionista virtual con inteligencia artificial que atiende WhatsApp, agenda citas y da seguimiento a tus pacientes — sin contratar a nadie más.",
     eyebrow: "Recepcionista virtual con IA",
@@ -152,10 +218,66 @@ export const SOLUCIONES: Solucion[] = [
       },
     ],
     giroDemo: "medica",
+    pasos: [
+      {
+        title: "Diagnóstico gratis con tus números",
+        body: "Vemos cuántos mensajes recibe tu clínica, en qué horarios llegan y qué se está quedando sin respuesta. Con tus datos reales, no con promedios de folleto.",
+      },
+      {
+        title: "Entrenamos a tu recepcionista virtual",
+        body: "Le cargamos tu catálogo de servicios, precios, indicaciones y tu forma de hablar. Queda lista para responder como alguien de tu propio equipo.",
+      },
+      {
+        title: "Definimos juntos sus límites",
+        body: "Qué responde sola, qué pasa a tu equipo y cómo les avisa. Tú pones las reglas; ella las sigue al pie de la letra, a cualquier hora.",
+      },
+      {
+        title: "En vivo en 1–2 semanas",
+        body: "Empieza a atender 24/7. Tu equipo conserva el control total: puede pausarla y tomar cualquier conversación desde su bandeja.",
+      },
+      {
+        title: "Se afina con el uso",
+        body: "La pulimos con las preguntas reales de tus pacientes para que cada semana atienda mejor. En el plan Gestionado, eso corre por nuestra cuenta.",
+      },
+    ],
+    integraciones: [
+      {
+        nombre: "Google Calendar",
+        detalle: "Agenda y confirma citas directamente en el calendario que ya usa tu clínica.",
+      },
+      {
+        nombre: "Tu sistema de agenda actual",
+        detalle: "Si ya tienes un software de citas o expediente, trabajamos encima de él — tus datos no se mueven de ahí.",
+      },
+      {
+        nombre: "WhatsApp Business API oficial",
+        detalle: "Atiende desde tu número, por la vía autorizada de Meta, con tu nombre y tu marca.",
+      },
+      {
+        nombre: "Tu CRM o expediente",
+        detalle: "No lo reemplazamos: tu recepcionista virtual registra y consulta donde tú ya trabajas.",
+      },
+    ],
+    seguridad: [
+      {
+        title: "Todo queda a tu nombre",
+        body: "Cuentas, número y datos son tuyos desde el día uno. Nunca quedas amarrado a nosotros para que tu clínica siga funcionando.",
+      },
+      {
+        title: "Tu equipo siempre al mando",
+        body: "Desde su bandeja pueden pausar al asistente, responder en persona o retomarlo cuando quieran. La última palabra siempre es humana.",
+      },
+      {
+        title: "Datos aislados y protegidos",
+        body: "La información de tus pacientes viaja cifrada y vive aislada en tus propias cuentas. No se comparte ni se mezcla con nadie.",
+      },
+    ],
+    relacionadas: ["chatbot-whatsapp-para-clinicas", "reducir-no-shows-clinica"],
+    actualizado: "2026-07-22",
   },
   {
     slug: "automatizacion-clinicas-dentales",
-    title: "Automatización con IA para clínicas dentales en México | Upcore AI",
+    title: "Automatización con IA para clínicas dentales en México",
     metaDescription:
       "Automatiza tu clínica dental: citas por WhatsApp, confirmaciones automáticas y menos no-shows. Agentes de IA hechos para dentistas en México.",
     eyebrow: "Automatización para clínicas dentales",
@@ -216,10 +338,66 @@ export const SOLUCIONES: Solucion[] = [
       },
     ],
     giroDemo: "dental",
+    pasos: [
+      {
+        title: "Diagnóstico con los números de tu consultorio",
+        body: "Citas al mes, no-shows, ticket promedio y tratamientos pausados. En 3 minutos sabes cuánto dinero se está quedando en la agenda y qué recuperarías.",
+      },
+      {
+        title: "Armamos tu sistema dental",
+        body: "Agente que responde y agenda + confirmaciones automáticas + reactivación de pacientes: limpiezas que ya tocan y tratamientos que quedaron a medias.",
+      },
+      {
+        title: "Conectamos tu agenda, no la cambiamos",
+        body: "Google Calendar o el software dental que ya uses. Tus expedientes se quedan donde están — nosotros trabajamos encima.",
+      },
+      {
+        title: "Pruebas y salida en vivo en 1–2 semanas",
+        body: "Lo pruebas como si fueras paciente, ajustamos los detalles y sale a contestar de verdad, con tu equipo siempre en control.",
+      },
+      {
+        title: "Resultados a la vista",
+        body: "Citas confirmadas, huecos rellenados y pacientes reactivados, medidos mes a mes. En el sistema completo lo ves en tu propio panel.",
+      },
+    ],
+    integraciones: [
+      {
+        nombre: "Google Calendar",
+        detalle: "El agente ve tus espacios reales y aparta las citas directo en tu calendario.",
+      },
+      {
+        nombre: "Tu software dental actual",
+        detalle: "Tus expedientes y odontogramas se quedan en tu sistema de siempre; el agente agenda y da seguimiento encima.",
+      },
+      {
+        nombre: "WhatsApp Business API oficial",
+        detalle: "Tu número de la clínica, conectado por la vía autorizada de Meta.",
+      },
+      {
+        nombre: "Tu hoja de cálculo",
+        detalle: "Si tu control es una hoja de cálculo, perfecto: ahí mismo registramos citas y seguimientos.",
+      },
+    ],
+    seguridad: [
+      {
+        title: "Los expedientes no se tocan",
+        body: "El agente agenda, confirma y da seguimiento. Tu expediente clínico se queda en tu sistema, bajo tus reglas y tu acceso.",
+      },
+      {
+        title: "Cuentas a tu nombre",
+        body: "Número, APIs y datos viven en tus propias cuentas, con tope de gasto. Todo es tuyo, trabajemos juntos o no.",
+      },
+      {
+        title: "Protegido de extremo a extremo",
+        body: "Mensajes cifrados por WhatsApp y acceso mínimo indispensable: el sistema solo ve lo que necesita para agendar.",
+      },
+    ],
+    relacionadas: ["reducir-no-shows-clinica", "chatbot-whatsapp-para-clinicas"],
+    actualizado: "2026-07-22",
   },
   {
     slug: "automatizacion-medicina-estetica",
-    title: "IA para clínicas de medicina estética: agenda llena sin saturar recepción | Upcore AI",
+    title: "IA para clínicas de medicina estética: agenda llena sin saturar recepción",
     metaDescription:
       "Automatización con IA para clínicas de medicina estética: responde WhatsApp al instante, agenda valoraciones y da seguimiento a tus pacientes.",
     eyebrow: "IA para medicina estética",
@@ -280,10 +458,66 @@ export const SOLUCIONES: Solucion[] = [
       },
     ],
     giroDemo: "estetica",
+    pasos: [
+      {
+        title: "Diagnóstico gratis de tu clínica",
+        body: "Cuántas consultas de valoración pierdes por responder tarde, cuántos pacientes no regresan a mantenimiento y cuánto vale eso al mes. Números tuyos, al instante.",
+      },
+      {
+        title: "Cargamos tu menú de tratamientos",
+        body: "Precios, duraciones, cuidados previos y posteriores, promociones vigentes. El asistente responde con TU información, con el tono premium de tu marca.",
+      },
+      {
+        title: "Definimos tono y límites clínicos",
+        body: "Cómo habla, qué informa y qué NO responde: las valoraciones médicas siempre las da tu especialista. El asistente informa, agenda y acompaña.",
+      },
+      {
+        title: "En vivo en 1–2 semanas",
+        body: "Empieza a convertir preguntas en valoraciones agendadas, también de noche y en fin de semana — cuando tus pacientes sí tienen tiempo de escribir.",
+      },
+      {
+        title: "Mantenimiento en automático",
+        body: "Recordatorios de retoque (“ya tocan tus 4 meses”) y seguimiento post-tratamiento con tu tono. Tus pacientes regresan sin que nadie los persiga.",
+      },
+    ],
+    integraciones: [
+      {
+        nombre: "Google Calendar",
+        detalle: "Valoraciones y citas apartadas directo en la agenda de tus cabinas o consultorios.",
+      },
+      {
+        nombre: "Tu agenda actual",
+        detalle: "Si ya usas un sistema de citas para estética, nos conectamos a él — sin migrar nada.",
+      },
+      {
+        nombre: "WhatsApp Business API oficial",
+        detalle: "La conversación vive en el canal donde tus pacientes deciden, desde tu número verificado.",
+      },
+      {
+        nombre: "Instagram → WhatsApp",
+        detalle: "El link de tu bio y tus anuncios llevan la conversación a WhatsApp, donde el asistente la convierte en cita.",
+      },
+    ],
+    seguridad: [
+      {
+        title: "Discreción, también técnica",
+        body: "Los datos de tus pacientes viajan cifrados y viven en tus cuentas. La privacidad que la estética exige, cuidada de verdad.",
+      },
+      {
+        title: "El especialista decide",
+        body: "El asistente informa precios, cuidados y disponibilidad; los diagnósticos y valoraciones clínicas siempre quedan en manos de tu médico.",
+      },
+      {
+        title: "Todo a tu nombre",
+        body: "Cuentas, número y datos son de tu clínica. Si mañana cambias de proveedor, el sistema y la información siguen contigo.",
+      },
+    ],
+    relacionadas: ["recepcionista-virtual-clinica", "reducir-no-shows-clinica"],
+    actualizado: "2026-07-22",
   },
   {
     slug: "reducir-no-shows-clinica",
-    title: "Cómo reducir no-shows en tu clínica: confirmación automática de citas | Upcore AI",
+    title: "Cómo reducir no-shows en tu clínica: confirmación automática de citas",
     metaDescription:
       "Reduce las inasistencias de tu clínica con confirmación y recordatorios automáticos por WhatsApp. Cada cita confirmada es dinero que no se pierde.",
     eyebrow: "Reducir no-shows",
@@ -344,6 +578,62 @@ export const SOLUCIONES: Solucion[] = [
       },
     ],
     giroDemo: "dental",
+    pasos: [
+      {
+        title: "Medimos tu fuga real",
+        body: "¿Cuántas citas se te caen al mes y cuánto cuestan? El diagnóstico gratis lo calcula con tu volumen y tu ticket promedio — sin adornos.",
+      },
+      {
+        title: "Conectamos tu agenda",
+        body: "El sistema lee tus citas de Google Calendar o del software que ya uses. Nadie captura nada a mano ni cambia su forma de trabajar.",
+      },
+      {
+        title: "Diseñamos la secuencia de recordatorios",
+        body: "Cuándo se manda cada mensaje y qué dice, con tu tono: un día antes, el día de la cita, y el toque para reagendar si avisan que no llegan.",
+      },
+      {
+        title: "Confirmar o reagendar en un toque",
+        body: "El paciente responde el mensaje y listo. Un hueco avisado a tiempo es un espacio que tu recepción todavía puede volver a llenar.",
+      },
+      {
+        title: "Lista diaria para tu recepción",
+        body: "Cada mañana: quién confirmó, quién no, y a quién vale la pena llamar. El esfuerzo humano va solo donde de verdad hace falta.",
+      },
+    ],
+    integraciones: [
+      {
+        nombre: "Google Calendar",
+        detalle: "Lee tus citas reales y actualiza confirmaciones y cambios en tu propio calendario.",
+      },
+      {
+        nombre: "Tu software de agenda",
+        detalle: "¿Llevas las citas en otro sistema? Nos integramos a lo que uses — el registro sigue siendo el tuyo.",
+      },
+      {
+        nombre: "WhatsApp Business API oficial",
+        detalle: "Recordatorios que sí se leen, enviados desde tu número por la vía autorizada de Meta.",
+      },
+      {
+        nombre: "Tu hoja de control",
+        detalle: "Las confirmaciones y los pendientes se registran donde tu equipo ya trabaja.",
+      },
+    ],
+    seguridad: [
+      {
+        title: "Solo los datos mínimos",
+        body: "Nombre, teléfono y cita. Nada clínico viaja en los recordatorios — la información médica se queda en tu sistema.",
+      },
+      {
+        title: "Mensajes desde TU número",
+        body: "El paciente ve el WhatsApp de tu clínica, con tu nombre. La confianza que ya construiste no se presta a terceros.",
+      },
+      {
+        title: "Cuentas y topes a tu nombre",
+        body: "El envío de mensajes se contrata en tu cuenta, con tope de gasto activado. Pagas lo que se usa, y lo ves tú mismo.",
+      },
+    ],
+    relacionadas: ["chatbot-whatsapp-para-clinicas", "automatizacion-clinicas-dentales"],
+    actualizado: "2026-07-22",
   },
 ];
 

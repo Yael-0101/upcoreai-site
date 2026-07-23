@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { Legal, LegalSection } from "@/components/Legal";
 import { CONTACT } from "@/lib/content";
+import { metaPagina } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Política de Privacidad | Upcore AI",
+export const metadata: Metadata = metaPagina({
+  title: "Política de Privacidad",
   description:
     "Cómo Upcore AI recopila, usa y protege tus datos. No vendemos ni compartimos tu información.",
-};
+  path: "/privacidad",
+});
 
 const EMAIL = "upcoreai.com@gmail.com";
 

@@ -3,12 +3,14 @@ import { Backdrop } from "@/components/Backdrop";
 import { Nav } from "@/components/Nav";
 import { EmpezarForm } from "@/components/EmpezarForm";
 import { Footer } from "@/components/Footer";
+import { metaPagina } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Empieza sin llamada | Upcore AI",
+export const metadata: Metadata = metaPagina({
+  title: "Empieza sin llamada: tu diagnóstico gratis al instante",
   description:
-    "Cuéntanos de tu clínica en 2 minutos, sin agendar ninguna llamada. Te contactamos por WhatsApp con tu diagnóstico.",
-};
+    "Cuéntanos de tu clínica en 3 minutos, sin agendar ninguna llamada. Tu diagnóstico con números aparece al instante y también te llega por correo.",
+  path: "/empezar",
+});
 
 export default function EmpezarPage() {
   return (

@@ -6,17 +6,36 @@ import { Footer } from "@/components/Footer";
 import { CTAFinal } from "@/components/CTAFinal";
 import { SectionTitle } from "@/components/SectionTitle";
 import { Reveal } from "@/components/Reveal";
+import { JsonLd } from "@/components/JsonLd";
+import { metaPagina, articleJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
 const title =
-  "Qué hace el agente de IA en una clínica dental (caso de ejemplo con ROI) | Upcore AI";
+  "Qué hace el agente de IA en una clínica dental (caso de ejemplo con ROI)";
 const description =
   "Escenario modelado con cifras del sector: qué pasa cuando una clínica dental típica en México automatiza su WhatsApp y sus citas, número por número.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = metaPagina({
   title,
   description,
-  alternates: { canonical: "/casos/clinica-dental-ejemplo" },
-  openGraph: { title, description },
+  path: "/casos/clinica-dental-ejemplo",
+  tipo: "article",
+});
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    articleJsonLd({
+      titulo: title,
+      descripcion: description,
+      path: "/casos/clinica-dental-ejemplo",
+      fechaPublicado: "2026-07-18",
+      fechaActualizado: "2026-07-22",
+    }),
+    breadcrumbJsonLd([
+      { nombre: "Inicio", path: "/" },
+      { nombre: "Caso: clínica dental", path: "/casos/clinica-dental-ejemplo" },
+    ]),
+  ],
 };
 
 // Escenario modelado (NO es un cliente real): consultorio dental típico en México.
@@ -66,6 +85,7 @@ const ESCENARIO = {
 export default function CasoDentalPage() {
   return (
     <>
+      <JsonLd data={jsonLd} />
       <LiquidGlassFilter />
       <Backdrop />
       <Nav />

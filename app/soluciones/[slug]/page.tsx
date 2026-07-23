@@ -11,7 +11,7 @@ import { Reveal } from "@/components/Reveal";
 import { JsonLd } from "@/components/JsonLd";
 import { SOLUCIONES, getSolucion } from "@/lib/soluciones";
 import { RESULTADOS } from "@/lib/content";
-import { SITE_URL } from "@/lib/seo";
+import { SITE_URL, metaPagina, breadcrumbJsonLd } from "@/lib/seo";
 
 export function generateStaticParams() {
   return SOLUCIONES.map((s) => ({ slug: s.slug }));
@@ -25,12 +25,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const s = getSolucion(slug);
   if (!s) return {};
-  return {
+  return metaPagina({
     title: s.title,
     description: s.metaDescription,
-    alternates: { canonical: `/soluciones/${s.slug}` },
-    openGraph: { title: s.title, description: s.metaDescription },
-  };
+    path: `/soluciones/${s.slug}`,
+  });
 }
 
 export default async function SolucionPage({
@@ -61,6 +60,11 @@ export default async function SolucionPage({
           acceptedAnswer: { "@type": "Answer", text: f.a },
         })),
       },
+      // 2 niveles a propósito: no existe una página índice /soluciones.
+      breadcrumbJsonLd([
+        { nombre: "Inicio", path: "/" },
+        { nombre: s.nombreCorto, path: `/soluciones/${s.slug}` },
+      ]),
     ],
   };
 
@@ -151,6 +155,36 @@ export default async function SolucionPage({
           </div>
         </section>
 
+        {/* Cómo funciona, paso a paso */}
+        {s.pasos && (
+          <section className="px-[6%] py-20 md:px-[10%] md:py-24">
+            <SectionTitle
+              title="Cómo funciona, paso a paso"
+              sub="Del diagnóstico a tenerlo funcionando — sin que tengas que aprender nada técnico."
+              variant="fadeUp"
+            />
+            <div className="mx-auto max-w-3xl space-y-3">
+              {s.pasos.map((p, i) => (
+                <Reveal key={p.title} delay={i * 0.05}>
+                  <div className="card-soft rounded-2xl p-6">
+                    <div className="glass-body flex gap-5">
+                      <div className="pt-0.5 text-sm font-semibold text-clay">
+                        {String(i + 1).padStart(2, "0")}
+                      </div>
+                      <div>
+                        <h3 className="mb-1 font-semibold text-sand">{p.title}</h3>
+                        <p className="text-sm font-light leading-relaxed text-mocha">
+                          {p.body}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Stats */}
         <section className="px-[6%] py-20 md:px-[10%] md:py-24">
           <Reveal variant="fadeUp">
@@ -174,7 +208,83 @@ export default async function SolucionPage({
           </Reveal>
         </section>
 
+        {/* Integraciones */}
+        {s.integraciones && (
+          <section className="px-[6%] py-20 md:px-[10%] md:py-24">
+            <SectionTitle
+              title="Nos integramos a lo que ya usas"
+              sub="Tu forma de trabajar no cambia: el sistema se conecta encima de tus herramientas. No te obligamos a migrar a ninguna plataforma."
+              variant="fadeUp"
+            />
+            <div className="mx-auto grid max-w-4xl gap-4 sm:grid-cols-2">
+              {s.integraciones.map((it, i) => (
+                <Reveal key={it.nombre} delay={i * 0.06}>
+                  <div className="card-soft h-full rounded-2xl p-6">
+                    <div className="glass-body">
+                      <h3 className="mb-1 font-semibold text-sand">{it.nombre}</h3>
+                      <p className="text-sm font-light leading-relaxed text-mocha">
+                        {it.detalle}
+                      </p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Seguridad y propiedad */}
+        {s.seguridad && (
+          <section className="px-[6%] py-20 md:px-[10%] md:py-24">
+            <SectionTitle
+              title="Tus datos y tus cuentas, siempre tuyos"
+              variant="fadeUp"
+            />
+            <div className="mx-auto grid max-w-5xl gap-4 md:grid-cols-3">
+              {s.seguridad.map((sg, i) => (
+                <Reveal key={sg.title} delay={i * 0.08}>
+                  <div className="card-soft h-full rounded-2xl p-7">
+                    <div className="glass-body">
+                      <h3 className="mb-2 font-semibold text-sand">{sg.title}</h3>
+                      <p className="text-sm font-light leading-relaxed text-mocha">
+                        {sg.body}
+                      </p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </section>
+        )}
+
         <FAQ heading="Preguntas frecuentes" items={s.faqs} />
+
+        {/* Soluciones relacionadas (enlaces internos) */}
+        {s.relacionadas && s.relacionadas.length > 0 && (
+          <section className="px-[6%] pb-20 md:px-[10%]">
+            <div className="mx-auto max-w-3xl text-center">
+              <p className="mb-4 text-sm font-light text-mocha">
+                También te puede servir:
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                {s.relacionadas.map((slugRel) => {
+                  const rel = getSolucion(slugRel);
+                  if (!rel) return null;
+                  return (
+                    <a
+                      key={slugRel}
+                      href={`/soluciones/${rel.slug}`}
+                      className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay"
+                    >
+                      {rel.nombreCorto}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        )}
+
         <CTAFinal />
       </main>
       <Footer />

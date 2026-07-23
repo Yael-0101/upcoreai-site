@@ -1,34 +1,23 @@
-"use client";
+import { SOLUCIONES } from "@/lib/soluciones";
+import { HAY_BLOG } from "@/lib/blog";
+import { NavClient, type EnlaceNav } from "./NavClient";
 
-import { useEffect, useState } from "react";
-import { Logo } from "./Logo";
-import { AgendarCTA } from "./AgendarCTA";
-
+// Server component: arma los enlaces (datos) y se los pasa serializados al
+// cliente — así lib/soluciones.ts y lib/blog.ts no viajan al bundle del navegador.
 export function Nav() {
-  const [scrolled, setScrolled] = useState(false);
+  const enlaces: EnlaceNav[] = [
+    {
+      label: "Soluciones",
+      items: SOLUCIONES.map((s) => ({
+        href: `/soluciones/${s.slug}`,
+        label: s.nombreCorto,
+      })),
+    },
+    { label: "Caso real", href: "/casos/clinica-dental-ejemplo" },
+    { label: "Precios", href: "/precios" },
+    ...(HAY_BLOG ? ([{ label: "Blog", href: "/blog" }] as EnlaceNav[]) : []),
+    { label: "Nosotros", href: "/nosotros" },
+  ];
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  return (
-    <nav
-      className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between px-[6%] py-5 transition-all duration-500 md:px-[10%] ${
-        scrolled
-          ? "border-b border-[rgba(242,231,219,0.08)] bg-[rgba(26,21,18,0.72)] backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent"
-      }`}
-    >
-      <a href="#top" aria-label="Upcore AI — inicio" className="inline-flex">
-        <Logo markClass="h-7 w-7" textClass="text-[1.25rem]" />
-      </a>
-      <AgendarCTA
-        label="Agenda tu diagnóstico"
-        className="btn-shine rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-semibold text-sand transition-all duration-300 hover:border-clay hover:bg-clay hover:text-obsidian"
-      />
-    </nav>
-  );
+  return <NavClient enlaces={enlaces} />;
 }

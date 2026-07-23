@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { Analytics } from "@vercel/analytics/react";
 import { JsonLd } from "@/components/JsonLd";
+import { jsonLdGlobal, SITE_NAME } from "@/lib/seo";
 import "./globals.css";
 
 const title = "Upcore AI | Automatización con IA para clínicas";
@@ -10,7 +11,8 @@ const description =
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://upcoreai.com"),
-  title,
+  // Las páginas ponen su título "a secas" y el template agrega la marca.
+  title: { default: title, template: `%s | ${SITE_NAME}` },
   description,
   keywords: [
     "automatización para clínicas",
@@ -30,52 +32,17 @@ export const metadata: Metadata = {
     title,
     description,
     url: "https://upcoreai.com",
-    siteName: "Upcore AI",
-    images: ["/social.png"],
+    siteName: SITE_NAME,
     type: "website",
     locale: "es_MX",
+    // Sin `images`: la provee app/opengraph-image.tsx (convención de archivo),
+    // que sobrevive al merge superficial en todas las rutas.
   },
   twitter: {
     card: "summary_large_image",
     title,
     description,
-    images: ["/social.png"],
   },
-};
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "ProfessionalService",
-      "@id": "https://upcoreai.com/#organizacion",
-      name: "Upcore AI",
-      url: "https://upcoreai.com",
-      logo: "https://upcoreai.com/apple-icon",
-      description:
-        "Automatización con IA para clínicas privadas de salud y estética: agentes de WhatsApp, reducción de no-shows, sistemas y dashboards a la medida.",
-      areaServed: { "@type": "Country", name: "México" },
-      knowsAbout: [
-        "automatización para clínicas",
-        "agentes de WhatsApp con IA",
-        "reducción de no-shows",
-        "dashboards para clínicas",
-      ],
-      contactPoint: {
-        "@type": "ContactPoint",
-        contactType: "sales",
-        url: "https://cal.com/yael-upcore-ai/diagnostico-gratis",
-      },
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://upcoreai.com/#sitio",
-      url: "https://upcoreai.com",
-      name: "Upcore AI",
-      inLanguage: "es-MX",
-      publisher: { "@id": "https://upcoreai.com/#organizacion" },
-    },
-  ],
 };
 
 export default function RootLayout({
@@ -84,10 +51,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className={GeistSans.variable}>
+    <html lang="es-MX" className={GeistSans.variable}>
       <body className="font-sans antialiased">
         {children}
-        <JsonLd data={jsonLd} />
+        <JsonLd data={jsonLdGlobal()} />
         <Analytics />
       </body>
     </html>

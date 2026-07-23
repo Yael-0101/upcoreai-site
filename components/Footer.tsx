@@ -1,5 +1,6 @@
 import { Logo } from "./Logo";
 import { SOLUCIONES } from "@/lib/soluciones";
+import { HAY_BLOG } from "@/lib/blog";
 
 export function Footer() {
   return (
@@ -28,6 +29,27 @@ export function Footer() {
             className="text-xs text-mocha transition-colors hover:text-clay"
           >
             Caso de ejemplo
+          </a>
+        </div>
+      </nav>
+      <nav aria-label="Upcore" className="mb-8">
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+          <a href="/precios" className="text-xs text-mocha transition-colors hover:text-clay">
+            Precios
+          </a>
+          <a href="/nosotros" className="text-xs text-mocha transition-colors hover:text-clay">
+            Nosotros
+          </a>
+          {HAY_BLOG && (
+            <a href="/blog" className="text-xs text-mocha transition-colors hover:text-clay">
+              Blog
+            </a>
+          )}
+          <a href="/demo" className="text-xs text-mocha transition-colors hover:text-clay">
+            Demo en vivo
+          </a>
+          <a href="/empezar" className="text-xs text-mocha transition-colors hover:text-clay">
+            Diagnóstico gratis
           </a>
         </div>
       </nav>

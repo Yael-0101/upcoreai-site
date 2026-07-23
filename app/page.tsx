@@ -6,6 +6,7 @@ import { Problema } from "@/components/Problema";
 import { ComoFunciona } from "@/components/ComoFunciona";
 import { Sistema } from "@/components/Sistema";
 import { DemoTeaser } from "@/components/DemoTeaser";
+import { Comparativa } from "@/components/Comparativa";
 import { Resultados } from "@/components/Resultados";
 import { Calculadora } from "@/components/Calculadora";
 import { Garantia } from "@/components/Garantia";
@@ -40,6 +41,7 @@ export default function Home() {
         <ComoFunciona />
         <Sistema />
         <DemoTeaser />
+        <Comparativa />
         <Resultados />
         <Calculadora />
         <Garantia />

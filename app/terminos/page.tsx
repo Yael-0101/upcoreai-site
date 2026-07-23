@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { Legal, LegalSection } from "@/components/Legal";
 import { CONTACT } from "@/lib/content";
+import { metaPagina } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Términos de Servicio | Upcore AI",
+export const metadata: Metadata = metaPagina({
+  title: "Términos de Servicio",
   description:
     "Los términos que rigen el uso del sitio y los servicios de Upcore AI.",
-};
+  path: "/terminos",
+});
 
 const EMAIL = "upcoreai.com@gmail.com";
 

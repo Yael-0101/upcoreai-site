@@ -6,5 +6,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: ruta.path === "/" ? SITE_URL : `${SITE_URL}${ruta.path}`,
     changeFrequency: ruta.changeFrequency,
     priority: ruta.priority,
+    ...(ruta.lastModified && { lastModified: ruta.lastModified }),
   }));
 }

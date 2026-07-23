@@ -6,13 +6,14 @@ import { DemoChat } from "@/components/DemoChat";
 import { AgendarCTA } from "@/components/AgendarCTA";
 import { LiquidGlassFilter } from "@/components/LiquidGlassFilter";
 import { sanitizeClinica, sanitizeGiro, GIROS } from "@/lib/demo-config";
+import { metaPagina } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Prueba el asistente | Upcore AI",
+export const metadata: Metadata = metaPagina({
+  title: "Prueba el asistente",
   description:
     "Chatea con una demo del asistente de IA que responde, atiende y agenda citas por WhatsApp para clínicas. Juega a ser tu paciente.",
-  alternates: { canonical: "https://upcoreai.com/demo" },
-};
+  path: "/demo",
+});
 
 const BULLETS = [
   {
