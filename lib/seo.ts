@@ -135,7 +135,7 @@ export function jsonLdGlobal() {
           "@type": "ContactPoint",
           contactType: "sales",
           email: ORGANIZACION.email,
-          url: "https://cal.com/yael-upcore-ai/diagnostico-gratis",
+          url: `${SITE_URL}/empezar`,
         },
       },
       {

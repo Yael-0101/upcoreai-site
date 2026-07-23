@@ -652,16 +652,7 @@ export default async function PropuestaPublica({
             💬 Me interesa — hablemos por WhatsApp
           </a>
           <p className="mt-5 text-sm font-light text-mocha">
-            ¿Prefieres platicarlo con calma?{" "}
-            <a
-              href={CONTACT.calendly}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sand underline hover:text-clay"
-            >
-              Agenda una llamada de 15 min
-            </a>{" "}
-            · Este diagnóstico no te compromete a nada · Válido hasta el {venceTxt}
+            Este diagnóstico no te compromete a nada · Válido hasta el {venceTxt}
           </p>
           <div className="mt-6">
             <DescargarPDF />

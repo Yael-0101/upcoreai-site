@@ -8,7 +8,8 @@ export const CONTACT = {
   whatsapp: "https://wa.me/14244472698?text=" +
     encodeURIComponent("Hola Upcore AI, quiero automatizar mi clínica. ¿Me ayudan?"),
   whatsappDisplay: "+1 424 447 2698",
-  calendly: "https://cal.com/yael-upcore-ai/diagnostico-gratis",
+  // (2026-07-23) Sin agendado de llamadas en el embudo de diagnóstico — decisión
+  // de Yael: los leads entrantes ya nos conocen; el diagnóstico es solo sin llamada.
 };
 
 export const HERO = {

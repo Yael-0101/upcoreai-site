@@ -148,7 +148,7 @@ export default function NosotrosPage() {
             sub="Sin menús telefónicos ni tickets de soporte."
             variant="fadeUp"
           />
-          <div className="mx-auto grid max-w-4xl gap-4 sm:grid-cols-3">
+          <div className="mx-auto grid max-w-2xl gap-4 sm:grid-cols-2">
             <Reveal>
               <a href={CONTACT.whatsapp} className="card-soft block h-full rounded-2xl p-6 transition-colors hover:border-clay">
                 <div className="glass-body">
@@ -170,14 +170,6 @@ export default function NosotrosPage() {
                   <h3 className="mb-1 font-semibold text-sand">Correo</h3>
                   <p className="break-all text-sm font-light text-mocha">{ORGANIZACION.email}</p>
                   <p className="mt-1 text-xs font-light text-mocha/70">Clic para escribirnos →</p>
-                </div>
-              </a>
-            </Reveal>
-            <Reveal delay={0.12}>
-              <a href={CONTACT.calendly} className="card-soft block h-full rounded-2xl p-6 transition-colors hover:border-clay">
-                <div className="glass-body">
-                  <h3 className="mb-1 font-semibold text-sand">Videollamada</h3>
-                  <p className="text-sm font-light text-mocha">Diagnóstico gratis de 15 min</p>
                 </div>
               </a>
             </Reveal>

@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { CONTACT } from "@/lib/content";
 
-// Botón único "Agenda tu diagnóstico": al hacer clic abre los caminos para empezar
-// (llamada normal → WhatsApp con el asistente, videollamada → cal.com,
-// sin llamada → /empezar, demo → /demo). Un solo CTA en todo el sitio.
+// Botón único "Agenda tu diagnóstico": al hacer clic abre los caminos para empezar.
+// Decisión de Yael (2026-07-23): SIN opciones de llamada en el embudo de diagnóstico
+// (los leads que llegan ya nos conocen) — solo el diagnóstico instantáneo y la demo.
 export function AgendarCTA({
   label = "Agenda tu diagnóstico",
   className = "",
@@ -51,63 +50,23 @@ export function AgendarCTA({
                 ×
               </button>
               <h3 className="mb-1 pr-8 text-xl font-semibold tracking-tight text-sand">
-                ¿Cómo prefieres tu diagnóstico?
+                Tu diagnóstico gratis, sin llamadas
               </h3>
               <p className="mb-6 text-sm font-light text-mocha">
-                Es gratis y sin compromiso — tú eliges el camino.
+                Contesta unas preguntas y el resultado aparece al instante, con los números
+                de TU clínica.
               </p>
 
               <div className="flex flex-col gap-3">
                 <a
-                  href={
-                    "https://wa.me/14244472698?text=" +
-                    encodeURIComponent(
-                      "Hola, quiero agendar una llamada para mi diagnóstico gratis."
-                    )
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="card-soft group flex items-center gap-4 rounded-2xl p-4 text-left"
-                >
-                  <span className="text-2xl">📞</span>
-                  <span className="flex-1">
-                    <span className="block font-semibold text-sand">Llamada normal</span>
-                    <span className="block text-xs font-light leading-relaxed text-mocha">
-                      Te llamamos por WhatsApp — escríbenos y eliges el día y la hora al momento.
-                    </span>
-                  </span>
-                  <span className="text-clay transition-transform duration-300 group-hover:translate-x-1">
-                    →
-                  </span>
-                </a>
-
-                <a
-                  href={CONTACT.calendly}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="card-soft group flex items-center gap-4 rounded-2xl p-4 text-left"
-                >
-                  <span className="text-2xl">🎥</span>
-                  <span className="flex-1">
-                    <span className="block font-semibold text-sand">Videollamada</span>
-                    <span className="block text-xs font-light leading-relaxed text-mocha">
-                      Elige día y hora en el calendario — platicamos por Google Meet.
-                    </span>
-                  </span>
-                  <span className="text-clay transition-transform duration-300 group-hover:translate-x-1">
-                    →
-                  </span>
-                </a>
-
-                <a
                   href="/empezar"
                   className="card-soft group flex items-center gap-4 rounded-2xl p-4 text-left"
                 >
-                  <span className="text-2xl">💬</span>
+                  <span className="text-2xl">⚡</span>
                   <span className="flex-1">
-                    <span className="block font-semibold text-sand">Sin llamada</span>
+                    <span className="block font-semibold text-sand">Hacer mi diagnóstico</span>
                     <span className="block text-xs font-light leading-relaxed text-mocha">
-                      Respondes unas preguntas en 2 minutos y te escribimos por WhatsApp.
+                      3 minutos de preguntas y tu diagnóstico al instante — sin agendar nada.
                     </span>
                   </span>
                   <span className="text-clay transition-transform duration-300 group-hover:translate-x-1">
