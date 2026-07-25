@@ -247,7 +247,7 @@ const TU_PARTE: Record<string, { t: string; min: string }[]> = {
   Agente: [
     { t: "Contestar el checklist de tu clínica: servicios, precios, horarios y tu tono", min: "15 min" },
     { t: "Decidir qué número de WhatsApp usará el asistente — te explico la diferencia antes", min: "5 min" },
-    { t: "Crear tus cuentas viendo nuestro video — tú das los clics; contraseñas por chat, jamás", min: "20–30 min" },
+    { t: "Tus cuentas: te las creamos nosotros a tu nombre para que no batalles, o las creas tú con nuestro video — contraseñas por chat, jamás", min: "5–30 min" },
     { t: "Darme acceso a tu calendario o agenda", min: "5 min" },
     { t: "Probarlo como si fueras tu paciente antes de salir en vivo", min: "15 min" },
   ],
@@ -271,7 +271,7 @@ const TU_PARTE: Record<string, { t: string; min: string }[]> = {
 };
 const TU_PARTE_GENERICA = [
   { t: "Contestar el checklist de tu clínica", min: "15 min" },
-  { t: "Crear tus cuentas viendo nuestro video — tú das los clics", min: "20–30 min" },
+  { t: "Tus cuentas: te las creamos nosotros a tu nombre, o las creas tú con nuestro video", min: "5–30 min" },
   { t: "Probar el sistema antes de la entrega", min: "15 min" },
 ];
 
