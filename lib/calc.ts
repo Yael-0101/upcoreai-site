@@ -38,22 +38,60 @@ export const CLINICA_OPTIONS: Option[] = [
 ];
 
 type Producto = Option & {
-  setupMin: number;
-  setupMax: number;
+  /**
+   * Precio FIJO de construcción, en pesos (pago único). Ya no es un rango: un rango
+   * de 3x no es un precio, es decirle al cliente "no sé cuánto te voy a cobrar" — y
+   * el techo espantaba. Cada número está anclado a lo que cobra el mercado mexicano
+   * (jul-2026) y a lo que le cuesta a la clínica no resolverlo.
+   */
+  setupMXN: number;
   varMin: number;
   varMax: number;
   hrs: number;
   alcance: string; // qué incluye concretamente (para dejar claro el alcance)
+  /**
+   * true = el costo variable escala casi lineal con el volumen.
+   * La voz se cobra POR MINUTO HABLADO (~$0.12–$0.18 USD/min): al doble de llamadas,
+   * el doble de costo. El resto de productos casi no escalan (responder un mensaje es
+   * gratis dentro de la ventana de 24 h), por eso usan el factor suave.
+   */
+  escalaFuerte?: boolean;
 };
 
-// setup = construcción (pago único, USD). var = costo que corre al mes (USD, a nombre del cliente).
-// Cifras alineadas al mercado real: entrada accesible en el piso, realista de mercado en el techo.
+// setupMXN = construcción (pago único, PESOS). var = costo que corre al mes (USD, a
+// nombre del cliente). Anclas de mercado MX (jul-2026) detrás de cada precio:
+//   agente $24,000 → Simplixy Profesional cobra $21,900 y hace menos; BotHoy renta a
+//     $2,990/mes (8 meses); una recepcionista extra cuesta $8-12,000 AL MES.
+//   voz $26,000 → Vokey $999/mes (26 meses), Callbeat $1,290/mes (20 meses).
+//   web $18,000 → web médica en México va de $14,000 a $45,000.
+//   auto $14,000 → implementar n8n arranca en $20,000; esto es más acotado.
+//   reactivacion $12,000 → se paga con 2-3 pacientes recuperados.
 export const PRODUCTO_OPTIONS: Producto[] = [
-  { val: "agente", label: "Agente de WhatsApp 24/7", desc: "Responde, atiende y agenda solo", icon: "💬", setupMin: 1000, setupMax: 3000, varMin: 5, varMax: 16, hrs: 14, alcance: "responde WhatsApp 24/7, agenda, confirma citas y califica pacientes" },
-  { val: "web", label: "Sitio web con agenda", desc: "Una web que agenda y responde", icon: "🌐", setupMin: 800, setupMax: 2500, varMin: 0, varMax: 10, hrs: 6, alcance: "sitio con agenda online que responde y capta pacientes" },
-  { val: "auto", label: "Automatizaciones", desc: "Recordatorios y seguimiento", icon: "🔄", setupMin: 700, setupMax: 2200, varMin: 6, varMax: 12, hrs: 10, alcance: "recordatorios, confirmaciones y seguimientos que corren solos" },
-  { val: "reactivacion", label: "Reactivación de pacientes", desc: "Recupera pacientes que no vuelven", icon: "📈", setupMin: 500, setupMax: 2000, varMin: 6, varMax: 20, hrs: 8, alcance: "campaña para recuperar pacientes que dejaron de venir" },
+  { val: "agente", label: "Agente de WhatsApp 24/7", desc: "Responde, atiende y agenda solo", icon: "💬", setupMXN: 24000, varMin: 5, varMax: 16, hrs: 14, alcance: "responde WhatsApp 24/7, agenda, confirma citas y califica pacientes" },
+  { val: "voz", label: "Agente de voz 24/7", desc: "Contesta el teléfono y agenda", icon: "📞", setupMXN: 26000, varMin: 15, varMax: 30, hrs: 16, escalaFuerte: true, alcance: "contesta las llamadas que hoy se pierden, resuelve dudas hablando, agenda en tu agenda y avisa a recepción — conservando tu número actual" },
+  { val: "web", label: "Sitio web con agenda", desc: "Una web que agenda y responde", icon: "🌐", setupMXN: 18000, varMin: 0, varMax: 10, hrs: 6, alcance: "sitio con agenda online que responde y capta pacientes" },
+  { val: "auto", label: "Automatizaciones", desc: "Recordatorios y seguimiento", icon: "🔄", setupMXN: 14000, varMin: 6, varMax: 12, hrs: 10, alcance: "recordatorios, confirmaciones y seguimientos que corren solos" },
+  { val: "reactivacion", label: "Reactivación de pacientes", desc: "Recupera pacientes que no vuelven", icon: "📈", setupMXN: 12000, varMin: 6, varMax: 20, hrs: 8, alcance: "campaña para recuperar pacientes que dejaron de venir" },
 ];
+
+/** De la SEGUNDA pieza en adelante. No es un descuento inventado: montar la segunda
+ *  sobre lo ya construido cuesta menos de verdad. */
+export const DESCUENTO_PAQUETE = 0.15;
+
+/** Gestionado: mensualidad fija en pesos (el mercado cobra $2,990-4,497/mes). */
+export const MENSUALIDAD_BASE = 3500;
+export const MENSUALIDAD_POR_PIEZA_EXTRA = 700;
+
+// El panel/dashboard NO es una pieza: es un añadido que se monta encima de las demás.
+// Vive aquí, en un solo lugar, porque su precio se usa en dos partes (el total cuando el
+// cliente lo quiere, y el "+$X" del añadido opcional en su propuesta).
+// $12,000: los softwares dentales completos (Dentalink, Doctocliq) cuestan $315-536
+// AL MES, así que esto equivale a ~2 años de renta — y es suyo. Antes se cotizaba
+// hasta en $74,000, que no se sostenía contra esa comparación.
+export const PANEL_ADICIONAL = {
+  setupMXN: 12000,
+  varMax: 10, // hosting/BD si escala; el piso suele ser $0
+};
 
 export const MODO_OPTIONS: Option[] = [
   { val: "sistema", label: "Con sistema completo", desc: "Dashboard + todo integrado", icon: "🧩" },
@@ -83,7 +121,9 @@ const fmt = (n: number) => n.toLocaleString("en-US");
 export type Money = { mxn: string; usd: string };
 
 // Convierte un rango en USD a strings en ambas monedas (pesos principal, dólares equivalente).
-function money(loUSD: number, hiUSD: number, perMonth = false): Money {
+// Exportada: el motor de propuestas cotiza los AÑADIDOS opcionales con esta misma fórmula,
+// para que un "+$X" de la propuesta nunca se calcule con un redondeo distinto al del total.
+export function money(loUSD: number, hiUSD: number, perMonth = false): Money {
   const suf = perMonth ? "/mes" : "";
   const mxnLo = roundMXN(loUSD * FX);
   const mxnHi = roundMXN(hiUSD * FX);
@@ -98,6 +138,28 @@ function money(loUSD: number, hiUSD: number, perMonth = false): Money {
       ? `≈ $${fmt(usdLo)} USD${suf}`
       : `≈ $${fmt(usdLo)} – $${fmt(usdHi)} USD${suf}`;
   return { mxn, usd };
+}
+
+// Un precio CERRADO en pesos (el dólar se muestra solo como referencia). Se usa para
+// todo lo que Upcore cobra; `money()` se queda para lo que de verdad es un rango:
+// el consumo de APIs del cliente, que depende de su volumen.
+export function precioFijo(mxn: number, perMonth = false): Money {
+  const suf = perMonth ? "/mes" : "";
+  return {
+    mxn: `$${fmt(mxn)} MXN${suf}`,
+    usd: `≈ $${fmt(roundUSD(mxn / FX))} USD${suf}`,
+  };
+}
+
+/** Suma los precios de las piezas aplicando el descuento de paquete: la más cara a
+ *  precio completo y el resto con descuento, para que quitar una pieza siempre baje. */
+export function sumarPiezas(preciosMXN: number[]): number {
+  const orden = [...preciosMXN].sort((a, b) => b - a);
+  return orden.reduce(
+    (total, p, i) =>
+      total + (i === 0 ? p : Math.round((p * (1 - DESCUENTO_PAQUETE)) / 100) * 100),
+    0
+  );
 }
 
 export type CalcResult = {
@@ -122,23 +184,28 @@ export function calculate(s: CalcState): CalcResult {
   const sistema = s.modo === "sistema";
   const gestionado = s.operacion === "upcore";
 
-  let setupMin = 0,
-    setupMax = 0,
-    varMin = 0,
+  let varMin = 0,
     varMax = 0,
+    // Productos que se cobran por uso real (voz): se escalan aparte, más fuerte.
+    varMinUso = 0,
+    varMaxUso = 0,
     hrs = 0;
   list.forEach((p) => {
-    setupMin += p.setupMin;
-    setupMax += p.setupMax;
-    varMin += p.varMin;
-    varMax += p.varMax;
+    if (p.escalaFuerte) {
+      varMinUso += p.varMin;
+      varMaxUso += p.varMax;
+    } else {
+      varMin += p.varMin;
+      varMax += p.varMax;
+    }
     hrs += p.hrs;
   });
+  const piezasMXN = list.map((p) => p.setupMXN);
   if (sistema) {
-    setupMin += 1500;
-    setupMax += 4000;
-    varMax += 10; // dashboard: hosting/BD si escala; el piso suele ser $0
+    piezasMXN.push(PANEL_ADICIONAL.setupMXN);
+    varMax += PANEL_ADICIONAL.varMax;
   }
+  const setupMXN = sumarPiezas(piezasMXN);
 
   const msgs = Math.max(parseInt(s.msgs) || 15, 0);
   const leads = Math.max(parseInt(s.leads) || 30, 0);
@@ -148,12 +215,16 @@ export function calculate(s: CalcState): CalcResult {
   // algo (marketing/reactivación sí escala con envíos).
   const volFactor =
     1 + Math.min(msgs / 70, 1.2) + Math.min(leads / 250, 0.4);
-  const varLoUSD = varMin * volFactor;
-  const varHiUSD = varMax * volFactor;
+  // La voz SÍ escala: se paga por minuto hablado. Al doble de llamadas, el doble de costo.
+  // Techo ~6.5x sobre la base (clínica de alto volumen, ~1,200 min/mes).
+  const volFactorUso =
+    1 + Math.min(msgs / 25, 4) + Math.min(leads / 100, 1.5);
+  const varLoUSD = varMin * volFactor + varMinUso * volFactorUso;
+  const varHiUSD = varMax * volFactor + varMaxUso * volFactorUso;
 
   // --- Ahorro (conservador y honesto) ---------------------------------------
   const has = (v: string) => list.some((p) => p.val === v);
-  const capta24_7 = has("agente") || has("web"); // responde e invita a agendar al instante
+  const capta24_7 = has("agente") || has("web") || has("voz"); // responde e invita a agendar al instante
   const hasReact = has("reactivacion");
 
   const HORA_USD = 3.5; // sueldo de recepción en México (~$65 MXN/h)
@@ -180,13 +251,15 @@ export function calculate(s: CalcState): CalcResult {
     reactivados * CITA_USD;
 
   // --- Mensualidad de Upcore (solo Gestionado) ------------------------------
-  const n = list.length;
-  const upLoUSD = gestionado ? 120 + n * 40 + (sistema ? 30 : 0) : 0;
-  const upHiUSD = gestionado ? 220 + n * 70 + (sistema ? 90 : 0) : 0;
-  const upAvg = (upLoUSD + upHiUSD) / 2;
+  // Fija y predecible: base + un extra por cada pieza que hay que operar.
+  const nPiezas = piezasMXN.length;
+  const upMXN = gestionado
+    ? MENSUALIDAD_BASE + MENSUALIDAD_POR_PIEZA_EXTRA * Math.max(nPiezas - 1, 0)
+    : 0;
+  const upAvg = upMXN / FX; // el resto del cálculo de retorno corre en USD
 
   const varAvg = (varLoUSD + varHiUSD) / 2;
-  const setupAvg = (setupMin + setupMax) / 2;
+  const setupAvg = setupMXN / FX;
 
   // ROI sobre el costo RECURRENTE (variable + mensualidad), con tope para no verse irreal.
   const recurringUSD = varAvg + upAvg;
@@ -230,9 +303,9 @@ export function calculate(s: CalcState): CalcResult {
   }
 
   const complejidad =
-    setupMax <= 2500
+    setupMXN <= 30000
       ? "Solución esencial"
-      : setupMax <= 6000
+      : setupMXN <= 60000
       ? "Sistema a la medida"
       : "Infraestructura completa";
 
@@ -241,16 +314,15 @@ export function calculate(s: CalcState): CalcResult {
     incluye.push("Dashboard + sistema integrado — todo operando junto, con tu ROI a la vista");
 
   return {
-    inversion: money(setupMin, setupMax),
-    inversionNota: gestionado
-      ? "Pago único (o repartido en tu mensualidad)"
-      : "Pago único",
+    inversion: precioFijo(setupMXN),
+    inversionNota:
+      (nPiezas > 1 ? "Precio cerrado, ya con descuento por paquete · " : "Precio cerrado · ") +
+      (gestionado ? "pago único (o repartido en tu mensualidad)" : "pago único"),
     costosCliente: money(varLoUSD, varHiUSD, true),
-    costosNota:
-      "APIs, IA y hosting — van directo a los proveedores, a tu nombre. Upcore no les agrega margen.",
-    mensualidadUpcore: gestionado
-      ? money(upLoUSD, upHiUSD, true)
-      : { mxn: "$0", usd: "" },
+    costosNota: has("voz")
+      ? "APIs, IA y hosting — van directo a los proveedores, a tu nombre. Upcore no les agrega margen. El agente de voz se cobra por minuto hablado, así que sube con tus llamadas: se contrata con tope de gasto y ves tu consumo tú mismo."
+      : "APIs, IA y hosting — van directo a los proveedores, a tu nombre. Upcore no les agrega margen.",
+    mensualidadUpcore: gestionado ? precioFijo(upMXN, true) : { mxn: "$0", usd: "" },
     upcoreNota: gestionado
       ? "Operación, mantenimiento y mejoras"
       : "Plan Llave en Mano · tú lo operas, sin mensualidad",
