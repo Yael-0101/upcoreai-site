@@ -68,6 +68,15 @@ const PREGUNTAS_POR_PRODUCTO: Record<string, { q: string; options: Option[] }> =
       { val: "nose", label: "No sé, solo sé que se pierden", icon: "🤷" },
     ],
   },
+  voz: {
+    q: "¿Cuántas llamadas dirías que se quedan sin contestar al día?",
+    options: [
+      { val: "1-3", label: "1 – 3", icon: "🟢" },
+      { val: "4-10", label: "4 – 10", icon: "🟠" },
+      { val: "10+", label: "Más de 10", icon: "🔴" },
+      { val: "nose", label: "No lo medimos (no queda registro)", icon: "🤷" },
+    ],
+  },
   web: {
     q: "¿Tienes sitio web hoy?",
     options: [
@@ -99,6 +108,7 @@ const PREGUNTAS_POR_PRODUCTO: Record<string, { q: string; options: Option[] }> =
 const DOLORES_OPTIONS: Option[] = [
   { val: "noshows", label: "Pacientes que no llegan a su cita", icon: "📉" },
   { val: "whatsapp", label: "WhatsApp sin responder", icon: "💬" },
+  { val: "llamadas", label: "Llamadas que nadie alcanza a contestar", icon: "📞" },
   { val: "recepcion", label: "Recepción saturada", icon: "😰" },
   { val: "huecos", label: "Huecos en la agenda / no vuelven", icon: "🕳️" },
   { val: "nuevos", label: "Atraer más pacientes nuevos", icon: "🌱" },

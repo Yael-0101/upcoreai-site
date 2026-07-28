@@ -388,6 +388,104 @@ export const ARTICULOS: Articulo[] = [
       "recepcionista-virtual-clinica",
     ],
   },
+  {
+    slug: "llamadas-perdidas-clinica-quien-contesta-telefono",
+    title: "Su software le manda recordatorios, pero ¿quién contesta el teléfono?",
+    metaDescription:
+      "Las llamadas perdidas son la fuga más grande de una clínica y la única que no deja rastro. Qué hacen (y qué no) los softwares de gestión, y cómo un agente de voz contesta lo que hoy se pierde sin cambiar tu número.",
+    h1: "Su software le manda recordatorios, pero ¿quién contesta el teléfono?",
+    resumen:
+      "Los mensajes sin responder se ven en la pantalla y duelen. Las llamadas perdidas no dejan rastro: el paciente marca, nadie contesta, cuelga y marca a la siguiente clínica. Nunca supiste que existió. Aquí va por qué es la fuga más cara de una clínica, por qué tu software de gestión no la tapa, y qué se puede hacer sin cambiar tu número.",
+    fechaPublicado: "2026-07-25",
+    secciones: [
+      {
+        h2: "La fuga que no deja rastro",
+        parrafos: [
+          "Si un paciente te escribe por WhatsApp y nadie contesta, el mensaje se queda ahí. Lo ves al día siguiente, sientes la punzada, y a veces todavía alcanzas a responder.",
+          "Si un paciente te llama y nadie contesta, no pasa nada de eso. No hay mensaje pendiente, no hay notificación, no hay nada que revisar mañana. La llamada simplemente no ocurrió — y del otro lado hay una persona que ya está marcando al siguiente número de su búsqueda.",
+          "Esa es la diferencia importante: los mensajes sin responder se acumulan a la vista; las llamadas perdidas se evaporan. Por eso casi ninguna clínica sabe cuántas pierde, y por eso es la fuga más grande que nadie está midiendo.",
+        ],
+      },
+      {
+        h2: "Quien llama tiene más prisa que quien escribe",
+        parrafos: [
+          "Hay una diferencia de intención entre los dos canales que conviene entender antes de decidir dónde invertir.",
+          "El que escribe está comparando. Manda el mismo mensaje a tres o cuatro clínicas y espera. Puede aguantar unas horas.",
+          "El que llama ya casi decidió. Tiene el teléfono en la mano, quiere resolverlo ahora, y muchas veces está incómodo — le duele algo o trae prisa. Si no le contestan en tres timbres, no deja recado ni vuelve a intentar más tarde: marca al siguiente resultado de Google.",
+        ],
+        lista: [
+          "Quien escribe está evaluando opciones; quien llama quiere agendar hoy.",
+          "Quien escribe tolera una espera; quien llama cuelga en segundos.",
+          "Quien escribe deja rastro para recuperarlo; quien llama desaparece sin dejar número.",
+        ],
+      },
+      {
+        h2: "No es descuido de tu recepción: una persona no alcanza",
+        parrafos: [
+          "Cuando se habla de llamadas perdidas, el reflejo es pensar que alguien no está haciendo bien su trabajo. Casi nunca es eso.",
+          "Tu recepcionista está cobrando, recibiendo a un paciente en mostrador, resolviendo una duda de otro por teléfono, o simplemente comiendo. En todos esos momentos, la llamada que entra no tiene a nadie disponible. No es falta de ganas: es que una persona no puede estar en dos conversaciones a la vez.",
+          "Y hay horas en las que la clínica está cerrada y la gente sigue marcando: temprano en la mañana, en la noche y los fines de semana, que es justo cuando la mayoría tiene tiempo de ocuparse de su salud.",
+        ],
+      },
+      {
+        h2: "Por qué tu software de gestión no tapa esta fuga",
+        parrafos: [
+          "Si usas un software de gestión de clínicas, probablemente ya te manda recordatorios de cita por WhatsApp. Eso está bien y sirve — pero conviene ver con precisión qué hace y qué no.",
+          "Los recordatorios son mensajes salientes de plantilla: tu sistema avisa al paciente que ya tiene cita. Es comunicación hacia afuera, hacia gente que YA está en tu agenda.",
+          "La llamada perdida es exactamente lo contrario: es alguien de afuera intentando entrar a tu agenda, y no hay quien lo reciba. Ningún recordatorio resuelve eso, porque esa persona todavía no existe en tu sistema.",
+          "Lo mismo pasa con la 'IA' que anuncian varios softwares médicos: en la mayoría de los casos sirve para dictar y ordenar notas clínicas. Es una herramienta para el médico, hacia adentro. Ayuda a documentar mejor a los pacientes que ya llegaron; no ayuda a que lleguen.",
+        ],
+      },
+      {
+        h2: "Cómo se calcula lo que te cuesta hoy",
+        parrafos: [
+          "Antes de contratar nada, vale la pena poner el número. Es una cuenta de servilleta y se hace en dos minutos:",
+        ],
+        lista: [
+          "1. Pregunta a tu recepción cuántas llamadas calcula que se quedan sin contestar en un día normal. Aunque sea a ojo.",
+          "2. Multiplícalo por los días que abres al mes.",
+          "3. De esas, asume que solo 1 de cada 10 era un paciente nuevo que sí habría agendado. Es un supuesto deliberadamente conservador.",
+          "4. Multiplica ese resultado por lo que vale para ti un paciente nuevo — no la primera consulta, sino lo que suele dejar en total.",
+        ],
+      },
+      {
+        h2: "Contestar lo que se pierde, sin cambiar tu número",
+        parrafos: [
+          "La solución que la mayoría imagina es contratar a alguien más, y para muchas clínicas no sale la cuenta: es sueldo y prestaciones, y aun así no cubre noches ni domingos.",
+          "La alternativa es un agente de voz: un asistente con inteligencia artificial que contesta hablando. Resuelve dudas de servicios, precios y horarios, pregunta el motivo de la llamada, agenda en tu agenda real y avisa a tu equipo cuando hace falta una persona.",
+          "El detalle que más tranquiliza a los dueños es que no reemplaza a nadie ni cambia nada visible. Tu número sigue siendo el mismo — el de tus recetas, tu fachada y tu Google — y tu recepcionista sigue contestando igual. Se configura un desvío con tu compañía telefónica para que, solo cuando nadie contesta después de varios timbres o es fuera de horario, la llamada pase al asistente en lugar de perderse.",
+          "Dicho con honestidad: un agente de voz cuesta bastante más al mes que un asistente de WhatsApp, porque se cobra por minuto hablado. Ese es justo el argumento para usar el desvío en vez de mandarle todas las llamadas: al asistente solo llegan las que de todas formas se iban a caer.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "¿Tengo que cambiar el número de mi clínica?",
+        a: "No. Se configura un desvío con tu compañía telefónica y tus pacientes siguen marcando al mismo número de siempre. Si prefieres una línea nueva y aparte, también se puede — pero casi nunca conviene: el valor de un número que tus pacientes ya conocen es enorme.",
+      },
+      {
+        q: "¿Se nota que no es una persona?",
+        a: "Sí, y a propósito: el asistente avisa desde el saludo que es virtual. Es preferible que tu paciente sepa con quién habla a que se sienta engañado. Lo que sí debe sonar natural es la conversación — que escuche, que se calle si lo interrumpen y que no suene a grabación.",
+      },
+      {
+        q: "¿Y si la llamada es una urgencia?",
+        a: "Un agente bien hecho no da diagnósticos ni consejo médico, nunca. Reconoce señales de urgencia y actúa según el tipo de clínica: en un consultorio médico indica marcar al 911 y no agenda; en una dental prioriza el caso y avisa a recepción de inmediato. Ante cualquier duda, pasa con una persona.",
+      },
+      {
+        q: "¿Esto reemplaza al asistente de WhatsApp?",
+        a: "No: son dos canales distintos y ninguno hace lo del otro. Uno atiende a quien escribe y el otro a quien llama. Puedes tener uno, el otro o los dos. Si tienes ambos, lo importante es que compartan la misma información y la misma agenda, para que jamás le den dos precios distintos al mismo paciente.",
+      },
+      {
+        q: "¿Graba las llamadas? ¿Eso es legal con pacientes?",
+        a: "Se graban, y el paciente debe saberlo desde la primera frase: es un aviso obligatorio, no un detalle de estilo. Los datos de salud son sensibles, así que el asistente guarda lo mínimo (nombre, contacto, motivo general y la cita) y nada clínico. Las grabaciones deben vivir en las cuentas de tu clínica, con tu política de retención — no en las de un proveedor.",
+      },
+    ],
+    solucionesRelacionadas: [
+      "agente-de-voz-para-clinicas",
+      "recepcionista-virtual-clinica",
+      "chatbot-whatsapp-para-clinicas",
+    ],
+  },
 ];
 
 export const HAY_BLOG = ARTICULOS.length > 0;

@@ -9,6 +9,7 @@ import { FAQ } from "@/components/FAQ";
 import { SectionTitle } from "@/components/SectionTitle";
 import { Reveal } from "@/components/Reveal";
 import { JsonLd } from "@/components/JsonLd";
+import { DemoVoz } from "@/components/DemoVoz";
 import { SOLUCIONES, getSolucion } from "@/lib/soluciones";
 import { RESULTADOS } from "@/lib/content";
 import { SITE_URL, metaPagina, breadcrumbJsonLd } from "@/lib/seo";
@@ -40,6 +41,9 @@ export default async function SolucionPage({
   const { slug } = await params;
   const s = getSolucion(slug);
   if (!s) notFound();
+
+  // La demo de voz solo vive en su propia página (se cobra por minuto: ver /api/demo-voz)
+  const esVoz = s.slug === "agente-de-voz-para-clinicas";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -95,10 +99,10 @@ export default async function SolucionPage({
           <Reveal delay={0.25}>
             <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <a
-                href={`/demo?g=${s.giroDemo}`}
+                href={esVoz ? "#demo-voz" : `/demo?g=${s.giroDemo}`}
                 className="btn-shine w-full rounded-full bg-clay px-8 py-4 font-semibold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright sm:w-auto"
               >
-                Pruébalo en la demo
+                {esVoz ? "Háblale ahora →" : "Pruébalo en la demo"}
               </a>
               <a
                 href="/empezar"
@@ -109,6 +113,17 @@ export default async function SolucionPage({
             </div>
           </Reveal>
         </section>
+
+        {/* Demo de voz en vivo — solo en la página del agente de voz */}
+        {esVoz && (
+          <section id="demo-voz" className="scroll-mt-24 px-[6%] pb-4 md:px-[10%]">
+            <div className="mx-auto max-w-3xl">
+              <Reveal>
+                <DemoVoz giro={s.giroDemo} />
+              </Reveal>
+            </div>
+          </section>
+        )}
 
         {/* Dolores */}
         <section className="px-[6%] py-20 md:px-[10%] md:py-24">

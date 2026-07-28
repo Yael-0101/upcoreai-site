@@ -80,9 +80,25 @@ export function AgendarCTA({
                 >
                   <span className="text-2xl">🤖</span>
                   <span className="flex-1">
-                    <span className="block font-semibold text-sand">Prueba el agente</span>
+                    <span className="block font-semibold text-sand">Prueba el agente de chat</span>
                     <span className="block text-xs font-light leading-relaxed text-mocha">
                       Chatea con una demo del asistente, como si fueras tu paciente.
+                    </span>
+                  </span>
+                  <span className="text-clay transition-transform duration-300 group-hover:translate-x-1">
+                    →
+                  </span>
+                </a>
+
+                <a
+                  href="/soluciones/agente-de-voz-para-clinicas#demo-voz"
+                  className="card-soft group flex items-center gap-4 rounded-2xl p-4 text-left"
+                >
+                  <span className="text-2xl">📞</span>
+                  <span className="flex-1">
+                    <span className="block font-semibold text-sand">Prueba el agente de voz</span>
+                    <span className="block text-xs font-light leading-relaxed text-mocha">
+                      Háblale por el micrófono y escucha cómo contestaría tu teléfono.
                     </span>
                   </span>
                   <span className="text-clay transition-transform duration-300 group-hover:translate-x-1">

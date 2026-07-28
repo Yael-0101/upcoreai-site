@@ -152,8 +152,12 @@ export const SOLUCIONES: Solucion[] = [
         body: "Las APIs se contratan a tu nombre y con tope de gasto activado. Ves tu consumo real, sin intermediarios que revendan de más.",
       },
     ],
-    relacionadas: ["recepcionista-virtual-clinica", "reducir-no-shows-clinica"],
-    actualizado: "2026-07-22",
+    relacionadas: [
+      "recepcionista-virtual-clinica",
+      "agente-de-voz-para-clinicas",
+      "reducir-no-shows-clinica",
+    ],
+    actualizado: "2026-07-25",
   },
   {
     slug: "recepcionista-virtual-clinica",
@@ -216,6 +220,10 @@ export const SOLUCIONES: Solucion[] = [
         q: "¿Los datos de mis pacientes están seguros?",
         a: "Sí. Viajan cifrados y viven aislados en tus propias cuentas. Nunca se comparten ni se mezclan con nadie.",
       },
+      {
+        q: "¿También contesta el teléfono?",
+        a: "Esa es otra pieza: el agente de voz, que encuentras aquí abajo en 'También te puede servir'. Atender mensajes y atender llamadas son cosas técnicamente distintas, así que se ofrecen por separado y puedes tener una, la otra o las dos. Si tienes ambas, comparten tu información y tu agenda, así que nunca se contradicen en un precio ni en un horario.",
+      },
     ],
     giroDemo: "medica",
     pasos: [
@@ -272,8 +280,12 @@ export const SOLUCIONES: Solucion[] = [
         body: "La información de tus pacientes viaja cifrada y vive aislada en tus propias cuentas. No se comparte ni se mezcla con nadie.",
       },
     ],
-    relacionadas: ["chatbot-whatsapp-para-clinicas", "reducir-no-shows-clinica"],
-    actualizado: "2026-07-22",
+    relacionadas: [
+      "agente-de-voz-para-clinicas",
+      "chatbot-whatsapp-para-clinicas",
+      "reducir-no-shows-clinica",
+    ],
+    actualizado: "2026-07-25",
   },
   {
     slug: "automatizacion-clinicas-dentales",
@@ -634,6 +646,150 @@ export const SOLUCIONES: Solucion[] = [
     ],
     relacionadas: ["chatbot-whatsapp-para-clinicas", "automatizacion-clinicas-dentales"],
     actualizado: "2026-07-22",
+  },
+  {
+    slug: "agente-de-voz-para-clinicas",
+    title: "Agente de voz con IA para clínicas: contesta el teléfono 24/7",
+    metaDescription:
+      "Un agente de voz con IA que contesta las llamadas de tu clínica cuando nadie más puede: resuelve dudas, agenda citas y avisa a tu recepción. Tu número no cambia.",
+    eyebrow: "Agente de voz para clínicas",
+    h1: "La llamada que nadie contestó ya se fue con otra clínica.",
+    intro:
+      "Un agente de voz con inteligencia artificial que contesta el teléfono de tu clínica cuando tu recepción no puede: mientras atiende a un paciente, a la hora de la comida o de madrugada. Responde hablando, resuelve dudas, agenda la cita en tu agenda y avisa a tu equipo cuando hace falta una persona. Y lo más importante: tus pacientes siguen marcando al mismo número de siempre.",
+    nombreCorto: "Agente de voz",
+    dolores: [
+      {
+        title: "Quien llama no espera",
+        body: "El paciente que marca tiene el teléfono en la mano y la decisión tomada. Si no contestas en tres timbres, cuelga y marca a la siguiente clínica. No deja mensaje y no vuelve a intentar.",
+      },
+      {
+        title: "Tu recepción no puede estar en dos lados",
+        body: "Cuando está cobrando, atendiendo a alguien en mostrador o en el teléfono con otro paciente, la llamada que entra se cae. No es descuido: es que una persona no alcanza.",
+      },
+      {
+        title: "Nunca sabes cuántas perdiste",
+        body: "Los mensajes sin responder se ven en la pantalla. Las llamadas perdidas no dejan rastro. Es la fuga más grande de una clínica y la única que nadie mide.",
+      },
+    ],
+    comoAyuda: [
+      {
+        title: "Contesta justo lo que se iba a perder",
+        body: "Tu teléfono suena igual y tu recepcionista contesta igual. Solo cuando nadie puede — después de varios timbres, ocupado o fuera de horario — entra el agente. No reemplaza a tu equipo: agarra lo que se caía.",
+      },
+      {
+        title: "Tu número no cambia",
+        body: "Tus pacientes marcan al mismo número que ya conocen, el de tus recetas, tu fachada y tu Google. No hay que avisar nada ni reimprimir nada.",
+      },
+      {
+        title: "Agenda hablando, en tu agenda",
+        body: "Consulta tus horarios reales, ofrece los que sí están libres y deja la cita puesta. Nunca inventa un espacio que no existe ni un precio que no le diste.",
+      },
+      {
+        title: "Sabe cuándo callarse y pasar la llamada",
+        body: "Si es una urgencia, una pregunta médica o el paciente pide hablar con una persona, avisa a tu recepción de inmediato — sin insistir ni intentar convencer a nadie.",
+      },
+    ],
+    stats: [
+      { value: "24/7", label: "el teléfono siempre contestado" },
+      { value: "El mismo", label: "número de siempre" },
+      { value: "1–2 sem", label: "para estar operando" },
+      { value: "0", label: "llamadas al buzón" },
+    ],
+    faqs: [
+      {
+        q: "¿Tengo que cambiar el número de mi clínica?",
+        a: "No, y es la parte que más tranquiliza a los dueños. Tu número sigue siendo tuyo y tus pacientes marcan al de siempre. Se configura un desvío con tu compañía telefónica: las llamadas que nadie contesta pasan al agente en lugar de perderse. Si prefieres una línea nueva y aparte, también se puede.",
+      },
+      {
+        q: "¿También contesta mi WhatsApp?",
+        a: "No. El agente de voz atiende llamadas y el agente de WhatsApp atiende mensajes: son dos cosas distintas y ninguna hace lo de la otra. Puedes tener una, la otra o las dos. Si tienes ambas, comparten la misma información y la misma agenda, así que jamás se contradicen en un precio o un horario.",
+      },
+      {
+        q: "¿Se nota que no es una persona?",
+        a: "Se nota, y lo decimos a propósito: el agente avisa desde el saludo que es un asistente virtual. Preferimos que tu paciente sepa con quién habla a que se sienta engañado. Lo que sí suena natural es la conversación — escucha, se calla cuando lo interrumpen y responde sin sonar a grabación.",
+      },
+      {
+        q: "¿Y si es una urgencia?",
+        a: "El agente no da diagnósticos ni consejo médico, nunca. Está entrenado para reconocer señales de urgencia y actuar: en un consultorio médico indica marcar al 911 y no agenda; en una dental prioriza el caso y avisa a tu recepción de inmediato. Ante la duda, siempre pasa con una persona.",
+      },
+      {
+        q: "¿Graba las llamadas?",
+        a: "Sí, y el paciente lo sabe desde la primera frase — es un aviso obligatorio que no se puede quitar. Las grabaciones viven en tu cuenta, con tu política. El agente guarda lo mínimo: nombre, contacto, motivo general y la cita. Nada clínico.",
+      },
+      {
+        q: "¿Cuánto cuesta usarlo al mes?",
+        a: "Se cobra por minuto hablado, en tu propia cuenta y con tope de gasto — así ves exactamente lo que consumes. Es el producto de mayor consumo mensual que ofrecemos, bastante más que un agente de WhatsApp, y te lo decimos antes de cerrar, no después. Como referencia: una sola cita nueva recuperada suele cubrir el mes completo. En el diagnóstico gratis lo calculamos con tu volumen real.",
+      },
+      {
+        q: "¿Puede llamar a mis pacientes para confirmar?",
+        a: "Hoy no: esta versión solo contesta llamadas que entran. Las confirmaciones y recordatorios los hacemos por WhatsApp, que se lee más y cuesta mucho menos que una llamada.",
+      },
+    ],
+    giroDemo: "dental",
+    pasos: [
+      {
+        title: "Medimos cuántas llamadas pierdes",
+        body: "Primero el número, no la tecnología: cuántas llamadas entran, cuántas se caen y cuánto vale un paciente nuevo para ti. El diagnóstico gratis lo calcula con tus datos.",
+      },
+      {
+        title: "Decidimos cómo llegan las llamadas",
+        body: "Casi siempre: desvío desde tu número actual, solo cuando nadie contesta. Tú eliges después de cuántos timbres y en qué horarios — tu recepción sigue teniendo la primera palabra.",
+      },
+      {
+        title: "Armamos el guion de tu clínica",
+        body: "Tus servicios, tus precios, tus horarios y tu forma de tratar. Un guion de dental no se parece al de una clínica de estética: cambian las preguntas, el vocabulario y el tono.",
+      },
+      {
+        title: "Lo probamos llamando de verdad",
+        body: "Antes de entregarte nada, marcamos: cita nueva, horario ocupado, pregunta de precio, urgencia y 'quiero hablar con una persona'. Si algo suena mal, se corrige antes de que lo oiga un paciente.",
+      },
+      {
+        title: "Te lo entregamos funcionando",
+        body: "Video corto y guía de una página: cómo ver tus citas, cómo ver tu consumo y cómo apagar el desvío si algún día quieres que todo lo conteste tu equipo.",
+      },
+    ],
+    integraciones: [
+      {
+        nombre: "Tu línea telefónica actual",
+        detalle: "Se configura un desvío con tu compañía. Conservas tu número, tu contrato y tu forma de trabajar.",
+      },
+      {
+        nombre: "Tu agenda",
+        detalle: "Google Calendar, Cal.com o el software que ya uses. El agente consulta tus horarios reales y deja la cita ahí.",
+      },
+      {
+        nombre: "Donde ya registras pacientes",
+        detalle: "¿Usas Nimbo, otro software, Notion o una hoja de cálculo? Ahí se guarda. No te pedimos cambiar de sistema.",
+      },
+      {
+        nombre: "Tu agente de WhatsApp",
+        detalle: "Si ya lo tienes, ambos leen la misma información y escriben en la misma agenda. Un asistente, dos canales.",
+      },
+    ],
+    seguridad: [
+      {
+        title: "El paciente sabe que es un asistente",
+        body: "El aviso va en la primera frase, junto con el de grabación. No fingimos ser una persona: es un requisito del producto, no una opción.",
+      },
+      {
+        title: "Nunca opina de salud",
+        body: "No da diagnósticos, no interpreta estudios, no sugiere tratamientos ni comenta medicamentos. Ante cualquier tema clínico, pasa con tu equipo.",
+      },
+      {
+        title: "Solo los datos mínimos",
+        body: "Nombre, contacto, motivo general y la cita. El detalle clínico no se pregunta ni se guarda: eso se queda en tu consultorio.",
+      },
+      {
+        title: "Tus cuentas, tu número, tu tope",
+        body: "Todo se contrata a tu nombre, con tu tarjeta y con límite de gasto activado. Ves tu consumo tú mismo y, si un día no seguimos, no pierdes nada.",
+      },
+    ],
+    relacionadas: [
+      "recepcionista-virtual-clinica",
+      "chatbot-whatsapp-para-clinicas",
+      "automatizacion-clinicas-dentales",
+    ],
+    actualizado: "2026-07-25",
   },
 ];
 

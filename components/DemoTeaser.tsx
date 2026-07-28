@@ -21,7 +21,7 @@ export function DemoTeaser() {
     <section id="demo" className="px-[6%] py-24 md:px-[10%] md:py-32">
       <SectionTitle
         title="No nos creas. Pruébalo."
-        sub="Chatea con una demostración del asistente como si fueras tu propio paciente — pide una cita y mira lo que sentirían los tuyos."
+        sub="Ponte en los zapatos de tu propio paciente: escríbele al asistente o háblale por teléfono, pídele una cita y mira lo que sentirían los tuyos."
       />
 
       <div className="mx-auto flex max-w-4xl flex-col items-center gap-10 md:flex-row md:gap-14">
@@ -62,16 +62,27 @@ export function DemoTeaser() {
           </h3>
           <p className="mt-3 text-base font-light leading-relaxed text-mocha">
             El asistente responde al momento, resuelve dudas y agenda la cita — a las 8 de la
-            mañana o a las 11 de la noche. La demo es interactiva: escríbele lo que quieras.
+            mañana o a las 11 de la noche. Y no solo por escrito: también contesta el teléfono.
+            Las dos demos son interactivas.
           </p>
-          <Link
-            href="/demo"
-            className="btn-shine mt-6 inline-block rounded-full bg-clay px-8 py-3.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
-          >
-            Pruébalo tú mismo →
-          </Link>
+
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center md:justify-start">
+            <Link
+              href="/demo"
+              className="btn-shine inline-block rounded-full bg-clay px-7 py-3.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
+            >
+              💬 Escríbele →
+            </Link>
+            <Link
+              href="/soluciones/agente-de-voz-para-clinicas#demo-voz"
+              className="inline-block rounded-full border border-[rgba(242,231,219,0.25)] px-7 py-3.5 text-sm font-semibold text-sand transition-colors hover:border-clay hover:text-clay"
+            >
+              📞 Háblale →
+            </Link>
+          </div>
+
           <p className="mt-3 text-xs font-light text-mocha/70">
-            Sin registro. Es una demo con datos ficticios.
+            Sin registro. Son demos con datos ficticios.
           </p>
         </Reveal>
       </div>
