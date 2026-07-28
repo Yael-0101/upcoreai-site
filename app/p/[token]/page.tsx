@@ -50,9 +50,19 @@ type Snapshot = {
     urgencia: string;
     mensaje: string;
     objetivo?: string;
+    presencia?: string;
   };
   numeros?: Numeros;
   incluye: string[];
+  // v3: piezas cotizadas APARTE. La propuesta solo cobra lo que ataca su dolor;
+  // lo demás se muestra con su precio y el motivo por el que puede esperar.
+  opcionales?: Array<{
+    val: string;
+    label: string;
+    alcance: string;
+    precio: Money;
+    razon: string;
+  }>;
   complejidad: string;
   llave: Plan;
   gestionado: Plan;
@@ -107,11 +117,28 @@ const PIEZA_ICONS: Record<string, string> = {
   Automatizaciones: "🔄",
   Reactivación: "📈",
   Dashboard: "🧩",
+  Panel: "🧩",
 };
 const icono = (texto: string) => {
   const clave = Object.keys(PIEZA_ICONS).find((k) => texto.startsWith(k));
   return clave ? PIEZA_ICONS[clave] : "→";
 };
+
+// El bot guarda la presencia digital con palabras fijas (para poder decidir si le
+// proponemos un sitio web sin adivinar). Aquí se traducen a algo que se lea humano.
+const PRESENCIA_TXT: Record<string, string> = {
+  "web-y-redes": "Hoy te encuentran por tu sitio web y tus redes",
+  "solo-web": "Hoy te encuentran por tu sitio web",
+  "solo-redes": "Hoy te encuentran solo por redes — no tienes sitio web",
+  nada: "Hoy no tienes sitio web ni redes activas",
+};
+function presenciaTxt(v: string | undefined): string | false {
+  const clave = (v || "").trim().toLowerCase();
+  if (!clave) return false;
+  if (PRESENCIA_TXT[clave]) return PRESENCIA_TXT[clave];
+  // Leads viejos (y los del formulario web) traían aquí texto libre de canales.
+  return `Tus pacientes llegan por: ${v}`;
+}
 
 const OBJETIVO_TXT: Record<string, string> = {
   "llenar-agenda": "llenar tu agenda con más pacientes",
@@ -388,7 +415,7 @@ export default async function PropuestaPublica({
   const diag = [
     p.diag.volumen && `Volumen: ${p.diag.volumen}`,
     p.diag.agenda_hoy && `Hoy la agenda se maneja con: ${p.diag.agenda_hoy}`,
-    p.diag.canales && `Tus pacientes llegan por: ${p.diag.canales}`,
+    presenciaTxt(p.diag.presencia || p.diag.canales),
     p.diag.detalle,
     p.diag.mensaje && `“${p.diag.mensaje}”`,
   ].filter(Boolean) as string[];
@@ -493,6 +520,41 @@ export default async function PropuestaPublica({
                 días de ajustes por nuestra cuenta.
               </span>
             </div>
+          </div>
+
+          {/* Lo que dejamos fuera A PROPÓSITO. Antes se metía todo al precio (el panel
+              entraba solo por tener 2+ piezas) y encarecía la propuesta sin que nadie
+              lo hubiera pedido. */}
+          {p.opcionales && p.opcionales.length > 0 && (
+            <div className="mb-8 rounded-3xl border border-[rgba(242,231,219,0.12)] p-6">
+              <p className="mb-1 font-medium text-sand">Esto lo dejamos fuera a propósito</p>
+              <p className="text-sm font-light text-mocha">
+                No está incluido en el precio de abajo. Sirve, y en algún momento te va a
+                convenir — pero primero se resuelve lo que hoy te está costando pacientes. Si lo
+                quieres desde el arranque, esto es lo que sumaría:
+              </p>
+              <div className="mt-5 grid gap-3">
+                {p.opcionales.map((o) => (
+                  <div key={o.val} className="rounded-2xl bg-[rgba(242,231,219,0.03)] p-4">
+                    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                      <span className="font-light text-sand">
+                        {icono(o.label)} {o.label}
+                      </span>
+                      <span className="text-sm font-medium text-clay">+{o.precio.mxn}</span>
+                    </div>
+                    <p className="mt-1.5 text-sm font-light text-mocha">{o.razon}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Invitación explícita a recortar: sin esto, el cliente asume que es un
+              paquete cerrado de tómalo o déjalo. */}
+          <div className="mb-12 rounded-3xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-6 font-light">
+            <span className="font-medium text-sand">¿Algo de aquí no lo necesitas?</span> Dímelo
+            por WhatsApp y te mando tu propuesta ajustada en el momento — si quitamos una pieza, el
+            precio baja. No vendemos paquetes cerrados: pagas por lo que de verdad vas a usar.
           </div>
         </Seccion>
 

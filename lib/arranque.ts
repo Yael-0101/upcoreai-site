@@ -23,6 +23,22 @@ export type AvanceItem = {
 
 export type CuentaEstado = { lista: boolean; correo: string };
 
+/**
+ * Quién crea las cuentas. La propuesta le promete al cliente que "te las creamos
+ * nosotros a tu nombre, o las creas tú" — así que el portal tiene que ofrecer las
+ * dos. En modo "upcore" el cliente no crea nada: solo nos dice a qué correo y
+ * teléfono quedan (son SUYAS, a su nombre) y cuándo puede contestarnos, porque los
+ * códigos de verificación le llegan a él y se vencen rápido.
+ */
+export type ConciergeDatos = {
+  modo: "upcore" | "yo" | null;
+  correoTipo: "mio" | "nuevo" | null; // usa un correo suyo, o le creamos uno del negocio
+  correo: string; // si es "mio"
+  correoIdea: string; // si es "nuevo": cómo le gustaría que se llame
+  telefono: string; // a donde llegan los códigos por SMS
+  horario: string; // cuándo le queda bien que le escribamos por WhatsApp
+};
+
 export type ArranqueDatos = {
   config: {
     nombre: string;
@@ -40,6 +56,7 @@ export type ArranqueDatos = {
     logoColores: string;
   };
   numero: { decision: string | null }; // actual | nuevo | asesoria
+  concierge: ConciergeDatos;
   cuentas: Record<string, CuentaEstado>;
   calendario: { compartido: boolean; tipo: string };
   prueba: { hecha: boolean; comentarios: string };
@@ -81,6 +98,15 @@ export function normalizarDatos(d: unknown): ArranqueDatos {
       ...(x.checklist ?? {}),
     },
     numero: { decision: null, ...(x.numero ?? {}) },
+    concierge: {
+      modo: null,
+      correoTipo: null,
+      correo: "",
+      correoIdea: "",
+      telefono: "",
+      horario: "",
+      ...(x.concierge ?? {}),
+    },
     cuentas: x.cuentas && typeof x.cuentas === "object" ? x.cuentas : {},
     calendario: { compartido: false, tipo: "", ...(x.calendario ?? {}) },
     prueba: { hecha: false, comentarios: "", ...(x.prueba ?? {}) },
@@ -155,6 +181,16 @@ export function cuentasRequeridas(config: ArranqueDatos["config"]): CuentaDef[] 
   return defs;
 }
 
+/**
+ * ¿Ya nos dio lo que necesitamos para crearle las cuentas nosotros? Necesitamos a
+ * qué correo quedan y un teléfono donde nos conteste los códigos.
+ */
+export function conciergeListo(c: ConciergeDatos): boolean {
+  if (c.modo !== "upcore") return false;
+  const correoOk = c.correoTipo === "nuevo" || (c.correoTipo === "mio" && c.correo.trim() !== "");
+  return correoOk && c.telefono.trim() !== "";
+}
+
 /** Estado real del arranque según lo que ya está hecho. */
 export function estadoDe(d: ArranqueDatos): "en-curso" | "parte-inicial-lista" | "completado" {
   const nucleoListo =
@@ -165,7 +201,11 @@ export function estadoDe(d: ArranqueDatos): "en-curso" | "parte-inicial-lista" |
   if (!nucleoListo) return "en-curso";
 
   const reqs = cuentasRequeridas(d.config);
-  const cuentasOk = reqs.every((r) => d.cuentas[r.id]?.lista);
+  // Si las creamos nosotros, el cliente no tiene nada que marcar: su parte termina
+  // cuando nos deja sus datos. Si no, se le esperaría por algo que no le toca hacer.
+  const cuentasOk = conciergeListo(d.concierge)
+    ? true
+    : reqs.every((r) => d.cuentas[r.id]?.lista);
   const textosOk = d.textos.length > 0 && d.textos.every((t) => t.estado === "aprobado");
   if (cuentasOk && d.calendario.compartido && d.prueba.hecha && textosOk) {
     return "completado";

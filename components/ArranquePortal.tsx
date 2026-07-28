@@ -17,6 +17,7 @@ import {
 } from "./WizardUI";
 import { CONTACT } from "@/lib/content";
 import {
+  conciergeListo,
   cuentasRequeridas,
   estadoDe,
   giroDemo,
@@ -44,6 +45,26 @@ const NUMERO_OPTIONS: Option[] = [
   },
   { val: "nuevo", label: "Un número nuevo", icon: "🆕", desc: "Dedicado para el asistente" },
   { val: "asesoria", label: "No sé — asesórenme", icon: "🤔", desc: "Lo vemos juntos" },
+];
+
+// Quién le da los clics a las cuentas. "Créenmelas ustedes" va primero a propósito:
+// es lo que la propuesta ofrece primero y lo que la mayoría de dueños prefiere.
+const CUENTAS_MODO_OPTIONS: Option[] = [
+  {
+    val: "upcore",
+    label: "Créenmelas ustedes",
+    icon: "🤝",
+    desc: "Nosotros las creamos a tu nombre",
+  },
+  { val: "yo", label: "Yo las creo", icon: "🙋", desc: "Con nuestra guía y video" },
+];
+
+// Las dos NO cuestan lo mismo para el cliente y hay que decírselo: con su correo,
+// los códigos le llegan a él y nos los tiene que leer (una ida y vuelta por cuenta);
+// con uno nuevo, llegan al buzón que administramos y él no hace nada.
+const CORREO_OPTIONS: Option[] = [
+  { val: "nuevo", label: "Créenme uno nuevo", icon: "✨", desc: "Recomendado · tú no haces nada" },
+  { val: "mio", label: "Con un correo mío", icon: "📧", desc: "Nos lees unos códigos" },
 ];
 
 const CALENDARIO_OPTIONS: Option[] = [
@@ -161,6 +182,8 @@ export function ArranquePortal({
     const actual = d.cuentas[id] ?? { lista: false, correo: "" };
     patch({ cuentas: { ...d.cuentas, [id]: { ...actual, ...p } } });
   };
+  const setConcierge = (p: Partial<ArranqueDatos["concierge"]>) =>
+    patch({ concierge: { ...d.concierge, ...p } });
   const setTexto = (id: string, p: Partial<TextoItem>) =>
     patch({ textos: d.textos.map((t) => (t.id === id ? { ...t, ...p } : t)) });
 
@@ -337,11 +360,113 @@ export function ArranquePortal({
         <div>
           <StepHeader
             q="Tus cuentas — tuyas desde el día uno"
-            hint="Todo se crea A TU NOMBRE con tus propios clics. Marca las que ya tengas; puedes seguir sin terminarlas y volver después."
+            hint="Van A TU NOMBRE siempre: tú eres el dueño. Lo único que decides aquí es quién les da los clics."
           />
           <div className="mb-5 rounded-2xl border border-clay/40 bg-[rgba(200,98,61,0.07)] p-4 text-center text-sm font-light">
-            🔒 <strong className="font-semibold text-sand">Nunca nos compartas contraseñas ni llaves</strong> — ni aquí, ni por WhatsApp. Solo necesitamos saber que la cuenta existe.
+            🔒 <strong className="font-semibold text-sand">Nunca nos compartas contraseñas ni llaves</strong> — ni aquí, ni por WhatsApp. Elijas lo que elijas, jamás te vamos a pedir una.
           </div>
+
+          {/* Quién las crea. La propuesta le prometió las dos opciones; aquí se cumplen. */}
+          <div className="mx-auto mb-6 grid max-w-lg grid-cols-1 gap-3 sm:grid-cols-2">
+            {CUENTAS_MODO_OPTIONS.map((o) => (
+              <OptionBtn
+                key={o.val}
+                opt={o}
+                selected={d.concierge.modo === o.val}
+                onClick={() => setConcierge({ modo: o.val as "upcore" | "yo" })}
+              />
+            ))}
+          </div>
+
+          {/* A) Se las creamos nosotros — solo necesitamos a nombre de quién quedan. */}
+          {d.concierge.modo === "upcore" && (
+            <div className="mb-8">
+              <div className="mb-5 rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5 text-sm font-light text-mocha">
+                <p className="mb-2">
+                  Perfecto, nosotros les damos los clics. Las cuentas quedan{" "}
+                  <strong className="font-semibold text-sand">a tu nombre y son tuyas</strong> — si algún
+                  día te vas, se van contigo.
+                </p>
+                <p>
+                  Lo único que necesitamos de ti: decirnos a qué correo y teléfono quedan.{" "}
+                  <strong className="font-semibold text-sand">
+                    Tu contraseña no nos hace falta para nada
+                  </strong>{" "}
+                  — las cuentas se abren con un código de un solo uso, y la contraseña de cada una la
+                  defines tú al final.
+                </p>
+              </div>
+              <div className="mx-auto grid max-w-lg gap-4">
+                <div>
+                  <p className="mb-2 text-sm font-medium text-sand">¿Con qué correo las creamos?</p>
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    {CORREO_OPTIONS.map((o) => (
+                      <OptionBtn
+                        key={o.val}
+                        opt={o}
+                        selected={d.concierge.correoTipo === o.val}
+                        onClick={() => setConcierge({ correoTipo: o.val as "mio" | "nuevo" })}
+                      />
+                    ))}
+                  </div>
+                  {d.concierge.correoTipo === "mio" && (
+                    <p className="mt-3 text-sm font-light text-mocha">
+                      Va. Como las cuentas se abren con tu correo, a tu bandeja te van a llegar 2 o 3
+                      códigos de confirmación. Te escribimos por WhatsApp y nos los lees — un minuto
+                      cada uno. Ojo: se vencen rápido, por eso te preguntamos abajo tu mejor horario.
+                    </p>
+                  )}
+                  {d.concierge.correoTipo === "nuevo" && (
+                    <p className="mt-3 text-sm font-light text-mocha">
+                      La más cómoda y la que recomendamos: lo creamos nosotros, los códigos llegan
+                      ahí y <strong className="font-semibold text-sand">tú no haces nada</strong>.
+                      Además deja{" "}
+                      <strong className="font-semibold text-sand">
+                        todas las cuentas de tu clínica en un solo lugar
+                      </strong>
+                      , sin revolverse con tu correo personal. Al entregarte el proyecto te pasamos su
+                      acceso en persona o por videollamada, y queda tuyo con todo adentro.
+                    </p>
+                  )}
+                </div>
+                {d.concierge.correoTipo === "mio" && (
+                  <Field
+                    label="Tu correo"
+                    type="email"
+                    value={d.concierge.correo}
+                    placeholder="ej. hola@tuclinica.com"
+                    onChange={(v) => setConcierge({ correo: v })}
+                  />
+                )}
+                {d.concierge.correoTipo === "nuevo" && (
+                  <Field
+                    label="¿Cómo te gustaría que se llame? (opcional)"
+                    type="text"
+                    value={d.concierge.correoIdea}
+                    placeholder="ej. contacto@clinicabeauty — si no, te proponemos uno"
+                    onChange={(v) => setConcierge({ correoIdea: v })}
+                  />
+                )}
+                <Field
+                  label="Teléfono donde te llegan los códigos"
+                  type="tel"
+                  value={d.concierge.telefono}
+                  placeholder="10 dígitos — normalmente el mismo de tu WhatsApp"
+                  onChange={(v) => setConcierge({ telefono: v })}
+                />
+                <Field
+                  label="¿Qué horario te queda mejor para que te escribamos? (opcional)"
+                  type="text"
+                  value={d.concierge.horario}
+                  placeholder="ej. martes o jueves después de las 3, que es cuando puedo contestar rápido"
+                  onChange={(v) => setConcierge({ horario: v })}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* B) Las crea el cliente — la guía de siempre. */}
+          {d.concierge.modo === "yo" && (
           <div className="mb-8 grid gap-4">
             {cuentas.map((c) => {
               const est = d.cuentas[c.id] ?? { lista: false, correo: "" };
@@ -383,7 +508,13 @@ export function ArranquePortal({
               );
             })}
           </div>
-          <NavBtns onBack={() => irA(4)} onNext={() => irA(6)} nextEnabled nextLabel="Siguiente →" />
+          )}
+          <NavBtns
+            onBack={() => irA(4)}
+            onNext={() => irA(6)}
+            nextEnabled={!!d.concierge.modo}
+            nextLabel="Siguiente →"
+          />
         </div>
       )}
 
@@ -560,7 +691,23 @@ export function ArranquePortal({
               { ok: step2Ready, txt: "Servicios y precios", req: true },
               { ok: step3Ready, txt: "Horarios y tono", req: true },
               { ok: step4Ready, txt: "Decisión del número de WhatsApp", req: true },
-              ...cuentas.map((c) => ({ ok: !!d.cuentas[c.id]?.lista, txt: `Cuenta: ${c.titulo}`, req: false })),
+              // Si las creamos nosotros, no tiene sentido listarle una por una algo
+              // que no le toca hacer: es una sola línea.
+              ...(d.concierge.modo === "upcore"
+                ? [
+                    {
+                      ok: conciergeListo(d.concierge),
+                      txt: conciergeListo(d.concierge)
+                        ? "Cuentas: las creamos nosotros a tu nombre"
+                        : "Cuentas: falta decirnos tu correo y teléfono",
+                      req: false,
+                    },
+                  ]
+                : cuentas.map((c) => ({
+                    ok: !!d.cuentas[c.id]?.lista,
+                    txt: `Cuenta: ${c.titulo}`,
+                    req: false,
+                  }))),
               { ok: d.calendario.compartido, txt: "Calendario compartido", req: false },
               { ok: d.prueba.hecha, txt: "Probaste el asistente", req: false },
               ...(d.textos.length > 0
