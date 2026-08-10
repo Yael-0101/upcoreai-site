@@ -151,6 +151,31 @@ export function precioFijo(mxn: number, perMonth = false): Money {
   };
 }
 
+/** Lee un precio ya formateado ("$24,000 MXN") y devuelve el número. Null si no se puede:
+ *  el acuerdo prefiere no generarse a generarse con una cifra inventada. */
+export function pesosDe(precio: string): number | null {
+  const limpio = (precio || "").replace(/[^0-9]/g, "");
+  if (!limpio) return null;
+  const n = Number(limpio);
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+
+/** Parte un precio en anticipo (50%) y resto, para el acuerdo. El anticipo se redondea a
+ *  centenas y el RESTO se calcula por diferencia — así los dos pagos siempre suman el total
+ *  exacto, aunque el precio sea impar. Único dueño de esta cuenta: si el 50% cambia, cambia
+ *  aquí y en ningún otro lado. */
+export function partirEnDosPagos(
+  precioMXN: string
+): { total: number; anticipo: Money; resto: Money } | null {
+  const total = pesosDe(precioMXN);
+  if (total === null) return null;
+  const anticipo = Math.round(total / 2 / 100) * 100;
+  // Con un total absurdamente bajo el redondeo dejaría el anticipo en $0 (o en el total
+  // entero). Antes que emitir un acuerdo que diga "Para arrancar: $0", no se emite.
+  if (anticipo <= 0 || anticipo >= total) return null;
+  return { total, anticipo: precioFijo(anticipo), resto: precioFijo(total - anticipo) };
+}
+
 /** Suma los precios de las piezas aplicando el descuento de paquete: la más cara a
  *  precio completo y el resto con descuento, para que quitar una pieza siempre baje. */
 export function sumarPiezas(preciosMXN: number[]): number {
