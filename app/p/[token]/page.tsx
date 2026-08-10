@@ -1,5 +1,19 @@
 import type { Metadata } from "next";
 import { CONTACT } from "@/lib/content";
+import { TIEMPOS, TIEMPO_DEFAULT } from "@/lib/acuerdo";
+import {
+  piezasDeSnapshot,
+  filaCostos,
+  faq,
+  dia1Desc,
+  pruebasDesc,
+  nuestraParte as nuestraParteDe,
+  lineaAgendaPorPieza,
+  noNecesitas,
+  tuParte,
+  mostrarDemo,
+  mostrarPerdida,
+} from "@/lib/propuesta-copy";
 import { DescargarPDF } from "@/components/DescargarPDF";
 
 // Propuesta/diagnóstico con link secreto: upcoreai.com/p/[token].
@@ -40,6 +54,9 @@ type Numeros = {
 };
 type Snapshot = {
   version?: number;
+  // v4: claves CRUDAS de lo cotizado (web/agente/voz/auto/reactivacion/panel) —
+  // con ellas la página decide su copy por pieza sin adivinar desde los labels.
+  piezas?: string[];
   fecha: string;
   lead: { nombre: string; clinica: string; decisor: string; tipo_clinica: string; tamano: string };
   diag: {
@@ -120,6 +137,8 @@ const PIEZA_ICONS: Record<string, string> = {
   Panel: "🧩",
 };
 const icono = (texto: string) => {
+  // La voz va primero: "Agente de voz…" también empieza con "Agente" y saldría 💬.
+  if (texto.startsWith("Agente de voz")) return "📞";
   const clave = Object.keys(PIEZA_ICONS).find((k) => texto.startsWith(k));
   return clave ? PIEZA_ICONS[clave] : "→";
 };
@@ -135,6 +154,9 @@ const PRESENCIA_TXT: Record<string, string> = {
 function presenciaTxt(v: string | undefined): string | false {
   const clave = (v || "").trim().toLowerCase();
   if (!clave) return false;
+  // "whatsapp" era un valor FIJO que el bot escribía en `canales` para todos —
+  // no es información del cliente y decía "Tus pacientes llegan por: whatsapp".
+  if (clave === "whatsapp") return false;
   if (PRESENCIA_TXT[clave]) return PRESENCIA_TXT[clave];
   // Leads viejos (y los del formulario web) traían aquí texto libre de canales.
   return `Tus pacientes llegan por: ${v}`;
@@ -163,18 +185,22 @@ function PlanCard({
   icon,
   desc,
   plan,
+  costos,
   destacado,
 }: {
   titulo: string;
   icon: string;
   desc: string;
   plan: Plan;
+  // Nombre y nota de la fila de costos variables — cambian por pieza (una web
+  // sola no gasta APIs: gasta dominio y hosting). El valor sigue congelado.
+  costos: { k: string; n: string };
   destacado?: boolean;
 }) {
   const filas = [
     { k: "Inversión (una vez)", v: plan.inversion.mxn, n: plan.inversion.usd },
     { k: "Mensualidad Upcore", v: plan.mensualidadUpcore.mxn, n: plan.upcoreNota },
-    { k: "Costos de APIs (tuyos)", v: plan.costosCliente.mxn, n: "Directo a los proveedores, a tu nombre — sin margen de Upcore" },
+    { k: costos.k, v: plan.costosCliente.mxn, n: costos.n },
     { k: "Retorno estimado", v: plan.roi, n: plan.roiNota },
   ];
   return (
@@ -206,34 +232,13 @@ function PlanCard({
 }
 
 // ── Sección 6: "Así trabajaríamos juntos" (línea de tiempo + requisitos) ──────
-// Días hábiles aproximados desde el anticipo, escalados por la complejidad del
-// proyecto (viene en el snapshot). Estimado honesto, nunca promesa cerrada.
-const TIEMPOS: Record<
-  string,
-  { construccion: string; pruebas: string; entrega: string; total: string }
-> = {
-  "Solución esencial": {
-    construccion: "Días 2–6",
-    pruebas: "Días 7–9",
-    entrega: "≈ Día 10",
-    total: "≈ 2 semanas",
-  },
-  "Sistema a la medida": {
-    construccion: "Días 2–10",
-    pruebas: "Días 11–14",
-    entrega: "≈ Día 15",
-    total: "≈ 3 semanas",
-  },
-  "Infraestructura completa": {
-    construccion: "Días 2–14",
-    pruebas: "Días 15–18",
-    entrega: "≈ Día 20",
-    total: "3–4 semanas",
-  },
-};
-const TIEMPO_DEFAULT = TIEMPOS["Solución esencial"];
+// Los plazos viven en lib/acuerdo.ts, que es de donde también los lee el acuerdo:
+// así la propuesta y el contrato nunca prometen fechas distintas.
 
-function lineaDeTiempo(t: (typeof TIEMPOS)[string]) {
+function lineaDeTiempo(
+  t: (typeof TIEMPOS)[string],
+  textos: { dia1: string; pruebas: string }
+) {
   return [
     {
       n: "Día 0",
@@ -243,7 +248,9 @@ function lineaDeTiempo(t: (typeof TIEMPOS)[string]) {
     {
       n: "Día 1",
       t: "Recibes tu Portal de Arranque",
-      d: "Un link privado donde haces tu parte a tu ritmo: el checklist de tu clínica (15 min), la decisión de tu número y las guías para crear tus cuentas — a TU nombre y con tus propios clics. Todo se guarda solo.",
+      // El contenido del Día 1 depende de las piezas: número de WhatsApp solo si hay
+      // agente; desvío solo si hay voz; textos/colores/referencias solo si hay web.
+      d: textos.dia1,
     },
     {
       n: t.construccion,
@@ -253,7 +260,7 @@ function lineaDeTiempo(t: (typeof TIEMPOS)[string]) {
     {
       n: t.pruebas,
       t: "TÚ lo pruebas",
-      d: "Lo usas como si fueras tu propio paciente y ajustamos lo que pidas antes de salir en vivo.",
+      d: textos.pruebas,
     },
     {
       n: t.entrega,
@@ -268,112 +275,9 @@ function lineaDeTiempo(t: (typeof TIEMPOS)[string]) {
   ];
 }
 
-// "Tu parte": lo que necesitamos del cliente, por pieza del proyecto. Las claves
-// son los mismos prefijos de `incluye[]` que usa PIEZA_ICONS (startsWith).
-const TU_PARTE: Record<string, { t: string; min: string }[]> = {
-  Agente: [
-    { t: "Contestar el checklist de tu clínica: servicios, precios, horarios y tu tono", min: "15 min" },
-    { t: "Decidir qué número de WhatsApp usará el asistente — te explico la diferencia antes", min: "5 min" },
-    { t: "Tus cuentas: te las creamos nosotros a tu nombre para que no batalles, o las creas tú con nuestro video — contraseñas por chat, jamás", min: "5–30 min" },
-    { t: "Darme acceso a tu calendario o agenda", min: "5 min" },
-    { t: "Probarlo como si fueras tu paciente antes de salir en vivo", min: "15 min" },
-  ],
-  Sitio: [
-    { t: "Pasarme los textos, fotos y logo que ya tengas de tu clínica", min: "20 min" },
-    { t: "Tu dominio (o lo compramos juntos, a tu nombre)", min: "10 min" },
-    { t: "Revisar el borrador y pedirme cambios", min: "15 min" },
-  ],
-  Automatizaciones: [
-    { t: "Darme acceso a tu calendario o agenda", min: "5 min" },
-    { t: "Aprobar los textos de recordatorios y confirmaciones (van con tu tono)", min: "10 min" },
-    { t: "Probar el flujo completo con una cita de mentira", min: "10 min" },
-  ],
-  Reactivación: [
-    { t: "Sacar tu lista de pacientes inactivos — te digo exactamente cómo exportarla", min: "15 min" },
-    { t: "Aprobar los mensajes de reactivación", min: "10 min" },
-  ],
-  Dashboard: [
-    { t: "Una revisión corta de avances para dejar tu panel a tu gusto", min: "15 min" },
-  ],
-};
-const TU_PARTE_GENERICA = [
-  { t: "Contestar el checklist de tu clínica", min: "15 min" },
-  { t: "Tus cuentas: te las creamos nosotros a tu nombre, o las creas tú con nuestro video", min: "5–30 min" },
-  { t: "Probar el sistema antes de la entrega", min: "15 min" },
-];
-
-function tuParte(incluye: string[]) {
-  const items: { t: string; min: string }[] = [];
-  const vistos = new Set<string>();
-  for (const clave of Object.keys(TU_PARTE)) {
-    if (!incluye.some((x) => x.startsWith(clave))) continue;
-    for (const item of TU_PARTE[clave]) {
-      if (vistos.has(item.t)) continue; // dedup entre piezas (ej. acceso al calendario)
-      vistos.add(item.t);
-      items.push(item);
-    }
-  }
-  return items.length > 0 ? items : TU_PARTE_GENERICA;
-}
-
-// Personalización ligera: qué dijo el cliente sobre cómo maneja su agenda hoy.
-// El nombre de su software viene embebido entre paréntesis en `agenda_hoy`
-// (ej. "Un software o sistema (Dentalink)").
-function lineaAgenda(agendaHoy: string): string | null {
-  const a = (agendaHoy || "").trim();
-  if (!a) return null;
-  const software = a.match(/\(([^)]+)\)/)?.[1]?.trim();
-  if (software)
-    return `Integrarnos a tu ${software} — tus datos y tu expediente se quedan donde están`;
-  if (/software|sistema/i.test(a))
-    return "Integrarnos al sistema que ya usas — tus datos se quedan donde están";
-  if (/papel|excel/i.test(a))
-    return "Dejarte la agenda ordenada en un calendario digital (hoy la llevas en papel/Excel) — sin costo extra";
-  return "Conectarnos a tu forma actual de agendar — sin obligarte a cambiar nada";
-}
-
-const NUESTRA_PARTE = [
-  "Construir el sistema completo, de punta a punta",
-  "Probarlo contigo hasta que quede como acordamos",
-  "Capacitarte con un video corto + guía de 1 página",
-  "La garantía: si no entrego lo acordado funcionando, te devuelvo tu anticipo",
-  "30 días de ajustes después de la entrega, por mi cuenta",
-];
-
-const NO_NECESITAS = [
-  "Saber de tecnología",
-  "Cambiar tu software o tu forma de trabajar",
-  "Contratar a alguien más",
-  "Pagar todo por adelantado",
-  "Compartir contraseñas por chat (eso jamás)",
-];
-
-const FAQ = [
-  {
-    q: "¿Es difícil de usar? No soy de tecnología.",
-    a: "Está pensado justo para eso: tú sigues trabajando como siempre y el sistema hace la parte pesada. Te entrego un video corto y una guía de 1 página; si algo no queda claro, me escribes y lo vemos.",
-  },
-  {
-    q: "Ya tengo mi sistema / mi forma de trabajar.",
-    a: "No se toca. Nos integramos a lo que ya usas (agenda, WhatsApp, Excel, software) — tus datos se quedan donde están y esto se encarga de lo que hoy nadie alcanza a hacer.",
-  },
-  {
-    q: "¿De quién queda todo esto?",
-    a: "Tuyo, al 100%. Las cuentas, el número, la página y el sistema quedan a tu nombre. Si un día no quieres seguir con Upcore, todo sigue siendo tuyo — nunca quedas amarrado.",
-  },
-  {
-    q: "¿Y si no funciona como esperaba?",
-    a: "Los primeros 30 días los ajustes van por mi cuenta hasta que quede como acordamos. Y si no te entrego lo acordado funcionando, te devuelvo tu anticipo.",
-  },
-  {
-    q: "¿Los números de esta propuesta son reales?",
-    a: "Son estimaciones conservadoras calculadas con los datos que TÚ nos diste (los supuestos están a la vista). Preferimos quedarnos cortos a prometerte de más.",
-  },
-  {
-    q: "¿Por qué los costos de APIs van aparte?",
-    a: "Porque son tuyos y así lo ves todo transparente: pagas el consumo real directo al proveedor, sin margen escondido de Upcore. Suelen ser unos cuantos dólares al mes, con tope de gasto activado.",
-  },
-];
+// "Tu parte", "Nuestra parte", NO_NECESITAS, FAQ y la línea de agenda viven ahora
+// en lib/propuesta-copy.ts (fuente única por pieza, probada por el guardián
+// scripts/probar-propuesta.mjs) — aquí solo se consumen.
 
 export default async function PropuestaPublica({
   params,
@@ -420,13 +324,16 @@ export default async function PropuestaPublica({
     p.diag.mensaje && `“${p.diag.mensaje}”`,
   ].filter(Boolean) as string[];
   const n = p.numeros;
+  // Las piezas cotizadas mandan sobre el copy: v4 las trae crudas; v3 se infieren.
+  const piezas = piezasDeSnapshot(p);
+  const conPerdida = mostrarPerdida(piezas, n);
   // Sección 6 (fusionada): tiempos por complejidad + requisitos por pieza.
   const tiempos = TIEMPOS[p.complejidad] ?? TIEMPO_DEFAULT;
-  const pasos = lineaDeTiempo(tiempos);
-  const parte = tuParte(p.incluye ?? []);
+  const pasos = lineaDeTiempo(tiempos, { dia1: dia1Desc(piezas), pruebas: pruebasDesc(piezas) });
+  const parte = tuParte(piezas);
   const horasTuParte = parte.length <= 5 ? "~1 hora" : "~1 a 2 horas";
-  const agendaTxt = lineaAgenda(p.diag.agenda_hoy);
-  const nuestraParte = agendaTxt ? [NUESTRA_PARTE[0], agendaTxt, ...NUESTRA_PARTE.slice(1)] : NUESTRA_PARTE;
+  const nuestraParte = nuestraParteDe(piezas, lineaAgendaPorPieza(p.diag.agenda_hoy, piezas));
+  const costosFila = filaCostos(piezas);
   const waPropuesta =
     "https://wa.me/14244472698?text=" +
     encodeURIComponent(
@@ -470,7 +377,7 @@ export default async function PropuestaPublica({
           </Seccion>
         )}
 
-        {n && n.perdidaMensual > 0 && (
+        {conPerdida && n && (
           <Seccion titulo="2 · Lo que te está costando seguir igual">
             <div className="mb-12 rounded-3xl border border-clay/40 bg-[rgba(200,98,61,0.07)] p-7">
               <div className="grid gap-6 sm:grid-cols-2">
@@ -559,7 +466,7 @@ export default async function PropuestaPublica({
         </Seccion>
 
         <Seccion titulo="4 · Tu inversión, con números honestos">
-          {n && n.perdidaMensual > 0 && (
+          {conPerdida && n && (
             <p className="mb-5 font-light text-mocha">
               Para ponerla en contexto: compárala contra los ~{mxn(n.perdidaMensual)} que hoy se
               van cada mes.
@@ -571,12 +478,14 @@ export default async function PropuestaPublica({
               icon="🔑"
               desc="Lo construimos y es 100% tuyo — tú lo operas, sin mensualidad"
               plan={p.llave}
+              costos={costosFila}
             />
             <PlanCard
               titulo="Gestionado"
               icon="🛠️"
               desc="Lo construimos Y lo operamos por ti: monitoreo, cambios y soporte"
               plan={p.gestionado}
+              costos={costosFila}
               destacado
             />
           </div>
@@ -663,7 +572,7 @@ export default async function PropuestaPublica({
           <div className="mb-12 rounded-3xl border border-[rgba(242,231,219,0.1)] bg-[rgba(242,231,219,0.04)] p-7">
             <h3 className="mb-3 font-semibold text-sand">Y lo que NO vas a necesitar:</h3>
             <div className="grid gap-2 sm:grid-cols-2">
-              {NO_NECESITAS.map((x) => (
+              {noNecesitas(piezas).map((x) => (
                 <div key={x} className="flex gap-2.5 text-sm font-light text-mocha">
                   <span className="text-clay">✗</span>
                   <span>{x}</span>
@@ -684,7 +593,7 @@ export default async function PropuestaPublica({
 
         <Seccion titulo="7 · Las dudas que seguro tienes">
           <div className="mb-12 grid gap-3">
-            {FAQ.map((f) => (
+            {faq(piezas).map((f) => (
               <div key={f.q} className="rounded-2xl bg-[rgba(242,231,219,0.03)] p-5">
                 <div className="mb-1 font-semibold">{f.q}</div>
                 <div className="text-sm font-light text-mocha">{f.a}</div>
@@ -693,18 +602,23 @@ export default async function PropuestaPublica({
           </div>
         </Seccion>
 
-        <div className="no-print mb-12 rounded-3xl border border-[rgba(242,231,219,0.1)] bg-[rgba(242,231,219,0.03)] p-6 text-center font-light text-mocha">
-          ¿Quieres ver el agente en acción antes de decidir?{" "}
-          <a
-            href={`https://upcoreai.com/demo${p.lead.clinica ? `?c=${encodeURIComponent(p.lead.clinica)}` : ""}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium text-sand underline hover:text-clay"
-          >
-            Pruébalo tú mismo aquí
-          </a>{" "}
-          — juega a ser tu propio paciente.
-        </div>
+        {/* La demo pública es el agente de WhatsApp: invitar a probarla solo tiene
+            sentido si el agente está cotizado (a un cliente de solo-web o de voz le
+            estaríamos enseñando un producto que no pidió). */}
+        {mostrarDemo(piezas) && (
+          <div className="no-print mb-12 rounded-3xl border border-[rgba(242,231,219,0.1)] bg-[rgba(242,231,219,0.03)] p-6 text-center font-light text-mocha">
+            ¿Quieres ver el agente en acción antes de decidir?{" "}
+            <a
+              href={`https://upcoreai.com/demo${p.lead.clinica ? `?c=${encodeURIComponent(p.lead.clinica)}` : ""}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-sand underline hover:text-clay"
+            >
+              Pruébalo tú mismo aquí
+            </a>{" "}
+            — juega a ser tu propio paciente.
+          </div>
+        )}
 
         <div className="no-print my-16 text-center">
           <a

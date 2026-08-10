@@ -4,8 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/probar-acuerdo.mjs && node scripts/probar-propuesta.mjs && node scripts/generar-acuerdo-md.mjs --verificar",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "probar:acuerdo": "node scripts/probar-acuerdo.mjs",
+    "generar:acuerdo": "node scripts/generar-acuerdo-md.mjs",
+    "verificar:acuerdo": "node scripts/generar-acuerdo-md.mjs --verificar"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
@@ -22,6 +26,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.4.20",
+    "jiti": "^1.21.7",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3"

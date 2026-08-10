@@ -44,7 +44,7 @@ export type ArranqueDatos = {
     nombre: string;
     clinica: string;
     giro: string; // dental | estetica | medica (alimenta la demo)
-    productos: string[]; // agente | web | auto | reactivacion
+    productos: string[]; // agente | voz | web | auto | reactivacion | panel
     plan: string; // llave | gestionado
   };
   checklist: {
@@ -60,6 +60,9 @@ export type ArranqueDatos = {
   cuentas: Record<string, CuentaEstado>;
   calendario: { compartido: boolean; tipo: string };
   prueba: { hecha: boolean; comentarios: string };
+  /** Estilo del sitio (solo proyectos con web): paleta propia o de inspiración,
+   *  y 1–3 páginas de referencia con qué le gusta de cada una. */
+  web: { paleta: string; referencias: Array<{ url: string; nota: string }> };
   /** Borradores de recordatorios/confirmaciones — los siembra Upcore por cliente */
   textos: TextoItem[];
   /** Fases del proyecto — las actualiza Upcore; el cliente solo las ve */
@@ -84,7 +87,12 @@ export function normalizarDatos(d: unknown): ArranqueDatos {
       nombre: "",
       clinica: "",
       giro: "dental",
-      productos: ["agente"],
+      // OJO: no hay endpoint que siembre esta fila desde la propuesta aceptada —
+      // `productos` lo pone Yael a mano al crearla (claves crudas, ej. ["web"]).
+      // Vacío = "no se sembró": el portal muestra TODOS los pasos (comportamiento
+      // de las filas viejas). Antes el default era ["agente"] y a un cliente de
+      // solo-web le pedía decidir su número de WhatsApp (lección 2026-08-10).
+      productos: [],
       plan: "llave",
       ...(x.config ?? {}),
     },
@@ -110,10 +118,49 @@ export function normalizarDatos(d: unknown): ArranqueDatos {
     cuentas: x.cuentas && typeof x.cuentas === "object" ? x.cuentas : {},
     calendario: { compartido: false, tipo: "", ...(x.calendario ?? {}) },
     prueba: { hecha: false, comentarios: "", ...(x.prueba ?? {}) },
+    web: (() => {
+      const w = (x.web ?? {}) as Record<string, any>;
+      return {
+        paleta: typeof w.paleta === "string" ? w.paleta : "",
+        referencias: Array.isArray(w.referencias) ? w.referencias : [],
+      };
+    })(),
     textos: Array.isArray(x.textos) ? x.textos : [],
     avances: Array.isArray(x.avances) && x.avances.length > 0 ? x.avances : FASES_DEFAULT,
     progreso: { pasoActual: 1, ...(x.progreso ?? {}) },
   };
+}
+
+// ── Qué pasos del wizard aplican a ESTE proyecto ─────────────────────────────
+// Antes los 9 pasos eran fijos y un cliente de solo-web tenía que "decidir su
+// número de WhatsApp" y "jugar a ser su paciente" en el chat (lección 2026-08-10).
+// Misma filosofía que cuentasRequeridas(): las piezas mandan.
+export type PasoId =
+  | "bienvenida"
+  | "servicios"
+  | "horarios"
+  | "numero"
+  | "cuentas"
+  | "calendario"
+  | "demo"
+  | "textos"
+  | "resumen";
+
+export function pasosVisibles(productos: string[]): PasoId[] {
+  const p = productos ?? [];
+  // Fila vieja sin sembrar (lista vacía): se muestra todo, como siempre — no se
+  // le esconde un paso a un proyecto del que no sabemos sus piezas.
+  const todos = p.length === 0;
+  const tiene = (...c: string[]) => todos || c.some((x) => p.includes(x));
+  const pasos: PasoId[] = ["bienvenida", "servicios", "horarios"];
+  if (tiene("agente", "auto", "reactivacion")) pasos.push("numero");
+  pasos.push("cuentas");
+  // La web también agenda (su botón de citas cae al calendario del cliente).
+  if (tiene("agente", "voz", "auto", "web")) pasos.push("calendario");
+  // La demo es el CHAT del agente: a voz-sola o web-sola no les aplica.
+  if (tiene("agente")) pasos.push("demo");
+  pasos.push("textos", "resumen");
+  return pasos;
 }
 
 export type CuentaDef = {
@@ -191,13 +238,16 @@ export function conciergeListo(c: ConciergeDatos): boolean {
   return correoOk && c.telefono.trim() !== "";
 }
 
-/** Estado real del arranque según lo que ya está hecho. */
+/** Estado real del arranque según lo que ya está hecho. Consciente de piezas:
+ *  a un proyecto de solo-web no se le espera por el número de WhatsApp ni por la
+ *  prueba del chat — serían requisitos inalcanzables y jamás llegaría a "completado". */
 export function estadoDe(d: ArranqueDatos): "en-curso" | "parte-inicial-lista" | "completado" {
+  const visibles = new Set(pasosVisibles(d.config.productos ?? []));
   const nucleoListo =
     d.checklist.servicios.some((s) => s.nombre.trim() !== "") &&
     d.checklist.horarios.trim() !== "" &&
     !!d.checklist.tono &&
-    !!d.numero.decision;
+    (!visibles.has("numero") || !!d.numero.decision);
   if (!nucleoListo) return "en-curso";
 
   const reqs = cuentasRequeridas(d.config);
@@ -206,8 +256,14 @@ export function estadoDe(d: ArranqueDatos): "en-curso" | "parte-inicial-lista" |
   const cuentasOk = conciergeListo(d.concierge)
     ? true
     : reqs.every((r) => d.cuentas[r.id]?.lista);
-  const textosOk = d.textos.length > 0 && d.textos.every((t) => t.estado === "aprobado");
-  if (cuentasOk && d.calendario.compartido && d.prueba.hecha && textosOk) {
+  const calOk = !visibles.has("calendario") || d.calendario.compartido;
+  const pruebaOk = !visibles.has("demo") || d.prueba.hecha;
+  // Los `textos` son borradores de recordatorios: solo existen en proyectos con
+  // piezas de WhatsApp (mismo criterio que el paso "numero").
+  const textosOk = visibles.has("numero")
+    ? d.textos.length > 0 && d.textos.every((t) => t.estado === "aprobado")
+    : d.textos.length === 0 || d.textos.every((t) => t.estado === "aprobado");
+  if (cuentasOk && calOk && pruebaOk && textosOk) {
     return "completado";
   }
   return "parte-inicial-lista";

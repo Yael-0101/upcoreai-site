@@ -21,13 +21,29 @@ import {
   cuentasRequeridas,
   estadoDe,
   giroDemo,
+  pasosVisibles,
   type ArranqueDatos,
+  type PasoId,
   type ServicioItem,
   type TextoItem,
 } from "@/lib/arranque";
 
 type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | "listo";
 const TOTAL_PASOS = 9;
+// Número de paso ↔ su id (índice + 1). El orden es el del wizard de siempre;
+// pasosVisibles() decide cuáles aplican a las piezas de ESTE proyecto.
+const NUM_A_PASO: PasoId[] = [
+  "bienvenida",
+  "servicios",
+  "horarios",
+  "numero",
+  "cuentas",
+  "calendario",
+  "demo",
+  "textos",
+  "resumen",
+];
+const numDePaso = (id: PasoId) => (NUM_A_PASO.indexOf(id) + 1) as Step & number;
 
 const TONO_OPTIONS: Option[] = [
   { val: "calido", label: "Cálido y cercano", icon: "🤗", desc: "Como recepción de confianza" },
@@ -104,7 +120,14 @@ export function ArranquePortal({
   }));
   const [step, setStep] = useState<Step>(() => {
     const p = datosIniciales.progreso.pasoActual;
-    return (p >= 1 && p <= TOTAL_PASOS ? p : 1) as Step;
+    let n = p >= 1 && p <= TOTAL_PASOS ? p : 1;
+    // Si el paso guardado ya no aplica a sus piezas (ej. "número" en un proyecto
+    // de solo-web), se avanza al siguiente que sí aplique.
+    const vis = new Set(
+      pasosVisibles(datosIniciales.config.productos ?? []).map((id) => numDePaso(id))
+    );
+    while (n < TOTAL_PASOS && !vis.has(n as Step & number)) n++;
+    return n as Step;
   });
   const [save, setSave] = useState<"idle" | "guardando" | "ok" | "error">("idle");
   const [enviando, setEnviando] = useState(false);
@@ -116,6 +139,12 @@ export function ArranquePortal({
   );
 
   const patch = (p: Partial<ArranqueDatos>) => setD((prev) => ({ ...prev, ...p }));
+
+  // Qué pasos aplican a este proyecto (por sus piezas). La navegación de abajo
+  // sigue usando los números de siempre y aquí se brincan los que no aplican.
+  const pasosLista = pasosVisibles(d.config.productos ?? []);
+  const visibleNum = new Set(pasosLista.map((id) => numDePaso(id)));
+  const tieneWeb = (d.config.productos ?? []).includes("web");
 
   const guardar = async (datos: ArranqueDatos, estado?: string) => {
     setSave("guardando");
@@ -140,9 +169,16 @@ export function ArranquePortal({
 
   const irA = (n: Step) => {
     if (typeof n === "number") {
-      const datos = { ...d, progreso: { ...d.progreso, pasoActual: n } };
+      // Los botones apuntan al paso vecino de siempre; si ese paso no aplica a
+      // las piezas del proyecto, se sigue de largo en la misma dirección.
+      // (1 y 9 siempre aplican, así que siempre se aterriza en algo visible.)
+      const desde = typeof step === "number" ? step : TOTAL_PASOS;
+      const dir = n >= desde ? 1 : -1;
+      let destino = n;
+      while (destino > 1 && destino < TOTAL_PASOS && !visibleNum.has(destino)) destino += dir;
+      const datos = { ...d, progreso: { ...d.progreso, pasoActual: destino } };
       setD(datos);
-      setStep(n);
+      setStep(destino as Step);
       void guardar(datos); // autosave — si falla, el aviso queda visible y nada se pierde en pantalla
     } else {
       setStep(n);
@@ -190,7 +226,9 @@ export function ArranquePortal({
   // ── Validaciones por paso ─────────────────────────────────────────────────
   const step2Ready = d.checklist.servicios.some((s) => s.nombre.trim() !== "");
   const step3Ready = d.checklist.horarios.trim() !== "" && !!d.checklist.tono;
-  const step4Ready = !!d.numero.decision;
+  // Si el paso del número no aplica (proyecto sin piezas de WhatsApp), no puede
+  // ser requisito: sería esperar por una decisión que nadie le va a pedir.
+  const step4Ready = !visibleNum.has(4) || !!d.numero.decision;
   const nucleoListo = step2Ready && step3Ready && step4Ready;
 
   const cuentas = cuentasRequeridas(d.config);
@@ -239,9 +277,18 @@ export function ArranquePortal({
     );
   }
 
+  // El contador cuenta SOLO los pasos que aplican a este proyecto (un cliente de
+  // solo-web ve "Paso 4 de 7", no un brinco del 3 al 5).
+  const posEnLista =
+    typeof step === "number" ? pasosLista.indexOf(NUM_A_PASO[step - 1]) + 1 : pasosLista.length;
+
   return (
     <div className="card-soft rounded-[36px] p-6 md:p-12">
-      <ProgressDots step={step} total={TOTAL_PASOS} label={`Paso ${step} de ${TOTAL_PASOS}`} />
+      <ProgressDots
+        step={posEnLista}
+        total={pasosLista.length}
+        label={`Paso ${posEnLista} de ${pasosLista.length}`}
+      />
 
       {/* 1 · Bienvenida */}
       {step === 1 && (
@@ -521,7 +568,7 @@ export function ArranquePortal({
       {/* 6 · Calendario */}
       {step === 6 && (
         <div>
-          <StepHeader q="Tu calendario o agenda" hint="Para que las citas que agende tu asistente caigan donde tú ya trabajas." />
+          <StepHeader q="Tu calendario o agenda" hint="Para que las citas que se agenden — por tu asistente o por tu sitio — caigan donde tú ya trabajas." />
           <div className="mx-auto mb-5 grid max-w-lg grid-cols-1 gap-3 sm:grid-cols-3">
             {CALENDARIO_OPTIONS.map((o) => (
               <OptionBtn key={o.val} opt={o} selected={d.calendario.tipo === o.val} onClick={() => patch({ calendario: { ...d.calendario, tipo: o.val } })} />
@@ -608,17 +655,114 @@ export function ArranquePortal({
         </div>
       )}
 
-      {/* 8 · Aprobar textos */}
+      {/* 8 · Aprobar textos (+ estilo del sitio si el proyecto lleva web) */}
       {step === 8 && (
         <div>
           <StepHeader
-            q="Los textos de tu clínica"
-            hint="Recordatorios y confirmaciones que mandará tu sistema — tú les das el visto bueno."
+            q={tieneWeb ? "Los textos y el estilo de tu clínica" : "Los textos de tu clínica"}
+            hint={
+              tieneWeb
+                ? "El estilo de tu sitio, y los textos que mandará tu sistema — tú les das el visto bueno."
+                : "Recordatorios y confirmaciones que mandará tu sistema — tú les das el visto bueno."
+            }
           />
-          {d.textos.length === 0 ? (
-            <div className="mx-auto mb-8 max-w-md rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-6 text-center text-sm font-light text-mocha">
-              ✍️ Tus textos están <strong className="font-semibold text-sand">en preparación</strong> (los redactamos con tu tono en cuanto tengamos tu checklist). Te avisaremos por WhatsApp cuando estén aquí para tu visto bueno — mientras, continúa.
+          {tieneWeb && (
+            <div className="mx-auto mb-8 max-w-md">
+              <div className="mb-3 text-sm font-semibold text-sand">🎨 El estilo de tu sitio</div>
+              <p className="mb-4 text-sm font-light text-mocha">
+                Todo esto es opcional — pero entre más nos des, más tuyo se va a sentir el
+                primer borrador.
+              </p>
+              <div className="grid gap-4">
+                <Field
+                  label="Tu paleta de colores (si tienes una)"
+                  type="text"
+                  value={d.web.paleta}
+                  placeholder="Ej. azul marino y dorado · #1B2A4A y #C9A227 · o el link de una página cuyos colores te gusten"
+                  onChange={(v) => patch({ web: { ...d.web, paleta: v } })}
+                />
+                {d.web.referencias.map((r, i) => (
+                  <div
+                    key={i}
+                    className="grid gap-2 rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-4"
+                  >
+                    <div className="flex items-end gap-2">
+                      <div className="flex-1">
+                        <Field
+                          label={`Página que te gusta ${i + 1}`}
+                          type="text"
+                          value={r.url}
+                          placeholder="https://…"
+                          onChange={(v) =>
+                            patch({
+                              web: {
+                                ...d.web,
+                                referencias: d.web.referencias.map((x, j) =>
+                                  j === i ? { ...x, url: v } : x
+                                ),
+                              },
+                            })
+                          }
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        aria-label="Quitar referencia"
+                        onClick={() =>
+                          patch({
+                            web: {
+                              ...d.web,
+                              referencias: d.web.referencias.filter((_, j) => j !== i),
+                            },
+                          })
+                        }
+                        className="h-11 rounded-xl border border-[rgba(242,231,219,0.15)] px-3 text-mocha transition-colors hover:border-clay hover:text-clay"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    <Field
+                      label="¿Qué te gusta de ella?"
+                      type="text"
+                      value={r.nota}
+                      placeholder="Ej. lo limpio del menú, cómo muestran los precios, las fotos grandes…"
+                      onChange={(v) =>
+                        patch({
+                          web: {
+                            ...d.web,
+                            referencias: d.web.referencias.map((x, j) =>
+                              j === i ? { ...x, nota: v } : x
+                            ),
+                          },
+                        })
+                      }
+                    />
+                  </div>
+                ))}
+                {d.web.referencias.length < 3 && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      patch({
+                        web: { ...d.web, referencias: [...d.web.referencias, { url: "", nota: "" }] },
+                      })
+                    }
+                    className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay"
+                  >
+                    + Agregar una página de referencia (máx. 3)
+                  </button>
+                )}
+              </div>
             </div>
+          )}
+          {d.textos.length === 0 ? (
+            // Los borradores de recordatorios solo existen en proyectos con piezas de
+            // WhatsApp; a uno de solo-web no se le promete algo que no va a llegar.
+            visibleNum.has(4) ? (
+              <div className="mx-auto mb-8 max-w-md rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-6 text-center text-sm font-light text-mocha">
+                ✍️ Tus textos están <strong className="font-semibold text-sand">en preparación</strong> (los redactamos con tu tono en cuanto tengamos tu checklist). Te avisaremos por WhatsApp cuando estén aquí para tu visto bueno — mientras, continúa.
+              </div>
+            ) : null
           ) : (
             <div className="mb-8 grid gap-4">
               {d.textos.map((t) => (
@@ -690,7 +834,11 @@ export function ArranquePortal({
             {[
               { ok: step2Ready, txt: "Servicios y precios", req: true },
               { ok: step3Ready, txt: "Horarios y tono", req: true },
-              { ok: step4Ready, txt: "Decisión del número de WhatsApp", req: true },
+              // Las filas de pasos que no aplican a sus piezas no se listan: no se
+              // le muestra pendiente algo que nadie le va a pedir.
+              ...(visibleNum.has(4)
+                ? [{ ok: step4Ready, txt: "Decisión del número de WhatsApp", req: true }]
+                : []),
               // Si las creamos nosotros, no tiene sentido listarle una por una algo
               // que no le toca hacer: es una sola línea.
               ...(d.concierge.modo === "upcore"
@@ -708,8 +856,23 @@ export function ArranquePortal({
                     txt: `Cuenta: ${c.titulo}`,
                     req: false,
                   }))),
-              { ok: d.calendario.compartido, txt: "Calendario compartido", req: false },
-              { ok: d.prueba.hecha, txt: "Probaste el asistente", req: false },
+              ...(visibleNum.has(6)
+                ? [{ ok: d.calendario.compartido, txt: "Calendario compartido", req: false }]
+                : []),
+              ...(visibleNum.has(7)
+                ? [{ ok: d.prueba.hecha, txt: "Probaste el asistente", req: false }]
+                : []),
+              ...(tieneWeb
+                ? [
+                    {
+                      ok:
+                        d.web.paleta.trim() !== "" ||
+                        d.web.referencias.some((r) => r.url.trim() !== ""),
+                      txt: "Estilo de tu sitio: paleta y referencias",
+                      req: false,
+                    },
+                  ]
+                : []),
               ...(d.textos.length > 0
                 ? [{ ok: d.textos.every((t) => t.estado === "aprobado"), txt: "Textos aprobados", req: false }]
                 : []),
