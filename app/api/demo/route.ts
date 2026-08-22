@@ -4,6 +4,7 @@ import {
   DEMO_CIERRE,
   DEMO_FALLBACK,
   DEMO_LIMITS,
+  DEMO_DEFAULTS,
   sanitizeClinica,
   sanitizeGiro,
 } from "@/lib/demo-config";
@@ -100,7 +101,15 @@ export async function POST(req: Request) {
   }
 
   // Aviso a Yael cuando un PROSPECTO (demo personalizada) llega a su 3er mensaje.
-  if (clinica !== "Clínica Demo" && turnosUsuario === 3) {
+  //
+  // 🔴 Aquí decía `clinica !== "Clínica Demo"`: un nombre ESCRITO A MANO que se quedó
+  // del nicho anterior. Al migrar, el nombre por defecto pasó a "Inmobiliaria Demo",
+  // así que la condición era SIEMPRE cierta y cada visitante anónimo que jugaba con
+  // la demo del sitio disparaba un aviso de "un prospecto probó tu demo". No daba
+  // error: solo llenaba los avisos de ruido, que es como se deja de confiar en ellos.
+  // Ahora se compara contra la fuente única (DEMO_DEFAULTS), así un cambio de nicho
+  // no lo puede volver a romper.
+  if (clinica !== DEMO_DEFAULTS.clinica && turnosUsuario === 3) {
     avisarDemoProbada(clinica, giro);
   }
 

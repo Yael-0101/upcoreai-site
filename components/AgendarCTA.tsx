@@ -2,23 +2,29 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { contenido } from "@/lib/site-textos";
+import { ruta, type Idioma } from "@/lib/idioma";
 
-// Botón único "Agenda tu diagnóstico": al hacer clic abre los caminos para empezar.
+// Botón único "Haz tu diagnóstico": al hacer clic abre los caminos para empezar.
 // Decisión de Yael (2026-07-23): SIN opciones de llamada en el embudo de diagnóstico
 // (los leads que llegan ya nos conocen) — solo el diagnóstico instantáneo y la demo.
 export function AgendarCTA({
-  label = "Agenda tu diagnóstico",
+  idioma = "es",
+  label,
   className = "",
 }: {
+  idioma?: Idioma;
   label?: string;
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
+  const t = contenido(idioma).cta;
+  const texto = label ?? contenido(idioma).nav.cta;
 
   return (
     <>
       <button type="button" onClick={() => setOpen(true)} className={className}>
-        {label}
+        {texto}
       </button>
 
       {open && (
@@ -44,67 +50,35 @@ export function AgendarCTA({
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                aria-label="Cerrar"
+                aria-label={t.cerrar}
                 className="absolute right-1 top-0 flex h-9 w-9 items-center justify-center rounded-full text-xl text-mocha transition-colors hover:text-sand"
               >
                 ×
               </button>
               <h3 className="mb-1 pr-8 text-xl font-semibold tracking-tight text-sand">
-                Tu diagnóstico gratis, sin llamadas
+                {t.titulo}
               </h3>
-              <p className="mb-6 text-sm font-light text-mocha">
-                Contesta unas preguntas y el resultado aparece al instante, con los números
-                de TU clínica.
-              </p>
+              <p className="mb-6 text-sm font-light text-mocha">{t.sub}</p>
 
               <div className="flex flex-col gap-3">
-                <a
-                  href="/empezar"
-                  className="card-soft group flex items-center gap-4 rounded-2xl p-4 text-left"
-                >
-                  <span className="text-2xl">⚡</span>
-                  <span className="flex-1">
-                    <span className="block font-semibold text-sand">Hacer mi diagnóstico</span>
-                    <span className="block text-xs font-light leading-relaxed text-mocha">
-                      3 minutos de preguntas y tu diagnóstico al instante — sin agendar nada.
+                {t.opciones.map((o) => (
+                  <a
+                    key={o.href}
+                    href={ruta(idioma, o.href)}
+                    className="card-soft group flex items-center gap-4 rounded-2xl p-4 text-left"
+                  >
+                    <span className="text-2xl">{o.emoji}</span>
+                    <span className="flex-1">
+                      <span className="block font-semibold text-sand">{o.titulo}</span>
+                      <span className="block text-xs font-light leading-relaxed text-mocha">
+                        {o.sub}
+                      </span>
                     </span>
-                  </span>
-                  <span className="text-clay transition-transform duration-300 group-hover:translate-x-1">
-                    →
-                  </span>
-                </a>
-
-                <a
-                  href="/demo"
-                  className="card-soft group flex items-center gap-4 rounded-2xl p-4 text-left"
-                >
-                  <span className="text-2xl">🤖</span>
-                  <span className="flex-1">
-                    <span className="block font-semibold text-sand">Prueba el agente de chat</span>
-                    <span className="block text-xs font-light leading-relaxed text-mocha">
-                      Chatea con una demo del asistente, como si fueras tu paciente.
+                    <span className="text-clay transition-transform duration-300 group-hover:translate-x-1">
+                      →
                     </span>
-                  </span>
-                  <span className="text-clay transition-transform duration-300 group-hover:translate-x-1">
-                    →
-                  </span>
-                </a>
-
-                <a
-                  href="/soluciones/agente-de-voz-para-clinicas#demo-voz"
-                  className="card-soft group flex items-center gap-4 rounded-2xl p-4 text-left"
-                >
-                  <span className="text-2xl">📞</span>
-                  <span className="flex-1">
-                    <span className="block font-semibold text-sand">Prueba el agente de voz</span>
-                    <span className="block text-xs font-light leading-relaxed text-mocha">
-                      Háblale por el micrófono y escucha cómo contestaría tu teléfono.
-                    </span>
-                  </span>
-                  <span className="text-clay transition-transform duration-300 group-hover:translate-x-1">
-                    →
-                  </span>
-                </a>
+                  </a>
+                ))}
               </div>
             </div>
           </motion.div>

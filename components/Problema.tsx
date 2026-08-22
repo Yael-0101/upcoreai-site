@@ -2,9 +2,11 @@ import { SectionTitle } from "./SectionTitle";
 import { Reveal } from "./Reveal";
 import { GlassCard } from "./GlassCard";
 import { Icon } from "./Icons";
-import { PROBLEMAS } from "@/lib/content";
+import { contenido } from "@/lib/site-textos";
+import type { Idioma } from "@/lib/idioma";
 
-export function Problema() {
+export function Problema({ idioma = "es" }: { idioma?: Idioma }) {
+  const PROBLEMAS = contenido(idioma).problemas;
   return (
     <section id="problema" className="px-[6%] py-24 md:px-[10%] md:py-32">
       <SectionTitle title={PROBLEMAS.heading} sub={PROBLEMAS.sub} />

@@ -1,9 +1,27 @@
 // ============================================================================
-// BLOG (SEO) — Upcore AI
-// Cada objeto es un artículo en /blog/[slug]. Edita el texto aquí.
-// Para agregar un artículo: copia un bloque, cambia slug/fechas/texto.
-// El sitemap, el índice /blog y el enlace del menú se actualizan solos.
+// BLOG (SEO) — Upcore AI · español e inglés
+//
+// Cada objeto es un artículo en /blog/[slug] y /en/blog/[slug]. El sitemap, el
+// índice, el `hreflang` y el enlace del menú se actualizan solos.
+//
+// El texto vive en `t: Record<Idioma, TextoArticulo>`: TypeScript obliga a que los
+// dos idiomas tengan las mismas claves. Publicar un artículo en español sin su
+// versión inglesa NO COMPILA.
+//
+// ⚠️ REGLA DE CIFRAS (la de la casa). Este contenido es público y con firma, así que
+// solo van números con fuente comprobada:
+//   · 60–70% de los prospectos se pierden por seguimiento tardío
+//   · 48% de los asesores no da un segundo contacto
+//   · responder en menos de 1 hora → 7× más probable calificar al lead
+//   · el sector convierte entre 0.4% y 2.4%
+//   · 52% de las compras de preventa en el sur de Florida son de extranjeros;
+//     ~86% de esos compradores internacionales son latinoamericanos
+// Lo que NO se hace: inventar precios de competidores que no hemos comprobado, ni
+// prometer un número de ventas. Los precios propios sí se dicen, porque son nuestros
+// — y hay guardián que los compara contra `lib/calc.ts`, que es su único dueño.
 // ============================================================================
+
+import type { Idioma } from "./idioma";
 
 export type SeccionArticulo = {
   h2: string;
@@ -12,479 +30,695 @@ export type SeccionArticulo = {
   lista?: string[];
 };
 
-export type Articulo = {
-  slug: string;
+export type TextoArticulo = {
   /** Título SEO SIN "| Upcore AI" — el layout agrega la marca */
   title: string;
   metaDescription: string;
   h1: string;
   /** Entradilla: se muestra en el índice y bajo el h1 */
   resumen: string;
+  secciones: SeccionArticulo[];
+  faqs?: { q: string; a: string }[];
+};
+
+export type Articulo = {
+  slug: string;
   /** ISO "2026-07-22" — alimenta JSON-LD y sitemap (solo fechas reales) */
   fechaPublicado: string;
   fechaActualizado?: string;
-  secciones: SeccionArticulo[];
-  faqs?: { q: string; a: string }[];
   /** Slugs de lib/soluciones.ts → enlaces internos al final del artículo */
   solucionesRelacionadas?: string[];
+  t: Record<Idioma, TextoArticulo>;
 };
 
 export const ARTICULOS: Articulo[] = [
+  // ─────────────────────────────────────────────────────────────────────────
   {
-    slug: "cuanto-cuesta-chatbot-whatsapp-clinica-mexico",
-    title: "¿Cuánto cuesta un chatbot de WhatsApp para una clínica en México? (guía 2026)",
-    metaDescription:
-      "Precios reales 2026: lo que cobran agencias y software en México por un chatbot de WhatsApp para clínicas, los costos ocultos de las APIs y las preguntas para detectar letra chica.",
-    h1: "¿Cuánto cuesta un chatbot de WhatsApp para una clínica en México?",
-    resumen:
-      "La mayoría de los proveedores te hace 'solicitar cotización' para averiguarlo. Aquí va la respuesta con números reales del mercado 2026: cuánto se cobra, qué modelos de pago existen, cuánto cuestan las APIs que casi nadie menciona — y las preguntas para que no te agarren con letra chica.",
-    fechaPublicado: "2026-07-22",
-    secciones: [
-      {
-        h2: "La respuesta corta: de $12,000 MXN a mucho más — y por qué",
-        parrafos: [
-          "En México, en 2026, un chatbot de WhatsApp para una clínica se mueve en estos rangos reales de mercado:",
-        ],
-        lista: [
-          "Bot básico de agencia (responde preguntas frecuentes): desde $12,000–15,000 MXN, pago único.",
-          "Bot con agenda (además agenda citas y califica pacientes): $20,000–36,000 MXN, pago único.",
-          "Modelo de renta mensual: $1,600 a $4,500 MXN al mes, normalmente con el costo de construcción 'escondido' dentro de la mensualidad — si dejas de pagar, te quedas sin nada.",
-          "Software de gestión con WhatsApp incluido: $1,400–5,500 MXN al mes… pero su WhatsApp suele ser de plantillas (recordatorios), no un bot que conversa, y varios cobran el módulo aparte.",
-          "Sistema completo a la medida (agente + automatizaciones + panel): $90,000–180,000 MXN. Una pieza suelta cuesta 3 a 6 veces menos que el sistema completo.",
-        ],
-      },
-      {
-        h2: "Los 3 modelos de cobro que te vas a topar",
-        parrafos: [
-          "Detrás de cualquier cotización hay uno de estos tres modelos, y conviene reconocerlos porque cambian totalmente lo que acabas pagando a 2 años:",
-          "1) Renta mensual (SaaS). Pagas poco para entrar y para siempre. A $3,000 MXN al mes, en 2 años llevas $72,000 — y el bot nunca es tuyo: si te vas, se apaga. Es el modelo favorito del mercado porque asegura ingreso recurrente al proveedor.",
-          "2) Proyecto de pago único. Pagas la construcción una vez y el sistema queda a tu nombre. Cuesta más al inicio, pero a mediano plazo suele ser lo más barato, y no quedas amarrado a nadie. Casi nadie lo ofrece en México — pregunta por él.",
-          "3) Híbrido: construcción + mensualidad de operación. Pagas el proyecto y, si quieres, una mensualidad para que el proveedor lo opere, mantenga y mejore por ti. La clave honesta aquí: la mensualidad debe pagar el SERVICIO de operación, no 'la renta del bot'.",
-        ],
-      },
-      {
-        h2: "Los costos que casi nadie te dice: las APIs",
-        parrafos: [
-          "Todo chatbot serio corre sobre dos servicios que cobran por consumo, y es dinero aparte del proyecto. Un proveedor honesto te los pone sobre la mesa desde el día uno:",
-        ],
-        lista: [
-          "WhatsApp (Meta): responder a un paciente que te escribió es gratis dentro de una ventana de 24 horas. Solo cuestan los mensajes que TÚ inicias con plantillas (recordatorios, campañas): del orden de centavos — unos $0.10 a $0.55 MXN por mensaje según el tipo. Para una clínica chica, esto suele ser de $0 a unos cientos de pesos al mes.",
-          "Inteligencia artificial (el 'cerebro'): se paga por uso al proveedor del modelo. En una clínica típica: entre $40 y $800 MXN al mes según el volumen de conversaciones.",
-          "Hosting (donde vive la automatización): de $0 (planes gratuitos serios) a unos $110–220 MXN al mes si el proyecto necesita servidor propio.",
-          "La práctica sana: que esas cuentas estén A TU NOMBRE, con tope de gasto activado, y que tú veas el consumo real. Si el proveedor 'te lo incluye', pregunta cuánto le está ganando a tu consumo.",
-        ],
-      },
-      {
-        h2: "El otro precio: lo que cuesta NO tener quien conteste",
-        parrafos: [
-          "El precio del chatbot solo tiene sentido comparado contra lo que hoy se te va. Haz esta cuenta rápida: si tu ticket promedio es de $1,000 MXN y a la semana se te escapan aunque sea 2 pacientes que preguntaron y nadie les contestó a tiempo, son unos $8,000 MXN al mes — casi $100,000 al año — yéndose con la clínica de enfrente.",
-          "Con esa referencia, un bot de $20,000–30,000 pago único se paga solo en 3 o 4 meses. Y uno rentado 'barato' a $3,000/mes también se justifica… mientras recuerdes que a los 2 años pagaste más del doble y no es tuyo.",
-        ],
-      },
-      {
-        h2: "5 preguntas para detectar la letra chica",
-        parrafos: [
-          "Antes de firmar con cualquier proveedor (incluidos nosotros), haz estas preguntas. Las respuestas te dicen todo:",
-        ],
-        lista: [
-          "¿La implementación y la capacitación van incluidas, o son un cargo aparte? (Hay quien cobra $3,900–8,500 MXN extra de 'puesta en marcha'.)",
-          "¿Cobran por usuario o por sucursal? (Los 'por usuario' se inflan callados conforme creces.)",
-          "¿El WhatsApp conversa de verdad o solo manda plantillas? Pide chatear TÚ con un demo antes de decidir.",
-          "¿De quién son las cuentas — el número, las APIs, los datos? Si la respuesta es 'del proveedor', el día que te vayas pierdes todo.",
-          "¿Qué pasa exactamente si me quiero ir en 12 meses? La respuesta honesta debería ser: 'te quedas con todo funcionando'.",
-        ],
-      },
-      {
-        h2: "Cómo lo hacemos en Upcore (para que compares)",
-        parrafos: [
-          "En Upcore AI no publicamos una tabla de precios porque sería mentirte: no cuesta lo mismo un consultorio de un doctor que una clínica de cinco sillones. Lo que sí hacemos es darte tu precio exacto GRATIS y al instante: contestas unas preguntas (3 minutos, por la web o por WhatsApp) y tu diagnóstico llega con los números de TU clínica — cuánto pierdes hoy, qué te conviene construir y cuánto cuesta, en pago único o con nosotros operándolo.",
-          "Las APIs siempre quedan a tu nombre con tope de gasto, la implementación va incluida, no cobramos por usuario, y todo lo construido es tuyo — te quedes con nosotros o no.",
-        ],
-      },
-    ],
-    faqs: [
-      {
-        q: "¿No hay chatbots gratis?",
-        a: "Los hay genéricos y 'hazlo tú mismo'. El costo real es tu tiempo y el riesgo: un bot mal configurado contestando mal a pacientes reales sale más caro que cualquier proveedor. Para uso médico/estético, la calidad de las respuestas no es negociable.",
-      },
-      {
-        q: "¿Necesito la API oficial de WhatsApp o sirve una app 'pirata'?",
-        a: "API oficial, siempre. Las conexiones no oficiales ponen tu número en riesgo de bloqueo — y el número de tu clínica, con años de pacientes, no es algo que quieras apostar.",
-      },
-      {
-        q: "¿Cuánto cuesta el chatbot de Upcore AI?",
-        a: "Depende de tu clínica — por eso el diagnóstico gratis te da tu número exacto en 3 minutos, sin llamada y sin compromiso. Como referencia honesta: nos movemos dentro de los rangos de mercado de esta guía.",
-      },
-      {
-        q: "¿La renta mensual es siempre mala idea?",
-        a: "No. Si prefieres no desembolsar de golpe y quieres que alguien lo opere por ti, una mensualidad honesta (que pague servicio de operación, no 'renta del bot') es una gran opción. Lo importante es que la propiedad sea tuya en cualquier caso.",
-      },
-    ],
+    slug: "prospectos-que-se-enfrian-seguimiento-inmobiliario",
+    fechaPublicado: "2026-08-19",
+    fechaActualizado: "2026-08-22",
     solucionesRelacionadas: [
-      "chatbot-whatsapp-para-clinicas",
-      "reducir-no-shows-clinica",
+      "seguimiento-de-leads-inmobiliarios",
+      "chatbot-whatsapp-para-inmobiliarias",
+      "automatizacion-para-inmobiliarias",
     ],
+    t: {
+      es: {
+        title: "El 60–70% de tus prospectos se pierde por seguimiento tardío",
+        metaDescription:
+          "No es que no lleguen prospectos: es que no se les da seguimiento. Los números del sector inmobiliario, por qué pasa aunque el equipo sea bueno, y qué se puede automatizar sin que se note.",
+        h1: "El 60–70% de tus prospectos se pierde por seguimiento tardío",
+        resumen:
+          "La mayoría de las inmobiliarias no tiene un problema de generación de leads: tiene un problema de seguimiento. Aquí van los números del sector, la razón por la que pasa incluso con equipos buenos, y qué parte de esto se puede resolver sin contratar a nadie.",
+        secciones: [
+          {
+            h2: "Los tres números que describen el problema",
+            parrafos: [
+              "Hay tres cifras del sector inmobiliario que, juntas, explican casi todo lo que pasa entre que alguien pregunta y alguien firma:",
+            ],
+            lista: [
+              "Entre el 60% y el 70% de los prospectos se pierden por falta de seguimiento oportuno.",
+              "El 48% de los asesores no vuelve a contactar después de la primera llamada.",
+              "Solo entre el 0.4% y el 2.4% de los leads acaba en venta.",
+            ],
+          },
+          {
+            h2: "Por qué pasa aunque tu equipo sea bueno",
+            parrafos: [
+              "La lectura fácil es que los asesores no hacen su trabajo. La lectura correcta es otra: el volumen gana cuando no hay un sistema detrás.",
+              "Un asesor con treinta conversaciones abiertas atiende bien las cinco más calientes. Las otras veinticinco no se pierden por desinterés: se pierden porque nadie tiene en la cabeza que al prospecto del 14 de marzo le tocaba un mensaje el 2 de mayo. Y la preventa es justo el negocio donde eso importa más, porque entre la primera pregunta y la firma pueden pasar meses.",
+              "El segundo motivo es el horario. Si tu comprador está en otro país, escribe a su hora, no a la tuya. El mensaje que entra a las once de la noche compite con el proyecto que sí contestó.",
+            ],
+          },
+          {
+            h2: "La primera hora es la que decide",
+            parrafos: [
+              "Quien responde un lead en menos de una hora tiene siete veces más probabilidad de calificarlo. La mayoría de los equipos tarda veinticuatro horas o más.",
+              "No es magia: es que a los sesenta minutos la persona sigue en el mismo estado mental en el que preguntó. Al día siguiente ya miró otros tres proyectos y la conversación arranca de cero, si es que arranca.",
+              "Esto es lo primero que conviene arreglar, y no requiere reorganizar a nadie: requiere que alguien —o algo— conteste siempre.",
+            ],
+          },
+          {
+            h2: "Qué se puede automatizar sin que se sienta automático",
+            parrafos: [
+              "No todo el seguimiento se automatiza, ni conviene. Lo que sí, y sin que el comprador lo note:",
+            ],
+            lista: [
+              "La primera respuesta, a cualquier hora y en el idioma en que le escriban.",
+              "La calificación básica: qué busca, en qué zona, con qué presupuesto y en qué plazo.",
+              "El agendado de la visita o la videollamada, contra tu calendario real.",
+              "Los recordatorios de cada etapa de pago y los avisos de avance de obra.",
+              "El toque de reactivación al que dejó de contestar hace tres meses.",
+            ],
+          },
+          {
+            h2: "Lo que no se automatiza",
+            parrafos: [
+              "La conversación de cierre. La visita. La llamada donde el comprador te dice que su esposa no está convencida. Ahí es donde tu asesor gana su comisión, y ahí no debe haber un robot.",
+              "El punto de automatizar lo anterior no es reemplazar al asesor: es que llegue a esa conversación con el prospecto ya calificado y todavía caliente, en vez de gastar el día contestando dudas que se repiten y si se puede comprar desde el extranjero.",
+            ],
+          },
+        ],
+        faqs: [
+          {
+            q: "¿Cuántas ventas más voy a cerrar con esto?",
+            a: "No se puede saber sin tu CRM y tu tasa de cierre, y desconfía de quien te dé un número. Lo que sí se puede garantizar es que ningún prospecto se quede sin su siguiente toque.",
+          },
+          {
+            q: "¿Mis compradores van a notar que les escribe un sistema?",
+            a: "Si los mensajes van con tu tono, su nombre y el dato que le toca a esa persona, no. Lo que sí se nota es la plantilla igual para todos — por eso los textos los apruebas tú antes de que salga el primero.",
+          },
+        ],
+      },
+      en: {
+        title: "60–70% of your leads are lost to late follow-up",
+        metaDescription:
+          "It is not that leads are not arriving: it is that nobody follows up. The industry numbers, why it happens even with a good team, and what can be automated without it showing.",
+        h1: "60–70% of your leads are lost to late follow-up",
+        resumen:
+          "Most real estate firms do not have a lead generation problem: they have a follow-up problem. Here are the industry numbers, the reason it happens even to good teams, and which part of it can be solved without hiring anyone.",
+        secciones: [
+          {
+            h2: "The three numbers that describe the problem",
+            parrafos: [
+              "There are three industry figures that, taken together, explain almost everything that happens between someone asking and someone signing:",
+            ],
+            lista: [
+              "Between 60% and 70% of leads are lost for lack of timely follow-up.",
+              "48% of agents never follow up after the first call.",
+              "Only 0.4% to 2.4% of leads end in a sale.",
+            ],
+          },
+          {
+            h2: "Why it happens even when your team is good",
+            parrafos: [
+              "The easy reading is that the agents are not doing their job. The correct reading is a different one: volume wins when there is no system behind it.",
+              "An agent with thirty open conversations handles the five hottest ones well. The other twenty-five are not lost to indifference: they are lost because nobody is carrying around the fact that the lead from March 14 was due a message on May 2. And preconstruction is exactly the business where that matters most, because months can pass between the first question and the signature.",
+              "The second reason is the clock. If your buyer is in another country, they write on their time, not yours. The message that lands at eleven at night is competing with the project that did answer.",
+            ],
+          },
+          {
+            h2: "The first hour is the one that decides",
+            parrafos: [
+              "Whoever answers a lead within an hour is seven times more likely to qualify them. Most teams take twenty-four hours or more.",
+              "It is not magic: sixty minutes in, the person is still in the same frame of mind they asked in. By the next day they have looked at three other projects and the conversation starts from zero, if it starts at all.",
+              "This is the first thing worth fixing, and it does not require reorganizing anybody: it requires that someone — or something — always answers.",
+            ],
+          },
+          {
+            h2: "What can be automated without feeling automated",
+            parrafos: [
+              "Not all follow-up should be automated, nor is that wise. What should be, without the buyer noticing:",
+            ],
+            lista: [
+              "The first reply, at any hour and in whatever language they write in.",
+              "Basic qualification: what they are looking for, which area, what budget and what timeline.",
+              "Booking the visit or the video call, against your real calendar.",
+              "Reminders for every payment milestone and construction progress updates.",
+              "The re-engagement touch to whoever stopped replying three months ago.",
+            ],
+          },
+          {
+            h2: "What does not get automated",
+            parrafos: [
+              "The closing conversation. The site visit. The call where the buyer tells you their spouse is not convinced. That is where your agent earns their commission, and there should be no robot there.",
+              "The point of automating everything before it is not to replace the agent: it is that they reach that conversation with the lead already qualified and still warm, instead of spending the day answering the same recurring questions and whether you can buy from abroad.",
+            ],
+          },
+        ],
+        faqs: [
+          {
+            q: "How many more sales will I close with this?",
+            a: "It cannot be known without your CRM and your close rate, and be suspicious of anyone who hands you a number. What can be guaranteed is that no lead is left without its next touch.",
+          },
+          {
+            q: "Will my buyers notice a system is writing to them?",
+            a: "If the messages carry your tone, their name and the detail that belongs to that person, no. What does show is one template for everybody — which is why you approve the copy before the first one goes out.",
+          },
+        ],
+      },
+    },
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
   {
-    slug: "software-clinica-ia-notas-vs-atencion",
-    title: "¿Tu software de clínica ya 'tiene IA'? Notas médicas no es lo mismo que atención al paciente",
-    metaDescription:
-      "Los software de gestión presumen IA, pero casi siempre es dictado y resumen de notas para el médico. Aprende a distinguir la IA que documenta de la IA que atiende, con un test de 5 preguntas.",
-    h1: "¿Tu software de clínica ya “tiene IA”? Hay dos IA distintas — y te falta una",
-    resumen:
-      "Casi todos los software de gestión de clínicas anuncian inteligencia artificial. Es cierto… a medias: su IA le escribe las notas al médico. La que contesta el WhatsApp, califica al paciente y agenda a las 11 de la noche es OTRA tecnología — y es la que llena agendas. Aquí aprendes a distinguirlas en 5 preguntas.",
-    fechaPublicado: "2026-07-22",
-    secciones: [
-      {
-        h2: "Las dos IA que puede tener una clínica",
-        parrafos: [
-          "Cuando un software dice 'ahora con IA', hay que preguntar: ¿IA hacia adentro o hacia afuera?",
-          "IA hacia adentro (documentación): trabaja PARA el médico. Transcribe la consulta por voz, da formato a la nota clínica, resume el expediente. Ahorra tiempo de tecleo — muy útil, cero discusión.",
-          "IA hacia afuera (atención): trabaja PARA el paciente. Contesta el WhatsApp al instante, resuelve dudas de precios y servicios, agenda en el calendario real, confirma citas y sabe cuándo pasar la conversación a una persona. Esta es la que convierte mensajes en citas.",
-          "El problema: el mercado vende la primera con el lenguaje de la segunda. Y una clínica que compra 'software con IA' esperando que le llenen la agenda, descubre meses después que su IA solo escribe notas.",
-        ],
-      },
-      {
-        h2: "Qué hace (de verdad) la IA de los software de gestión",
-        parrafos: [
-          "Revisamos a fondo qué ofrecen las plataformas de gestión más conocidas que se venden en México y España. El patrón se repite:",
-        ],
-        lista: [
-          "Dictado por voz a texto de la consulta y formato automático de notas clínicas.",
-          "Resúmenes automáticos del historial del paciente.",
-          "Formularios médicos que se llenan solos.",
-          "Recordatorios de cita por WhatsApp de plantilla: mensajes salientes de una vía, con botones de confirmar/cancelar en el mejor de los casos.",
-          "Chat de WhatsApp 'integrado'… que contesta UNA PERSONA de tu equipo, manualmente.",
-        ],
-      },
-      {
-        h2: "Por qué los recordatorios de plantilla no son conversación",
-        parrafos: [
-          "Un recordatorio de plantilla avisa: 'Su cita es mañana a las 10:00. Responda 1 para confirmar'. Eso reduce olvidos y está muy bien — pero mira lo que pasa cuando el paciente responde cualquier cosa fuera del guion: '¿puedo mejor el jueves?', '¿cuánto cuesta agregar una limpieza?', '¿atienden a mi hijo de 8 años?'.",
-          "Silencio. O un '1' que no aplica. La plantilla no entiende lenguaje natural; solo dispara mensajes predefinidos. Cada una de esas respuestas sin atender es una cita que se enfría.",
-          "Un agente conversacional de verdad entiende la pregunta, la responde con la información real de tu clínica, reagenda ahí mismo si el paciente lo pide, y escala con tu equipo cuando el tema lo amerita.",
-        ],
-      },
-      {
-        h2: "El test de las 5 preguntas",
-        parrafos: [
-          "¿Quieres saber en 2 minutos si algo 'con IA' de verdad atiende pacientes? Hazle estas 5 preguntas al proveedor (o mejor: pide un demo y pruébalas tú):",
-        ],
-        lista: [
-          "Si un paciente NUEVO escribe a las 11 de la noche '¿cuánto cuesta una valoración y cuándo tienen lugar?', ¿recibe respuesta útil al instante?",
-          "¿Entiende mensajes con lenguaje natural ('me duele una muela desde ayer, ¿me pueden ver hoy?') o solo botones y números?",
-          "¿Puede agendar SOLO, viendo los horarios reales del calendario, sin que intervenga tu recepción?",
-          "¿Sabe cuándo NO contestar y pasar la conversación a un humano (casos delicados, quejas, temas médicos)?",
-          "¿Responde con TU información — precios, servicios, indicaciones — o con respuestas genéricas?",
-        ],
-      },
-      {
-        h2: "No es 'una u otra': son complementarias",
-        parrafos: [
-          "Aquí viene lo importante: no tienes que tirar tu software de gestión. Si ya usas uno para expediente, agenda y facturación, está haciendo su trabajo — y su IA de notas le ahorra tiempo real a tus médicos.",
-          "Lo que te falta es la capa de ATENCIÓN: el agente que está despierto cuando tu recepción no, y que convierte los mensajes en citas dentro de tu misma agenda. La arquitectura sana es: tu software sigue siendo el registro (ahí viven expedientes y citas), y el agente conversacional se conecta ENCIMA — lee tu calendario, agenda, confirma y da seguimiento.",
-          "Por eso en Upcore AI el principio es 'integrar, no migrar': construimos el agente sobre lo que tu clínica ya usa. Tus datos no se mueven; tu forma de trabajar no cambia; tu WhatsApp empieza a contestar solo.",
-        ],
-      },
-    ],
-    faqs: [
-      {
-        q: "¿Entonces la IA de mi software de gestión no sirve?",
-        a: "Sí sirve — para lo que fue hecha: ahorrarle tecleo al médico (notas, resúmenes, formularios). Lo que no hace es atender pacientes. Son dos tecnologías distintas con el mismo apellido.",
-      },
-      {
-        q: "¿Tengo que cambiar de software para tener un agente de IA?",
-        a: "No. Un agente bien construido se integra a lo que ya usas: tu calendario, tu software de agenda, tu hoja de cálculo. Si un proveedor te obliga a migrar todo a su plataforma para 'darte IA', esa es una bandera roja.",
-      },
-      {
-        q: "¿El agente puede dar consejo médico?",
-        a: "No debe. Un agente serio informa (precios, horarios, indicaciones generales, preparación para una cita) y agenda; los diagnósticos y valoraciones clínicas se quedan siempre en manos del médico. Esos límites se configuran desde el día uno.",
-      },
-      {
-        q: "¿Cómo pruebo la diferencia sin comprar nada?",
-        a: "Chatea con un agente real. Nuestra demo es pública: entra a upcoreai.com/demo, juega a ser tu paciente y hazle las 5 preguntas del test. Así se siente la IA 'hacia afuera'.",
-      },
-    ],
+    slug: "comprador-latinoamericano-preventa-miami",
+    fechaPublicado: "2026-08-19",
+    fechaActualizado: "2026-08-22",
     solucionesRelacionadas: [
-      "chatbot-whatsapp-para-clinicas",
-      "recepcionista-virtual-clinica",
+      "vender-preventa-en-miami-a-compradores-latinos",
+      "chatbot-whatsapp-para-inmobiliarias",
+      "seguimiento-de-leads-inmobiliarios",
     ],
+    t: {
+      es: {
+        title: "Cómo atender a un comprador latinoamericano que compra en Miami sin visitarla",
+        metaDescription:
+          "Más de la mitad de las compras de preventa en el sur de Florida son de extranjeros, y la mayoría son latinoamericanos. Qué cambia en tu operación cuando ese es tu comprador.",
+        h1: "Cómo atender a un comprador latinoamericano que compra en Miami sin visitarla",
+        resumen:
+          "Compra desde otro país, decide en familia, pregunta en español y muchas veces firma sin haber pisado la unidad. Este perfil ya es la mayoría del mercado de preventa en el sur de Florida, y atiende distinto a como está montada la mayoría de las operaciones.",
+        secciones: [
+          {
+            h2: "Quién compra hoy la preventa de Miami",
+            parrafos: [
+              "En nueva construcción y preconstrucción del sur de Florida, los compradores globales representan alrededor del 52% de las compras. Y dentro de ese segmento internacional, cerca del 86% son latinoamericanos.",
+              "Dicho simple: si vendes preventa en Miami, es más probable que tu próximo comprador sea de Bogotá, Buenos Aires o Ciudad de México que de Florida.",
+            ],
+          },
+          {
+            h2: "Tres cosas que cambian cuando tu comprador está afuera",
+            parrafos: [
+              "No es el mismo proceso con el acento cambiado. Cambian tres cosas de fondo:",
+            ],
+            lista: [
+              "El horario. Tu comprador pregunta a su hora. Tu oficina abre a la tuya. Esa diferencia se come los primeros mensajes, que son los que más valen.",
+              "El idioma. El español suele ser el idioma del primer contacto y el de la decisión familiar. Atender bien en inglés y regular en español pierde justo donde más pesa.",
+              "La distancia. Muchos compran sin visitar. Eso significa que la confianza no se construye enseñando el departamento, sino contestando bien y rápido durante meses.",
+            ],
+          },
+          {
+            h2: "Las preguntas que llegan y que no son del proyecto",
+            parrafos: [
+              "Un comprador local pregunta por la unidad. Uno que compra desde afuera pregunta, además, cosas que no tienen que ver con el edificio: cómo se paga desde su país, si necesita residencia, a nombre de quién conviene escriturar, qué pasa con los impuestos al vender.",
+              "Aquí hay una regla que conviene tener clarísima: esas preguntas se derivan, no se improvisan. Un asesor —o un asistente— que contesta a la ligera sobre impuestos, FIRPTA o condiciones de crédito le puede costar dinero real a esa persona. Lo correcto es decir con naturalidad que eso lo ve su abogado o su contador, y ofrecer conectarlo.",
+              "Curiosamente, admitir lo que no sabes construye más confianza que responder todo. Sobre todo con alguien que va a mandar un anticipo a un país donde no vive.",
+            ],
+          },
+          {
+            h2: "Qué se puede hacer distinto sin contratar a nadie",
+            parrafos: [
+              "Lo que casi siempre falta no es un equipo más grande: es cobertura fuera de horario y memoria a largo plazo.",
+            ],
+            lista: [
+              "Atención inmediata en español, a la hora que escriban, con la información real de tus proyectos.",
+              "Calificación básica antes de que llegue al asesor: zona, presupuesto, plazo y si necesita financiamiento.",
+              "Agendado de visita o videollamada, recordando que tus horarios son de Miami y los suyos no.",
+              "Seguimiento que aguante los meses que dura la preventa, con los recordatorios de cada etapa.",
+            ],
+          },
+        ],
+        faqs: [
+          {
+            q: "¿Sirve si vendo unidades listas y no preventa?",
+            a: "Sí. El seguimiento largo pesa menos, pero la atención inmediata y la calificación funcionan igual.",
+          },
+          {
+            q: "¿Y si mi equipo ya habla español?",
+            a: "Mejor todavía. El problema que esto resuelve no es de idioma sino de horario y de volumen: nadie puede contestar a las once de la noche todos los días, ni acordarse de trescientos prospectos.",
+          },
+        ],
+      },
+      en: {
+        title: "How to serve a Latin American buyer purchasing in Miami sight unseen",
+        metaDescription:
+          "More than half of South Florida preconstruction purchases are made by foreign buyers, and most of them are Latin American. What changes in your operation when that is your buyer.",
+        h1: "How to serve a Latin American buyer purchasing in Miami sight unseen",
+        resumen:
+          "They buy from another country, decide as a family, ask in Spanish and often sign without ever setting foot in the unit. This profile is already the majority of the South Florida preconstruction market, and it needs to be served differently from how most operations are set up.",
+        secciones: [
+          {
+            h2: "Who is buying Miami preconstruction today",
+            parrafos: [
+              "In South Florida new construction and preconstruction, global buyers account for roughly 52% of purchases. And within that international segment, close to 86% are Latin American.",
+              "Put simply: if you sell preconstruction in Miami, your next buyer is more likely to be from Bogotá, Buenos Aires or Mexico City than from Florida.",
+            ],
+          },
+          {
+            h2: "Three things that change when your buyer is abroad",
+            parrafos: [
+              "It is not the same process with a different accent. Three things change at the root:",
+            ],
+            lista: [
+              "The clock. Your buyer asks on their time. Your office opens on yours. That gap eats the first messages, which are the ones worth most.",
+              "The language. Spanish tends to be the language of the first contact and of the family decision. Being good in English and merely passable in Spanish loses exactly where it weighs most.",
+              "The distance. Many buy without visiting. That means trust is not built by showing the apartment, but by answering well and fast for months.",
+            ],
+          },
+          {
+            h2: "The questions that arrive and are not about the project",
+            parrafos: [
+              "A local buyer asks about the unit. Someone buying from abroad also asks things that have nothing to do with the building: how to pay from their country, whether they need residency, whose name should go on the deed, what happens with taxes when they sell.",
+              "There is a rule here worth being absolutely clear about: those questions get handed over, not improvised. An agent — or an assistant — who answers carelessly about taxes, FIRPTA or financing terms can cost that person real money. The right move is to say plainly that their attorney or accountant handles that, and offer to connect them.",
+              "Oddly enough, admitting what you do not know builds more trust than answering everything. Especially with someone about to wire a deposit to a country they do not live in.",
+            ],
+          },
+          {
+            h2: "What can be done differently without hiring anyone",
+            parrafos: [
+              "What is almost always missing is not a bigger team: it is after-hours coverage and long-term memory.",
+            ],
+            lista: [
+              "Immediate coverage in Spanish, whatever hour they write, with the real information about your projects.",
+              "Basic qualification before it reaches the agent: area, budget, timeline and whether they need financing.",
+              "Booking a visit or video call, remembering that your hours are Miami time and theirs are not.",
+              "Follow-up that lasts the months a preconstruction sale takes, with the reminders for each milestone.",
+            ],
+          },
+        ],
+        faqs: [
+          {
+            q: "Does it help if I sell finished units rather than preconstruction?",
+            a: "Yes. The long follow-up matters less, but immediate response and qualification work just the same.",
+          },
+          {
+            q: "What if my team already speaks Spanish?",
+            a: "Even better. The problem this solves is not language but hours and volume: nobody can answer at eleven at night every day, or remember three hundred leads.",
+          },
+        ],
+      },
+    },
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
   {
-    slug: "whatsapp-business-api-clinicas-guia",
-    title: "WhatsApp Business API para clínicas: la guía simple (número, costos de Meta y ventana de 24 horas)",
-    metaDescription:
-      "Qué es la API oficial de WhatsApp y cómo la usa una clínica: diferencias con la app, la ventana de 24 horas, cuánto cobra Meta por mensaje y los errores que ponen tu número en riesgo.",
-    h1: "WhatsApp Business API para clínicas: la guía simple, sin tecnicismos",
-    resumen:
-      "Si tu clínica quiere un asistente que conteste solo, tarde o temprano aparecen las palabras 'API oficial de WhatsApp'. Esta guía te explica en cristiano qué es, en qué se diferencia del WhatsApp normal, cuánto cobra Meta de verdad, qué es la famosa ventana de 24 horas — y qué errores pueden costarte el número de tu clínica.",
-    fechaPublicado: "2026-07-22",
-    secciones: [
-      {
-        h2: "Los 3 WhatsApp que existen (y cuál es para qué)",
-        parrafos: [
-          "Aunque para el paciente todo 'es WhatsApp', del lado del negocio hay tres productos distintos:",
-        ],
-        lista: [
-          "WhatsApp normal (el de tu teléfono personal): para tu vida. Usarlo como canal oficial de la clínica mezcla lo personal con el negocio y no permite automatizar nada.",
-          "WhatsApp Business app (la app gratuita de negocio): agrega catálogo, respuestas rápidas y etiquetas. Sigue siendo 100% manual — una persona contesta desde un teléfono. Perfecto para empezar; insuficiente cuando el volumen crece.",
-          "WhatsApp Business API (también llamada 'Platform'): el número vive en la nube, conectado a sistemas. Aquí es donde un agente de IA puede contestar 24/7, varias personas pueden atender a la vez, y todo se integra con tu agenda. No tiene app: se maneja desde paneles y sistemas.",
-        ],
-      },
-      {
-        h2: "Qué gana tu clínica al pasar a la API",
-        parrafos: [
-          "La API no es 'un WhatsApp más caro'; es otra categoría de herramienta:",
-        ],
-        lista: [
-          "Un asistente con IA puede responder al instante, a cualquier hora — la app normal no permite conectar nada así de forma segura.",
-          "El número se verifica ante Meta a nombre de tu negocio (aparece el nombre de tu clínica, no solo un teléfono).",
-          "Tu equipo completo puede atender desde una bandeja compartida, con historial ordenado.",
-          "Se conecta con tu calendario y tus sistemas: las citas que el asistente agenda caen en TU agenda real.",
-          "Los recordatorios y confirmaciones salen solos, desde tu número, con reglas claras de Meta.",
-        ],
-      },
-      {
-        h2: "La ventana de 24 horas y las plantillas, en cristiano",
-        parrafos: [
-          "Es la regla de oro de los costos en la API, y entendida bien te ahorra dinero:",
-          "Cuando un PACIENTE te escribe, se abre una 'ventana' de 24 horas. Dentro de esa ventana, tu clínica (o tu asistente de IA) puede responderle lo que sea, gratis — texto libre, sin plantillas. Cada nuevo mensaje del paciente reinicia el reloj.",
-          "Cuando TÚ quieres iniciar la conversación (un recordatorio de cita, un aviso), fuera de esa ventana, necesitas una 'plantilla': un mensaje pre-aprobado por Meta, con costo por envío. Los de servicio/utilidad (recordatorios, confirmaciones) cuestan del orden de centavos por mensaje; los de marketing cuestan más y se usan con cuidado.",
-          "Traducción práctica para una clínica: atender pacientes que te escriben es gratis. Lo que cuesta (poco) es el flujo proactivo — recordatorios y avisos — que es justo el que te reduce los no-shows. El balance sale absurdamente a favor.",
-        ],
-      },
-      {
-        h2: "Los errores que ponen tu número en riesgo",
-        parrafos: [
-          "El número de WhatsApp de una clínica — con años de pacientes que lo conocen — es un activo. Estos errores lo ponen en riesgo:",
-        ],
-        lista: [
-          "Conectarlo a apps o APIs 'no oficiales' (las que piden escanear un QR desde un servidor pirata). Meta las detecta y puede restringir o bloquear el número. Si un proveedor te propone esa vía 'porque es más barata', corre.",
-          "Mandar mensajes en frío a números comprados o listas masivas. Además de las quejas, dispara los filtros de spam de WhatsApp.",
-          "Vincular y desvincular el número repetidamente entre dispositivos y servicios en poco tiempo.",
-          "No decidir con calma QUÉ número conectar: al pasar un número a la API, sale de la app del teléfono (deja de usarse ahí). Es lo correcto para el canal oficial de la clínica — pero hay que decidirlo sabiendo, no descubrirlo después.",
-        ],
-      },
-      {
-        h2: "Qué necesitas para arrancar (checklist)",
-        parrafos: [
-          "Para conectar una clínica a la API oficial hacen falta cuatro cosas:",
-        ],
-        lista: [
-          "Un número para el canal oficial: idealmente el que tus pacientes ya conocen (sabiendo que sale de la app), o uno nuevo dedicado si prefieres conservar el actual en el teléfono.",
-          "Una cuenta de Meta Business del DUEÑO real del negocio — con su cuenta personal de Facebook con historia. Las cuentas recién creadas despiertan revisiones de Meta.",
-          "El sistema que va a contestar: el agente de IA, la bandeja del equipo, la conexión con tu agenda. Aquí entra tu proveedor.",
-          "Una regla de propiedad: los activos (el portafolio de Meta, el número, las APIs) se crean A NOMBRE DE LA CLÍNICA, con el proveedor como colaborador con acceso acotado. Si alguien quiere crearlos a su nombre 'para hacértelo fácil', ese proveedor te está amarrando.",
-        ],
-      },
-      {
-        h2: "Cómo lo hacemos en Upcore",
-        parrafos: [
-          "En Upcore AI conectamos clínicas a la API oficial con la regla de propiedad completa: el portafolio de Meta se crea con la cuenta del dueño (nosotros te dictamos cada clic, tú los das), el número y las APIs quedan a tu nombre con topes de gasto, y el agente que contesta se construye con la información y el tono de tu clínica. Puedes probar cómo se siente en la demo pública, y tu diagnóstico gratis te dice exactamente qué necesita tu caso — incluyendo la decisión del número.",
-        ],
-      },
-    ],
-    faqs: [
-      {
-        q: "¿Puedo usar el número actual de mi clínica?",
-        a: "Sí, y suele ser lo mejor (tus pacientes ya lo conocen). El detalle importante: al conectarlo a la API sale de la app del teléfono, y tu equipo pasa a responder desde una bandeja/panel. Si no quieren soltar la app, se usa un número nuevo dedicado para el canal oficial.",
-      },
-      {
-        q: "¿Cuánto cobra Meta por usar la API?",
-        a: "Responder a pacientes que te escriben es gratis (ventana de 24 horas). Los mensajes que tú inicias con plantilla cuestan del orden de centavos (los de servicio) — en una clínica chica el gasto mensual con Meta suele ir de $0 a unos cientos de pesos. Las tarifas cambian por trimestre; un buen proveedor te muestra el rate card vigente.",
-      },
-      {
-        q: "¿Me pueden bloquear el número?",
-        a: "Con la API oficial, buenas prácticas y mensajes a pacientes reales, el riesgo es mínimo — es la vía que Meta diseñó para negocios. Lo peligroso es lo contrario: las conexiones piratas y el spam en frío.",
-      },
-      {
-        q: "¿La API tiene app para mi teléfono?",
-        a: "No. El número vive en la nube y se atiende desde paneles (la bandeja de tu equipo). Esa es justo la gracia: deja de depender de UN teléfono y una persona.",
-      },
-    ],
+    slug: "cuanto-cuesta-automatizar-atencion-inmobiliaria",
+    fechaPublicado: "2026-08-19",
+    fechaActualizado: "2026-08-22",
     solucionesRelacionadas: [
-      "chatbot-whatsapp-para-clinicas",
-      "automatizacion-clinicas-dentales",
+      "automatizacion-para-inmobiliarias",
+      "chatbot-whatsapp-para-inmobiliarias",
+      "agente-de-voz-para-inmobiliarias",
     ],
+    t: {
+      es: {
+        title: "¿Cuánto cuesta automatizar la atención de una inmobiliaria? (guía 2026)",
+        metaDescription:
+          "Qué determina de verdad el precio de automatizar la atención de una inmobiliaria, los tres modelos de cobro del mercado, los costos de APIs que casi nadie menciona y las preguntas para detectar letra chica.",
+        h1: "¿Cuánto cuesta automatizar la atención de una inmobiliaria?",
+        resumen:
+          "La mayoría de los proveedores te hace \"solicitar cotización\" para averiguarlo. Aquí va cómo se forma ese precio de verdad, los tres modelos de cobro que te vas a topar, los costos de APIs que suelen quedar fuera de la propuesta, y las preguntas que conviene hacer antes de firmar.",
+        secciones: [
+          {
+            h2: "Primero, lo que decide el precio",
+            parrafos: [
+              "El precio no lo decide el tamaño de tu firma: lo deciden dos cosas. Cuántas piezas montas, y quién lo opera después.",
+              "Las piezas suelen ser cinco: un asistente para WhatsApp, un agente que conteste el teléfono, un sitio con la ficha de cada desarrollo y agenda en línea, el seguimiento automático de la preventa, y la reactivación de prospectos viejos. Encima puede ir un panel para el director comercial.",
+              "Una pieza suelta cuesta una fracción del sistema completo. Y el sistema completo rinde más que la suma de sus partes, porque comparten la misma información y no se contradicen entre ellas.",
+            ],
+          },
+          {
+            h2: "Los tres modelos de cobro que te vas a topar",
+            parrafos: [
+              "Detrás de cualquier cotización hay uno de estos tres modelos, y conviene reconocerlos porque cambian por completo lo que acabas pagando a dos años:",
+              "1) Renta mensual. Pagas poco para entrar, y para siempre. El sistema nunca es tuyo: el día que dejas de pagar, se apaga. Es el modelo favorito del mercado porque asegura ingreso recurrente al proveedor.",
+              "2) Pago único. Se construye, se entrega y es tuyo. Sale más caro el primer mes y mucho más barato al segundo año. El riesgo es quedarte solo si el proveedor desaparece — por eso importa que todo quede a tu nombre.",
+              "3) Pago único más mensualidad opcional de operación. Lo construyes una vez y decides si lo operas tú o si alguien lo mantiene por ti. Es el modelo que usamos: la propiedad siempre es tuya, y la mensualidad es por el servicio, nunca por el software.",
+            ],
+          },
+          {
+            h2: "Los costos que casi nadie menciona en la propuesta",
+            parrafos: [
+              "Un asistente con inteligencia artificial consume APIs, y esas APIs cuestan. Es un costo real, mensual y variable según tu volumen. Que no aparezca en una cotización no significa que no exista: significa que va escondido en la mensualidad, con margen encima.",
+              "La forma honesta de manejarlo es que esas cuentas se abran a tu nombre, con tope de gasto activado, y que pagues el consumo directo al proveedor. Así ves exactamente cuánto gastas y nadie le agrega margen.",
+              "Ojo con una pieza en particular: el agente de voz se cobra por minuto hablado, así que escala casi lineal con tus llamadas. Es la pieza con el costo por uso más alto de todas, y quien no te lo diga de frente te lo va a cobrar de todos modos.",
+            ],
+          },
+          {
+            h2: "Cinco preguntas antes de firmar",
+            parrafos: [
+              "Da igual con quién trabajes. Estas cinco preguntas separan una propuesta seria de una que va a doler después:",
+            ],
+            lista: [
+              "¿A nombre de quién quedan las cuentas, el número y el sitio? Si la respuesta no es \"tuyo\", estás rentando.",
+              "¿Cuánto cuestan las APIs al mes con mi volumen, y a quién se las pago?",
+              "¿Qué pasa el día que quiera irme? ¿Se apaga algo?",
+              "¿Se integra a mi CRM actual o tengo que migrar? Una migración forzada es un costo oculto enorme.",
+              "¿Qué exactamente está incluido en el precio y qué se cobra aparte?",
+            ],
+          },
+          {
+            h2: "Y nuestros precios, ya que estamos",
+            parrafos: [
+              "Sería raro escribir esto y no decir los nuestros. Son cerrados, no rangos: el asistente de WhatsApp son $6,000 USD, el agente de voz $6,500, el sitio con agenda $4,500, el seguimiento automático $3,500 y la reactivación $3,000. El panel, si lo quieres, $3,000. De la segunda pieza en adelante hay 15% menos.",
+              "Todo es pago único y queda a tu nombre. Si prefieres que nosotros lo operemos, hay una mensualidad aparte por ese servicio — nunca por el software.",
+            ],
+          },
+        ],
+        faqs: [
+          {
+            q: "¿Por qué no publican rangos de la competencia?",
+            a: "Porque no los hemos comprobado en este mercado, y aquí no escribimos cifras sin fuente. Cuando tengamos ese dato verificado, lo publicamos.",
+          },
+          {
+            q: "¿Puedo empezar con una sola pieza?",
+            a: "Sí, y a veces es lo correcto. En el diagnóstico se ve qué ataca tu dolor real; lo demás se lista aparte, con su precio y el motivo por el que puede esperar.",
+          },
+        ],
+      },
+      en: {
+        title: "What does it cost to automate a real estate firm's inbound? (2026 guide)",
+        metaDescription:
+          "What actually determines the price of automating a real estate firm's inbound, the three billing models on the market, the API costs almost nobody mentions, and the questions that surface the fine print.",
+        h1: "What does it cost to automate a real estate firm's inbound?",
+        resumen:
+          "Most vendors make you \"request a quote\" to find out. Here is how that price is actually built, the three billing models you will run into, the API costs that usually stay out of the proposal, and the questions worth asking before you sign.",
+        secciones: [
+          {
+            h2: "First, what decides the price",
+            parrafos: [
+              "The price is not decided by the size of your firm: it is decided by two things. How many pieces you build, and who runs it afterwards.",
+              "There are usually five pieces: an assistant for WhatsApp, an agent that answers the phone, a site with a page for each development and online booking, automated follow-up through the preconstruction cycle, and re-engagement of old leads. On top of those there can be a dashboard for the sales director.",
+              "A single piece costs a fraction of the full system. And the full system is worth more than the sum of its parts, because the pieces share the same information and never contradict each other.",
+            ],
+          },
+          {
+            h2: "The three billing models you will run into",
+            parrafos: [
+              "Behind any quote sits one of these three models, and it is worth recognizing them because they completely change what you end up paying over two years:",
+              "1) Monthly rental. You pay little to get in, and you pay forever. The system is never yours: the day you stop paying, it switches off. It is the market's favorite model because it locks in recurring revenue for the vendor.",
+              "2) One-time payment. It gets built, handed over, and it is yours. More expensive in month one and far cheaper by year two. The risk is being left on your own if the vendor disappears — which is why it matters that everything is in your name.",
+              "3) One-time payment plus an optional monthly operating fee. You build it once and decide whether you run it or someone maintains it for you. It is the model we use: ownership is always yours, and the monthly fee is for the service, never for the software.",
+            ],
+          },
+          {
+            h2: "The costs almost nobody mentions in the proposal",
+            parrafos: [
+              "An AI assistant consumes APIs, and those APIs cost money. It is a real cost, monthly and variable with your volume. Its absence from a quote does not mean it does not exist: it means it is buried in the monthly fee, with margin on top.",
+              "The honest way to handle it is for those accounts to be opened in your name, with a spending cap turned on, and for you to pay usage directly to the provider. That way you see exactly what you spend and nobody adds margin to it.",
+              "Watch one piece in particular: the voice agent is billed per minute spoken, so it scales almost linearly with your call volume. It is the piece with the highest usage cost of them all, and whoever does not tell you that up front will charge you for it anyway.",
+            ],
+          },
+          {
+            h2: "Five questions before you sign",
+            parrafos: [
+              "It does not matter who you work with. These five questions separate a serious proposal from one that will hurt later:",
+            ],
+            lista: [
+              "Whose name are the accounts, the number and the site in? If the answer is not \"yours\", you are renting.",
+              "What do the APIs cost per month at my volume, and who do I pay them to?",
+              "What happens the day I want to leave? Does anything switch off?",
+              "Does it integrate with my current CRM or do I have to migrate? A forced migration is an enormous hidden cost.",
+              "What exactly is included in the price and what is billed separately?",
+            ],
+          },
+          {
+            h2: "And our prices, while we are at it",
+            parrafos: [
+              "It would be odd to write all this and not state ours. They are fixed, not ranges: the WhatsApp assistant is $6,000 USD, the voice agent $6,500, the site with booking $4,500, automated follow-up $3,500 and re-engagement $3,000. The dashboard, if you want it, $3,000. From the second piece onward there is 15% off.",
+              "It is all one-time payment and it all stays in your name. If you would rather we ran it, there is a separate monthly fee for that service — never for the software.",
+            ],
+          },
+        ],
+        faqs: [
+          {
+            q: "Why do you not publish competitors' ranges?",
+            a: "Because we have not verified them in this market, and we do not write figures without a source. When we have that verified, we will publish it.",
+          },
+          {
+            q: "Can I start with a single piece?",
+            a: "Yes, and sometimes that is the right call. The assessment shows what actually attacks your real pain; everything else is listed separately, with its price and the reason it can wait.",
+          },
+        ],
+      },
+    },
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
   {
-    slug: "pacientes-perdidos-whatsapp-clinica-calculo",
-    title: "¿Cuántos pacientes pierde tu clínica por no contestar WhatsApp? Cálculo paso a paso",
-    metaDescription:
-      "Un método de 4 pasos para calcular cuántas citas y cuánto dinero pierde tu clínica por mensajes de WhatsApp sin responder — con un ejemplo trabajado y las 3 formas de tapar la fuga.",
-    h1: "¿Cuántos pacientes pierde tu clínica por no contestar WhatsApp? Hagamos la cuenta",
-    resumen:
-      "No es una pregunta retórica: se puede calcular. Aquí va el método de 4 pasos con un ejemplo trabajado, los números típicos del sector para que compares, y las tres formas (de gratis a automática) de tapar la fuga.",
-    fechaPublicado: "2026-07-22",
-    secciones: [
-      {
-        h2: "Por qué un mensaje sin contestar es una cita perdida",
-        parrafos: [
-          "El paciente que escribe a una clínica casi nunca escribe solo a una: está comparando 3 o 4 al mismo tiempo, con el teléfono en la mano y la decisión fresca. La primera que le contesta bien suele quedarse con la cita — no necesariamente la mejor clínica, ni la más barata: la que contestó.",
-          "Y los mensajes no llegan en horario de oficina: una parte enorme cae en la noche, en fin de semana, o justo cuando tu recepción está con un paciente enfrente. Alrededor del 40% de los mensajes a una clínica llegan cuando nadie puede contestar. Ahí está la fuga.",
-        ],
-      },
-      {
-        h2: "El cálculo en 4 pasos",
-        parrafos: [
-          "Toma papel (o abre tu WhatsApp Business y revisa una semana real) y sigue estos pasos:",
-        ],
-        lista: [
-          "Paso 1 — Cuenta tus conversaciones NUEVAS por semana: personas distintas que escribieron preguntando algo (no tus pacientes de siempre confirmando). Ejemplo: 30.",
-          "Paso 2 — ¿Cuántas recibieron respuesta tarde (más de 1 hora) o nunca? Cuenta las de fuera de horario y las de horas pico. Ejemplo honesto: 12 de las 30 (40%).",
-          "Paso 3 — ¿Cuántas de esas venían a agendar? En clínicas, entre el 30% y el 50% de los mensajes nuevos preguntan por cita, precio o disponibilidad — es intención real. Ejemplo conservador: 40% de 12 ≈ 5 por semana.",
-          "Paso 4 — ¿Cuántas se pierden y cuánto valen? No todas se van con otro; asume que pierdes la mitad: 2–3 citas por semana. Con un ticket promedio de $1,000 MXN son $8,000–12,000 MXN al mes. Al año: más de $100,000.",
-        ],
-      },
-      {
-        h2: "Ajusta el número a TU clínica",
-        parrafos: [
-          "El ejemplo usa números conservadores de un consultorio chico. Mueve las palancas según tu caso:",
-        ],
-        lista: [
-          "Ticket promedio: en dental y estética el rango típico en México va de $800 a $3,000 MXN por cita — y en tratamientos completos, mucho más. Con ticket de $2,000, la misma fuga vale el doble.",
-          "Volumen: si recibes 60 conversaciones nuevas por semana, duplica todo.",
-          "Velocidad actual: si hoy contestas en minutos dentro de horario, tu fuga está casi toda en noches y fines de semana — cuenta solo esas.",
-          "Ojo: esta cuenta NO incluye los no-shows (pacientes que agendaron y no llegaron). Esa es otra fuga, con su propio arreglo — la tratamos en nuestro caso de ejemplo con ROI.",
-        ],
-      },
-      {
-        h2: "Las 3 formas de tapar la fuga (de gratis a automática)",
-        parrafos: [
-          "No todas las clínicas necesitan lo mismo. Estas son las tres soluciones reales, en orden de inversión:",
-          "Nivel 1 — Protocolo humano (gratis): define que TODO mensaje se contesta en menos de 15 minutos en horario de clínica, con turnos claros de quién atiende el WhatsApp. Tapa la fuga de horas pico; no puede tapar la de noches y domingos, y depende de la disciplina del equipo.",
-          "Nivel 2 — WhatsApp Business app bien usada (gratis): respuestas rápidas para las 10 preguntas de siempre, mensaje de ausencia con expectativa clara ('te contestamos mañana a las 9') y etiquetas para no perder pendientes. Mejora la experiencia; sigue siendo manual y el mensaje de ausencia no agenda a nadie.",
-          "Nivel 3 — Agente de IA 24/7: un asistente que contesta al instante a cualquier hora, con la información real de tu clínica, agenda en tu calendario y pasa a tu equipo lo delicado. Es el único nivel que tapa la fuga completa — incluida la mitad de los mensajes que llegan cuando tu clínica duerme.",
-        ],
-      },
-      {
-        h2: "Hazlo con tus números reales (gratis)",
-        parrafos: [
-          "Si quieres la versión sin papel: nuestro diagnóstico gratis hace exactamente esta cuenta con los números de TU clínica — volumen, ticket, citas que se caen — y te la entrega al instante, con la recomendación honesta de qué nivel te conviene (aunque la respuesta sea 'por ahora, con el protocolo humano te alcanza').",
-          "Son 3 minutos de preguntas, por la web o directo por WhatsApp, sin llamadas y sin compromiso. Y si quieres sentir cómo contesta un agente de verdad, la demo es pública: juega a ser tu propio paciente.",
-        ],
-      },
-    ],
-    faqs: [
-      {
-        q: "¿De dónde sale el dato del 40% fuera de horario?",
-        a: "Es el patrón típico del sector servicios en WhatsApp: los mensajes se concentran en la noche (cuando la gente por fin tiene tiempo) y los fines de semana. Tu número real puede variar — por eso el método te pide medir UNA semana de tu propio WhatsApp antes que creer promedios ajenos.",
-      },
-      {
-        q: "¿Y si yo mismo contesto rápido a todas horas?",
-        a: "Mientras puedas sostenerlo, funciona — muchos dueños lo hacen años. El costo es invisible: tus noches, tus domingos, y que el día que no puedas (vacaciones, consulta llena), la fuga regresa. La automatización no te reemplaza; te devuelve esas horas.",
-      },
-      {
-        q: "¿Esto aplica para una clínica chica con pocos mensajes?",
-        a: "Aplica más: con 10 conversaciones nuevas por semana, cada una vale proporcionalmente más. Perder 1 cita semanal de $1,500 son $6,000 al mes — para un consultorio chico, eso es la renta.",
-      },
-      {
-        q: "¿El agente de IA no espanta a los pacientes?",
-        a: "Uno malo, sí. Uno bien hecho responde natural, con la información y el tono de tu clínica, y pasa a tu equipo en cuanto hace falta — la mayoría de los pacientes solo nota que POR FIN le contestaron al momento. Pruébalo tú mismo en la demo y saca tu conclusión.",
-      },
-    ],
+    slug: "whatsapp-business-api-inmobiliarias-guia",
+    fechaPublicado: "2026-08-19",
+    fechaActualizado: "2026-08-22",
     solucionesRelacionadas: [
-      "reducir-no-shows-clinica",
-      "recepcionista-virtual-clinica",
+      "chatbot-whatsapp-para-inmobiliarias",
+      "asistente-virtual-para-inmobiliarias",
+      "automatizacion-para-inmobiliarias",
     ],
+    t: {
+      es: {
+        title: "WhatsApp Business API para inmobiliarias: guía sin tecnicismos",
+        metaDescription:
+          "Qué es la API oficial de WhatsApp, en qué se diferencia de la app, por qué importa para una inmobiliaria y los riesgos reales de usar conexiones no oficiales.",
+        h1: "WhatsApp Business API para inmobiliarias: guía sin tecnicismos",
+        resumen:
+          "Si vas a poner un asistente en tu WhatsApp, esta es la parte que conviene entender antes: qué es la vía oficial, en qué cambia tu operación diaria, y por qué las conexiones piratas ponen en riesgo el número por el que te contacta todo el mundo.",
+        secciones: [
+          {
+            h2: "Tres WhatsApp distintos, y solo uno sirve para esto",
+            parrafos: [
+              "WhatsApp normal es la app personal. WhatsApp Business es la app para negocios chicos, con catálogo y respuestas rápidas, pero sigue viviendo en un teléfono. La API oficial (Cloud API) es otra cosa: no vive en un teléfono, vive en la nube, y es la única que permite que un sistema conteste por ti de forma autorizada.",
+              "Esa diferencia tiene una consecuencia práctica que hay que saber antes: cuando conectas tu número a la API, sale de la app del teléfono. Tu equipo pasa a responder desde una bandeja en la computadora. No es peor — de hecho es mejor para un equipo — pero es un cambio de hábito y conviene decidirlo a conciencia.",
+            ],
+          },
+          {
+            h2: "La decisión: tu número de siempre o uno nuevo",
+            parrafos: ["Las dos opciones son válidas y dependen de tu operación:"],
+            lista: [
+              "Tu número actual: tus compradores ya lo conocen y no lo mandan a spam. El detalle es el que acabamos de ver — sale de la app del teléfono.",
+              "Un número nuevo: tu línea de siempre se queda intacta en el celular y el asistente estrena la suya. Cuesta poco y se anuncia donde ya publicas.",
+            ],
+          },
+          {
+            h2: "Por qué las conexiones no oficiales son mala idea",
+            parrafos: [
+              "Existen formas de conectar un bot a WhatsApp sin pasar por Meta. Son más baratas y más rápidas de montar, y por eso mucha gente las usa.",
+              "El problema es que violan los términos de WhatsApp, y la sanción no es una multa: es que el número deja de funcionar. Perder de golpe el número por el que te escriben todos tus prospectos, y toda la conversación histórica con ellos, no compensa el ahorro.",
+              "Hay un matiz que conviene conocer: la API oficial no puede escribirle primero a alguien con quien no has hablado, salvo con plantillas previamente aprobadas. Eso es una limitación real y es a propósito — es lo que evita que WhatsApp se llene de spam. Si un proveedor te ofrece \"mandar mensajes masivos a quien quieras\", te está ofreciendo justo lo que hace que tumben números.",
+            ],
+          },
+          {
+            h2: "Qué necesitas de tu lado",
+            parrafos: [
+              "Aquí hay una sola cosa que no se puede delegar, y conviene decirla de frente: el activo de WhatsApp tiene que salir del Facebook personal del dueño del negocio. Meta lo exige, y automatizar ese paso hace que restrinjan la cuenta.",
+              "En la práctica son unos diez minutos en videollamada, con alguien dictándote cada clic. Todo lo demás —abrir las cuentas, configurar, conectar, probar— no requiere que toques nada.",
+            ],
+          },
+        ],
+        faqs: [
+          {
+            q: "¿Pierdo mis conversaciones anteriores al migrar?",
+            a: "El historial de la app no se transfiere a la bandeja nueva. Conviene saberlo antes y, si hay conversaciones que importan, exportarlas.",
+          },
+          {
+            q: "¿Cuánto cuesta la API oficial?",
+            a: "Meta cobra por conversación, con un tramo gratuito mensual. Para el volumen de una inmobiliaria suelen ser unas decenas de dólares al mes, y se paga directo a Meta desde tu cuenta.",
+          },
+        ],
+      },
+      en: {
+        title: "WhatsApp Business API for real estate: a guide without the jargon",
+        metaDescription:
+          "What the official WhatsApp API is, how it differs from the app, why it matters for a real estate firm, and the real risks of using unofficial connections.",
+        h1: "WhatsApp Business API for real estate: a guide without the jargon",
+        resumen:
+          "If you are going to put an assistant on your WhatsApp, this is the part worth understanding first: what the official route is, how it changes your daily operation, and why unofficial connections put at risk the number everyone contacts you on.",
+        secciones: [
+          {
+            h2: "Three different WhatsApps, and only one works for this",
+            parrafos: [
+              "Regular WhatsApp is the personal app. WhatsApp Business is the app for small businesses, with a catalog and quick replies, but it still lives on a phone. The official API (Cloud API) is a different thing: it does not live on a phone, it lives in the cloud, and it is the only one that lets a system answer on your behalf in an authorized way.",
+              "That difference has a practical consequence worth knowing in advance: when you connect your number to the API, it leaves the phone app. Your team starts replying from an inbox on the computer. It is not worse — it is actually better for a team — but it is a change of habit and worth deciding on deliberately.",
+            ],
+          },
+          {
+            h2: "The decision: your usual number or a new one",
+            parrafos: ["Both options are valid and it depends on your operation:"],
+            lista: [
+              "Your current number: your buyers already know it and do not send it to spam. The catch is the one we just covered — it leaves the phone app.",
+              "A new number: your usual line stays untouched on the phone and the assistant gets its own. It costs little and you advertise it where you already publish.",
+            ],
+          },
+          {
+            h2: "Why unofficial connections are a bad idea",
+            parrafos: [
+              "There are ways to connect a bot to WhatsApp without going through Meta. They are cheaper and quicker to set up, which is why plenty of people use them.",
+              "The problem is that they violate WhatsApp's terms, and the penalty is not a fine: it is that the number stops working. Losing, all at once, the number every one of your leads writes to — and the entire conversation history with them — does not make up for the savings.",
+              "There is a nuance worth knowing: the official API cannot write first to someone you have not spoken with, except through pre-approved templates. That is a real limitation and it is deliberate — it is what keeps WhatsApp from filling up with spam. If a vendor offers you \"mass messaging to whoever you want\", they are offering you exactly what gets numbers taken down.",
+            ],
+          },
+          {
+            h2: "What is needed on your side",
+            parrafos: [
+              "There is exactly one thing here that cannot be delegated, and it is worth saying plainly: the WhatsApp asset has to come from the business owner's personal Facebook. Meta requires it, and automating that step gets the account restricted.",
+              "In practice it is about ten minutes on a video call, with someone dictating every click. Everything else — opening the accounts, configuring, connecting, testing — requires nothing from you.",
+            ],
+          },
+        ],
+        faqs: [
+          {
+            q: "Do I lose my previous conversations when migrating?",
+            a: "The app's history does not transfer to the new inbox. Worth knowing beforehand and, if there are conversations that matter, exporting them.",
+          },
+          {
+            q: "What does the official API cost?",
+            a: "Meta bills per conversation, with a free monthly tier. For a real estate firm's volume it usually runs to a few tens of dollars a month, paid directly to Meta from your account.",
+          },
+        ],
+      },
+    },
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
   {
-    slug: "llamadas-perdidas-clinica-quien-contesta-telefono",
-    title: "Su software le manda recordatorios, pero ¿quién contesta el teléfono?",
-    metaDescription:
-      "Las llamadas perdidas son la fuga más grande de una clínica y la única que no deja rastro. Qué hacen (y qué no) los softwares de gestión, y cómo un agente de voz contesta lo que hoy se pierde sin cambiar tu número.",
-    h1: "Su software le manda recordatorios, pero ¿quién contesta el teléfono?",
-    resumen:
-      "Los mensajes sin responder se ven en la pantalla y duelen. Las llamadas perdidas no dejan rastro: el paciente marca, nadie contesta, cuelga y marca a la siguiente clínica. Nunca supiste que existió. Aquí va por qué es la fuga más cara de una clínica, por qué tu software de gestión no la tapa, y qué se puede hacer sin cambiar tu número.",
-    fechaPublicado: "2026-07-25",
-    secciones: [
-      {
-        h2: "La fuga que no deja rastro",
-        parrafos: [
-          "Si un paciente te escribe por WhatsApp y nadie contesta, el mensaje se queda ahí. Lo ves al día siguiente, sientes la punzada, y a veces todavía alcanzas a responder.",
-          "Si un paciente te llama y nadie contesta, no pasa nada de eso. No hay mensaje pendiente, no hay notificación, no hay nada que revisar mañana. La llamada simplemente no ocurrió — y del otro lado hay una persona que ya está marcando al siguiente número de su búsqueda.",
-          "Esa es la diferencia importante: los mensajes sin responder se acumulan a la vista; las llamadas perdidas se evaporan. Por eso casi ninguna clínica sabe cuántas pierde, y por eso es la fuga más grande que nadie está midiendo.",
-        ],
-      },
-      {
-        h2: "Quien llama tiene más prisa que quien escribe",
-        parrafos: [
-          "Hay una diferencia de intención entre los dos canales que conviene entender antes de decidir dónde invertir.",
-          "El que escribe está comparando. Manda el mismo mensaje a tres o cuatro clínicas y espera. Puede aguantar unas horas.",
-          "El que llama ya casi decidió. Tiene el teléfono en la mano, quiere resolverlo ahora, y muchas veces está incómodo — le duele algo o trae prisa. Si no le contestan en tres timbres, no deja recado ni vuelve a intentar más tarde: marca al siguiente resultado de Google.",
-        ],
-        lista: [
-          "Quien escribe está evaluando opciones; quien llama quiere agendar hoy.",
-          "Quien escribe tolera una espera; quien llama cuelga en segundos.",
-          "Quien escribe deja rastro para recuperarlo; quien llama desaparece sin dejar número.",
-        ],
-      },
-      {
-        h2: "No es descuido de tu recepción: una persona no alcanza",
-        parrafos: [
-          "Cuando se habla de llamadas perdidas, el reflejo es pensar que alguien no está haciendo bien su trabajo. Casi nunca es eso.",
-          "Tu recepcionista está cobrando, recibiendo a un paciente en mostrador, resolviendo una duda de otro por teléfono, o simplemente comiendo. En todos esos momentos, la llamada que entra no tiene a nadie disponible. No es falta de ganas: es que una persona no puede estar en dos conversaciones a la vez.",
-          "Y hay horas en las que la clínica está cerrada y la gente sigue marcando: temprano en la mañana, en la noche y los fines de semana, que es justo cuando la mayoría tiene tiempo de ocuparse de su salud.",
-        ],
-      },
-      {
-        h2: "Por qué tu software de gestión no tapa esta fuga",
-        parrafos: [
-          "Si usas un software de gestión de clínicas, probablemente ya te manda recordatorios de cita por WhatsApp. Eso está bien y sirve — pero conviene ver con precisión qué hace y qué no.",
-          "Los recordatorios son mensajes salientes de plantilla: tu sistema avisa al paciente que ya tiene cita. Es comunicación hacia afuera, hacia gente que YA está en tu agenda.",
-          "La llamada perdida es exactamente lo contrario: es alguien de afuera intentando entrar a tu agenda, y no hay quien lo reciba. Ningún recordatorio resuelve eso, porque esa persona todavía no existe en tu sistema.",
-          "Lo mismo pasa con la 'IA' que anuncian varios softwares médicos: en la mayoría de los casos sirve para dictar y ordenar notas clínicas. Es una herramienta para el médico, hacia adentro. Ayuda a documentar mejor a los pacientes que ya llegaron; no ayuda a que lleguen.",
-        ],
-      },
-      {
-        h2: "Cómo se calcula lo que te cuesta hoy",
-        parrafos: [
-          "Antes de contratar nada, vale la pena poner el número. Es una cuenta de servilleta y se hace en dos minutos:",
-        ],
-        lista: [
-          "1. Pregunta a tu recepción cuántas llamadas calcula que se quedan sin contestar en un día normal. Aunque sea a ojo.",
-          "2. Multiplícalo por los días que abres al mes.",
-          "3. De esas, asume que solo 1 de cada 10 era un paciente nuevo que sí habría agendado. Es un supuesto deliberadamente conservador.",
-          "4. Multiplica ese resultado por lo que vale para ti un paciente nuevo — no la primera consulta, sino lo que suele dejar en total.",
-        ],
-      },
-      {
-        h2: "Contestar lo que se pierde, sin cambiar tu número",
-        parrafos: [
-          "La solución que la mayoría imagina es contratar a alguien más, y para muchas clínicas no sale la cuenta: es sueldo y prestaciones, y aun así no cubre noches ni domingos.",
-          "La alternativa es un agente de voz: un asistente con inteligencia artificial que contesta hablando. Resuelve dudas de servicios, precios y horarios, pregunta el motivo de la llamada, agenda en tu agenda real y avisa a tu equipo cuando hace falta una persona.",
-          "El detalle que más tranquiliza a los dueños es que no reemplaza a nadie ni cambia nada visible. Tu número sigue siendo el mismo — el de tus recetas, tu fachada y tu Google — y tu recepcionista sigue contestando igual. Se configura un desvío con tu compañía telefónica para que, solo cuando nadie contesta después de varios timbres o es fuera de horario, la llamada pase al asistente en lugar de perderse.",
-          "Dicho con honestidad: un agente de voz cuesta bastante más al mes que un asistente de WhatsApp, porque se cobra por minuto hablado. Ese es justo el argumento para usar el desvío en vez de mandarle todas las llamadas: al asistente solo llegan las que de todas formas se iban a caer.",
-        ],
-      },
-    ],
-    faqs: [
-      {
-        q: "¿Tengo que cambiar el número de mi clínica?",
-        a: "No. Se configura un desvío con tu compañía telefónica y tus pacientes siguen marcando al mismo número de siempre. Si prefieres una línea nueva y aparte, también se puede — pero casi nunca conviene: el valor de un número que tus pacientes ya conocen es enorme.",
-      },
-      {
-        q: "¿Se nota que no es una persona?",
-        a: "Sí, y a propósito: el asistente avisa desde el saludo que es virtual. Es preferible que tu paciente sepa con quién habla a que se sienta engañado. Lo que sí debe sonar natural es la conversación — que escuche, que se calle si lo interrumpen y que no suene a grabación.",
-      },
-      {
-        q: "¿Y si la llamada es una urgencia?",
-        a: "Un agente bien hecho no da diagnósticos ni consejo médico, nunca. Reconoce señales de urgencia y actúa según el tipo de clínica: en un consultorio médico indica marcar al 911 y no agenda; en una dental prioriza el caso y avisa a recepción de inmediato. Ante cualquier duda, pasa con una persona.",
-      },
-      {
-        q: "¿Esto reemplaza al asistente de WhatsApp?",
-        a: "No: son dos canales distintos y ninguno hace lo del otro. Uno atiende a quien escribe y el otro a quien llama. Puedes tener uno, el otro o los dos. Si tienes ambos, lo importante es que compartan la misma información y la misma agenda, para que jamás le den dos precios distintos al mismo paciente.",
-      },
-      {
-        q: "¿Graba las llamadas? ¿Eso es legal con pacientes?",
-        a: "Se graban, y el paciente debe saberlo desde la primera frase: es un aviso obligatorio, no un detalle de estilo. Los datos de salud son sensibles, así que el asistente guarda lo mínimo (nombre, contacto, motivo general y la cita) y nada clínico. Las grabaciones deben vivir en las cuentas de tu clínica, con tu política de retención — no en las de un proveedor.",
-      },
-    ],
+    slug: "llamadas-perdidas-inmobiliaria-quien-contesta",
+    fechaPublicado: "2026-08-19",
+    fechaActualizado: "2026-08-22",
     solucionesRelacionadas: [
-      "agente-de-voz-para-clinicas",
-      "recepcionista-virtual-clinica",
-      "chatbot-whatsapp-para-clinicas",
+      "agente-de-voz-para-inmobiliarias",
+      "asistente-virtual-para-inmobiliarias",
+      "chatbot-whatsapp-para-inmobiliarias",
     ],
+    t: {
+      es: {
+        title:
+          "Las llamadas que se van al buzón: quién contesta tu teléfono a las 8 de la noche",
+        metaDescription:
+          "En preventa, quien llama suele ser el que ya está decidido. Qué pasa con esas llamadas fuera de horario, por qué un menú de opciones espanta y qué alternativas hay.",
+        h1: "Las llamadas que se van al buzón: quién contesta tu teléfono a las 8 de la noche",
+        resumen:
+          "El WhatsApp se lleva la atención, pero en inmobiliario el teléfono sigue siendo el canal del comprador serio. Y es el que peor se cubre fuera de horario. Esto es lo que pasa con esas llamadas y qué se puede hacer.",
+        secciones: [
+          {
+            h2: "Quien llama, casi siempre, va más en serio",
+            parrafos: [
+              "Escribir un mensaje cuesta poco: se hace en la fila del súper y se olvida. Marcar cuesta más — hay que decidir hablar con alguien.",
+              "Por eso, en una operación de preventa, la llamada suele venir de quien ya recorrió el sitio, ya vio los planos y quiere resolver dudas concretas. Perder esa llamada duele más que perder un mensaje.",
+            ],
+          },
+          {
+            h2: "Y sin embargo, es lo peor cubierto",
+            parrafos: [
+              "Casi todas las operaciones tienen a alguien atento al WhatsApp. Muy pocas tienen a alguien atento al teléfono fuera del horario de oficina.",
+              "Si tu comprador está en otro país, esto se agrava: marca a su hora. Y a la hora en que a él le queda bien llamar, tu oficina está cerrada.",
+              "El resultado es un buzón de voz. Y un buzón de voz, para alguien que está comparando tres proyectos, es una señal de que ahí no lo van a atender bien.",
+            ],
+          },
+          {
+            h2: "Por qué un menú de opciones no arregla nada",
+            parrafos: [
+              "La solución tradicional es una centralita: \"marque 1 para ventas, marque 2 para administración\". Funciona para clasificar llamadas, no para atender a alguien que va a poner cientos de miles de dólares.",
+              "Un menú comunica exactamente lo contrario de lo que quieres comunicar en una compra grande: que del otro lado hay un proceso, no una persona. Y aun así, al final del menú, sigue sin haber nadie a las ocho de la noche.",
+            ],
+          },
+          {
+            h2: "Las tres alternativas reales",
+            parrafos: ["Puestas de frente, con sus costos y sus contras:"],
+            lista: [
+              "Un servicio de contestación humano. Contestan, pero no conocen tus proyectos: toman el recado y el prospecto queda igual de sin resolver.",
+              "Guardias rotativas en tu equipo. Funciona un mes y luego nadie quiere el turno del domingo. Y se paga con desgaste.",
+              "Un agente de voz con IA. Contesta hablando, conoce tus proyectos, agenda en tu calendario y avisa al asesor. Tu número de siempre no cambia: se configura un desvío para cuando nadie contesta.",
+            ],
+          },
+          {
+            h2: "Lo que hay que saber antes de elegir la tercera",
+            parrafos: [
+              "Dos cosas, y las decimos porque nos las preguntarías después.",
+              "La primera: la voz se cobra por minuto hablado. Es la pieza con el costo por uso más alto de todas, y sube con tus llamadas. Se contrata con tope de gasto y ves tu consumo tú mismo.",
+              "La segunda: un agente de voz no debe intentar cerrar la venta ni improvisar sobre impuestos, financiamiento o escrituración. Su trabajo es atender bien, resolver lo que sí sabe, y dejar la visita agendada para que un humano haga el resto.",
+            ],
+          },
+        ],
+        faqs: [
+          {
+            q: "¿Tengo que cambiar mi número de teléfono?",
+            a: "No. Se configura un desvío y quien te llama marca el mismo número de siempre. También puedes darle línea propia al asistente si lo prefieres.",
+          },
+          {
+            q: "¿Se nota que es una IA?",
+            a: "Se nota si le preguntas. Está construido para decirlo cuando le preguntan, no para fingir que es humano. Lo que no se nota es la incomodidad de un menú: contesta hablando y entiende lo que le dices.",
+          },
+        ],
+      },
+      en: {
+        title: "The calls that go to voicemail: who answers your phone at 8 p.m.",
+        metaDescription:
+          "In preconstruction, whoever calls is usually the one already decided. What happens to those after-hours calls, why a phone menu scares people off, and what the alternatives are.",
+        h1: "The calls that go to voicemail: who answers your phone at 8 p.m.",
+        resumen:
+          "WhatsApp gets all the attention, but in real estate the phone is still the serious buyer's channel. And it is the one worst covered after hours. Here is what happens to those calls and what can be done.",
+        secciones: [
+          {
+            h2: "Whoever calls is almost always more serious",
+            parrafos: [
+              "Sending a message costs little: you do it in the supermarket line and forget about it. Dialing costs more — you have to decide to talk to someone.",
+              "That is why, in a preconstruction operation, the call usually comes from someone who has already been through the site, already seen the floor plans, and wants concrete answers. Losing that call hurts more than losing a message.",
+            ],
+          },
+          {
+            h2: "And yet it is the worst covered",
+            parrafos: [
+              "Almost every operation has somebody watching WhatsApp. Very few have somebody watching the phone outside office hours.",
+              "If your buyer is in another country this gets worse: they dial on their clock. And at the hour that suits them to call, your office is closed.",
+              "The result is voicemail. And voicemail, to someone comparing three projects, is a signal that they will not be well looked after there.",
+            ],
+          },
+          {
+            h2: "Why a phone menu fixes nothing",
+            parrafos: [
+              "The traditional answer is a switchboard: \"press 1 for sales, press 2 for administration\". It works for sorting calls, not for looking after someone about to put down hundreds of thousands of dollars.",
+              "A menu communicates exactly the opposite of what you want to communicate in a large purchase: that on the other side there is a process, not a person. And even so, at the end of the menu there is still nobody there at eight at night.",
+            ],
+          },
+          {
+            h2: "The three real alternatives",
+            parrafos: ["Laid out plainly, with their costs and their downsides:"],
+            lista: [
+              "A human answering service. They pick up, but they do not know your projects: they take a message and the lead is left just as unresolved.",
+              "Rotating on-call shifts in your team. It works for a month and then nobody wants the Sunday shift. And it is paid for in burnout.",
+              "An AI voice agent. It answers by talking, knows your projects, books on your calendar and notifies the agent. Your usual number does not change: forwarding is set up for when nobody picks up.",
+            ],
+          },
+          {
+            h2: "What to know before choosing the third",
+            parrafos: [
+              "Two things, and we say them because you would ask us later.",
+              "First: voice is billed per minute spoken. It is the piece with the highest usage cost of them all, and it rises with your call volume. It is set up with a spending cap and you watch your own usage.",
+              "Second: a voice agent should not try to close the sale or improvise about taxes, financing or closing. Its job is to look after the caller well, resolve what it does know, and leave the appointment booked so a human can do the rest.",
+            ],
+          },
+        ],
+        faqs: [
+          {
+            q: "Do I have to change my phone number?",
+            a: "No. Forwarding is set up and whoever calls dials the same number as always. You can also give the assistant its own line if you prefer.",
+          },
+          {
+            q: "Can you tell it is an AI?",
+            a: "You can if you ask it. It is built to say so when asked, not to pretend it is human. What you do not notice is the awkwardness of a menu: it answers by talking and understands what you say to it.",
+          },
+        ],
+      },
+    },
   },
 ];
 
@@ -494,9 +728,10 @@ export function getArticulo(slug: string): Articulo | undefined {
   return ARTICULOS.find((a) => a.slug === slug);
 }
 
-/** "2026-07-22" → "22 de julio de 2026" */
-export function fechaBonita(iso: string) {
-  return new Intl.DateTimeFormat("es-MX", {
+/** La fecha, escrita como la escribe cada idioma. En inglés se pone el mes primero:
+ *  "August 19, 2026", no "19 de agosto". Es de lo primero que delata una traducción. */
+export function fechaBonita(iso: string, idioma: Idioma = "es") {
+  return new Intl.DateTimeFormat(idioma === "en" ? "en-US" : "es-MX", {
     day: "numeric",
     month: "long",
     year: "numeric",

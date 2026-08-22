@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { CONTACT } from "@/lib/content";
 import { Logo } from "@/components/Logo";
 import { ArranquePortal } from "@/components/ArranquePortal";
+import { TA } from "@/lib/arranque-textos";
+import { idiomaDe, type Idioma } from "@/lib/acuerdo-textos";
 import { normalizarDatos, type ArranqueDatos } from "@/lib/arranque";
 
 // Portal de Arranque con link secreto: upcoreai.com/arranque/[token].
@@ -64,8 +66,10 @@ const AVANCE_ICON: Record<string, string> = {
 
 export default async function ArranquePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ token: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { token } = await params;
   const fila = await getArranque(token);
@@ -93,6 +97,12 @@ export default async function ArranquePage({
   }
 
   const d = fila.datos;
+  // El idioma que se abre: manda lo que el cliente eligió la última vez (guardado
+  // en `datos`), y `?lang=` lo puede pisar — así el link que le mandemos en inglés
+  // funciona la primera vez, y a partir de ahí se acuerda solo.
+  const pedido = (await searchParams)?.lang;
+  const idioma: Idioma = pedido ? idiomaDe(pedido) : d.idioma === "en" ? "en" : "es";
+  const T = TA[idioma];
 
   return (
     <main className="min-h-screen bg-obsidian px-[6%] py-10 text-sand md:px-[10%]">
@@ -101,16 +111,23 @@ export default async function ArranquePage({
         <div className="mb-10 flex flex-col items-center gap-2 text-center">
           <Logo markClass="h-8 w-8" textClass="text-[1.35rem]" />
           <div className="text-xs font-semibold uppercase tracking-[0.2em] text-clay">
-            Portal de Arranque · {fila.clinica || d.config.clinica || "tu clínica"}
+            {T.bienvenida.etiqueta(
+              fila.clinica || d.config.clinica || (idioma === "en" ? "your firm" : "tu inmobiliaria")
+            )}
           </div>
         </div>
 
-        <ArranquePortal token={token} datosIniciales={d} estadoInicial={fila.estado} />
+        <ArranquePortal
+          token={token}
+          datosIniciales={d}
+          estadoInicial={fila.estado}
+          idiomaInicial={idioma}
+        />
 
         {/* Avance del proyecto (lo actualiza Upcore; el cliente solo lo ve) */}
         <section className="mt-12">
           <h2 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-mocha">
-            Avance de tu proyecto
+            {T.ui.avance}
           </h2>
           <div className="rounded-3xl border border-[rgba(242,231,219,0.1)] bg-[rgba(242,231,219,0.04)] p-7">
             {d.avances.map((a) => (
@@ -133,10 +150,13 @@ export default async function ArranquePage({
                   <div
                     className={`font-medium ${a.estado === "pendiente" ? "text-mocha" : "text-sand"}`}
                   >
-                    {a.fase}
+                    {/* La clave guardada es el nombre EN ESPAÑOL: es lo que Upcore
+                        escribe al actualizar el avance. Aquí solo se traduce cómo se
+                        lee, para no romper los datos que ya existen. */}
+                    {T.ui.fases[a.fase] ?? a.fase}
                     {a.estado === "en-curso" && (
                       <span className="ml-2 text-xs font-semibold uppercase tracking-wide text-clay">
-                        en curso
+                        {T.ui.estados["en-curso"]}
                       </span>
                     )}
                   </div>
@@ -147,15 +167,14 @@ export default async function ArranquePage({
               </div>
             ))}
             <p className="mt-4 text-xs font-light text-mocha/70">
-              Esta sección la vamos actualizando nosotros conforme avanza tu proyecto —
-              entra cuando quieras a ver cómo va.
+              {T.ui.notaAvance}
             </p>
           </div>
         </section>
 
         <footer className="mt-12 border-t border-[rgba(242,231,219,0.08)] pt-6 text-center text-xs font-light text-mocha/60">
-          Upcore AI · Portal privado de {fila.clinica || "tu clínica"} — no compartas este
-          link · ¿Dudas? Escríbenos por{" "}
+          {T.ui.pie(fila.clinica || (idioma === "en" ? "your firm" : "tu inmobiliaria"))} ·{" "}
+          {T.ui.dudas} {T.ui.escribenos.replace(/ ?WhatsApp$/, "")}{" "}
           <a href={CONTACT.whatsapp} className="underline hover:text-clay">
             WhatsApp
           </a>

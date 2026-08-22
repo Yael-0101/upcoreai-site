@@ -1,26 +1,31 @@
 import type { Metadata } from "next";
+import { RaizIdioma } from "@/components/RaizIdioma";
 import { Backdrop } from "@/components/Backdrop";
 import { Nav } from "@/components/Nav";
 import { EmpezarForm } from "@/components/EmpezarForm";
 import { Footer } from "@/components/Footer";
 import { metaPagina } from "@/lib/seo";
+import { empezar } from "@/lib/empezar-textos";
+
+const IDIOMA = "es" as const;
+const t = empezar(IDIOMA);
 
 export const metadata: Metadata = metaPagina({
-  title: "Empieza sin llamada: tu diagnóstico gratis al instante",
-  description:
-    "Cuéntanos de tu clínica en 3 minutos, sin agendar ninguna llamada. Tu diagnóstico con números aparece al instante y también te llega por correo.",
+  title: t.h1,
+  description: t.subA + t.subFuerte + t.subB,
   path: "/empezar",
+  idioma: IDIOMA,
 });
 
-export default function EmpezarPage() {
+export default function Pagina() {
   return (
-    <>
+    <RaizIdioma idioma={IDIOMA}>
       <Backdrop />
-      <Nav />
+      <Nav idioma={IDIOMA} path="/empezar" />
       <main className="relative z-[2] pt-20">
-        <EmpezarForm />
+        <EmpezarForm idioma={IDIOMA} />
       </main>
-      <Footer />
-    </>
+      <Footer idioma={IDIOMA} />
+    </RaizIdioma>
   );
 }

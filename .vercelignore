@@ -1,0 +1,8 @@
+# Los secretos NUNCA salen de la máquina. Vercel ya excluye los .env por su cuenta,
+# pero aquí queda escrito: una protección que depende de un comportamiento por
+# defecto es una protección que nadie revisa. En Vercel las variables se leen del
+# panel del proyecto, no de estos archivos.
+.env
+.env.*
+credentials.json
+token.json

@@ -7,6 +7,8 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { AgendarCTA } from "./AgendarCTA";
+import { paginas } from "@/lib/paginas-textos";
+import type { Idioma } from "@/lib/idioma";
 import {
   DEMO_LIMITS,
   demoGreeting,
@@ -27,7 +29,16 @@ const horaAhora = () =>
 
 let nextId = 1;
 
-export function DemoChat({ clinica, giro }: { clinica: string; giro: Giro }) {
+export function DemoChat({
+  clinica,
+  giro,
+  idioma = "es",
+}: {
+  clinica: string;
+  giro: Giro;
+  idioma?: Idioma;
+}) {
+  const T = paginas(idioma).demoChat;
   const [msgs, setMsgs] = useState<Msg[]>(() => [
     { id: 0, from: "bot", text: demoGreeting(clinica), hora: horaAhora() },
   ]);
@@ -82,8 +93,7 @@ export function DemoChat({ clinica, giro }: { clinica: string; giro: Giro }) {
       terminado = true;
     }
     if (!reply) {
-      reply =
-        "El asistente de demostración está tomando un descanso 😅 Agenda tu diagnóstico gratis y te lo enseñamos en vivo.";
+      reply = T.descanso;
       terminado = true;
     }
 
@@ -99,13 +109,7 @@ export function DemoChat({ clinica, giro }: { clinica: string; giro: Giro }) {
 
     if (agendado && !remateMostrado) {
       setRemateMostrado(true);
-      window.setTimeout(
-        () =>
-          pushSystem(
-            "✨ Cita agendada en menos de un minuto, sin que nadie de la clínica tocara el teléfono. Esto mismo, en TU WhatsApp."
-          ),
-        900
-      );
+      window.setTimeout(() => pushSystem(T.agendada), 900);
     }
     if (terminado) setDone(true);
     else inputRef.current?.focus();
@@ -121,15 +125,15 @@ export function DemoChat({ clinica, giro }: { clinica: string; giro: Giro }) {
           </span>
           <div className="min-w-0 flex-1">
             <div className="truncate text-sm font-semibold text-sand">
-              Asistente de {clinica}
+              {T.asistenteDe(clinica)}
             </div>
             <div className="flex items-center gap-1.5 text-[0.68rem] text-sage">
               <span className="h-1.5 w-1.5 rounded-full bg-sage" aria-hidden />
-              en línea
+              {T.enLinea}
             </div>
           </div>
           <span className="shrink-0 rounded-full border border-mocha/30 px-2 py-0.5 text-[0.6rem] font-medium uppercase tracking-wide text-mocha">
-            Demo · datos ficticios
+            {T.demoFicticia}
           </span>
         </div>
 
@@ -154,7 +158,8 @@ export function DemoChat({ clinica, giro }: { clinica: string; giro: Giro }) {
                   <div className="max-w-[90%] rounded-2xl border border-sage/40 bg-sage/10 px-4 py-3 text-center">
                     <p className="text-xs leading-relaxed text-sand">{m.text}</p>
                     <AgendarCTA
-                      label="Quiero esto en mi clínica →"
+                      idioma={idioma}
+                      label={T.quieroEsto}
                       className="btn-shine mt-2.5 inline-block rounded-full bg-clay px-4 py-2 text-xs font-semibold text-white transition-transform active:scale-95"
                     />
                   </div>
@@ -227,16 +232,16 @@ export function DemoChat({ clinica, giro }: { clinica: string; giro: Giro }) {
             onChange={(e) => setTexto(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && enviar()}
             maxLength={DEMO_LIMITS.maxCharsMensaje}
-            placeholder={done ? "La demo terminó — agenda tu diagnóstico 👆" : "Escribe como paciente…"}
+            placeholder={done ? T.placeholderFin : T.placeholder}
             disabled={escribiendo || done}
-            aria-label="Mensaje para el asistente de demostración"
+            aria-label={T.aria}
             className="min-w-0 flex-1 rounded-full border border-white/10 bg-obsidian px-4 py-2.5 text-sm text-sand outline-none transition-colors placeholder:text-mocha/50 focus:border-clay/60 disabled:opacity-50"
           />
           <button
             type="button"
             onClick={() => enviar()}
             disabled={!texto.trim() || escribiendo || done}
-            aria-label="Enviar"
+            aria-label={T.enviar}
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-clay text-white transition-all hover:bg-clay-bright disabled:opacity-40 active:scale-90"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>

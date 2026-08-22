@@ -1,0 +1,95 @@
+// ============================================================================
+// IDIOMA — fuente única para todo el sitio y los documentos del cliente.
+//
+// Antes `Idioma` vivía dentro de `acuerdo-textos.ts`, porque el acuerdo fue lo
+// primero que se hizo bilingüe. Al hacer bilingüe también el sitio público, ese
+// archivo habría acabado importado por la portada — que no tiene nada que ver
+// con un contrato. El tipo vive aquí y todos lo leen de aquí.
+//
+// ⚠️ POR QUÉ EL SITIO NO USA `?lang=` COMO LOS DOCUMENTOS.
+// La propuesta, el acuerdo y el Portal de Arranque son documentos privados con
+// link secreto: no los indexa nadie, así que el idioma puede viajar en la URL
+// como parámetro. Una página pública NO puede: Google vería la versión en
+// español y la inglesa en la MISMA dirección, las trataría como contenido
+// duplicado y la inglesa no aparecería nunca. Por eso el sitio tiene URLs
+// propias — `/precios` y `/en/precios` — enlazadas entre sí con `hreflang`.
+// ============================================================================
+
+export type Idioma = "es" | "en";
+
+export const IDIOMAS: Idioma[] = ["es", "en"];
+
+/** El idioma en el que nació el sitio y el que gobierna los contratos. */
+export const IDIOMA_POR_DEFECTO: Idioma = "es";
+
+/** Valida un valor que viene de fuera (URL, webhook, formulario).
+ *  ⚠️ Se compara contra la LISTA, nunca con `OBJETO[valor]`: indexar un objeto
+ *  normal también encuentra lo que hereda de Object.prototype, así que
+ *  `?lang=constructor` pasaría el filtro (lección 2026-08-19). */
+export function idiomaDe(valor: unknown): Idioma {
+  const v = String(valor ?? "").toLowerCase();
+  return (IDIOMAS as string[]).includes(v) ? (v as Idioma) : IDIOMA_POR_DEFECTO;
+}
+
+/** El código que va en `<html lang>` y en `og:locale`. */
+export const LOCALE: Record<Idioma, { html: string; og: string }> = {
+  es: { html: "es-MX", og: "es_MX" },
+  en: { html: "en-US", og: "en_US" },
+};
+
+/** El prefijo de ruta de cada idioma. El español vive en la raíz — es el idioma
+ *  original del sitio y sus URLs ya están indexadas; moverlas a `/es` tiraría
+ *  ese trabajo a la basura. */
+export const PREFIJO: Record<Idioma, string> = { es: "", en: "/en" };
+
+/**
+ * Convierte una ruta canónica (siempre escrita en español, con `/` al inicio) a
+ * la ruta del idioma pedido.
+ *
+ *   ruta("es", "/precios") → "/precios"
+ *   ruta("en", "/precios") → "/en/precios"
+ *   ruta("en", "/")        → "/en"
+ *
+ * ⚠️ Los slugs NO se traducen (`/en/soluciones/agente-de-voz-para-inmobiliarias`).
+ * Es a propósito: con el mismo slug en los dos idiomas, cada página sabe cuál es
+ * su pareja sin ningún diccionario, y el `hreflang` y el sitemap salen solos. Si
+ * algún día el inglés tiene que posicionar por su cuenta, ahí sí hará falta un
+ * slug propio — y con él, un mapa en las dos direcciones.
+ */
+export function ruta(idioma: Idioma, path: string): string {
+  const limpio = path.startsWith("/") ? path : `/${path}`;
+  if (idioma === "es") return limpio;
+  return limpio === "/" ? "/en" : `/en${limpio}`;
+}
+
+/**
+ * El origen del sitio, para canonical y hreflang absolutos.
+ *
+ * ⚠️ VA CON `www`, Y NO ES UN DETALLE. En Vercel el dominio principal es
+ * `www.upcoreai.com`: el apex `upcoreai.com` devuelve un 307 hacia allá. Hasta el
+ * 2026-08-22 esto decía el apex, así que TODOS los canonical apuntaban a una URL
+ * que redirige. Con el sitio en un solo idioma era un defecto menor —Google sigue
+ * la redirección y consolida—, pero con `hreflang` deja de serlo: la documentación
+ * de Google es explícita en que las URLs de `hreflang` tienen que ser canónicas y
+ * NO redirigir, o las anotaciones se descartan enteras. O sea que el sitio
+ * bilingüe habría quedado publicado y Google no se habría enterado de que las dos
+ * versiones son la misma página.
+ *
+ * Si algún día se cambia el dominio principal en Vercel, se cambia AQUÍ también:
+ * `scripts/probar-produccion.mjs` comprueba que el canonical publicado no redirija.
+ */
+export const ORIGEN = "https://www.upcoreai.com";
+
+/** Las dos direcciones de una misma página, para las etiquetas `hreflang`.
+ *  Se incluye `x-default` apuntando al español: es el idioma original y el que
+ *  debe recibir a quien llegue sin preferencia declarada. */
+export function alternativas(path: string) {
+  return {
+    canonical: `${ORIGEN}${ruta("es", path)}`,
+    languages: {
+      "es-MX": `${ORIGEN}${ruta("es", path)}`,
+      "en-US": `${ORIGEN}${ruta("en", path)}`,
+      "x-default": `${ORIGEN}${ruta("es", path)}`,
+    },
+  };
+}

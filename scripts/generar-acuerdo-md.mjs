@@ -53,7 +53,10 @@ function plantilla(plan) {
     fecha: new Date(0).toISOString(),
     lead: {
       nombre: "{{NOMBRE_CONTACTO}}",
-      clinica: "{{CLINICA}}",
+      // ⚪ `clinica` es el nombre de una columna de la data table de n8n (no se puede
+      // renombrar por API); hoy guarda el nombre de la INMOBILIARIA. El hueco que
+      // rellena la skill sí se llama por lo que es.
+      clinica: "{{EMPRESA}}",
       decisor: "{{PUESTO}}",
       tipo_clinica: "",
       tamano: "",
@@ -81,7 +84,7 @@ function plantilla(plan) {
 function aMarkdown(doc) {
   const l = [];
   l.push("# Acuerdo de servicio", "");
-  l.push("**Upcore AI** (Yael López · upcoreai.com) — **{{CLINICA}}** ({{NOMBRE_CONTACTO}}{{PUESTO}})");
+  l.push("**Upcore AI** (Yael López · upcoreai.com) — **{{EMPRESA}}** ({{NOMBRE_CONTACTO}}{{PUESTO}})");
   l.push("Fecha: {{FECHA}} · Acordado a distancia (servicios 100% en línea)", "");
   l.push(`> ${doc.intro}`);
   l.push("> Se acepta contestando **“de acuerdo”** por WhatsApp o correo.", "");
@@ -109,7 +112,7 @@ function aMarkdown(doc) {
   }
 
   l.push("---", "");
-  l.push("[[FIRMAS: Yael López | Upcore AI || {{NOMBRE_CONTACTO}} | {{CLINICA}}]]", "");
+  l.push("[[FIRMAS: Yael López | Upcore AI || {{NOMBRE_CONTACTO}} | {{EMPRESA}}]]", "");
   l.push("---", "");
   l.push("*Documento generado por Upcore AI · upcoreai.com*", "");
   return l.join("\n");
@@ -121,7 +124,7 @@ function conPlaceholders(md, doc) {
     .split(doc.precio).join("{{PRECIO_TOTAL}}")
     .split(doc.anticipo).join("{{ANTICIPO}}")
     .split(doc.resto).join("{{RESTO}}")
-    .split(precioFijo(MENSUALIDAD_CENTINELA, true).mxn).join("{{MENSUALIDAD}}")
+    .split(precioFijo(MENSUALIDAD_CENTINELA, true).principal).join("{{MENSUALIDAD}}")
     .split(doc.entrega).join("{{TIEMPO_ENTREGA}}");
 }
 

@@ -1,8 +1,10 @@
 import { Reveal } from "./Reveal";
 import { Icon } from "./Icons";
-import { GARANTIA } from "@/lib/content";
+import { contenido } from "@/lib/site-textos";
+import type { Idioma } from "@/lib/idioma";
 
-export function Garantia() {
+export function Garantia({ idioma = "es" }: { idioma?: Idioma }) {
+  const GARANTIA = contenido(idioma).garantia;
   return (
     <section className="px-[6%] py-16 md:px-[10%]">
       <Reveal variant="scaleIn">

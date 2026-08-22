@@ -2,12 +2,14 @@ import { SectionTitle } from "./SectionTitle";
 import { Reveal } from "./Reveal";
 import { GlassCard } from "./GlassCard";
 import { Icon } from "./Icons";
-import { SISTEMA } from "@/lib/content";
+import { contenido } from "@/lib/site-textos";
+import type { Idioma } from "@/lib/idioma";
 
 // Bento: tamaños variados para romper la rejilla uniforme (solo aplica en lg).
 const BENTO = ["lg:col-span-2", "", "", "lg:col-span-2", "lg:col-span-3"];
 
-export function Sistema() {
+export function Sistema({ idioma = "es" }: { idioma?: Idioma }) {
+  const SISTEMA = contenido(idioma).sistema;
   return (
     <section id="sistema" className="px-[6%] py-24 md:px-[10%] md:py-32">
       <SectionTitle title={SISTEMA.heading} sub={SISTEMA.sub} align="left" />

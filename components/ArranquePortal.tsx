@@ -16,6 +16,8 @@ import {
   type Option,
 } from "./WizardUI";
 import { CONTACT } from "@/lib/content";
+import { TA } from "@/lib/arranque-textos";
+import { idiomaDe, type Idioma } from "@/lib/acuerdo-textos";
 import {
   conciergeListo,
   cuentasRequeridas,
@@ -27,75 +29,108 @@ import {
   type ServicioItem,
   type TextoItem,
 } from "@/lib/arranque";
+// TODO el texto que cambia según las piezas vive en un solo archivo. Si algo de
+// aquí abajo nombra un producto ("asistente", "tu sitio", "WhatsApp"), tiene que
+// salir de ahí — no escrito a mano. Ver el encabezado de arranque-copy.ts.
+import {
+  copyBienvenida,
+  copyCalendario,
+  copyFinal,
+  copyHorarios,
+  copyLinea,
+  copyNumero,
+  copyServicios,
+  copyTextos,
+  etiquetaDemo,
+  etiquetaNumero,
+  hayMensajes,
+  hayWeb,
+  normalizarPiezas,
+} from "@/lib/arranque-copy";
 
-type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | "listo";
-const TOTAL_PASOS = 9;
-// Número de paso ↔ su id (índice + 1). El orden es el del wizard de siempre;
+type Step = number | "listo";
+// Número de paso ↔ su id (índice + 1). El orden es el del wizard completo;
 // pasosVisibles() decide cuáles aplican a las piezas de ESTE proyecto.
 const NUM_A_PASO: PasoId[] = [
   "bienvenida",
   "servicios",
   "horarios",
   "numero",
+  "linea",
   "cuentas",
   "calendario",
   "demo",
   "textos",
   "resumen",
 ];
-const numDePaso = (id: PasoId) => (NUM_A_PASO.indexOf(id) + 1) as Step & number;
+const TOTAL_PASOS = NUM_A_PASO.length;
+const numDePaso = (id: PasoId) => NUM_A_PASO.indexOf(id) + 1;
+/** El número del paso, por su id — para no volver a escribir 5, 6, 7 a mano.
+ *  (Meter un paso nuevo en medio ya nos habría desalineado todo el wizard.) */
+const N = {
+  bienvenida: numDePaso("bienvenida"),
+  servicios: numDePaso("servicios"),
+  horarios: numDePaso("horarios"),
+  numero: numDePaso("numero"),
+  linea: numDePaso("linea"),
+  cuentas: numDePaso("cuentas"),
+  calendario: numDePaso("calendario"),
+  demo: numDePaso("demo"),
+  textos: numDePaso("textos"),
+  resumen: numDePaso("resumen"),
+};
 
-const TONO_OPTIONS: Option[] = [
-  { val: "calido", label: "Cálido y cercano", icon: "🤗", desc: "Como recepción de confianza" },
-  { val: "profesional", label: "Profesional y directo", icon: "🤝", desc: "Claro, sin rodeos" },
-  { val: "premium", label: "Elegante y discreto", icon: "✨", desc: "Tono de clínica premium" },
-  { val: "relajado", label: "Fresco y relajado", icon: "😌", desc: "Juvenil, sin perder respeto" },
-];
+// ⚠️ Los `val` son los que se GUARDAN (y viajan a n8n): no se traducen nunca. Lo
+// único que cambia de idioma es lo que el cliente lee.
+const ICONO_TONO: Record<string, string> = {
+  calido: "🤗", profesional: "🤝", elegante: "✨", fresco: "😌",
+};
+const tonoOptions = (idioma: Idioma): Option[] =>
+  TA[idioma].tonos.map((t) => ({ val: t.val, label: t.label, icon: ICONO_TONO[t.val] ?? "💬", desc: t.desc }));
 
-const NUMERO_OPTIONS: Option[] = [
-  {
-    val: "actual",
-    label: "Mi número actual",
-    icon: "📱",
-    desc: "El que ya conocen tus pacientes",
-  },
-  { val: "nuevo", label: "Un número nuevo", icon: "🆕", desc: "Dedicado para el asistente" },
-  { val: "asesoria", label: "No sé — asesórenme", icon: "🤔", desc: "Lo vemos juntos" },
-];
+// Las opciones del número dependen de la pieza: no es lo mismo un asistente que
+// CONVERSA por ese número que unos recordatorios que solo SALEN de él.
+const numeroOptions = (piezas: string[], idioma: Idioma): Option[] => {
+  const c = copyNumero(piezas, idioma);
+  const t = TA[idioma].numero;
+  return [
+    { val: "actual", label: c.labelActual, icon: "📱", desc: t.descActual },
+    { val: "nuevo", label: c.labelNuevo, icon: "🆕", desc: t.descNuevo },
+    { val: "asesoria", label: t.noSe, icon: "🤔", desc: t.noSeDesc },
+  ];
+};
 
-// Quién le da los clics a las cuentas. "Créenmelas ustedes" va primero a propósito:
-// es lo que la propuesta ofrece primero y lo que la mayoría de dueños prefiere.
-const CUENTAS_MODO_OPTIONS: Option[] = [
-  {
-    val: "upcore",
-    label: "Créenmelas ustedes",
-    icon: "🤝",
-    desc: "Nosotros las creamos a tu nombre",
-  },
-  { val: "yo", label: "Yo las creo", icon: "🙋", desc: "Con nuestra guía y video" },
-];
+// Solo agente de voz. El desvío va primero: es lo que recomendamos y lo que
+// deja intacto el número que la clínica lleva años anunciando.
+const lineaOptions = (idioma: Idioma): Option[] => {
+  const t = TA[idioma].linea;
+  const n = TA[idioma].numero;
+  return [
+    { val: "desvio", label: t.labelDesvio, icon: "📞", desc: t.descDesvio },
+    { val: "nuevo", label: t.labelNuevo, icon: "🆕", desc: t.descNuevo },
+    { val: "asesoria", label: n.noSe, icon: "🤔", desc: n.noSeDesc },
+  ];
+};
 
-// Las dos NO cuestan lo mismo para el cliente y hay que decírselo: con su correo,
-// los códigos le llegan a él y nos los tiene que leer (una ida y vuelta por cuenta);
-// con uno nuevo, llegan al buzón que administramos y él no hace nada.
-const CORREO_OPTIONS: Option[] = [
-  { val: "nuevo", label: "Créenme uno nuevo", icon: "✨", desc: "Recomendado · tú no haces nada" },
-  { val: "mio", label: "Con un correo mío", icon: "📧", desc: "Nos lees unos códigos" },
-];
+// ⛔ Aquí vivían dos botones: "Créenmelas ustedes" y "Yo las creo". Se quitaron
+// el 2026-08-16 por decisión de Yael: las cuentas las crea SIEMPRE Upcore. Un
+// doctor no puede perder su tarde abriendo cuentas, y ese botón le ofrecía
+// justo eso — además de contradecir el arranque concierge del manual.
 
-const CALENDARIO_OPTIONS: Option[] = [
-  { val: "google", label: "Google Calendar", icon: "📅" },
-  { val: "software", label: "Mi software de agenda", icon: "🖥️" },
-  { val: "ninguno", label: "Aún no uso ninguno", icon: "📓", desc: "Te montamos uno" },
-];
+// ⛔ Aquí vivían las dos opciones de correo ("créenme uno nuevo" / "con un correo
+// mío"). Se quitaron el 2026-08-16: el correo del proyecto siempre se crea nuevo,
+// porque es más eficiente para los dos lados (ver el comentario del paso 6).
 
-const GUION_PRUEBAS = [
-  "Pide una cita como paciente nuevo",
-  "Pregunta el precio de un servicio",
-  "Pide un horario y luego cámbialo",
-  "Pregunta algo raro, a ver cómo sale",
-  "Di “quiero hablar con una persona”",
-];
+const calendarioOptions = (idioma: Idioma): Option[] => {
+  const t = TA[idioma].calendario;
+  return [
+    { val: "google", label: t.google, icon: "📅" },
+    { val: "software", label: t.software, icon: "🖥️" },
+    { val: "ninguno", label: t.ninguno, icon: "📓", desc: t.ningunoDesc },
+  ];
+};
+
+
 
 const servicioVacio: ServicioItem = { nombre: "", precio: "", duracion: "" };
 
@@ -103,11 +138,18 @@ export function ArranquePortal({
   token,
   datosIniciales,
   estadoInicial,
+  idiomaInicial,
 }: {
   token: string;
   datosIniciales: ArranqueDatos;
   estadoInicial: string;
+  /** El idioma con el que se abre. Sale de `datos.idioma` (lo que eligió la última
+   *  vez) y lo puede pisar `?lang=` en la URL. Ver lib/arranque-textos.ts. */
+  idiomaInicial: Idioma;
 }) {
+  const [idioma, setIdioma] = useState<Idioma>(idiomaInicial);
+  const T = TA[idioma];
+  const en = idioma === "en";
   const [d, setD] = useState<ArranqueDatos>(() => ({
     ...datosIniciales,
     checklist: {
@@ -144,7 +186,13 @@ export function ArranquePortal({
   // sigue usando los números de siempre y aquí se brincan los que no aplican.
   const pasosLista = pasosVisibles(d.config.productos ?? []);
   const visibleNum = new Set(pasosLista.map((id) => numDePaso(id)));
-  const tieneWeb = (d.config.productos ?? []).includes("web");
+  // Las piezas ya normalizadas (lista vacía = fila vieja = se muestra todo).
+  // Todo el texto de abajo se arma con ESTA lista, nunca con d.config.productos
+  // a pelo, o una fila vieja leería el texto de un proyecto sin piezas.
+  const piezas = normalizarPiezas(d.config.productos);
+  const tieneWeb = hayWeb(piezas);
+  const tieneMensajes = hayMensajes(piezas);
+  const txtHorarios = copyHorarios(piezas, idioma);
 
   const guardar = async (datos: ArranqueDatos, estado?: string) => {
     setSave("guardando");
@@ -214,10 +262,9 @@ export function ArranquePortal({
     setChecklist({
       servicios: d.checklist.servicios.map((s, j) => (j === i ? { ...s, ...p } : s)),
     });
-  const setCuenta = (id: string, p: Partial<{ lista: boolean; correo: string }>) => {
-    const actual = d.cuentas[id] ?? { lista: false, correo: "" };
-    patch({ cuentas: { ...d.cuentas, [id]: { ...actual, ...p } } });
-  };
+  // (Se quitó setCuenta: ya no hay casillas de "marcar cuenta como lista" — las
+  //  cuentas las abre Upcore. El campo `cuentas` se conserva en los datos para no
+  //  perder lo que marcaron las filas viejas.)
   const setConcierge = (p: Partial<ArranqueDatos["concierge"]>) =>
     patch({ concierge: { ...d.concierge, ...p } });
   const setTexto = (id: string, p: Partial<TextoItem>) =>
@@ -225,23 +272,27 @@ export function ArranquePortal({
 
   // ── Validaciones por paso ─────────────────────────────────────────────────
   const step2Ready = d.checklist.servicios.some((s) => s.nombre.trim() !== "");
-  const step3Ready = d.checklist.horarios.trim() !== "" && !!d.checklist.tono;
-  // Si el paso del número no aplica (proyecto sin piezas de WhatsApp), no puede
-  // ser requisito: sería esperar por una decisión que nadie le va a pedir.
-  const step4Ready = !visibleNum.has(4) || !!d.numero.decision;
-  const nucleoListo = step2Ready && step3Ready && step4Ready;
+  // El tono solo se pide si algo de lo suyo le habla a un paciente: exigírselo a
+  // un proyecto de solo-panel sería pedirle algo que ni siquiera ve en pantalla.
+  const step3Ready =
+    d.checklist.horarios.trim() !== "" && (!txtHorarios.pideTono || !!d.checklist.tono);
+  // Si el paso no aplica a sus piezas, no puede ser requisito: sería esperar por
+  // una decisión que nadie le va a pedir.
+  const stepNumeroReady = !visibleNum.has(N.numero) || !!d.numero.decision;
+  const stepLineaReady = !visibleNum.has(N.linea) || !!d.linea.decision;
+  const nucleoListo = step2Ready && step3Ready && stepNumeroReady && stepLineaReady;
 
   const cuentas = cuentasRequeridas(d.config);
   const nombreCorto = (d.config.nombre || "").trim().split(" ")[0];
-  const linkDemo = `/demo?c=${encodeURIComponent(d.config.clinica || "Tu Clínica")}&g=${giroDemo(d.config.giro)}`;
+  const linkDemo = `/demo?c=${encodeURIComponent(d.config.clinica || "Tu Inmobiliaria")}&g=${giroDemo(d.config.giro)}`;
 
   const chipGuardado =
     save === "guardando"
-      ? "Guardando…"
+      ? T.ui.guardando
       : save === "ok"
-        ? "Guardado ✓"
+        ? T.ui.guardado
         : save === "error"
-          ? "⚠️ No se pudo guardar — revisa tu internet"
+          ? T.ui.errorGuardar
           : "";
 
   // ── Pantalla final ────────────────────────────────────────────────────────
@@ -251,12 +302,12 @@ export function ArranquePortal({
       <div className="card-soft rounded-[36px] p-8 text-center md:p-12">
         <div className="mb-4 text-5xl">{completo ? "🏆" : "🎉"}</div>
         <h2 className="mb-3 text-2xl font-semibold">
-          {completo ? "¡Tu arranque está COMPLETO!" : `¡Listo${nombreCorto ? `, ${nombreCorto}` : ""}! Tu parte inicial está hecha`}
+          {completo ? T.resumen.completo : T.resumen.listo(nombreCorto)}
         </h2>
         <p className="mx-auto mb-8 max-w-md font-light text-mocha">
           {completo
-            ? "No te falta nada. Nosotros seguimos construyendo y aquí mismo verás el avance de tu proyecto."
-            : "Ya nos avisó el sistema y nos ponemos a construir. Lo que quede pendiente (cuentas, textos) lo puedes completar aquí mismo cuando quieras — este link es tuyo."}
+            ? T.resumen.noTeFalta
+            : copyFinal(piezas, idioma).seguimos}
         </p>
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
@@ -267,7 +318,7 @@ export function ArranquePortal({
           </a>
           <button
             type="button"
-            onClick={() => setStep(9)}
+            onClick={() => setStep(N.resumen)}
             className="rounded-full border border-[rgba(242,231,219,0.2)] px-7 py-3 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay"
           >
             Volver a mi checklist
@@ -282,46 +333,77 @@ export function ArranquePortal({
   const posEnLista =
     typeof step === "number" ? pasosLista.indexOf(NUM_A_PASO[step - 1]) + 1 : pasosLista.length;
 
+  /** Cambia el idioma Y LO GUARDA: el cliente vuelve días después con el mismo
+   *  link y tiene que encontrarlo como lo dejó. Si el guardado falla no pasa nada
+   *  grave —la pantalla ya cambió— y al volver lo elige otra vez. */
+  const cambiarIdioma = async () => {
+    const otro: Idioma = idioma === "en" ? "es" : "en";
+    setIdioma(otro);
+    const conIdioma = { ...d, idioma: otro };
+    setD(conIdioma);
+    await guardar(conIdioma);
+  };
+
   return (
     <div className="card-soft rounded-[36px] p-6 md:p-12">
+      <div className="mb-4 flex justify-end">
+        <button
+          type="button"
+          onClick={cambiarIdioma}
+          className="rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay"
+        >
+          {T.ui.verEnOtroIdioma}
+        </button>
+      </div>
       <ProgressDots
         step={posEnLista}
         total={pasosLista.length}
-        label={`Paso ${posEnLista} de ${pasosLista.length}`}
+        label={T.bienvenida.paso(posEnLista, pasosLista.length)}
       />
 
       {/* 1 · Bienvenida */}
-      {step === 1 && (
+      {step === N.bienvenida && (
         <div>
           <StepHeader
-            q={`${nombreCorto ? `${nombreCorto}, b` : "B"}ienvenido a tu arranque 🚀`}
-            hint="Aquí haces tu parte del proyecto, a tu ritmo — todo se guarda solo."
+            q={T.bienvenida.titulo(nombreCorto)}
+            hint={copyBienvenida(piezas, pasosLista.length, idioma).intro}
           />
           <div className="mx-auto mb-8 grid max-w-md gap-3 text-sm font-light">
-            <div className="flex gap-3"><span>⏱️</span><span>Tu parte toma <strong className="font-semibold text-sand">~1 hora en total</strong>, y no tiene que ser de corrido: cierra y regresa con este mismo link cuando quieras.</span></div>
-            <div className="flex gap-3"><span>🧭</span><span>Te vamos guiando paso por paso — no necesitas saber nada técnico.</span></div>
-            <div className="flex gap-3"><span>🔒</span><span><strong className="font-semibold text-sand">Aquí jamás se piden contraseñas ni llaves.</strong> Solo confirmaciones. Si alguien te pide una contraseña por chat, no somos nosotros.</span></div>
+            <div className="flex gap-3"><span>⏱️</span><span>{T.prosa.tuParteToma1}<strong className="font-semibold text-sand">{copyBienvenida(piezas, pasosLista.length, idioma).duracion}</strong>{T.prosa.tuParteToma2}</span></div>
+            <div className="flex gap-3"><span>🧭</span><span>{T.bienvenida.guiando}</span></div>
+            <div className="flex gap-3"><span>🔒</span><span><strong className="font-semibold text-sand">{T.bienvenida.seguridadFuerte}</strong> {T.bienvenida.seguridadResto}</span></div>
           </div>
-          <NavBtns onNext={() => irA(2)} nextEnabled nextLabel="Empezar →" />
+          <NavBtns onNext={() => irA(N.servicios)} nextEnabled nextLabel={T.bienvenida.empezar} />
         </div>
       )}
 
       {/* 2 · Servicios y precios */}
-      {step === 2 && (
+      {step === N.servicios && (
         <div>
-          <StepHeader
-            q="Tus servicios y precios"
-            hint="Con esto tu asistente responde con TU información real. Los precios pueden ser aproximados o rangos."
-          />
+          <StepHeader {...copyServicios(piezas, idioma)} />
           <div className="mb-4 grid gap-3">
             {d.checklist.servicios.map((s, i) => (
               <div key={i} className="grid gap-2 rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-4 sm:grid-cols-[2fr_1fr_1fr_auto] sm:items-end">
-                <Field label={i === 0 ? "Servicio" : ""} type="text" value={s.nombre} placeholder="Ej. Limpieza dental" onChange={(v) => setServicio(i, { nombre: v })} />
-                <Field label={i === 0 ? "Precio (MXN)" : ""} type="text" value={s.precio} placeholder="Ej. 800 o 700–900" onChange={(v) => setServicio(i, { precio: v })} />
-                <Field label={i === 0 ? "Duración" : ""} type="text" value={s.duracion} placeholder="Ej. 45 min" onChange={(v) => setServicio(i, { duracion: v })} />
+                {/* ⚠️ Las tres etiquetas eran del nicho de clínicas y se le mostraban
+                    tal cual a una firma de Miami (comprobado abriendo el portal, no
+                    leyendo el código): "Servicio", "Precio (MXN)" con ejemplo de $800,
+                    y "Duración · Ej. 45 min" — un condominio no dura 45 minutos.
+                    ⛔ El tercer campo NO puede ser la fecha de entrega: en este nicho
+                    las fechas de entrega están prohibidas porque caducan solas. El
+                    tamaño no caduca. */}
+                <Field label={i === 0 ? T.desarrollos.labelNombre : ""} type="text" value={s.nombre} placeholder={T.desarrollos.ejNombre} onChange={(v) => setServicio(i, { nombre: v })} />
+                {/* 🔴 El 2026-08-21 este campo pasó de "Precio (MXN)" a "Precio (USD)" y
+                    ahí me quedé: arreglé la moneda sin preguntarme si el campo debía
+                    existir. El sitio NO publica precios —línea roja nº1 del producto, y
+                    el config ni siquiera tiene dónde escribirlos—, así que el cliente
+                    tecleaba precios que nunca iba a ver en su página. El dato sirve (al
+                    equipo, para cotizar y calificar), pero hay que DECIR que no se
+                    publica: si no, el reclamo llega el día de la entrega. */}
+                <Field label={i === 0 ? T.desarrollos.labelPrecio : ""} type="text" value={s.precio} placeholder={T.desarrollos.ejPrecio} onChange={(v) => setServicio(i, { precio: v })} />
+                <Field label={i === 0 ? T.desarrollos.labelTamano : ""} type="text" value={s.duracion} placeholder={T.desarrollos.ejTamano} onChange={(v) => setServicio(i, { duracion: v })} />
                 <button
                   type="button"
-                  aria-label="Quitar servicio"
+                  aria-label={T.desarrollos.quitar}
                   onClick={() => setChecklist({ servicios: d.checklist.servicios.filter((_, j) => j !== i) })}
                   disabled={d.checklist.servicios.length === 1}
                   className="h-11 rounded-xl border border-[rgba(242,231,219,0.15)] px-3 text-mocha transition-colors hover:border-clay hover:text-clay disabled:opacity-30"
@@ -336,106 +418,146 @@ export function ArranquePortal({
             onClick={() => setChecklist({ servicios: [...d.checklist.servicios, { ...servicioVacio }] })}
             className="mb-8 rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay"
           >
-            + Agregar otro servicio
+            + Agregar otro desarrollo
           </button>
-          <NavBtns onBack={() => irA(1)} onNext={() => irA(3)} nextEnabled={step2Ready} nextLabel="Siguiente →" />
+          {/* ⚠️ El botón se apagaba sin decir por qué: el cliente veía "Siguiente"
+              muerto y no tenía forma de saber que le faltaba escribir al menos un
+              nombre. Un botón deshabilitado y mudo es un callejón sin salida. */}
+          {!step2Ready && (
+            <p className="mb-3 text-sm font-light text-mocha">
+              Escribe al menos un desarrollo o unidad para continuar. El precio y el
+              tamaño puedes dejarlos en blanco.
+            </p>
+          )}
+          <NavBtns onBack={() => irA(N.bienvenida)} onNext={() => irA(N.horarios)} nextEnabled={step2Ready} nextLabel={T.ui.siguiente} />
         </div>
       )}
 
       {/* 3 · Horarios, tono y extras */}
-      {step === 3 && (
+      {step === N.horarios && (
         <div>
-          <StepHeader q="Horarios y personalidad" hint="Cómo atiende tu clínica y cómo quieres que suene tu asistente." />
+          <StepHeader q={txtHorarios.q} hint={txtHorarios.hint} />
           <div className="mb-6 grid gap-5">
             <TextArea
-              label="Horarios de atención *"
+              label={T.horarios.label}
               value={d.checklist.horarios}
-              placeholder={"Ej. Lunes a viernes 9:00–19:00\nSábado 9:00–14:00 · Domingo cerrado"}
+              placeholder={T.horarios.ejemplo}
               onChange={(v) => setChecklist({ horarios: v })}
             />
-            <div>
-              <div className="mb-2 text-sm text-mocha">¿Cómo debe sonar tu asistente? *</div>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {TONO_OPTIONS.map((o) => (
-                  <OptionBtn key={o.val} opt={o} selected={d.checklist.tono === o.val} onClick={() => setChecklist({ tono: o.val })} />
-                ))}
+            {txtHorarios.pideTono && (
+              <div>
+                <div className="mb-2 text-sm text-mocha">{txtHorarios.tonoLabel}</div>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {tonoOptions(idioma).map((o) => (
+                    <OptionBtn key={o.val} opt={o} selected={d.checklist.tono === o.val} onClick={() => setChecklist({ tono: o.val })} />
+                  ))}
+                </div>
               </div>
-            </div>
-            <TextArea
-              label="Preguntas frecuentes de tus pacientes (opcional)"
-              value={d.checklist.faqs}
-              placeholder="Ej. ¿Aceptan tarjeta? Sí, y meses sin intereses. ¿Atienden niños? Sí, desde 3 años…"
-              onChange={(v) => setChecklist({ faqs: v })}
-            />
-            <TextArea
-              label="Indicaciones o datos útiles (opcional)"
-              value={d.checklist.indicaciones}
-              placeholder="Ej. Estacionamiento en la parte trasera. Llegar 10 min antes en primera cita…"
-              onChange={(v) => setChecklist({ indicaciones: v })}
-            />
-            <Field
-              label="Logo y colores de tu marca (opcional)"
-              type="text"
-              value={d.checklist.logoColores}
-              placeholder="Ej. Logo me lo mandas por WhatsApp · azul marino y dorado"
-              onChange={(v) => setChecklist({ logoColores: v })}
-            />
+            )}
+            {txtHorarios.pideFaqs && (
+              <>
+                <TextArea
+                  label={txtHorarios.faqsLabel}
+                  value={d.checklist.faqs}
+                  placeholder={T.horarios.ejFaqs}
+                  onChange={(v) => setChecklist({ faqs: v })}
+                />
+                <TextArea
+                  label={T.horarios.indicaciones}
+                  value={d.checklist.indicaciones}
+                  placeholder={T.horarios.ejIndicaciones}
+                  onChange={(v) => setChecklist({ indicaciones: v })}
+                />
+              </>
+            )}
+            {txtHorarios.pideLogo && (
+              <Field
+                label={T.horarios.logo}
+                type="text"
+                value={d.checklist.logoColores}
+                placeholder={T.horarios.ejLogo}
+                onChange={(v) => setChecklist({ logoColores: v })}
+              />
+            )}
           </div>
-          <NavBtns onBack={() => irA(2)} onNext={() => irA(4)} nextEnabled={step3Ready} nextLabel="Siguiente →" />
+          <NavBtns onBack={() => irA(N.servicios)} onNext={() => irA(N.numero)} nextEnabled={step3Ready} nextLabel={T.ui.siguiente} />
         </div>
       )}
 
-      {/* 4 · Número de WhatsApp */}
-      {step === 4 && (
+      {/* 4 · Número de WhatsApp — piezas que escriben por WhatsApp */}
+      {step === N.numero && (
         <div>
-          <StepHeader q="¿Qué número atenderá tu asistente?" hint="La decisión importante — léela con calma, no hay respuesta incorrecta." />
+          <StepHeader q={copyNumero(piezas, idioma).q} hint={copyNumero(piezas, idioma).hint} />
           <div className="mx-auto mb-6 max-w-lg rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5 text-sm font-light text-mocha">
-            <p className="mb-2"><strong className="font-semibold text-sand">📱 Tu número actual:</strong> tus pacientes ya lo conocen — es la mejor opción para la mayoría. El detalle: al conectarlo al asistente <strong className="font-semibold text-sand">sale de la app del teléfono</strong> y tu equipo pasa a responder desde una bandeja en la computadora.</p>
-            <p><strong className="font-semibold text-sand">🆕 Un número nuevo:</strong> tu número de siempre se queda como está en tu teléfono, y el asistente estrena línea propia. Cuesta poco y se anuncia a tus pacientes.</p>
+            <p className="mb-2"><strong className="font-semibold text-sand">{T.numero.prefijoActual}</strong> {copyNumero(piezas, idioma).actual}</p>
+            <p><strong className="font-semibold text-sand">{T.numero.prefijoNuevo}</strong> {copyNumero(piezas, idioma).nuevo}</p>
           </div>
           <div className="mx-auto mb-8 grid max-w-lg grid-cols-1 gap-3 sm:grid-cols-3">
-            {NUMERO_OPTIONS.map((o) => (
+            {numeroOptions(piezas, idioma).map((o) => (
               <OptionBtn key={o.val} opt={o} selected={d.numero.decision === o.val} onClick={() => patch({ numero: { decision: o.val } })} />
             ))}
           </div>
-          <NavBtns onBack={() => irA(3)} onNext={() => irA(5)} nextEnabled={step4Ready} nextLabel="Siguiente →" />
+          <NavBtns onBack={() => irA(N.horarios)} onNext={() => irA(N.linea)} nextEnabled={stepNumeroReady} nextLabel={T.ui.siguiente} />
         </div>
       )}
 
-      {/* 5 · Cuentas */}
-      {step === 5 && (
+      {/* 5 · La línea telefónica — solo agente de voz */}
+      {step === N.linea && (
         <div>
-          <StepHeader
-            q="Tus cuentas — tuyas desde el día uno"
-            hint="Van A TU NOMBRE siempre: tú eres el dueño. Lo único que decides aquí es quién les da los clics."
-          />
-          <div className="mb-5 rounded-2xl border border-clay/40 bg-[rgba(200,98,61,0.07)] p-4 text-center text-sm font-light">
-            🔒 <strong className="font-semibold text-sand">Nunca nos compartas contraseñas ni llaves</strong> — ni aquí, ni por WhatsApp. Elijas lo que elijas, jamás te vamos a pedir una.
+          <StepHeader q={copyLinea(idioma).q} hint={copyLinea(idioma).hint} />
+          <div className="mx-auto mb-6 max-w-lg rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5 text-sm font-light text-mocha">
+            <p className="mb-2"><strong className="font-semibold text-sand">{T.linea.prefijoDesvio}</strong> {copyLinea(idioma).desvio}</p>
+            <p><strong className="font-semibold text-sand">{T.linea.prefijoNuevo}</strong> {copyLinea(idioma).nuevo}</p>
           </div>
-
-          {/* Quién las crea. La propuesta le prometió las dos opciones; aquí se cumplen. */}
-          <div className="mx-auto mb-6 grid max-w-lg grid-cols-1 gap-3 sm:grid-cols-2">
-            {CUENTAS_MODO_OPTIONS.map((o) => (
-              <OptionBtn
-                key={o.val}
-                opt={o}
-                selected={d.concierge.modo === o.val}
-                onClick={() => setConcierge({ modo: o.val as "upcore" | "yo" })}
-              />
+          <div className="mx-auto mb-8 grid max-w-lg grid-cols-1 gap-3 sm:grid-cols-3">
+            {lineaOptions(idioma).map((o) => (
+              <OptionBtn key={o.val} opt={o} selected={d.linea.decision === o.val} onClick={() => patch({ linea: { decision: o.val } })} />
             ))}
           </div>
+          <NavBtns onBack={() => irA(N.numero)} onNext={() => irA(N.cuentas)} nextEnabled={stepLineaReady} nextLabel={T.ui.siguiente} />
+        </div>
+      )}
 
-          {/* A) Se las creamos nosotros — solo necesitamos a nombre de quién quedan. */}
-          {d.concierge.modo === "upcore" && (
-            <div className="mb-8">
-              <div className="mb-5 rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5 text-sm font-light text-mocha">
+      {/* 6 · Cuentas */}
+      {step === N.cuentas && (
+        <div>
+          <StepHeader
+            q={T.cuentas.titulo}
+            hint={T.cuentas.subtitulo}
+          />
+          {/* Aviso de seguridad. Dice DOS cosas distintas a propósito:
+              (1) las contraseñas no se comparten con nadie, ni con nosotros;
+              (2) los códigos SÍ nos los va a dictar, así que hay que decirle
+                  por dónde y cómo comprobar que somos nosotros — si no, el día
+                  que alguien se haga pasar por Upcore no tiene con qué
+                  compararlo. El número va escrito, no solo enlazado. */}
+          <div className="mb-5 rounded-2xl border border-clay/40 bg-[rgba(200,98,61,0.07)] p-4 text-sm font-light">
+            <p className="mb-2 text-center">
+              🔒 <strong className="font-semibold text-sand">{T.prosa.seguridadTitulo}</strong>{T.prosa.seguridadResto2}
+            </p>
+            <p className="text-center">
+              {T.prosa.codigosAntes}
+              <strong className="font-semibold text-sand">{T.prosa.codigosFuerte}</strong>{" "}
+              {/* El punto va PEGADO al cierre del enlace: en su propia línea,
+                  JSX mete un espacio y se lee "…2698 ." */}
+              <a href={CONTACT.whatsapp} className="font-semibold text-clay underline">
+                {CONTACT.whatsappDisplay}
+              </a>{T.prosa.codigosDespues}
+              <strong className="font-semibold text-sand">{T.prosa.codigosFuerte2}</strong>{T.prosa.codigosFinal}
+            </p>
+          </div>
+
+          {/* Ya no se le pregunta quién las crea: las crea Upcore, siempre.
+              Lo único que necesitamos es a nombre de quién quedan. */}
+          <div className="mb-8">
+            <div className="mb-5 rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5 text-sm font-light text-mocha">
                 <p className="mb-2">
-                  Perfecto, nosotros les damos los clics. Las cuentas quedan{" "}
+                  Nosotros les damos los clics. Las cuentas quedan{" "}
                   <strong className="font-semibold text-sand">a tu nombre y son tuyas</strong> — si algún
                   día te vas, se van contigo.
                 </p>
                 <p>
-                  Lo único que necesitamos de ti: decirnos a qué correo y teléfono quedan.{" "}
+                  Lo único que necesitamos de ti: un teléfono donde nos contestes.{" "}
                   <strong className="font-semibold text-sand">
                     Tu contraseña no nos hace falta para nada
                   </strong>{" "}
@@ -444,139 +566,107 @@ export function ArranquePortal({
                 </p>
               </div>
               <div className="mx-auto grid max-w-lg gap-4">
-                <div>
-                  <p className="mb-2 text-sm font-medium text-sand">¿Con qué correo las creamos?</p>
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {CORREO_OPTIONS.map((o) => (
-                      <OptionBtn
-                        key={o.val}
-                        opt={o}
-                        selected={d.concierge.correoTipo === o.val}
-                        onClick={() => setConcierge({ correoTipo: o.val as "mio" | "nuevo" })}
-                      />
-                    ))}
-                  </div>
-                  {d.concierge.correoTipo === "mio" && (
-                    <p className="mt-3 text-sm font-light text-mocha">
-                      Va. Como las cuentas se abren con tu correo, a tu bandeja te van a llegar 2 o 3
-                      códigos de confirmación. Te escribimos por WhatsApp y nos los lees — un minuto
-                      cada uno. Ojo: se vencen rápido, por eso te preguntamos abajo tu mejor horario.
-                    </p>
-                  )}
-                  {d.concierge.correoTipo === "nuevo" && (
-                    <p className="mt-3 text-sm font-light text-mocha">
-                      La más cómoda y la que recomendamos: lo creamos nosotros, los códigos llegan
-                      ahí y <strong className="font-semibold text-sand">tú no haces nada</strong>.
-                      Además deja{" "}
-                      <strong className="font-semibold text-sand">
-                        todas las cuentas de tu clínica en un solo lugar
-                      </strong>
-                      , sin revolverse con tu correo personal. Al entregarte el proyecto te pasamos su
-                      acceso en persona o por videollamada, y queda tuyo con todo adentro.
-                    </p>
-                  )}
+                {/* ⛔ Aquí se elegía entre "créenme uno nuevo" y "con un correo
+                    mío". Se quitó el 2026-08-16: el correo del proyecto SIEMPRE
+                    se crea nuevo. Con el suyo, cada cuenta le manda códigos a su
+                    bandeja y hay que perseguirlo para que nos los lea — lento
+                    para él y para nosotros. Con uno nuevo, los códigos llegan a
+                    un buzón que administramos y él no hace nada. */}
+                <div className="rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5">
+                  <p className="mb-2 text-sm font-semibold text-sand">
+                    ✨ Te creamos un correo nuevo para tu inmobiliaria
+                  </p>
+                  <p className="text-sm font-light text-mocha">
+                    {T.prosa.correoAntes}
+                    <strong className="font-semibold text-sand">{T.prosa.correoFuerte1}</strong>
+                    {T.prosa.correoMedio}
+                    <strong className="font-semibold text-sand">{T.prosa.correoFuerte2}</strong>
+                    {T.prosa.correoFinal}
+                  </p>
                 </div>
-                {d.concierge.correoTipo === "mio" && (
-                  <Field
-                    label="Tu correo"
-                    type="email"
-                    value={d.concierge.correo}
-                    placeholder="ej. hola@tuclinica.com"
-                    onChange={(v) => setConcierge({ correo: v })}
-                  />
-                )}
-                {d.concierge.correoTipo === "nuevo" && (
-                  <Field
-                    label="¿Cómo te gustaría que se llame? (opcional)"
-                    type="text"
-                    value={d.concierge.correoIdea}
-                    placeholder="ej. contacto@clinicabeauty — si no, te proponemos uno"
-                    onChange={(v) => setConcierge({ correoIdea: v })}
-                  />
-                )}
                 <Field
-                  label="Teléfono donde te llegan los códigos"
+                  label={T.cuentas.comoSeLlame}
+                  type="text"
+                  value={d.concierge.correoIdea}
+                  placeholder="ej. contacto@tuinmobiliaria — si no, te proponemos uno"
+                  onChange={(v) => setConcierge({ correoIdea: v })}
+                />
+                <Field
+                  label={T.cuentas.telefonoCodigos}
                   type="tel"
                   value={d.concierge.telefono}
-                  placeholder="10 dígitos — normalmente el mismo de tu WhatsApp"
+                  placeholder={T.cuentas.hintTelefono}
                   onChange={(v) => setConcierge({ telefono: v })}
                 />
                 <Field
-                  label="¿Qué horario te queda mejor para que te escribamos? (opcional)"
+                  label={T.cuentas.horarioEscribir}
                   type="text"
                   value={d.concierge.horario}
-                  placeholder="ej. martes o jueves después de las 3, que es cuando puedo contestar rápido"
+                  placeholder={T.cuentas.ejHorario}
                   onChange={(v) => setConcierge({ horario: v })}
                 />
               </div>
             </div>
-          )}
 
-          {/* B) Las crea el cliente — la guía de siempre. */}
-          {d.concierge.modo === "yo" && (
-          <div className="mb-8 grid gap-4">
-            {cuentas.map((c) => {
-              const est = d.cuentas[c.id] ?? { lista: false, correo: "" };
-              return (
-                <div key={c.id} className="rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5">
-                  <div className="mb-1 font-semibold text-sand">{c.titulo}</div>
-                  <div className="mb-3 text-sm font-light text-mocha">{c.para}</div>
-                  <ol className="mb-3 grid gap-1.5 pl-5 text-sm font-light text-mocha" style={{ listStyle: "decimal" }}>
-                    {c.pasos.map((p) => (
-                      <li key={p.slice(0, 30)}>{p}</li>
-                    ))}
-                  </ol>
-                  {c.nota && <p className="mb-3 text-xs font-light text-clay">{c.nota}</p>}
-                  <div className="mb-3 rounded-xl border border-dashed border-[rgba(242,231,219,0.2)] p-3 text-center text-xs font-light text-mocha/70">
-                    🎬 Video guía paso a paso — en camino
+          {/* Lo que le vamos a crear. Es una LISTA, no una tarea: no hay casillas
+              que marcar porque él no abre ninguna. Sirve para dos cosas — que vea
+              el trabajo que se le está quitando de encima, y que sepa de antemano
+              qué le va a costar al mes. */}
+          {cuentas.length > 0 && (
+            <div className="mb-8">
+              <div className="mb-3 text-sm font-semibold text-sand">
+                Esto es lo que te vamos a crear
+              </div>
+              <div className="grid gap-4">
+                {cuentas.map((c) => (
+                  <div
+                    key={c.id}
+                    className="rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5"
+                  >
+                    <div className="mb-1 flex flex-wrap items-center gap-2">
+                      <span className="font-semibold text-sand">{c.titulo}</span>
+                      {c.tusManos && (
+                        <span className="rounded-full bg-clay/20 px-3 py-1 text-xs font-semibold text-clay">
+                          Necesitamos tus manos 10 min
+                        </span>
+                      )}
+                    </div>
+                    <div className="mb-3 text-sm font-light text-mocha">{c.para}</div>
+                    <ul className="grid gap-1.5 text-sm font-light text-mocha">
+                      {c.pasos.map((p) => (
+                        <li key={p.slice(0, 30)} className="flex gap-2">
+                          <span className="text-clay">→</span>
+                          {p}
+                        </li>
+                      ))}
+                    </ul>
+                    {c.nota && <p className="mt-3 text-xs font-light text-clay">{c.nota}</p>}
                   </div>
-                  <div className="grid gap-3 sm:grid-cols-[auto_1fr] sm:items-end">
-                    <button
-                      type="button"
-                      onClick={() => setCuenta(c.id, { lista: !est.lista })}
-                      aria-pressed={est.lista}
-                      className={`rounded-full border px-5 py-2.5 text-sm font-semibold transition-all ${
-                        est.lista
-                          ? "border-sage bg-sage/20 text-sand"
-                          : "border-[rgba(242,231,219,0.2)] text-mocha hover:border-clay hover:text-sand"
-                      }`}
-                    >
-                      {est.lista ? "✓ Ya está lista" : "Marcar como lista"}
-                    </button>
-                    <Field
-                      label=""
-                      type="email"
-                      value={est.correo}
-                      placeholder="Correo con el que la creaste (opcional)"
-                      onChange={(v) => setCuenta(c.id, { correo: v })}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                ))}
+              </div>
+            </div>
           )}
           <NavBtns
-            onBack={() => irA(4)}
-            onNext={() => irA(6)}
-            nextEnabled={!!d.concierge.modo}
-            nextLabel="Siguiente →"
+            onBack={() => irA(N.linea)}
+            onNext={() => irA(N.calendario)}
+            nextEnabled={d.concierge.telefono.trim() !== ""}
+            nextLabel={T.ui.siguiente}
           />
         </div>
       )}
 
-      {/* 6 · Calendario */}
-      {step === 6 && (
+      {/* 7 · Calendario */}
+      {step === N.calendario && (
         <div>
-          <StepHeader q="Tu calendario o agenda" hint="Para que las citas que se agenden — por tu asistente o por tu sitio — caigan donde tú ya trabajas." />
+          <StepHeader {...copyCalendario(piezas, idioma)} />
           <div className="mx-auto mb-5 grid max-w-lg grid-cols-1 gap-3 sm:grid-cols-3">
-            {CALENDARIO_OPTIONS.map((o) => (
+            {calendarioOptions(idioma).map((o) => (
               <OptionBtn key={o.val} opt={o} selected={d.calendario.tipo === o.val} onClick={() => patch({ calendario: { ...d.calendario, tipo: o.val } })} />
             ))}
           </div>
           {d.calendario.tipo === "google" && (
             <div className="mx-auto mb-5 max-w-lg rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5 text-sm font-light text-mocha">
-              En tu Google Calendar: <strong className="font-semibold text-sand">Configuración del calendario → Compartir con determinadas personas → Añadir</strong>, y agrega el correo que te mandaremos por WhatsApp, con permiso de <em>“Realizar cambios en eventos”</em>.
+              {T.prosa.calAntes}<strong className="font-semibold text-sand">{T.prosa.calFuerte}</strong>{T.prosa.calDespues}
             </div>
           )}
           {d.calendario.tipo === "software" && (
@@ -586,7 +676,7 @@ export function ArranquePortal({
           )}
           {d.calendario.tipo === "ninguno" && (
             <div className="mx-auto mb-5 max-w-lg rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5 text-sm font-light text-mocha">
-              Sin problema: te dejamos un <strong className="font-semibold text-sand">Google Calendar ordenado y listo</strong> (gratis) como parte del proyecto. Marca la casilla y sigue.
+              {T.prosa.calNingunoAntes}<strong className="font-semibold text-sand">{T.prosa.calNingunoFuerte}</strong>{T.prosa.calNingunoDespues}
             </div>
           )}
           <div className="mx-auto mb-8 max-w-lg">
@@ -600,17 +690,17 @@ export function ArranquePortal({
                   : "border-[rgba(242,231,219,0.2)] text-mocha hover:border-clay hover:text-sand"
               }`}
             >
-              {d.calendario.compartido ? "✓ Listo, ya quedó" : "Marcar cuando esté listo (puedes volver después)"}
+              {d.calendario.compartido ? T.calendarioPasos.marcado : T.calendarioPasos.marcar}
             </button>
           </div>
-          <NavBtns onBack={() => irA(5)} onNext={() => irA(7)} nextEnabled nextLabel="Siguiente →" />
+          <NavBtns onBack={() => irA(N.cuentas)} onNext={() => irA(N.demo)} nextEnabled nextLabel={T.ui.siguiente} />
         </div>
       )}
 
-      {/* 7 · Probar el bot */}
-      {step === 7 && (
+      {/* 8 · Probar el bot */}
+      {step === N.demo && (
         <div>
-          <StepHeader q="Juega a ser tu paciente" hint="Prueba un asistente como el tuyo — así se sentirá escribirle a tu clínica." />
+          <StepHeader q={T.demoUi.titulo} hint={T.demoUi.subtitulo} />
           <div className="mb-5 text-center">
             <a
               href={linkDemo}
@@ -618,13 +708,13 @@ export function ArranquePortal({
               rel="noopener noreferrer"
               className="btn-shine inline-block rounded-full bg-clay px-8 py-3.5 font-semibold text-obsidian transition-all hover:scale-[1.03] hover:bg-clay-bright"
             >
-              💬 Abrir la demo de {d.config.clinica || "tu clínica"} →
+              💬 Abrir la demo de {d.config.clinica || "tu inmobiliaria"} →
             </a>
           </div>
           <div className="mx-auto mb-6 max-w-md rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5">
-            <div className="mb-2 text-sm font-semibold text-sand">Ponlo a prueba con esto:</div>
+            <div className="mb-2 text-sm font-semibold text-sand">{T.demoUi.ponloAPrueba}</div>
             <ul className="grid gap-1.5 text-sm font-light text-mocha">
-              {GUION_PRUEBAS.map((g) => (
+              {T.demo.ideas.map((g) => (
                 <li key={g} className="flex gap-2"><span className="text-clay">→</span>{g}</li>
               ))}
             </ul>
@@ -640,32 +730,25 @@ export function ArranquePortal({
                   : "border-[rgba(242,231,219,0.2)] text-mocha hover:border-clay hover:text-sand"
               }`}
             >
-              {d.prueba.hecha ? "✓ Ya lo probé" : "Marcar cuando lo hayas probado"}
+              {d.prueba.hecha ? T.demoUi.yaLoProbe : T.demoUi.marcarProbado}
             </button>
           </div>
           <div className="mx-auto mb-8 max-w-md">
             <TextArea
-              label="¿Qué te pareció? ¿Algo que quieras distinto en el tuyo? (opcional)"
+              label={T.demoUi.queTeParecio}
               value={d.prueba.comentarios}
-              placeholder="Ej. Me gustó, pero quiero que siempre pregunte si es primera visita…"
+              placeholder={T.demoUi.ejOpinion}
               onChange={(v) => patch({ prueba: { ...d.prueba, comentarios: v } })}
             />
           </div>
-          <NavBtns onBack={() => irA(6)} onNext={() => irA(8)} nextEnabled nextLabel="Siguiente →" />
+          <NavBtns onBack={() => irA(N.calendario)} onNext={() => irA(N.textos)} nextEnabled nextLabel={T.ui.siguiente} />
         </div>
       )}
 
-      {/* 8 · Aprobar textos (+ estilo del sitio si el proyecto lleva web) */}
-      {step === 8 && (
+      {/* 9 · Aprobar textos (+ estilo del sitio si el proyecto lleva web) */}
+      {step === N.textos && (
         <div>
-          <StepHeader
-            q={tieneWeb ? "Los textos y el estilo de tu clínica" : "Los textos de tu clínica"}
-            hint={
-              tieneWeb
-                ? "El estilo de tu sitio, y los textos que mandará tu sistema — tú les das el visto bueno."
-                : "Recordatorios y confirmaciones que mandará tu sistema — tú les das el visto bueno."
-            }
-          />
+          <StepHeader {...copyTextos(piezas, idioma)} />
           {tieneWeb && (
             <div className="mx-auto mb-8 max-w-md">
               <div className="mb-3 text-sm font-semibold text-sand">🎨 El estilo de tu sitio</div>
@@ -675,10 +758,10 @@ export function ArranquePortal({
               </p>
               <div className="grid gap-4">
                 <Field
-                  label="Tu paleta de colores (si tienes una)"
+                  label={T.estilo.paleta}
                   type="text"
                   value={d.web.paleta}
-                  placeholder="Ej. azul marino y dorado · #1B2A4A y #C9A227 · o el link de una página cuyos colores te gusten"
+                  placeholder={T.prosa.ejPaleta}
                   onChange={(v) => patch({ web: { ...d.web, paleta: v } })}
                 />
                 {d.web.referencias.map((r, i) => (
@@ -689,7 +772,7 @@ export function ArranquePortal({
                     <div className="flex items-end gap-2">
                       <div className="flex-1">
                         <Field
-                          label={`Página que te gusta ${i + 1}`}
+                          label={T.prosa.paginaQueGusta(i + 1)}
                           type="text"
                           value={r.url}
                           placeholder="https://…"
@@ -707,7 +790,7 @@ export function ArranquePortal({
                       </div>
                       <button
                         type="button"
-                        aria-label="Quitar referencia"
+                        aria-label={T.estilo.quitarReferencia}
                         onClick={() =>
                           patch({
                             web: {
@@ -722,10 +805,10 @@ export function ArranquePortal({
                       </button>
                     </div>
                     <Field
-                      label="¿Qué te gusta de ella?"
+                      label={T.estilo.queTeGusta}
                       type="text"
                       value={r.nota}
-                      placeholder="Ej. lo limpio del menú, cómo muestran los precios, las fotos grandes…"
+                      placeholder={T.estilo.ejQueGusta}
                       onChange={(v) =>
                         patch({
                           web: {
@@ -758,9 +841,9 @@ export function ArranquePortal({
           {d.textos.length === 0 ? (
             // Los borradores de recordatorios solo existen en proyectos con piezas de
             // WhatsApp; a uno de solo-web no se le promete algo que no va a llegar.
-            visibleNum.has(4) ? (
+            tieneMensajes ? (
               <div className="mx-auto mb-8 max-w-md rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-6 text-center text-sm font-light text-mocha">
-                ✍️ Tus textos están <strong className="font-semibold text-sand">en preparación</strong> (los redactamos con tu tono en cuanto tengamos tu checklist). Te avisaremos por WhatsApp cuando estén aquí para tu visto bueno — mientras, continúa.
+                {T.prosa.textosAntes}<strong className="font-semibold text-sand">{T.prosa.textosFuerte}</strong>{T.prosa.textosDespues}
               </div>
             ) : null
           ) : (
@@ -778,7 +861,7 @@ export function ArranquePortal({
                             : "bg-[rgba(242,231,219,0.08)] text-mocha"
                       }`}
                     >
-                      {t.estado === "aprobado" ? "Aprobado ✓" : t.estado === "con-cambios" ? "Con cambios" : "Por revisar"}
+                      {t.estado === "aprobado" ? T.estilo.aprobado : t.estado === "con-cambios" ? T.estilo.conCambios : T.estilo.porRevisar}
                     </span>
                   </div>
                   <p className="mb-4 whitespace-pre-wrap rounded-xl bg-[rgba(242,231,219,0.04)] p-4 text-sm font-light italic text-sand">
@@ -811,9 +894,9 @@ export function ArranquePortal({
                   {t.estado === "con-cambios" && (
                     <div className="mt-3">
                       <TextArea
-                        label="¿Qué le cambiamos?"
+                        label={T.estilo.queCambiamos}
                         value={t.comentario}
-                        placeholder="Ej. Que no diga 'estimado paciente', mejor solo el nombre…"
+                        placeholder={T.estilo.ejCambio}
                         onChange={(v) => setTexto(t.id, { comentario: v })}
                       />
                     </div>
@@ -822,45 +905,44 @@ export function ArranquePortal({
               ))}
             </div>
           )}
-          <NavBtns onBack={() => irA(7)} onNext={() => irA(9)} nextEnabled nextLabel="Siguiente →" />
+          <NavBtns onBack={() => irA(N.demo)} onNext={() => irA(N.resumen)} nextEnabled nextLabel={T.ui.siguiente} />
         </div>
       )}
 
-      {/* 9 · Resumen y cierre */}
-      {step === 9 && (
+      {/* 10 · Resumen y cierre */}
+      {step === N.resumen && (
         <div>
-          <StepHeader q="Así va tu parte" hint="Revisa el resumen — lo pendiente lo puedes completar después con este mismo link." />
+          <StepHeader q={T.resumenUi.titulo} hint={T.resumenUi.hint} />
           <div className="mx-auto mb-6 max-w-md rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5">
             {[
-              { ok: step2Ready, txt: "Servicios y precios", req: true },
-              { ok: step3Ready, txt: "Horarios y tono", req: true },
+              { ok: step2Ready, txt: T.resumenUi.desarrollos, req: true },
+              {
+                ok: step3Ready,
+                txt: txtHorarios.pideTono ? T.resumenUi.horariosYTono : T.resumenUi.horarios,
+                req: true,
+              },
               // Las filas de pasos que no aplican a sus piezas no se listan: no se
               // le muestra pendiente algo que nadie le va a pedir.
-              ...(visibleNum.has(4)
-                ? [{ ok: step4Ready, txt: "Decisión del número de WhatsApp", req: true }]
+              ...(visibleNum.has(N.numero)
+                ? [{ ok: stepNumeroReady, txt: etiquetaNumero(piezas, idioma), req: true }]
                 : []),
-              // Si las creamos nosotros, no tiene sentido listarle una por una algo
-              // que no le toca hacer: es una sola línea.
-              ...(d.concierge.modo === "upcore"
-                ? [
-                    {
-                      ok: conciergeListo(d.concierge),
-                      txt: conciergeListo(d.concierge)
-                        ? "Cuentas: las creamos nosotros a tu nombre"
-                        : "Cuentas: falta decirnos tu correo y teléfono",
-                      req: false,
-                    },
-                  ]
-                : cuentas.map((c) => ({
-                    ok: !!d.cuentas[c.id]?.lista,
-                    txt: `Cuenta: ${c.titulo}`,
-                    req: false,
-                  }))),
-              ...(visibleNum.has(6)
-                ? [{ ok: d.calendario.compartido, txt: "Calendario compartido", req: false }]
+              ...(visibleNum.has(N.linea)
+                ? [{ ok: stepLineaReady, txt: T.resumenUi.llamadas, req: true }]
                 : []),
-              ...(visibleNum.has(7)
-                ? [{ ok: d.prueba.hecha, txt: "Probaste el asistente", req: false }]
+              // Las cuentas las creamos nosotros: es UNA línea, no una por cuenta.
+              // Listarle una por una algo que no le toca hacer se lee como tarea.
+              {
+                ok: conciergeListo(d.concierge),
+                txt: conciergeListo(d.concierge)
+                  ? T.resumenUi.cuentasListas
+                  : T.resumenUi.cuentasFaltan,
+                req: false,
+              },
+              ...(visibleNum.has(N.calendario)
+                ? [{ ok: d.calendario.compartido, txt: T.resumenUi.calendario, req: false }]
+                : []),
+              ...(visibleNum.has(N.demo)
+                ? [{ ok: d.prueba.hecha, txt: etiquetaDemo(piezas, idioma), req: false }]
                 : []),
               ...(tieneWeb
                 ? [
@@ -868,13 +950,13 @@ export function ArranquePortal({
                       ok:
                         d.web.paleta.trim() !== "" ||
                         d.web.referencias.some((r) => r.url.trim() !== ""),
-                      txt: "Estilo de tu sitio: paleta y referencias",
+                      txt: T.resumenUi.estiloSitio,
                       req: false,
                     },
                   ]
                 : []),
               ...(d.textos.length > 0
-                ? [{ ok: d.textos.every((t) => t.estado === "aprobado"), txt: "Textos aprobados", req: false }]
+                ? [{ ok: d.textos.every((t) => t.estado === "aprobado"), txt: T.resumenUi.textosAprobados, req: false }]
                 : []),
             ].map((r) => (
               <div key={r.txt} className="flex items-center gap-3 border-b border-[rgba(242,231,219,0.07)] py-2 text-sm last:border-none">
@@ -893,10 +975,10 @@ export function ArranquePortal({
           )}
           <div className="text-center">
             <NavBtns
-              onBack={() => irA(8)}
+              onBack={() => irA(N.textos)}
               onNext={finalizar}
               nextEnabled={nucleoListo}
-              nextLabel="Mi parte está lista 🚀"
+              nextLabel={T.resumenUi.enviar}
               loading={enviando}
             />
           </div>
@@ -905,7 +987,7 @@ export function ArranquePortal({
 
       {/* Indicador de guardado */}
       <div className="mt-6 text-center text-xs font-light text-mocha/70" aria-live="polite">
-        {chipGuardado || "Tu avance se guarda solo en cada paso."}
+        {chipGuardado || T.bienvenida.seGuarda}
       </div>
     </div>
   );

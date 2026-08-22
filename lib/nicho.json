@@ -1,0 +1,178 @@
+{
+  "_leeme": [
+    "FUENTE ÚNICA del nicho. Antes de este archivo, el mismo concepto vivía en CINCO listas",
+    "paralelas sin dueño: CLINICA_OPTIONS (calc.ts), type Giro y sanitizeGiro (demo-config.ts),",
+    "giroKey() (calificacion.ts) y SCIAN_INCLUIDOS (catalogo-scian.mjs). Se desfasaban en silencio.",
+    "Es JSON y no .ts a propósito: así lo leen igual TypeScript (resolveJsonModule) y los",
+    "scripts .mjs de prospección, sin generadores ni copias que vigilar.",
+    "Guardián: upcore-panel/scripts/verificar-nicho.mjs (corre primero en el prebuild).",
+    "",
+    "⚠️ giroKey() en upcore-panel/lib/calificacion.ts NO puede importar este archivo: se",
+    "transpila a un Code node de n8n, donde no existe el repo. Esa copia se corrige A MANO",
+    "y el guardián comprueba que no se desfase."
+  ],
+
+  "id": "inmobiliario-miami",
+  "etiqueta": "Preventa inmobiliaria en el sur de Florida, vendida en español",
+
+  "moneda": "USD",
+
+  "vocabulario": {
+    "cliente": { "singular": "comprador", "plural": "compradores" },
+    "negocio": { "singular": "inmobiliaria", "plural": "inmobiliarias" },
+    "cita": { "singular": "visita", "plural": "visitas" },
+    "equipo": { "singular": "asesor", "plural": "asesores" }
+  },
+
+  "fuente": {
+    "tipo": "florida-preconstruccion",
+    "etiqueta": "Firmas del sur de Florida que venden preventa en español",
+    "pais": "US",
+    "region": "FL",
+    "nota": [
+      "Aquí NO existe un equivalente del código SCIAN del DENUE: en Florida no hay un censo",
+      "económico con el giro codificado. Por eso `codigos` va VACÍO a propósito, y",
+      "catalogo-scian.mjs se niega a correr con este nicho en vez de devolver una lista vacía",
+      "que filtraría todo en silencio.",
+      "La clasificación sale de lo que se COMPRUEBA abriendo el sitio de cada firma: si está en",
+      "español y si de verdad vende preventa. Las fuentes candidatas son Google Places (API ya",
+      "pagada), el padrón público de licencias inmobiliarias de Florida (DBPR) y los portales de",
+      "preconstrucción. Ver prospeccion/miami/LISTA-PROSPECTOS.md."
+    ],
+    "tiposPlaces": ["real_estate_agency"]
+  },
+
+  "familiaPorDefecto": "boutique",
+
+  "demo": {
+    "negocioDemo": "Inmobiliaria Demo",
+    "giroPorDefecto": "comercializadora"
+  },
+
+  "giros": [
+    {
+      "key": "comercializadora",
+      "label": "Comercializadora de preventa",
+      "icon": "🏙️",
+      "familia": "boutique",
+      "enSelector": true,
+      "codigos": {},
+      "pistas": ["PREVENTA", "PRECONSTRUC"],
+      "demo": {
+        "label": "comercializadora de preventa en Miami",
+        "servicios": [
+          "proyectos en preventa disponibles",
+          "planes de pago por etapas de obra",
+          "opciones de financiamiento para compradores extranjeros",
+          "compra a nombre de persona física o de LLC",
+          "visita al sales center o recorrido por video",
+          "acompañamiento hasta el cierre",
+          "administración y renta después de la entrega"
+        ],
+        "chips": [
+          "¿Qué proyectos tienen en preventa?",
+          "¿Puedo comprar desde fuera de Estados Unidos?",
+          "¿Cómo son los pagos durante la obra?"
+        ]
+      }
+    },
+    {
+      "key": "equipo",
+      "label": "Equipo o asesor independiente",
+      "icon": "🤝",
+      "familia": "equipo",
+      "enSelector": true,
+      "codigos": {},
+      "pistas": ["EQUIPO", "ASESOR", "REALTOR", "TEAM"],
+      "demo": {
+        "label": "equipo inmobiliario en Miami",
+        "servicios": [
+          "búsqueda de propiedad según presupuesto y objetivo",
+          "proyectos en preventa y propiedades listas para entregar",
+          "estimación de renta y retorno",
+          "conexión con financiamiento y con abogado",
+          "visita presencial o por videollamada",
+          "seguimiento hasta la escrituración"
+        ],
+        "chips": [
+          "Quiero invertir en Miami",
+          "¿Qué zona me conviene?",
+          "¿Cuánto necesito para empezar?"
+        ]
+      }
+    },
+    {
+      "key": "desarrolladora",
+      "label": "Desarrolladora",
+      "icon": "🏗️",
+      "familia": "desarrollador",
+      "enSelector": true,
+      "codigos": {},
+      "pistas": ["DESARROLL", "DEVELOP", "BUILDER"],
+      "demo": {
+        "label": "desarrolladora en Miami",
+        "servicios": [
+          "unidades disponibles del desarrollo",
+          "avance de obra y fecha estimada de entrega",
+          "amenidades y planos por tipo de unidad",
+          "esquema de pagos y reservación",
+          "cita en el sales center",
+          "contacto con la comercializadora asignada"
+        ],
+        "chips": [
+          "¿Qué unidades quedan?",
+          "¿Cuándo entregan?",
+          "Quiero agendar una visita"
+        ]
+      }
+    },
+    {
+      "key": "masterbroker",
+      "label": "Comercializadora grande / master broker",
+      "icon": "🏢",
+      "familia": "desarrollador",
+      "enSelector": true,
+      "codigos": {},
+      "pistas": ["MASTER"]
+    },
+    {
+      "key": "otro",
+      "label": "Otra inmobiliaria",
+      "icon": "🔑",
+      "familia": "boutique",
+      "enSelector": true,
+      "codigos": {},
+      "pistas": []
+    }
+  ],
+
+  "codigosExcluidos": {},
+
+  "_leeme_calificacion": [
+    "Estas dos listas también viven copiadas a mano en upcore-panel/lib/calificacion.ts, por el",
+    "mismo motivo que giroKey(): ese archivo se transpila a un Code node de n8n y no puede",
+    "importar. El guardián compara las copias.",
+    "",
+    "Se descubrieron tarde y costaron un susto: al pasar a Miami, VETO_B2B seguía teniendo",
+    "\"COMERCIALIZADORA\" —correctísimo en el nicho anterior, donde vendía insumos dentales—",
+    "pero en Miami la comercializadora de preventa ES el prospecto principal. El motor descartaba",
+    "al blanco con el motivo \"laboratorio o proveedor B2B\". Lección: al cambiar de nicho no basta",
+    "con mover la taxonomía; hay que revisar TODA lista de palabras que decida algo."
+  ],
+
+  "palabrasGenericas": [
+    "REAL", "ESTATE", "REALTY", "REALTOR", "REALTORS", "GROUP", "INTERNATIONAL",
+    "PROPERTIES", "PROPERTY", "INVESTMENTS", "INVESTMENT", "INMOBILIARIA", "INMOBILIARIO",
+    "BIENES", "RAICES", "PRECONSTRUCCION", "PREVENTA", "DEVELOPMENT", "DEVELOPERS",
+    "MIAMI", "FLORIDA", "BRICKELL", "LLC", "INC", "CORP", "THE", "OF", "AND",
+    "SIN", "NOMBRE", "DE", "DEL", "LA", "LAS", "LOS", "EL", "Y", "EN", "A"
+  ],
+
+  "vetoB2B": [
+    "TITLE COMPANY", "TITLE INSURANCE", "TITLE SERVICES",
+    "MORTGAGE", "ESCROW", "APPRAISAL", "APPRAISERS",
+    "BUILDING SUPPLY", "CONSTRUCTION SUPPLY"
+  ],
+
+  "motivoDescarteB2B": "proveedor de servicios de cierre (título, hipoteca, avalúo): no vende propiedad"
+}

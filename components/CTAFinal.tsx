@@ -1,8 +1,11 @@
 import { Reveal } from "./Reveal";
-import { CTA_FINAL, CONTACT } from "@/lib/content";
+import { linkWhatsApp } from "@/lib/content";
+import { contenido } from "@/lib/site-textos";
+import type { Idioma } from "@/lib/idioma";
 import { AgendarCTA } from "./AgendarCTA";
 
-export function CTAFinal() {
+export function CTAFinal({ idioma = "es" }: { idioma?: Idioma }) {
+  const CTA_FINAL = contenido(idioma).ctaFinal;
   return (
     <section id="contacto" className="px-[6%] py-28 md:px-[10%] md:py-36">
       <Reveal variant="scaleIn">
@@ -16,12 +19,13 @@ export function CTAFinal() {
             </p>
             <div className="mt-9 flex justify-center">
               <AgendarCTA
+                idioma={idioma}
                 label={CTA_FINAL.ctaAgenda}
                 className="btn-shine w-full rounded-full bg-clay px-9 py-4 font-semibold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright sm:w-auto"
               />
             </div>
             <a
-              href={CONTACT.whatsapp}
+              href={linkWhatsApp(idioma)}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-5 inline-block text-sm text-mocha underline-offset-4 transition-colors hover:text-clay hover:underline"

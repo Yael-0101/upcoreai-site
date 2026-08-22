@@ -1,10 +1,12 @@
 import { SectionTitle } from "./SectionTitle";
 import { Reveal } from "./Reveal";
 import { GlassCard } from "./GlassCard";
-import { PLANES } from "@/lib/content";
+import { contenido } from "@/lib/site-textos";
+import type { Idioma } from "@/lib/idioma";
 import { AgendarCTA } from "./AgendarCTA";
 
-export function Planes() {
+export function Planes({ idioma = "es" }: { idioma?: Idioma }) {
+  const PLANES = contenido(idioma).planes;
   return (
     <section id="planes" className="px-[6%] py-24 md:px-[10%] md:py-32">
       <SectionTitle title={PLANES.heading} sub={PLANES.sub} />
@@ -19,7 +21,7 @@ export function Planes() {
             >
               {p.destacado && (
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-clay px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-wider text-obsidian">
-                  Recomendado
+                  {PLANES.recomendado}
                 </span>
               )}
               <h3 className="text-xl font-semibold tracking-tight text-sand">
@@ -45,6 +47,7 @@ export function Planes() {
                   {PLANES.precioNota}
                 </p>
                 <AgendarCTA
+                  idioma={idioma}
                   label={PLANES.cta}
                   className={`block w-full rounded-full px-6 py-3 text-center text-sm font-semibold transition-all duration-300 hover:scale-[1.03] ${
                     p.destacado

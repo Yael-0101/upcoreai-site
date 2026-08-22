@@ -142,7 +142,7 @@ export function PlantillaOG({
             upcoreai.com
           </div>
           <div style={{ display: "flex", fontSize: 26, color: "#B9A897" }}>
-            Automatización con IA para clínicas
+            Automatización con IA para inmobiliarias
           </div>
         </div>
       </div>

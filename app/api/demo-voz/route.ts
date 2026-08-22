@@ -87,7 +87,7 @@ export async function POST(req: Request) {
       {
         error: "espera",
         motivo:
-          "Ya probaste la demo hace poco. Si quieres verlo con los números de tu clínica, haz tu diagnóstico gratis.",
+          "Ya probaste la demo hace poco. Si quieres verlo con los números de tu firma, haz tu diagnóstico gratis.",
       },
       { status: 429 }
     );
@@ -99,7 +99,7 @@ export async function POST(req: Request) {
       {
         error: "tope",
         motivo:
-          "La demo de voz alcanzó su límite de este mes. Agenda tu diagnóstico y te la mostramos en vivo.",
+          "La demo de voz alcanzó su límite de este mes. Haz tu diagnóstico y te la mostramos en vivo.",
       },
       { status: 503 }
     );
@@ -111,14 +111,14 @@ export async function POST(req: Request) {
   } catch {
     /* sin cuerpo: se usan los valores por defecto */
   }
-  const clinica = (body.clinica || "").trim().slice(0, 60) || "Clínica Dental Sonría";
+  const clinica = (body.clinica || "").trim().slice(0, 60) || "Brickell Preventa Realty";
   const giroRaw = (body.giro || "").trim().toLowerCase();
   const giro =
-    giroRaw === "estetica" || giroRaw === "estética"
-      ? "medicina estética"
-      : giroRaw === "medica" || giroRaw === "médica"
-      ? "consultorio médico"
-      : "odontología";
+    giroRaw === "equipo"
+      ? "equipo inmobiliario"
+      : giroRaw === "desarrolladora"
+      ? "desarrolladora"
+      : "comercializadora de preventa";
 
   const r = await fetch("https://api.retellai.com/v2/create-web-call", {
     method: "POST",

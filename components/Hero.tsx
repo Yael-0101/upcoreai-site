@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { IconSparkle, IconCalendar, IconChat } from "./Icons";
-import { HERO } from "@/lib/content";
+import { contenido } from "@/lib/site-textos";
+import type { Idioma } from "@/lib/idioma";
 import { AgendarCTA } from "./AgendarCTA";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -13,7 +14,9 @@ const CHIPS = [
   { Icon: IconChat, className: "left-[15%] bottom-[20%]", delay: "2.1s" },
 ];
 
-export function Hero() {
+export function Hero({ idioma = "es" }: { idioma?: Idioma }) {
+  const HERO = contenido(idioma).hero;
+
   return (
     <header
       id="top"
@@ -66,6 +69,7 @@ export function Hero() {
         className="relative z-10 mt-10 flex flex-col items-center gap-4 sm:flex-row"
       >
         <AgendarCTA
+          idioma={idioma}
           label={HERO.ctaPrimary}
           className="btn-shine animate-pulse-ring rounded-full bg-clay px-9 py-4 font-semibold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright"
         />

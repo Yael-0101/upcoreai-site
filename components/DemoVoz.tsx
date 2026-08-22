@@ -8,17 +8,23 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { paginas } from "@/lib/paginas-textos";
+import type { Idioma } from "@/lib/idioma";
 
 type Estado = "listo" | "conectando" | "hablando" | "terminada" | "error";
 
 type Props = {
-  /** Nombre de la clínica que dirá el asistente (viene de ?c= en la página) */
+  /** Nombre de la firma que dirá el asistente (viene de ?c= en la página) */
   clinica?: string;
-  /** dental | estetica | medica */
+  /** El giro del nicho (ver lib/nicho.json) */
   giro?: string;
+  /** El idioma de la INTERFAZ. El asistente sigue hablando en español: es el
+   *  producto que se está enseñando. */
+  idioma?: Idioma;
 };
 
-export function DemoVoz({ clinica, giro }: Props) {
+export function DemoVoz({ clinica, giro, idioma = "es" }: Props) {
+  const t = paginas(idioma).demoVoz;
   const [estado, setEstado] = useState<Estado>("listo");
   const [mensaje, setMensaje] = useState<string>("");
   const [segundos, setSegundos] = useState(0);
@@ -65,10 +71,7 @@ export function DemoVoz({ clinica, giro }: Props) {
 
       if (!r.ok || !data.accessToken) {
         setEstado("error");
-        setMensaje(
-          data?.motivo ||
-            "No se pudo iniciar la llamada. Inténtalo de nuevo en un momento."
-        );
+        setMensaje(data?.motivo || t.errorInicio);
         return;
       }
 
@@ -81,7 +84,7 @@ export function DemoVoz({ clinica, giro }: Props) {
       cliente.on("call_ended", () => setEstado("terminada"));
       cliente.on("error", () => {
         setEstado("error");
-        setMensaje("Se cortó la llamada. Puedes intentarlo otra vez.");
+        setMensaje(t.errorCorte);
         try {
           cliente.stopCall();
         } catch {
@@ -92,11 +95,9 @@ export function DemoVoz({ clinica, giro }: Props) {
       await cliente.startCall({ accessToken: data.accessToken });
     } catch {
       setEstado("error");
-      setMensaje(
-        "Tu navegador bloqueó el micrófono o no está disponible. Revisa los permisos e inténtalo de nuevo."
-      );
+      setMensaje(t.errorMicro);
     }
-  }, [clinica, giro]);
+  }, [clinica, giro, t]);
 
   const mmss = `${String(Math.floor(segundos / 60)).padStart(2, "0")}:${String(
     segundos % 60
@@ -119,13 +120,8 @@ export function DemoVoz({ clinica, giro }: Props) {
         </div>
 
         <div className="min-w-0 flex-1">
-          <h3 className="text-lg font-semibold text-sand">
-            Háblale como si fueras tu paciente
-          </h3>
-          <p className="mt-1 text-sm font-light leading-relaxed text-mocha">
-            Marca, pregunta por una cita y escucha lo que oiría quien llama a tu
-            clínica. Usa el micrófono de tu compu — no hace falta ningún número.
-          </p>
+          <h3 className="text-lg font-semibold text-sand">{t.titulo}</h3>
+          <p className="mt-1 text-sm font-light leading-relaxed text-mocha">{t.intro}</p>
 
           <AnimatePresence mode="wait">
             {estado === "hablando" && (
@@ -138,9 +134,9 @@ export function DemoVoz({ clinica, giro }: Props) {
               >
                 <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 px-3 py-1 font-medium text-emerald-300">
                   <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-                  En llamada · {mmss}
+                  {t.enLlamada} {mmss}
                 </span>
-                <span className="text-mocha">Habla normal, te está escuchando</span>
+                <span className="text-mocha">{t.hablaNormal}</span>
               </motion.div>
             )}
 
@@ -151,8 +147,7 @@ export function DemoVoz({ clinica, giro }: Props) {
                 animate={{ opacity: 1 }}
                 className="mt-4 text-sm font-light text-mocha"
               >
-                Llamada terminada. Así de simple sería para tus pacientes —
-                a cualquier hora, sin que nadie de tu equipo tenga que contestar.
+                {t.terminada}
               </motion.p>
             )}
 
@@ -174,7 +169,7 @@ export function DemoVoz({ clinica, giro }: Props) {
                 onClick={colgar}
                 className="rounded-full border border-[rgba(242,231,219,0.25)] px-6 py-3 text-sm font-semibold text-sand transition-colors hover:border-clay hover:text-clay"
               >
-                Colgar
+                {t.colgar}
               </button>
             ) : (
               <button
@@ -183,15 +178,13 @@ export function DemoVoz({ clinica, giro }: Props) {
                 className="rounded-full btn-shine bg-clay px-6 py-3 text-sm font-semibold text-obsidian transition-all duration-300 hover:scale-[1.03] hover:bg-clay-bright disabled:opacity-60"
               >
                 {estado === "conectando"
-                  ? "Conectando…"
+                  ? t.conectando
                   : estado === "terminada" || estado === "error"
-                  ? "Llamar otra vez"
-                  : "Llamar a la demo →"}
+                  ? t.otraVez
+                  : t.llamar}
               </button>
             )}
-            <span className="text-xs text-mocha">
-              Máximo 3 minutos · datos ficticios · te pedirá permiso del micrófono
-            </span>
+            <span className="text-xs text-mocha">{t.limite}</span>
           </div>
         </div>
       </div>

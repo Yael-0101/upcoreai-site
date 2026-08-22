@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CONTACT } from "@/lib/content";
-import type { DatosAcuerdo, Bloque } from "@/lib/acuerdo";
+import { ZONA_CLIENTE, idiomaDe, type Idioma, type DatosAcuerdo, type Bloque } from "@/lib/acuerdo";
+import { TEXTOS } from "@/lib/acuerdo-textos";
 import { AcuerdoAceptar } from "@/components/AcuerdoAceptar";
 
 // Acuerdo de servicio con link secreto: upcoreai.com/acuerdo/[token].
@@ -23,7 +24,10 @@ type Congelado = {
   version?: number;
   fecha: string;
   plan: string;
+  /** Español: la versión que GOBIERNA. */
   doc: DatosAcuerdo;
+  /** Inglés: traducción de cortesía, congelada igual. Falta en los acuerdos v1. */
+  docEn?: DatosAcuerdo;
 };
 
 type Fila = {
@@ -131,8 +135,10 @@ function RenderBloque({ bloque }: { bloque: Bloque }) {
 
 export default async function AcuerdoPublico({
   params,
+  searchParams,
 }: {
   params: Promise<{ token: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { token } = await params;
   const fila = await getAcuerdo(token);
@@ -143,28 +149,41 @@ export default async function AcuerdoPublico({
         <div>
           <div className="mb-4 text-3xl">📄</div>
           <h1 className="mb-2 text-2xl font-semibold text-sand">
-            Este acuerdo no está disponible
+            {TEXTOS.es.ui.noDisponible}
           </h1>
           <p className="mb-8 font-light text-mocha">
-            Puede que el link esté incompleto. Escríbenos y te lo mandamos de nuevo.
+            {TEXTOS.es.ui.noDisponibleNota}
           </p>
           <a
             href={CONTACT.whatsapp}
             className="rounded-full bg-clay px-8 py-3.5 font-semibold text-obsidian transition-colors hover:bg-clay-bright"
           >
-            💬 Hablar con Upcore
+            💬 {TEXTOS.es.ui.hablarConUpcore}
           </a>
         </div>
       </main>
     );
   }
 
-  const { doc } = fila.congelado;
+  // El idioma se pide por la URL (?lang=en) y se valida contra la LISTA, nunca
+  // indexando un objeto con texto que viene de fuera. Solo se ofrece el inglés si
+  // este acuerdo lo tiene congelado: los de antes del 2026-08-22 no lo traen, y
+  // generarlo al vuelo rompería la promesa de que el documento no cambia.
+  const hayIngles = Boolean(fila.congelado.docEn?.secciones?.length);
+  const idioma: Idioma = hayIngles ? idiomaDe((await searchParams)?.lang) : "es";
+  const en = idioma === "en";
+  const doc = en ? fila.congelado.docEn! : fila.congelado.doc;
+
+  const t = TEXTOS[idioma];
   const aceptado = fila.estado === "aceptado";
-  const fechaTxt = new Date(fila.congelado.fecha).toLocaleDateString("es-MX", {
+  // Las fechas van en la hora del CLIENTE (Miami), no en la del servidor, que en
+  // Vercel es UTC. Ver ZONA_CLIENTE en lib/acuerdo.ts: sin esto, quien acepta de
+  // noche recibe un contrato fechado al día siguiente.
+  const fechaTxt = new Date(fila.congelado.fecha).toLocaleDateString(en ? "en-US" : "es-MX", {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: ZONA_CLIENTE,
   });
   const firma = process.env.FIRMA_YAEL_BASE64 || "";
 
@@ -175,18 +194,39 @@ export default async function AcuerdoPublico({
           Upcore <span className="text-clay">AI</span>
         </div>
 
-        <span className="mb-6 inline-block rounded-full border border-clay/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-clay">
-          {aceptado ? "Acuerdo aceptado" : "Acuerdo de servicio"}
-        </span>
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <span className="inline-block rounded-full border border-clay/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-clay">
+            {aceptado ? t.ui.etiquetaAceptado : t.ui.etiquetaActivo}
+          </span>
+          {/* El cambio de idioma solo aparece si ESTE acuerdo trae la versión en inglés
+              congelada. Ofrecer un idioma que habría que generar al vuelo rompería la
+              promesa de que el documento no cambia después de firmado. */}
+          {hayIngles && (
+            <a
+              href={`/acuerdo/${encodeURIComponent(token)}${en ? "" : "?lang=en"}`}
+              className="no-print rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay"
+            >
+              {t.ui.verEnOtroIdioma}
+            </a>
+          )}
+        </div>
+
+        {/* Quien lee la traducción tiene que saber que es traducción, arriba y no
+            enterrado en la cláusula 12. */}
+        {en && (
+          <p className="mb-6 rounded-xl border border-sand/15 bg-sand/[0.03] px-4 py-3 text-xs font-light text-mocha/80">
+            {t.ui.avisoTraduccion}
+          </p>
+        )}
 
         <h1 className="mb-3 text-[clamp(1.9rem,4.5vw,2.8rem)] font-semibold leading-[1.12] tracking-[-0.03em]">
-          Acuerdo entre Upcore AI y{" "}
+          {en ? "Agreement between Upcore AI and" : "Acuerdo entre Upcore AI y"}{" "}
           <em className="not-italic text-clay">{doc.clinica}</em>
         </h1>
 
         <p className="mb-8 font-light text-mocha">
           {doc.contacto}
-          {doc.puesto ? `, ${doc.puesto}` : ""} · {fechaTxt} · Acordado a distancia
+          {doc.puesto ? `, ${doc.puesto}` : ""} · {fechaTxt} · {t.aDistancia}
         </p>
 
         <blockquote className="mb-12 border-l-2 border-clay/50 pl-5 font-light italic leading-relaxed text-mocha">
@@ -235,35 +275,51 @@ export default async function AcuerdoPublico({
                     <p className="font-semibold text-sand">{fila.aceptadoPor}</p>
                     <p className="text-sm font-light text-mocha">{doc.clinica}</p>
                     <p className="mt-1 text-sm font-light text-mocha/70">
-                      Aceptado el{" "}
-                      {new Date(fila.aceptadoEl).toLocaleString("es-MX", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
+                      {t.ui.aceptadoEl(
+                        new Date(fila.aceptadoEl).toLocaleString(en ? "en-US" : "es-MX", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          timeZone: ZONA_CLIENTE,
+                        })
+                      )}
                     </p>
                   </div>
                 </>
               ) : (
-                <AcuerdoAceptar token={token} clinica={doc.clinica} />
+                <AcuerdoAceptar token={token} clinica={doc.clinica} idioma={idioma} />
               )}
             </div>
           </div>
 
           {aceptado && (
             <p className="mt-10 rounded-2xl border border-clay/30 bg-clay/5 px-5 py-4 text-sm font-light text-mocha">
-              ✅ Este acuerdo quedó aceptado y registrado. Guarda este link: aquí lo puedes
-              volver a leer cuando quieras.
+              {t.ui.avisoCopia}
             </p>
           )}
+
+          {/* La copia que el cliente se guarda. Antes no existía: aceptaba y se quedaba
+              con un link secreto y nada más — si lo perdía, se quedaba sin contrato. Es
+              el MISMO documento congelado, no una versión aparte que se pueda desfasar. */}
+          <div className="no-print mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <a
+              href={`/api/acuerdo-pdf?token=${encodeURIComponent(token)}${en ? "&lang=en" : ""}`}
+              className="rounded-full border border-sand/30 px-6 py-3 text-sm font-semibold text-sand transition-colors hover:border-clay hover:text-clay"
+            >
+              {t.ui.descargarPdf}
+            </a>
+            <span className="text-xs font-light text-mocha/60">
+              {t.ui.guardalo}
+            </span>
+          </div>
         </section>
 
         <p className="mt-12 text-center text-xs font-light text-mocha/60">
-          Upcore AI · upcoreai.com · ¿Dudas?{" "}
+          Upcore AI · upcoreai.com · {t.ui.dudas}{" "}
           <a href={CONTACT.whatsapp} className="text-clay underline">
-            escríbenos por WhatsApp
+            {t.ui.escribenos}
           </a>
         </p>
       </div>

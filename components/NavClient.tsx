@@ -3,12 +3,34 @@
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { AgendarCTA } from "./AgendarCTA";
+import type { Idioma } from "@/lib/idioma";
 
 export type EnlaceNav =
   | { label: string; href: string; items?: undefined }
   | { label: string; href?: undefined; items: { href: string; label: string }[] };
 
-export function NavClient({ enlaces }: { enlaces: EnlaceNav[] }) {
+export type TextosNav = {
+  inicio: string;
+  abrirMenu: string;
+  cerrarMenu: string;
+  cta: string;
+  otroIdioma: string;
+  otroIdiomaAria: string;
+};
+
+export function NavClient({
+  enlaces,
+  idioma,
+  inicio,
+  otroIdiomaHref,
+  textos,
+}: {
+  enlaces: EnlaceNav[];
+  idioma: Idioma;
+  inicio: string;
+  otroIdiomaHref: string;
+  textos: TextosNav;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [abierto, setAbierto] = useState(false);
 
@@ -21,6 +43,19 @@ export function NavClient({ enlaces }: { enlaces: EnlaceNav[] }) {
 
   const conFondo = scrolled || abierto;
 
+  // ⚠️ `hrefLang` en el enlace del selector: le dice al navegador y al buscador
+  // que al otro lado hay la MISMA página en otro idioma, no otra página.
+  const selector = (
+    <a
+      href={otroIdiomaHref}
+      hrefLang={idioma === "en" ? "es-MX" : "en-US"}
+      aria-label={textos.otroIdiomaAria}
+      className="rounded-full border border-[rgba(242,231,219,0.2)] px-3 py-1.5 text-xs font-semibold tracking-[0.08em] text-mocha transition-colors hover:border-clay hover:text-clay"
+    >
+      {textos.otroIdioma}
+    </a>
+  );
+
   return (
     <nav
       className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between px-[6%] py-5 transition-all duration-500 md:px-[10%] ${
@@ -29,7 +64,7 @@ export function NavClient({ enlaces }: { enlaces: EnlaceNav[] }) {
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      <a href="/" aria-label="Upcore AI — inicio" className="inline-flex">
+      <a href={inicio} aria-label={textos.inicio} className="inline-flex">
         <Logo markClass="h-7 w-7" textClass="text-[1.25rem]" />
       </a>
 
@@ -72,8 +107,10 @@ export function NavClient({ enlaces }: { enlaces: EnlaceNav[] }) {
       </div>
 
       <div className="flex items-center gap-3">
+        <span className="hidden sm:inline-flex">{selector}</span>
         <AgendarCTA
-          label="Agenda tu diagnóstico"
+          idioma={idioma}
+          label={textos.cta}
           className="btn-shine hidden rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-semibold text-sand transition-all duration-300 hover:border-clay hover:bg-clay hover:text-obsidian sm:block"
         />
         {/* Hamburguesa (móvil/tablet) */}
@@ -81,7 +118,7 @@ export function NavClient({ enlaces }: { enlaces: EnlaceNav[] }) {
           type="button"
           onClick={() => setAbierto((v) => !v)}
           aria-expanded={abierto}
-          aria-label={abierto ? "Cerrar menú" : "Abrir menú"}
+          aria-label={abierto ? textos.cerrarMenu : textos.abrirMenu}
           className="flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(242,231,219,0.2)] text-sand transition-colors hover:border-clay lg:hidden"
         >
           <svg
@@ -140,10 +177,12 @@ export function NavClient({ enlaces }: { enlaces: EnlaceNav[] }) {
                 </a>
               )
             )}
-            <div className="pt-4 sm:hidden">
+            <div className="flex items-center gap-3 pt-4 sm:hidden">
+              {selector}
               <AgendarCTA
-                label="Agenda tu diagnóstico"
-                className="btn-shine block rounded-full bg-clay px-5 py-3 text-center text-sm font-semibold text-obsidian"
+                idioma={idioma}
+                label={textos.cta}
+                className="btn-shine flex-1 rounded-full bg-clay px-5 py-3 text-center text-sm font-semibold text-obsidian"
               />
             </div>
           </div>

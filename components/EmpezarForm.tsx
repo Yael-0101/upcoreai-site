@@ -12,8 +12,10 @@ import {
   NavBtns,
   type Option,
 } from "./WizardUI";
-import { CLINICA_OPTIONS, PRODUCTO_OPTIONS } from "@/lib/calc";
-import { CONTACT } from "@/lib/content";
+import { CLINICA_OPTIONS, PRODUCTO_OPTIONS, opcionEn } from "@/lib/calc";
+import { linkWhatsApp } from "@/lib/content";
+import { empezar, etiqueta, TE, type Etiquetas } from "@/lib/empezar-textos";
+import { ruta, type Idioma } from "@/lib/idioma";
 
 type Step = 1 | 2 | 3 | 4 | 5 | 6 | "enviado";
 
@@ -29,11 +31,11 @@ const panelAnim = {
 const TAMANO_OPTIONS: Option[] = [
   { val: "solo", label: "Solo yo", icon: "👤" },
   { val: "2-5", label: "2 a 5 personas", icon: "👥" },
-  { val: "6-15", label: "6 a 15 personas", icon: "🏥" },
-  { val: "15+", label: "Más de 15 o sucursales", icon: "🏢" },
+  { val: "6-15", label: "6 a 15 personas", icon: "🏢" },
+  { val: "15+", label: "Más de 15 o varias oficinas", icon: "🏙️" },
 ];
 
-const PACIENTES_OPTIONS: Option[] = [
+const PROSPECTOS_OPTIONS: Option[] = [
   { val: "<20", label: "Menos de 20", icon: "🌱" },
   { val: "20-50", label: "20 a 50", icon: "🌿" },
   { val: "50-150", label: "50 a 150", icon: "🌳" },
@@ -60,7 +62,7 @@ const AGENDA_OPTIONS: Option[] = [
 // Una pregunta específica por producto (multi, de un toque).
 const PREGUNTAS_POR_PRODUCTO: Record<string, { q: string; options: Option[] }> = {
   agente: {
-    q: "¿Cuándo pierden más pacientes o mensajes?",
+    q: "¿Cuándo se les quedan más mensajes sin contestar?",
     options: [
       { val: "fuera", label: "Fuera de horario", icon: "🌙" },
       { val: "findes", label: "Fines de semana", icon: "📆" },
@@ -86,7 +88,7 @@ const PREGUNTAS_POR_PRODUCTO: Record<string, { q: string; options: Option[] }> =
     ],
   },
   auto: {
-    q: "¿Cuántas citas pierden a la semana (pacientes que no llegan)?",
+    q: "¿Cuántos prospectos a la semana se enfrían por falta de seguimiento?",
     options: [
       { val: "1-2", label: "1 – 2", icon: "🟢" },
       { val: "3-5", label: "3 – 5", icon: "🟠" },
@@ -95,7 +97,7 @@ const PREGUNTAS_POR_PRODUCTO: Record<string, { q: string; options: Option[] }> =
     ],
   },
   reactivacion: {
-    q: "¿Dónde guardan los datos de sus pacientes anteriores?",
+    q: "¿Dónde guardan los prospectos que nunca cerraron?",
     options: [
       { val: "software", label: "En un software", icon: "💻" },
       { val: "excel", label: "Excel o papel", icon: "📒" },
@@ -106,12 +108,12 @@ const PREGUNTAS_POR_PRODUCTO: Record<string, { q: string; options: Option[] }> =
 
 // Si eligió "no estoy seguro": preguntamos qué le duele y nosotros recomendamos.
 const DOLORES_OPTIONS: Option[] = [
-  { val: "noshows", label: "Pacientes que no llegan a su cita", icon: "📉" },
+  { val: "noshows", label: "Prospectos que se enfrían sin seguimiento", icon: "📉" },
   { val: "whatsapp", label: "WhatsApp sin responder", icon: "💬" },
   { val: "llamadas", label: "Llamadas que nadie alcanza a contestar", icon: "📞" },
-  { val: "recepcion", label: "Recepción saturada", icon: "😰" },
-  { val: "huecos", label: "Huecos en la agenda / no vuelven", icon: "🕳️" },
-  { val: "nuevos", label: "Atraer más pacientes nuevos", icon: "🌱" },
+  { val: "equipo", label: "El equipo comercial saturado", icon: "😰" },
+  { val: "huecos", label: "Prospectos viejos que nunca se volvieron a tocar", icon: "🕳️" },
+  { val: "nuevos", label: "Atraer más compradores nuevos", icon: "🌱" },
 ];
 
 const URGENCIA_OPTIONS: Option[] = [
@@ -123,8 +125,8 @@ const URGENCIA_OPTIONS: Option[] = [
 
 const PAPEL_OPTIONS: Option[] = [
   { val: "dueno", label: "Soy el dueño/a", icon: "🔑" },
-  { val: "doctor", label: "Soy doctor(a) del equipo", icon: "🩺" },
-  { val: "admin", label: "Administración / recepción", icon: "🗂️" },
+  { val: "asesor", label: "Soy asesor(a) de ventas", icon: "🤝" },
+  { val: "admin", label: "Administración / operaciones", icon: "🗂️" },
   { val: "otro", label: "Otro", icon: "💼" },
 ];
 
@@ -145,18 +147,28 @@ const CITAS_PERDIDAS_OPTIONS: Option[] = [
   { val: "nose", label: "No lo medimos", icon: "🤷" },
 ];
 
+// 🔴 CORREGIDO 2026-08-22. Estos rangos eran los de CLÍNICAS ($150–$2,000: el ticket
+// de un tratamiento) y sobrevivieron a la migración de nicho porque son números, no
+// palabras — ningún auditor de vocabulario los ve.
+//
+// El daño no era cosmético: la comisión que elige aquí es lo que multiplica toda la
+// sección "lo que te está costando seguir igual". Con el tope en "$2,000", una firma
+// de Miami que contestaba con honestidad salía perdiendo **9 veces menos** de lo real
+// — y si NO contestaba, el motor usaba su valor por defecto de $18,000 y acertaba. O
+// sea que responder la pregunta empeoraba el diagnóstico. Ahora los rangos son los de
+// una comisión de preventa y el valor por defecto cae dentro de la banda de en medio.
 const TICKET_OPTIONS: Option[] = [
-  { val: "150-300", label: "$150 – $300", icon: "💵" },
-  { val: "300-800", label: "$300 – $800", icon: "💰" },
-  { val: "800-2000", label: "$800 – $2,000", icon: "💎" },
-  { val: "2000", label: "Más de $2,000", icon: "👑" },
+  { val: "5000-10000", label: "$5,000 – $10,000", icon: "💵" },
+  { val: "10000-20000", label: "$10,000 – $20,000", icon: "💰" },
+  { val: "20000-40000", label: "$20,000 – $40,000", icon: "💎" },
+  { val: "40000-80000", label: "Más de $40,000", icon: "👑" },
   { val: "nose", label: "Varía mucho / no sé", icon: "🤷" },
 ];
 
 const OBJETIVO_OPTIONS: Option[] = [
   { val: "llenar-agenda", label: "Llenar mi agenda", icon: "📈" },
-  { val: "no-perder-citas", label: "Dejar de perder citas", icon: "🛑" },
-  { val: "recuperar-pacientes", label: "Recuperar pacientes", icon: "🔄" },
+  { val: "no-perder-citas", label: "Dejar de perder prospectos", icon: "🛑" },
+  { val: "recuperar-pacientes", label: "Reactivar prospectos viejos", icon: "🔄" },
   { val: "imagen", label: "Verse más profesional", icon: "✨" },
 ];
 
@@ -230,7 +242,18 @@ const empty: LeadState = {
   acepta: false,
 };
 
-export function EmpezarForm() {
+export function EmpezarForm({ idioma = "es" }: { idioma?: Idioma }) {
+  const t = empezar(idioma);
+  // ⚠️ El payload que se manda a n8n usa SIEMPRE las etiquetas españolas: el panel
+  // lo lee Yael, en español. Aquí solo se traduce lo que se ve en pantalla.
+  /** La misma opción con su etiqueta en el idioma de la pantalla. El `val` NUNCA
+   *  cambia: es lo que se guarda y lo que viaja al webhook. */
+  const tr = (mapa: Etiquetas) => (o: Option): Option => ({
+    ...o,
+    label: mapa[o.val] ?? o.label,
+  });
+  /** El enunciado y las opciones de la pregunta de un producto, traducidos. */
+  const preguntaTr = (val: string) => t.porProducto[val] ?? { q: "", opciones: {} };
   const [step, setStep] = useState<Step>(1);
   const [s, setS] = useState<LeadState>(empty);
   const [loading, setLoading] = useState(false);
@@ -319,7 +342,7 @@ export function EmpezarForm() {
           tipo_clinica: s.tipoClinica,
           tamano: labelDe(TAMANO_OPTIONS, s.tamano),
           volumen: s.pacientesSemana
-            ? `${labelDe(PACIENTES_OPTIONS, s.pacientesSemana)} pacientes/semana`
+            ? `${labelDe(PROSPECTOS_OPTIONS, s.pacientesSemana)} prospectos/semana`
             : "",
           canales: labelsDe(CANALES_OPTIONS, s.canales).join(", "),
           productos: productosTxt,
@@ -333,7 +356,7 @@ export function EmpezarForm() {
           correo: s.correo,
           citas_perdidas:
             s.citasPerdidas && s.citasPerdidas !== "nose" ? `${s.citasPerdidas} por semana` : "",
-          ticket_promedio: s.ticket && s.ticket !== "nose" ? `${s.ticket} MXN por cita` : "",
+          ticket_promedio: s.ticket && s.ticket !== "nose" ? `${s.ticket} USD por venta` : "",
           objetivo: s.objetivo ?? "",
         }),
       });
@@ -354,41 +377,41 @@ export function EmpezarForm() {
     <section className="px-[6%] py-24 md:px-[10%] md:py-32">
       <Reveal>
         <h1 className="mb-3 text-center text-[clamp(2rem,5vw,3.1rem)] font-semibold tracking-[-0.03em]">
-          Empieza sin llamada
+          {t.h1}
         </h1>
         <p className="mb-14 text-center font-light text-mocha">
-          Cuéntanos de tu clínica en 3 minutos — puro toque de botón. Al terminar, tu
-          diagnóstico aparece <span className="text-sand">al instante</span>, con los
-          números de tu clínica.
+          {t.subA}
+          <span className="text-sand">{t.subFuerte}</span>
+          {t.subB}
         </p>
       </Reveal>
 
       <Reveal delay={0.1}>
         <div className="mx-auto max-w-[760px]">
           {step !== "enviado" && (
-            <ProgressDots step={step as number} total={6} label={`Paso ${step} de 6`} />
+            <ProgressDots step={step as number} total={6} label={t.paso(step as number, 6)} />
           )}
 
           <div className="card-soft rounded-[36px] p-8 md:p-12">
             {step === 1 && (
               <motion.div key="s1" {...panelAnim}>
                 <StepHeader
-                  q="Cuéntanos de tu clínica"
-                  hint="Así sabemos con quién estamos hablando"
+                  q={t.q1}
+                  hint={t.hint1}
                 />
                 <div className="mb-6">
                   <Field
-                    label="Nombre de tu clínica"
+                    label={t.campoNombreFirma}
                     type="text"
                     value={s.clinicaNombre}
-                    placeholder="Ej: Clínica Dental Sonrisa"
+                    placeholder={t.ejemploNombreFirma}
                     onChange={(v) => set({ clinicaNombre: v })}
                   />
                 </div>
                 <div className="mb-7">
-                  <BlockLabel>¿Qué tipo de clínica es?</BlockLabel>
+                  <BlockLabel>{t.bloqueTipo}</BlockLabel>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-                    {CLINICA_OPTIONS.map((o) => (
+                    {CLINICA_OPTIONS.map((o0) => opcionEn(o0, idioma)).map((o) => (
                       <OptionBtn
                         key={o.val}
                         opt={o}
@@ -400,9 +423,9 @@ export function EmpezarForm() {
                   </div>
                 </div>
                 <div className="mb-8">
-                  <BlockLabel>¿Qué tan grande es el equipo?</BlockLabel>
+                  <BlockLabel>{t.bloqueTamano}</BlockLabel>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                    {TAMANO_OPTIONS.map((o) => (
+                    {TAMANO_OPTIONS.map(tr(t.tamano)).map((o) => (
                       <OptionBtn
                         key={o.val}
                         opt={o}
@@ -413,20 +436,21 @@ export function EmpezarForm() {
                     ))}
                   </div>
                 </div>
-                <NavBtns onNext={() => setStep(2)} nextEnabled={step1Ready} nextLabel="Siguiente →" />
+                <NavBtns onNext={() => setStep(2)} nextEnabled={step1Ready} nextLabel={t.siguiente}
+                  backLabel={t.atras} />
               </motion.div>
             )}
 
             {step === 2 && (
               <motion.div key="s2" {...panelAnim}>
                 <StepHeader
-                  q="El movimiento de tu clínica"
-                  hint="Cifras aproximadas — con eso calculamos tu potencial"
+                  q={t.q2}
+                  hint={t.hint2}
                 />
                 <div className="mb-7">
-                  <BlockLabel>¿Cuántos pacientes atienden por semana, más o menos?</BlockLabel>
+                  <BlockLabel>{t.bloqueProspectos}</BlockLabel>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-                    {PACIENTES_OPTIONS.map((o) => (
+                    {PROSPECTOS_OPTIONS.map(tr(t.prospectos)).map((o) => (
                       <OptionBtn
                         key={o.val}
                         opt={o}
@@ -438,11 +462,9 @@ export function EmpezarForm() {
                   </div>
                 </div>
                 <div className="mb-7">
-                  <BlockLabel hint="Con esto calculamos cuánto se está yendo — es la pregunta que más vale">
-                    ¿Cuántas citas se pierden o no llegan por semana?
-                  </BlockLabel>
+                  <BlockLabel hint={t.hintPerdidos}>{t.bloquePerdidos}</BlockLabel>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-                    {CITAS_PERDIDAS_OPTIONS.map((o) => (
+                    {CITAS_PERDIDAS_OPTIONS.map(tr(t.citasPerdidas)).map((o) => (
                       <OptionBtn
                         key={o.val}
                         opt={o}
@@ -454,11 +476,9 @@ export function EmpezarForm() {
                   </div>
                 </div>
                 <div className="mb-7">
-                  <BlockLabel hint="Aproximado en pesos — cuánto deja una cita o tratamiento típico">
-                    ¿De cuánto es una cita promedio en tu clínica?
-                  </BlockLabel>
+                  <BlockLabel hint={t.hintTicket}>{t.bloqueTicket}</BlockLabel>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-                    {TICKET_OPTIONS.map((o) => (
+                    {TICKET_OPTIONS.map(tr(t.ticket)).map((o) => (
                       <OptionBtn
                         key={o.val}
                         opt={o}
@@ -470,11 +490,9 @@ export function EmpezarForm() {
                   </div>
                 </div>
                 <div className="mb-8">
-                  <BlockLabel hint="Puedes elegir varias">
-                    ¿De dónde llegan tus pacientes hoy?
-                  </BlockLabel>
+                  <BlockLabel hint={t.hintVarias}>{t.bloqueCanales}</BlockLabel>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-                    {CANALES_OPTIONS.map((o) => (
+                    {CANALES_OPTIONS.map(tr(t.canales)).map((o) => (
                       <OptionBtn
                         key={o.val}
                         opt={o}
@@ -489,7 +507,8 @@ export function EmpezarForm() {
                   onBack={() => setStep(1)}
                   onNext={() => setStep(3)}
                   nextEnabled={step2Ready}
-                  nextLabel="Siguiente →"
+                  nextLabel={t.siguiente}
+                  backLabel={t.atras}
                 />
               </motion.div>
             )}
@@ -497,11 +516,11 @@ export function EmpezarForm() {
             {step === 3 && (
               <motion.div key="s3" {...panelAnim}>
                 <StepHeader
-                  q="¿Qué necesitas?"
-                  hint="Elige una o varias — o pídenos que te recomendemos"
+                  q={t.q3}
+                  hint={t.hint3}
                 />
                 <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4">
-                  {PRODUCTO_OPTIONS.map((o) => (
+                  {PRODUCTO_OPTIONS.map((o0) => opcionEn(o0, idioma)).map((o) => (
                     <OptionBtn
                       key={o.val}
                       opt={o}
@@ -522,13 +541,14 @@ export function EmpezarForm() {
                       : "border-[rgba(242,231,219,0.14)] bg-[rgba(242,231,219,0.03)] text-mocha"
                   }`}
                 >
-                  🤔 No estoy seguro — recomiéndenme lo mejor
+                  {t.sinPreferencia}
                 </button>
                 <NavBtns
                   onBack={() => setStep(2)}
                   onNext={() => setStep(4)}
                   nextEnabled={step3Ready}
-                  nextLabel="Siguiente →"
+                  nextLabel={t.siguiente}
+                  backLabel={t.atras}
                 />
               </motion.div>
             )}
@@ -536,16 +556,14 @@ export function EmpezarForm() {
             {step === 4 && (
               <motion.div key="s4" {...panelAnim}>
                 <StepHeader
-                  q="Cuéntanos tu situación"
-                  hint="Toca al menos una opción en cada pregunta — de aquí sale tu diagnóstico"
+                  q={t.q4}
+                  hint={t.hint4}
                 />
 
                 <div className="mb-7">
-                  <BlockLabel hint="Elige todas las que usen — casi nadie usa una sola">
-                    ¿Cómo manejan las citas hoy?
-                  </BlockLabel>
+                  <BlockLabel hint={t.hintAgenda}>{t.bloqueAgenda}</BlockLabel>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                    {AGENDA_OPTIONS.map((o) => (
+                    {AGENDA_OPTIONS.map(tr(t.agenda)).map((o) => (
                       <OptionBtn
                         key={o.val}
                         opt={o}
@@ -558,10 +576,10 @@ export function EmpezarForm() {
                   {s.agendaHoy.includes("software") && (
                     <div className="mt-4">
                       <Field
-                        label="¿Cuál software o sistema? (opcional)"
+                        label={t.campoSoftware}
                         type="text"
                         value={s.agendaSoftware}
-                        placeholder="Ej: Dentalink, AgendaPro, Doctoralia…"
+                        placeholder={t.ejemploSoftware}
                         onChange={(v) => set({ agendaSoftware: v })}
                       />
                     </div>
@@ -570,11 +588,9 @@ export function EmpezarForm() {
 
                 {s.sinPreferencia ? (
                   <div className="mb-7">
-                    <BlockLabel hint="Puedes elegir varias">
-                      ¿Qué es lo que más te duele hoy?
-                    </BlockLabel>
+                    <BlockLabel hint={t.hintVarias}>{t.bloqueDolores}</BlockLabel>
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                      {DOLORES_OPTIONS.map((o) => (
+                      {DOLORES_OPTIONS.map(tr(t.dolores)).map((o) => (
                         <OptionBtn
                           key={o.val}
                           opt={o}
@@ -590,15 +606,15 @@ export function EmpezarForm() {
                     const preg = PREGUNTAS_POR_PRODUCTO[p.val];
                     return (
                       <div key={p.val} className="mb-7">
-                        <BlockLabel hint="Puedes elegir varias">
+                        <BlockLabel hint={t.hintVarias}>
                           <span className="mr-1.5">{p.icon}</span>
                           {preguntasActivas.length > 1 && (
                             <span className="text-mocha">{p.label} — </span>
                           )}
-                          {preg.q}
+                          {preguntaTr(p.val).q || preg.q}
                         </BlockLabel>
                         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                          {preg.options.map((o) => (
+                          {preg.options.map(tr(preguntaTr(p.val).opciones)).map((o) => (
                             <OptionBtn
                               key={o.val}
                               opt={o}
@@ -615,9 +631,9 @@ export function EmpezarForm() {
 
                 <div className="mb-8">
                   <TextArea
-                    label="¿Algo más que quieras contarnos? (opcional)"
+                    label={t.campoMensaje}
                     value={s.mensaje}
-                    placeholder="Ej: Somos 2 doctoras y una recepcionista, abrimos hace un año…"
+                    placeholder={t.ejemploMensaje}
                     onChange={(v) => set({ mensaje: v })}
                   />
                 </div>
@@ -625,7 +641,8 @@ export function EmpezarForm() {
                   onBack={() => setStep(3)}
                   onNext={() => setStep(5)}
                   nextEnabled={step4Ready}
-                  nextLabel="Siguiente →"
+                  nextLabel={t.siguiente}
+                  backLabel={t.atras}
                 />
               </motion.div>
             )}
@@ -633,15 +650,13 @@ export function EmpezarForm() {
             {step === 5 && (
               <motion.div key="s5" {...panelAnim}>
                 <StepHeader
-                  q="Para cerrar"
-                  hint="Tres toques y pasamos a tus datos"
+                  q={t.q5}
+                  hint={t.hint5}
                 />
                 <div className="mb-7">
-                  <BlockLabel hint="Define hacia dónde apuntamos tu diagnóstico">
-                    Si esto funciona, ¿qué es lo que más quieres lograr?
-                  </BlockLabel>
+                  <BlockLabel hint={t.hintObjetivo}>{t.bloqueObjetivo}</BlockLabel>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                    {OBJETIVO_OPTIONS.map((o) => (
+                    {OBJETIVO_OPTIONS.map(tr(t.objetivo)).map((o) => (
                       <OptionBtn
                         key={o.val}
                         opt={o}
@@ -653,9 +668,9 @@ export function EmpezarForm() {
                   </div>
                 </div>
                 <div className="mb-7">
-                  <BlockLabel>¿Qué tan pronto te gustaría empezar?</BlockLabel>
+                  <BlockLabel>{t.bloqueUrgencia}</BlockLabel>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                    {URGENCIA_OPTIONS.map((o) => (
+                    {URGENCIA_OPTIONS.map(tr(t.urgencia)).map((o) => (
                       <OptionBtn
                         key={o.val}
                         opt={o}
@@ -667,9 +682,9 @@ export function EmpezarForm() {
                   </div>
                 </div>
                 <div className="mb-8">
-                  <BlockLabel>¿Cuál es tu papel en la clínica?</BlockLabel>
+                  <BlockLabel>{t.bloquePapel}</BlockLabel>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                    {PAPEL_OPTIONS.map((o) => (
+                    {PAPEL_OPTIONS.map(tr(t.papel)).map((o) => (
                       <OptionBtn
                         key={o.val}
                         opt={o}
@@ -684,43 +699,42 @@ export function EmpezarForm() {
                   onBack={() => setStep(4)}
                   onNext={() => setStep(6)}
                   nextEnabled={step5Ready}
-                  nextLabel="Siguiente →"
+                  nextLabel={t.siguiente}
+                  backLabel={t.atras}
                 />
               </motion.div>
             )}
 
             {step === 6 && (
               <motion.div key="s6" {...panelAnim}>
-                <StepHeader q="Tus datos de contacto" hint="Te escribimos por WhatsApp — sin llamadas" />
+                <StepHeader q={t.q6} hint={t.hint6} />
                 <div className="mb-5 flex flex-col gap-5">
                   <Field
-                    label="Tu nombre"
+                    label={t.campoNombre}
                     type="text"
                     value={s.nombre}
-                    placeholder="Ej: Dra. Ana Martínez"
+                    placeholder={t.ejemploNombre}
                     onChange={(v) => set({ nombre: v })}
                   />
                   <Field
-                    label="WhatsApp o teléfono"
+                    label={t.campoContacto}
                     type="tel"
                     value={s.contacto}
-                    placeholder="Ej: +52 55 1234 5678"
+                    placeholder={t.ejemploContacto}
                     onChange={(v) => set({ contacto: v })}
                   />
                   <Field
-                    label="Correo (opcional)"
+                    label={t.campoCorreo}
                     type="email"
                     value={s.correo}
-                    placeholder="tu@clinica.com"
+                    placeholder={t.ejemploCorreo}
                     onChange={(v) => set({ correo: v })}
                   />
                 </div>
                 <div className="mb-6">
-                  <BlockLabel hint="Opcional — para no escribirte a deshoras">
-                    ¿Cuándo prefieres que te escribamos?
-                  </BlockLabel>
+                  <BlockLabel hint={t.hintHorario}>{t.bloqueHorario}</BlockLabel>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                    {HORARIO_OPTIONS.map((o) => (
+                    {HORARIO_OPTIONS.map(tr(t.horario)).map((o) => (
                       <OptionBtn
                         key={o.val}
                         opt={o}
@@ -739,23 +753,26 @@ export function EmpezarForm() {
                     className="mt-0.5 h-4 w-4 shrink-0 accent-clay"
                   />
                   <span>
-                    Acepto que Upcore AI me contacte por WhatsApp y trate mis datos según su{" "}
-                    <a href="/privacidad" className="text-clay transition-colors hover:text-clay-bright">
-                      Política de Privacidad
+                    {t.aceptoA}
+                    <a
+                      href={ruta(idioma, "/privacidad")}
+                      className="text-clay transition-colors hover:text-clay-bright"
+                    >
+                      {t.aceptoEnlace}
                     </a>
-                    .
+                    {t.aceptoB}
                   </span>
                 </label>
                 {error && (
-                  <p className="mb-4 text-center text-xs text-clay">
-                    No pudimos enviar tu solicitud. Intenta de nuevo o escríbenos por WhatsApp.
-                  </p>
+                  <p className="mb-4 text-center text-xs text-clay">{t.errorEnvio}</p>
                 )}
                 <NavBtns
                   onBack={() => setStep(5)}
                   onNext={submit}
                   nextEnabled={step6Ready}
-                  nextLabel="Enviar →"
+                  nextLabel={t.enviar}
+                  backLabel={t.atras}
+                  loadingLabel={t.enviando}
                   loading={loading}
                 />
               </motion.div>
@@ -771,46 +788,44 @@ export function EmpezarForm() {
               >
                 <div className="mb-5 text-5xl">{propuestaUrl ? "🎉" : "✅"}</div>
                 <h2 className="mb-3 text-2xl font-semibold tracking-tight">
-                  {propuestaUrl ? `¡Listo, ${s.nombre}! Tu diagnóstico ya existe` : `¡Gracias, ${s.nombre}!`}
+                  {propuestaUrl ? t.listoTitulo(s.nombre) : t.graciasTitulo(s.nombre)}
                 </h2>
                 {propuestaUrl ? (
                   <>
                     <p className="mx-auto mb-8 max-w-md font-light leading-relaxed text-mocha">
-                      Lo calculamos con tus números en este momento: qué se te está escapando,
-                      cuánto vale y cómo lo arreglamos. {s.correo.trim() ? "También te lo mandamos por correo." : ""}
+                      {t.listoTexto} {s.correo.trim() ? t.listoTextoCorreo : ""}
                     </p>
                     <a
                       href={propuestaUrl}
                       className="btn-shine inline-block rounded-full bg-clay px-9 py-4 text-lg font-bold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright"
                     >
-                      Ver mi diagnóstico ahora →
+                      {t.verDiagnostico}
                     </a>
                     <p className="mt-5 text-xs font-light text-mocha">
-                      ¿Dudas? Escríbenos por{" "}
+                      {t.dudasA}
                       <a
-                        href={CONTACT.whatsapp}
+                        href={linkWhatsApp(idioma)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-sand underline hover:text-clay"
                       >
-                        WhatsApp
-                      </a>{" "}
-                      — te contesta nuestro asistente al momento, a cualquier hora.
+                        {t.dudasEnlace}
+                      </a>
+                      {t.dudasB}
                     </p>
                   </>
                 ) : (
                   <>
                     <p className="mx-auto mb-8 max-w-md font-light leading-relaxed text-mocha">
-                      Ya tenemos tu información. Te contactamos pronto por WhatsApp con tu
-                      diagnóstico — sin compromiso.
+                      {t.graciasTexto}
                     </p>
                     <a
-                      href={CONTACT.whatsapp}
+                      href={linkWhatsApp(idioma)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-shine inline-block rounded-full bg-clay px-8 py-3.5 font-semibold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright"
                     >
-                      Escríbenos ahora por WhatsApp
+                      {t.graciasCta}
                     </a>
                   </>
                 )}

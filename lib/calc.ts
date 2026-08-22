@@ -1,17 +1,41 @@
 // ============================================================================
-// Calculadora de ROI para clínicas — configura tu solución + estimado aterrizado
+// Calculadora de retorno — configura tu solución + estimado aterrizado
 // Números basados en costos y precios reales de mercado (investigados, 2025-2026).
-// Cálculo interno en USD; se muestra en pesos (MXN) + equivalente en dólares.
+// Todo el cálculo y el precio corren en la moneda del nicho (lib/nicho.json). Hoy: USD.
 // ============================================================================
 
+import nicho from "./nicho.json";
+import { CALC_TEXTOS } from "./calc-textos";
+
+/** Idiomas en los que se pueden emitir las notas. Union literal a propósito: este
+ *  archivo se espeja al panel y no puede importar de fuera de lo que se espeja. */
+export type IdiomaCalc = "es" | "en";
+
 export type CalcState = {
+  /** Idioma de las NOTAS que produce el cálculo. Los números no cambian: solo las
+   *  palabras que los explican. El snapshot congela las dos versiones. */
+  idioma?: IdiomaCalc;
   clinica: string | null;
   productos: string[]; // multi-select
   modo: "sistema" | "normal" | null;
   operacion: "yo" | "upcore" | null;
   msgs: string; // mensajes/consultas por día
-  leads: string; // pacientes nuevos por mes
+  leads: string; // prospectos nuevos por mes
   email: string;
+  /**
+   * Lo que vale UN prospecto de ESTE cliente, en dólares: su comisión por venta
+   * cerrada × la probabilidad de haberlo cerrado. Lo calcula `numerosDeLead()` en
+   * propuesta.ts, que es el único lugar donde se hace esa conversión.
+   *
+   * ⚠️ Antes no existía y aquí se usaba una constante fija de $180 que ignoraba por
+   * completo lo que el cliente había declarado. Resultado: la sección "lo que te
+   * está costando" y la sección del retorno, en la MISMA propuesta, salían de dos
+   * cuentas que no se hablaban — una decía $64,950 al mes y la otra $375.
+   *
+   * Vacío = no lo sabemos (la calculadora pública del sitio, donde nadie declara su
+   * comisión): ahí se usa el valor por defecto del sector.
+   */
+  valorProspecto?: number | null;
 };
 
 export const emptyState: CalcState = {
@@ -29,22 +53,19 @@ export type Option = { val: string; label: string; icon: string; desc?: string }
 // Tipo de cambio aproximado (solo para mostrar; se avisa que es aprox.)
 const FX = 18.5;
 
-export const CLINICA_OPTIONS: Option[] = [
-  { val: "dental", label: "Dental", icon: "🦷" },
-  { val: "estetica", label: "Medicina estética", icon: "✨" },
-  { val: "medica", label: "Consultorio médico", icon: "🩺" },
-  { val: "spa", label: "Spa / Belleza", icon: "💆" },
-  { val: "otro", label: "Otra clínica", icon: "⚕️" },
-];
+// Los giros salen de lib/nicho.json (fuente única del nicho), no se declaran aquí.
+// Antes esta era una de cinco copias del mismo concepto y se desfasaban en silencio.
+export const CLINICA_OPTIONS: Option[] = nicho.giros
+  .filter((g) => g.enSelector)
+  .map((g) => ({ val: g.key, label: g.label, icon: g.icon }));
 
 type Producto = Option & {
   /**
-   * Precio FIJO de construcción, en pesos (pago único). Ya no es un rango: un rango
-   * de 3x no es un precio, es decirle al cliente "no sé cuánto te voy a cobrar" — y
-   * el techo espantaba. Cada número está anclado a lo que cobra el mercado mexicano
-   * (jul-2026) y a lo que le cuesta a la clínica no resolverlo.
+   * Precio FIJO de construcción, en DÓLARES (pago único). No es un rango: un rango de 3x
+   * no es un precio, es decirle al cliente "no sé cuánto te voy a cobrar" — y el techo
+   * espanta. Cada número está anclado a lo que le cuesta al cliente no resolverlo.
    */
-  setupMXN: number;
+  setupUSD: number;
   varMin: number;
   varMax: number;
   hrs: number;
@@ -58,39 +79,44 @@ type Producto = Option & {
   escalaFuerte?: boolean;
 };
 
-// setupMXN = construcción (pago único, PESOS). var = costo que corre al mes (USD, a
-// nombre del cliente). Anclas de mercado MX (jul-2026) detrás de cada precio:
-//   agente $24,000 → Simplixy Profesional cobra $21,900 y hace menos; BotHoy renta a
-//     $2,990/mes (8 meses); una recepcionista extra cuesta $8-12,000 AL MES.
-//   voz $26,000 → Vokey $999/mes (26 meses), Callbeat $1,290/mes (20 meses).
-//   web $18,000 → web médica en México va de $14,000 a $45,000.
-//   auto $14,000 → implementar n8n arranca en $20,000; esto es más acotado.
-//   reactivacion $12,000 → se paga con 2-3 pacientes recuperados.
+// setupUSD = construcción (pago único, DÓLARES). var = costo de APIs que corre al mes
+// (USD, a nombre del cliente).
+//
+// ⚓ El ancla de TODO este nicho es una sola: **una comisión rescatada paga el proyecto
+// varias veces.** Un condominio de $800,000 al 3% deja ~$24,000 USD de comisión, y la
+// firma promedio pierde entre el 60% y el 70% de sus prospectos por no dar seguimiento a
+// tiempo. No hay que explicar el retorno: se explica solo.
+//
+// ⚠️ Pendiente de investigar: qué cobran las agencias de Miami por esto. Los precios de
+// abajo se fijaron por valor entregado, NO comparando contra competidores — todavía no
+// tenemos ese dato comprobado y aquí no se escriben cifras sin fuente.
 export const PRODUCTO_OPTIONS: Producto[] = [
-  { val: "agente", label: "Agente de WhatsApp 24/7", desc: "Responde, atiende y agenda solo", icon: "💬", setupMXN: 24000, varMin: 5, varMax: 16, hrs: 14, alcance: "responde WhatsApp 24/7, agenda, confirma citas y califica pacientes" },
-  { val: "voz", label: "Agente de voz 24/7", desc: "Contesta el teléfono y agenda", icon: "📞", setupMXN: 26000, varMin: 15, varMax: 30, hrs: 16, escalaFuerte: true, alcance: "contesta las llamadas que hoy se pierden, resuelve dudas hablando, agenda en tu agenda y avisa a recepción — conservando tu número actual" },
-  { val: "web", label: "Sitio web con agenda", desc: "Una web que agenda y responde", icon: "🌐", setupMXN: 18000, varMin: 0, varMax: 10, hrs: 6, alcance: "sitio con agenda online que responde y capta pacientes" },
-  { val: "auto", label: "Automatizaciones", desc: "Recordatorios y seguimiento", icon: "🔄", setupMXN: 14000, varMin: 6, varMax: 12, hrs: 10, alcance: "recordatorios, confirmaciones y seguimientos que corren solos" },
-  { val: "reactivacion", label: "Reactivación de pacientes", desc: "Recupera pacientes que no vuelven", icon: "📈", setupMXN: 12000, varMin: 6, varMax: 20, hrs: 8, alcance: "campaña para recuperar pacientes que dejaron de venir" },
+  { val: "agente", label: "Agente de WhatsApp 24/7", desc: "Responde en español a cualquier hora", icon: "💬", setupUSD: 6000, varMin: 10, varMax: 30, hrs: 14, alcance: "responde WhatsApp en español a cualquier hora y en cualquier huso horario, resuelve las dudas de siempre, califica al comprador (presupuesto, plazo y si necesita financiamiento) y deja agendada la visita o la videollamada" },
+  { val: "voz", label: "Agente de voz 24/7", desc: "Contesta el teléfono y agenda", icon: "📞", setupUSD: 6500, varMin: 25, varMax: 60, hrs: 16, escalaFuerte: true, alcance: "contesta las llamadas que hoy se pierden, atiende en español o en inglés según quien llame, resuelve dudas hablando, agenda en tu calendario y avisa al asesor — conservando tu número actual" },
+  { val: "web", label: "Sitio web con agenda", desc: "Capta y agenda solo", icon: "🌐", setupUSD: 4500, varMin: 0, varMax: 15, hrs: 6, alcance: "sitio en español con la ficha de cada desarrollo, formulario que califica y agenda en línea, listo para recibir tráfico de anuncios" },
+  { val: "auto", label: "Seguimiento automático", desc: "Que ningún prospecto se enfríe", icon: "🔄", setupUSD: 3500, varMin: 8, varMax: 20, hrs: 10, alcance: "seguimiento que aguanta los meses que dura una preventa: recordatorios de cada etapa de pago, avisos de avance de obra y reactivación del prospecto que dejó de contestar" },
+  { val: "reactivacion", label: "Reactivación de prospectos", desc: "Recupera a los que nunca cerraron", icon: "📈", setupUSD: 3000, varMin: 8, varMax: 25, hrs: 8, alcance: "campaña para volver a tocar a los prospectos viejos que quedaron en la lista y nunca compraron" },
 ];
 
 /** De la SEGUNDA pieza en adelante. No es un descuento inventado: montar la segunda
  *  sobre lo ya construido cuesta menos de verdad. */
 export const DESCUENTO_PAQUETE = 0.15;
 
-/** Gestionado: mensualidad fija en pesos (el mercado cobra $2,990-4,497/mes). */
-export const MENSUALIDAD_BASE = 3500;
-export const MENSUALIDAD_POR_PIEZA_EXTRA = 700;
+/** Gestionado: mensualidad fija en dólares. Es por el SERVICIO (operar, mantener, mejorar),
+ *  nunca por las APIs — esas van a la tarjeta del cliente, como en todos los planes. */
+export const MENSUALIDAD_BASE = 600;
+export const MENSUALIDAD_POR_PIEZA_EXTRA = 150;
 
 // El panel/dashboard NO es una pieza: es un añadido que se monta encima de las demás.
 // Vive aquí, en un solo lugar, porque su precio se usa en dos partes (el total cuando el
 // cliente lo quiere, y el "+$X" del añadido opcional en su propuesta).
-// $12,000: los softwares dentales completos (Dentalink, Doctocliq) cuestan $315-536
-// AL MES, así que esto equivale a ~2 años de renta — y es suyo. Antes se cotizaba
-// hasta en $74,000, que no se sostenía contra esa comparación.
+//
+// En este nicho el panel pesa más que en el anterior: quien firma es el director comercial,
+// y lo que esa persona quiere es ver qué pasó con cada prospecto y cómo va su equipo. Aun
+// así se OFRECE, no se impone (regla de la casa).
 export const PANEL_ADICIONAL = {
-  setupMXN: 12000,
-  varMax: 10, // hosting/BD si escala; el piso suele ser $0
+  setupUSD: 3000,
+  varMax: 15, // hosting/BD si escala; el piso suele ser $0
 };
 
 export const MODO_OPTIONS: Option[] = [
@@ -102,6 +128,26 @@ export const OPERACION_OPTIONS: Option[] = [
   { val: "yo", label: "Yo lo opero", desc: "Pago único, sin mensualidad (Llave en Mano)", icon: "🔑" },
   { val: "upcore", label: "Que Upcore lo opere", desc: "Mensualidad, nos encargamos de todo (Gestionado)", icon: "🛠️" },
 ];
+
+/**
+ * La misma opción, con su etiqueta en el idioma pedido.
+ *
+ * Las listas de arriba se escriben en español porque son la fuente (y los `val` NUNCA
+ * se traducen: son lo que se guarda y lo que viaja al webhook — si cambiaran con el
+ * idioma, el cliente elegiría una cosa en inglés y se guardaría otra). La traducción
+ * vive en `calc-textos.ts` y se aplica aquí, al pintar.
+ */
+export function opcionEn<T extends Option>(o: T, idioma: IdiomaCalc = "es"): T {
+  if (idioma === "es") return o;
+  const T_ = CALC_TEXTOS[idioma];
+  const pieza = T_.piezas[o.val];
+  if (pieza) return { ...o, label: pieza.label, desc: pieza.desc };
+  const otra = T_.opciones[o.val];
+  if (otra) return { ...o, label: otra.label, desc: otra.desc };
+  const giro = T_.giros[o.val];
+  if (giro) return { ...o, label: giro };
+  return o;
+}
 
 // --- Redondeo bonito por moneda -------------------------------------------
 function roundMXN(n: number): number {
@@ -118,36 +164,61 @@ function roundUSD(n: number): number {
 }
 const fmt = (n: number) => n.toLocaleString("en-US");
 
-export type Money = { mxn: string; usd: string };
+/**
+ * Un precio ya formateado.
+ *
+ * ⚠️ Los campos se llamaban `mxn` y `usd`. Se renombraron al pasar el nicho a Miami: dejar
+ * un precio en dólares dentro de un campo llamado `mxn` es una trampa — tarde o temprano
+ * alguien escribe `${p.mxn} MXN` y sale "$6,000 USD MXN".
+ *
+ * `principal` = la moneda en la que se cobra (la del nicho, ver lib/nicho.json).
+ * `equivalente` = referencia en la otra moneda, o "" si no aplica.
+ */
+export type Money = { principal: string; equivalente: string };
 
-// Convierte un rango en USD a strings en ambas monedas (pesos principal, dólares equivalente).
-// Exportada: el motor de propuestas cotiza los AÑADIDOS opcionales con esta misma fórmula,
-// para que un "+$X" de la propuesta nunca se calcule con un redondeo distinto al del total.
-export function money(loUSD: number, hiUSD: number, perMonth = false): Money {
-  const suf = perMonth ? "/mes" : "";
+/** Moneda del nicho activo. Todo lo que Upcore cobra se expresa en ella. */
+const MONEDA = nicho.moneda;
+
+// Rango en USD → strings. Se usa para lo que de verdad ES un rango: el consumo de APIs
+// del cliente, que depende de su volumen. Exportada porque el motor de propuestas cotiza
+// los añadidos con esta misma fórmula, y así un "+$X" nunca se redondea distinto al total.
+export function money(
+  loUSD: number,
+  hiUSD: number,
+  perMonth = false,
+  idioma: IdiomaCalc = "es"
+): Money {
+  // ⚠️ El "/mes" también es idioma. Salía pegado a un precio en una propuesta
+  // enteramente en inglés ("$90 – $250 USD/mes") y ningún guardián lo veía, porque
+  // vive en el módulo del dinero y no en la tabla de textos.
+  const suf = perMonth ? (idioma === "en" ? "/month" : "/mes") : "";
+  const lo = roundUSD(loUSD);
+  const hi = roundUSD(hiUSD);
+  const principal =
+    lo === hi ? `$${fmt(lo)} USD${suf}` : `$${fmt(lo)} – $${fmt(hi)} USD${suf}`;
+  // Con el nicho en USD no hay segunda moneda que enseñar: el cliente de Miami paga en
+  // dólares y ver pesos solo lo confunde.
+  if (MONEDA === "USD") return { principal, equivalente: "" };
   const mxnLo = roundMXN(loUSD * FX);
   const mxnHi = roundMXN(hiUSD * FX);
-  const usdLo = roundUSD(loUSD);
-  const usdHi = roundUSD(hiUSD);
-  const mxn =
-    mxnLo === mxnHi
-      ? `$${fmt(mxnLo)} MXN${suf}`
-      : `$${fmt(mxnLo)} – $${fmt(mxnHi)} MXN${suf}`;
-  const usd =
-    usdLo === usdHi
-      ? `≈ $${fmt(usdLo)} USD${suf}`
-      : `≈ $${fmt(usdLo)} – $${fmt(usdHi)} USD${suf}`;
-  return { mxn, usd };
+  return {
+    principal:
+      mxnLo === mxnHi
+        ? `$${fmt(mxnLo)} MXN${suf}`
+        : `$${fmt(mxnLo)} – $${fmt(mxnHi)} MXN${suf}`,
+    equivalente: `≈ ${principal}`,
+  };
 }
 
-// Un precio CERRADO en pesos (el dólar se muestra solo como referencia). Se usa para
-// todo lo que Upcore cobra; `money()` se queda para lo que de verdad es un rango:
-// el consumo de APIs del cliente, que depende de su volumen.
-export function precioFijo(mxn: number, perMonth = false): Money {
-  const suf = perMonth ? "/mes" : "";
+// Un precio CERRADO, en la moneda del nicho. Se usa para todo lo que Upcore cobra.
+export function precioFijo(monto: number, perMonth = false, idioma: IdiomaCalc = "es"): Money {
+  const suf = perMonth ? (idioma === "en" ? "/month" : "/mes") : "";
+  if (MONEDA === "USD") {
+    return { principal: `$${fmt(monto)} USD${suf}`, equivalente: "" };
+  }
   return {
-    mxn: `$${fmt(mxn)} MXN${suf}`,
-    usd: `≈ $${fmt(roundUSD(mxn / FX))} USD${suf}`,
+    principal: `$${fmt(monto)} MXN${suf}`,
+    equivalente: `≈ $${fmt(roundUSD(monto / FX))} USD${suf}`,
   };
 }
 
@@ -204,6 +275,7 @@ export type CalcResult = {
 };
 
 export function calculate(s: CalcState): CalcResult {
+  const T = CALC_TEXTOS[s.idioma ?? "es"];
   const prods = PRODUCTO_OPTIONS.filter((p) => s.productos.includes(p.val));
   const list = prods.length ? prods : [PRODUCTO_OPTIONS[0]];
   const sistema = s.modo === "sistema";
@@ -225,12 +297,12 @@ export function calculate(s: CalcState): CalcResult {
     }
     hrs += p.hrs;
   });
-  const piezasMXN = list.map((p) => p.setupMXN);
+  const piezasUSD = list.map((p) => p.setupUSD);
   if (sistema) {
-    piezasMXN.push(PANEL_ADICIONAL.setupMXN);
+    piezasUSD.push(PANEL_ADICIONAL.setupUSD);
     varMax += PANEL_ADICIONAL.varMax;
   }
-  const setupMXN = sumarPiezas(piezasMXN);
+  const setupUSD = sumarPiezas(piezasUSD);
 
   const msgs = Math.max(parseInt(s.msgs) || 15, 0);
   const leads = Math.max(parseInt(s.leads) || 30, 0);
@@ -252,39 +324,70 @@ export function calculate(s: CalcState): CalcResult {
   const capta24_7 = has("agente") || has("web") || has("voz"); // responde e invita a agendar al instante
   const hasReact = has("reactivacion");
 
-  const HORA_USD = 3.5; // sueldo de recepción en México (~$65 MXN/h)
-  const CITA_USD = 85; // cita recuperada / no-show (~$1,570 MXN, conservador)
-  const NUEVO_USD = 150; // paciente NUEVO captado — MUY por debajo del real ($400-500)
+  // Costo de una hora de asistente comercial en Florida. Antes eran $3.50 (recepción en
+  // México); con ese número el retorno en Miami salía absurdamente bajo.
+  const HORA_USD = 22;
+
+  /**
+   * Valor esperado de UN prospecto rescatado. No es una promesa: es una cuenta que se
+   * puede auditar, hecha con cifras verificadas y por el lado bajo.
+   *
+   *   $600,000 USD  → precio conservador de una unidad en preventa en Miami (el inventario
+   *                   publicado por las firmas de la lista arranca en $230k y sube de $3M;
+   *                   se toma un valor bajo-medio a propósito)
+   *   × 3%          → comisión estándar del lado comprador
+   *   × 1%          → conversión de lead a venta. Verificado: el sector convierte entre
+   *                   0.4% y 2.4%; se toma el punto medio, no el techo.
+   *   = ~$180 USD por prospecto
+   *
+   * ⚠️ Regla de la casa: esto es un ESTIMADO y así se presenta. Nunca se le promete al
+   * cliente un número de ventas, porque no tenemos su CRM.
+   */
+  // Lo que vale un prospecto. Si el cliente declaró su comisión, `valorProspecto` ya
+  // viene convertido desde propuesta.ts (comisión × tasa de cierre) y MANDA sobre el
+  // default: si no, esta sección y la de "lo que te está costando" hablarían de dos
+  // negocios distintos, que es justo el defecto que se arregló el 2026-08-21.
+  //
+  // El default ($1,800) es para la calculadora pública, donde nadie declara nada:
+  // unidad de $600,000 × 3% de comisión × 10% de cierre.
+  const VALOR_PROSPECTO_DEFECTO = 1800;
+  const LEAD_USD =
+    s.valorProspecto && s.valorProspecto > 0 ? s.valorProspecto : VALOR_PROSPECTO_DEFECTO;
+  const NUEVO_USD = LEAD_USD; // un prospecto nuevo captado 24/7 vale lo mismo que uno rescatado
 
   // Horas liberadas al mes (aprox), con tope realista (~1 día/semana en volumen alto).
   const minutosMes = msgs * 30 + leads * 8;
   const hoursSaved = Math.min(Math.round(minutosMes / 60), 80);
   const timeValue = hoursSaved * HORA_USD;
 
-  // No-shows evitados por recordatorios (−22% conservador).
-  const noShowsSaved = leads * 0.06;
-  // Pacientes NUEVOS captados 24/7 (el mayor valor del agente/web: responder al instante).
+  // Prospectos que hoy se enfrían y se rescatan con seguimiento. Está MUY por debajo del
+  // dolor real: el sector pierde entre el 60% y el 70% de sus prospectos por no dar
+  // seguimiento a tiempo, y aquí solo se cuenta rescatar un 6%.
+  const rescatados = leads * 0.06;
+  // Prospectos NUEVOS captados a cualquier hora — el mayor valor del agente y del sitio.
+  // Pesa especialmente aquí: el comprador escribe desde otro país y otro huso horario, así
+  // que "responder al instante" es la diferencia entre atenderlo y perderlo.
   const nuevosCaptados = leads * (capta24_7 ? 0.1 : 0.03);
-  // Pacientes que regresan si hay reactivación.
+  // Prospectos viejos que vuelven a la conversación si hay campaña de reactivación.
   const reactivados = hasReact ? leads * 0.1 : 0;
 
-  const citasGanadas = noShowsSaved + nuevosCaptados + reactivados;
+  const citasGanadas = rescatados + nuevosCaptados + reactivados;
   const ahorroUSD =
     timeValue +
-    noShowsSaved * CITA_USD +
+    rescatados * LEAD_USD +
     nuevosCaptados * NUEVO_USD +
-    reactivados * CITA_USD;
+    reactivados * LEAD_USD;
 
   // --- Mensualidad de Upcore (solo Gestionado) ------------------------------
   // Fija y predecible: base + un extra por cada pieza que hay que operar.
-  const nPiezas = piezasMXN.length;
-  const upMXN = gestionado
+  const nPiezas = piezasUSD.length;
+  const upUSD = gestionado
     ? MENSUALIDAD_BASE + MENSUALIDAD_POR_PIEZA_EXTRA * Math.max(nPiezas - 1, 0)
     : 0;
-  const upAvg = upMXN / FX; // el resto del cálculo de retorno corre en USD
+  const upAvg = upUSD; // todo el cálculo de retorno corre en USD, igual que el precio
 
   const varAvg = (varLoUSD + varHiUSD) / 2;
-  const setupAvg = setupMXN / FX;
+  const setupAvg = setupUSD;
 
   // ROI sobre el costo RECURRENTE (variable + mensualidad), con tope para no verse irreal.
   const recurringUSD = varAvg + upAvg;
@@ -299,60 +402,73 @@ export function calculate(s: CalcState): CalcResult {
   let recomendacion = "";
   if (netRatio < 1) {
     recomendacion = gestionado
-      ? "A tu volumen de ahora, el plan Gestionado todavía no se paga solo. Te conviene empezar en Llave en Mano (sin mensualidad) o con solo la pieza esencial, y pasar a Gestionado cuando crezca tu volumen."
-      : "A tu volumen de ahora los números salen justos. En tu diagnóstico gratis vemos si te conviene arrancar más ligero o esperar a tener un poco más de movimiento.";
+      ? T.recomiendaLlave
+      : T.recomiendaEsperar;
   } else if (combo && netRatio < 2) {
-    recomendacion =
-      "El sistema completo + Gestionado rinde de verdad cuando ya tienes buen volumen. A tu nivel de ahora te conviene empezar más ligero (solo el agente, o Llave en Mano) y crecer hacia el sistema gestionado cuando el volumen lo pida — así te sale rentable desde el primer día.";
+    recomendacion = T.recomiendaLigero;
   } else if (gestionado && netRatio < 1.6) {
-    recomendacion =
-      "Ya es rentable, pero a tu volumen quizá te convenga empezar en Llave en Mano (sin mensualidad) y subir a Gestionado más adelante.";
+    recomendacion = T.recomiendaSubirDespues;
   }
 
   // Payback: meses para recuperar la inversión con el ahorro neto de la mensualidad.
   const netMensual = Math.max(ahorroUSD - upAvg, ahorroUSD * 0.15);
   const paybackMeses = Math.max(1, Math.min(Math.round(setupAvg / netMensual), 36));
-  const mesesTxt = paybackMeses === 1 ? "mes" : "meses";
+  const mesesTxt = paybackMeses === 1 ? T.mes : T.meses;
 
   // Reencuadre del retorno: además del múltiplo, la ganancia neta al mes y (si es Gestionado)
   // el valor de que Upcore lo opere.
-  const netaMXN = `$${roundMXN(gananciaNetaUSD * FX).toLocaleString("en-US")} MXN`;
+  // ⚠️ Antes esta línea formateaba SIEMPRE en pesos y le enseñaba "$42,500 MXN" a un
+  // cliente de Miami que paga en dólares. Ahora usa precioFijo(), que respeta la moneda
+  // del nicho. Se cazó corriendo la calculadora de verdad, no leyendo el código.
+  const netaMonto = precioFijo(Math.round(gananciaNetaUSD)).principal;
   let roiNota: string;
   if (netRatio < 1) {
-    roiNota = `A tu volumen de ahora tardaría ~${paybackMeses} ${mesesTxt} en recuperarse.`;
+    roiNota = T.roiTardaria(`${paybackMeses} ${mesesTxt}`);
   } else {
-    const neta =
-      gananciaNetaUSD > 0 ? ` Te quedan ~${netaMXN} limpios al mes.` : "";
-    const manos = gestionado ? " Y nosotros lo operamos por ti." : "";
-    roiNota = `Recuperas tu inversión en ~${paybackMeses} ${mesesTxt}.${neta}${manos}`;
+    const neta = gananciaNetaUSD > 0 ? T.netaTexto(netaMonto) : "";
+    roiNota = T.roiRecupera({ meses: `${paybackMeses} ${mesesTxt}`, neta, manos: gestionado });
   }
 
-  const complejidad =
-    setupMXN <= 30000
+  // Una sola pieza (la más cara son $6,500) siempre es "esencial": antes el umbral
+  // estaba en $5,000 y un solo agente ya salía como "Sistema a la medida".
+  const claveComplejidad =
+    setupUSD <= 7000
       ? "Solución esencial"
-      : setupMXN <= 60000
+      : setupUSD <= 15000
       ? "Sistema a la medida"
       : "Infraestructura completa";
+  // ⚠️ Antes se devolvía `claveComplejidad` tal cual y la tabla `T.complejidad`
+  // estaba escrita pero NUNCA se usaba: la calculadora en inglés enseñaba
+  // "Solución esencial" arriba del resultado. Una traducción que existe y nadie
+  // llama es peor que no tenerla, porque parece hecha.
+  const complejidad = T.complejidad[claveComplejidad] ?? claveComplejidad;
 
-  const incluye = list.map((p) => `${p.label} — ${p.alcance}`);
-  if (sistema)
-    incluye.push("Dashboard + sistema integrado — todo operando junto, con tu ROI a la vista");
+  const incluye = list.map((p) => {
+    const tp = T.piezas[p.val];
+    return `${tp?.label ?? p.label} — ${tp?.alcance ?? p.alcance}`;
+  });
+  if (sistema) incluye.push(T.panelIncluye);
 
   return {
-    inversion: precioFijo(setupMXN),
+    inversion: precioFijo(setupUSD),
+    // Se paga en DOS MITADES, y así se dice desde la propuesta (decisión de Yael,
+    // 2026-08-16). Antes decía "pago único", que suena a desembolsar todo de golpe
+    // y frena al cliente justo donde no debe. Repartirlo protege a los dos: el
+    // cliente no paga completo por algo que todavía no ha visto terminado, y
+    // Upcore no construye una semana a cuenta de un sí de palabra.
     inversionNota:
-      (nPiezas > 1 ? "Precio cerrado, ya con descuento por paquete · " : "Precio cerrado · ") +
-      (gestionado ? "pago único (o repartido en tu mensualidad)" : "pago único"),
-    costosCliente: money(varLoUSD, varHiUSD, true),
-    costosNota: has("voz")
-      ? "APIs, IA y hosting — van directo a los proveedores, a tu nombre. Upcore no les agrega margen. El agente de voz se cobra por minuto hablado, así que sube con tus llamadas: se contrata con tope de gasto y ves tu consumo tú mismo."
-      : "APIs, IA y hosting — van directo a los proveedores, a tu nombre. Upcore no les agrega margen.",
-    mensualidadUpcore: gestionado ? precioFijo(upMXN, true) : { mxn: "$0", usd: "" },
-    upcoreNota: gestionado
-      ? "Operación, mantenimiento y mejoras"
-      : "Plan Llave en Mano · tú lo operas, sin mensualidad",
-    ahorro: money(ahorroUSD, ahorroUSD, true),
-    ahorroNota: `≈ ${Math.max(1, Math.round(citasGanadas))} cita(s)/mes recuperadas + el tiempo de tu equipo`,
+      (nPiezas > 1 ? T.conDescuento : T.precioCerrado) +
+      " · " +
+      (gestionado ? T.mitadesGestionado : T.mitades),
+    costosCliente: money(varLoUSD, varHiUSD, true, s.idioma ?? "es"),
+    costosNota: has("voz") ? T.costosNotaVoz : T.costosNota,
+    mensualidadUpcore: gestionado ? precioFijo(upUSD, true, s.idioma ?? "es") : { principal: "$0", equivalente: "" },
+    upcoreNota: gestionado ? T.operacion : T.sinMensualidad,
+    ahorro: money(ahorroUSD, ahorroUSD, true, s.idioma ?? "es"),
+    // ⚠️ Decía "prospecto(s)/mes rescatados". Ese "(s)" es la confesión de que el
+    // texto lo armó una plantilla, en el renglón que resume el beneficio. Y en
+    // español el número también arrastra al participio: "1 prospecto rescatado".
+    ahorroNota: T.ahorroNota(Math.max(1, Math.round(citasGanadas))),
     roi,
     roiNota,
     recomendacion,

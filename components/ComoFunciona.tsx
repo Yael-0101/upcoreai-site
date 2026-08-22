@@ -1,8 +1,10 @@
 import { SectionTitle } from "./SectionTitle";
 import { Reveal } from "./Reveal";
-import { PASOS } from "@/lib/content";
+import { contenido } from "@/lib/site-textos";
+import type { Idioma } from "@/lib/idioma";
 
-export function ComoFunciona() {
+export function ComoFunciona({ idioma = "es" }: { idioma?: Idioma }) {
+  const PASOS = contenido(idioma).pasos;
   return (
     <section id="como-funciona" className="px-[6%] py-24 md:px-[10%] md:py-32">
       <SectionTitle title={PASOS.heading} sub={PASOS.sub} variant="blurIn" />

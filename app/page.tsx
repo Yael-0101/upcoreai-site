@@ -1,56 +1,21 @@
-import { Backdrop } from "@/components/Backdrop";
-import { LiquidGlassFilter } from "@/components/LiquidGlassFilter";
-import { Nav } from "@/components/Nav";
-import { Hero } from "@/components/Hero";
-import { Problema } from "@/components/Problema";
-import { ComoFunciona } from "@/components/ComoFunciona";
-import { Sistema } from "@/components/Sistema";
-import { DemoTeaser } from "@/components/DemoTeaser";
-import { Comparativa } from "@/components/Comparativa";
-import { Resultados } from "@/components/Resultados";
-import { Calculadora } from "@/components/Calculadora";
-import { Garantia } from "@/components/Garantia";
-import { Planes } from "@/components/Planes";
-import { FAQ } from "@/components/FAQ";
-import { SobreUpcore } from "@/components/SobreUpcore";
-import { CTAFinal } from "@/components/CTAFinal";
-import { Footer } from "@/components/Footer";
-import { JsonLd } from "@/components/JsonLd";
-import { FAQ as FAQ_CONTENIDO } from "@/lib/content";
+import type { Metadata } from "next";
+import { Inicio } from "@/components/paginas/Inicio";
+import { metaPagina } from "@/lib/seo";
+import { contenido } from "@/lib/site-textos";
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: FAQ_CONTENIDO.items.map((item) => ({
-    "@type": "Question",
-    name: item.q,
-    acceptedAnswer: { "@type": "Answer", text: item.a },
-  })),
-};
+const IDIOMA = "es" as const;
+const t = contenido(IDIOMA).meta;
 
-export default function Home() {
-  return (
-    <>
-      <JsonLd data={faqJsonLd} />
-      <LiquidGlassFilter />
-      <Backdrop />
-      <Nav />
-      <main className="relative z-[2]">
-        <Hero />
-        <Problema />
-        <ComoFunciona />
-        <Sistema />
-        <DemoTeaser />
-        <Comparativa />
-        <Resultados />
-        <Calculadora />
-        <Garantia />
-        <Planes />
-        <FAQ />
-        <SobreUpcore />
-        <CTAFinal />
-      </main>
-      <Footer />
-    </>
-  );
+export const metadata: Metadata = metaPagina({
+  title: t.title,
+  description: t.description,
+  path: "/",
+  idioma: IDIOMA,
+  // El título de la portada YA trae la marca al principio: sin esto el layout
+  // se la pega otra vez al final.
+  tituloAbsoluto: true,
+});
+
+export default function Pagina() {
+  return <Inicio idioma={IDIOMA} />;
 }

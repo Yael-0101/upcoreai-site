@@ -1,3 +1,7 @@
+import { pideTono } from "./arranque-copy";
+// Los giros válidos de la demo salen de lib/nicho.json (fuente única del nicho).
+import { GIROS_DEMO, DEMO_DEFAULTS } from "./demo-config";
+
 // ============================================================================
 // Portal de Arranque — tipos y helpers compartidos (página server + wizard client).
 // La fila vive en la tabla `arranques` de n8n; `datos` es un JSON string con
@@ -24,15 +28,24 @@ export type AvanceItem = {
 export type CuentaEstado = { lista: boolean; correo: string };
 
 /**
- * Quién crea las cuentas. La propuesta le promete al cliente que "te las creamos
- * nosotros a tu nombre, o las creas tú" — así que el portal tiene que ofrecer las
- * dos. En modo "upcore" el cliente no crea nada: solo nos dice a qué correo y
- * teléfono quedan (son SUYAS, a su nombre) y cuándo puede contestarnos, porque los
- * códigos de verificación le llegan a él y se vencen rápido.
+ * Los datos para crearle las cuentas.
+ *
+ * ⚠️ YA NO SE LE PREGUNTA QUIÉN LAS CREA (decisión de Yael, 2026-08-16): las crea
+ * SIEMPRE Upcore, a nombre del cliente. El portal ofrecía un botón de "Yo las
+ * creo" que contradecía el arranque concierge del manual — y el motivo de fondo
+ * es de venta: un doctor no puede perder su tarde abriendo cuentas, y que no
+ * tenga que hacerlo es justo la impresión que queremos que se lleve.
+ *
+ * El campo `modo` se conserva solo para no romper las filas viejas; nada lo
+ * escribe ya. Lo único que necesitamos de él es a qué correo y teléfono quedan
+ * (son SUYAS, a su nombre) y cuándo puede contestarnos, porque los códigos de
+ * verificación le llegan a él y se vencen rápido.
  */
 export type ConciergeDatos = {
   modo: "upcore" | "yo" | null;
-  correoTipo: "mio" | "nuevo" | null; // usa un correo suyo, o le creamos uno del negocio
+  /** ⚠️ Ya no se pregunta (2026-08-16): el correo del proyecto SIEMPRE se crea
+   *  nuevo. Se conserva para leer bien las filas que sí eligieron "mio". */
+  correoTipo: "mio" | "nuevo" | null;
   correo: string; // si es "mio"
   correoIdea: string; // si es "nuevo": cómo le gustaría que se llame
   telefono: string; // a donde llegan los códigos por SMS
@@ -43,7 +56,7 @@ export type ArranqueDatos = {
   config: {
     nombre: string;
     clinica: string;
-    giro: string; // dental | estetica | medica (alimenta la demo)
+    giro: string; // clave de giro de lib/nicho.json (alimenta la demo)
     productos: string[]; // agente | voz | web | auto | reactivacion | panel
     plan: string; // llave | gestionado
   };
@@ -56,6 +69,8 @@ export type ArranqueDatos = {
     logoColores: string;
   };
   numero: { decision: string | null }; // actual | nuevo | asesoria
+  /** Solo agente de voz: qué pasa con su teléfono. desvio | nuevo | asesoria */
+  linea: { decision: string | null };
   concierge: ConciergeDatos;
   cuentas: Record<string, CuentaEstado>;
   calendario: { compartido: boolean; tipo: string };
@@ -68,6 +83,16 @@ export type ArranqueDatos = {
   /** Fases del proyecto — las actualiza Upcore; el cliente solo las ve */
   avances: AvanceItem[];
   progreso: { pasoActual: number; parteInicialEl?: string; completadoEl?: string };
+  /**
+   * El idioma en que el cliente está leyendo su portal.
+   *
+   * ⚠️ SE GUARDA, no vive solo en la URL. El portal no se llena de una sentada: se
+   * entra, se deja a medias y se vuelve al día siguiente con el mismo link. Si el
+   * idioma viviera solo en `?lang=en`, al volver lo encontraría en español y
+   * pensaría que le cambiamos el portal. Cabe aquí sin tocar el esquema de n8n
+   * porque `datos` es un JSON.
+   */
+  idioma?: "es" | "en";
 };
 
 /** Las 5 fases del proyecto (espejo del checklist interno de despliegue). */
@@ -86,7 +111,7 @@ export function normalizarDatos(d: unknown): ArranqueDatos {
     config: {
       nombre: "",
       clinica: "",
-      giro: "dental",
+      giro: DEMO_DEFAULTS.giro,
       // OJO: no hay endpoint que siembre esta fila desde la propuesta aceptada —
       // `productos` lo pone Yael a mano al crearla (claves crudas, ej. ["web"]).
       // Vacío = "no se sembró": el portal muestra TODOS los pasos (comportamiento
@@ -106,6 +131,7 @@ export function normalizarDatos(d: unknown): ArranqueDatos {
       ...(x.checklist ?? {}),
     },
     numero: { decision: null, ...(x.numero ?? {}) },
+    linea: { decision: null, ...(x.linea ?? {}) },
     concierge: {
       modo: null,
       correoTipo: null,
@@ -128,6 +154,7 @@ export function normalizarDatos(d: unknown): ArranqueDatos {
     textos: Array.isArray(x.textos) ? x.textos : [],
     avances: Array.isArray(x.avances) && x.avances.length > 0 ? x.avances : FASES_DEFAULT,
     progreso: { pasoActual: 1, ...(x.progreso ?? {}) },
+    idioma: x.idioma === "en" ? "en" : "es",
   };
 }
 
@@ -140,6 +167,7 @@ export type PasoId =
   | "servicios"
   | "horarios"
   | "numero"
+  | "linea"
   | "cuentas"
   | "calendario"
   | "demo"
@@ -154,12 +182,20 @@ export function pasosVisibles(productos: string[]): PasoId[] {
   const tiene = (...c: string[]) => todos || c.some((x) => p.includes(x));
   const pasos: PasoId[] = ["bienvenida", "servicios", "horarios"];
   if (tiene("agente", "auto", "reactivacion")) pasos.push("numero");
+  // El agente de voz vive del TELÉFONO: decidir si se desvía su número o estrena
+  // línea es LA decisión de ese producto, y no se le preguntaba nunca
+  // (lección 2026-08-16). Es un paso aparte del número de WhatsApp: un cliente
+  // con las dos piezas tiene que decidir las dos cosas, no una.
+  if (tiene("voz")) pasos.push("linea");
   pasos.push("cuentas");
   // La web también agenda (su botón de citas cae al calendario del cliente).
   if (tiene("agente", "voz", "auto", "web")) pasos.push("calendario");
   // La demo es el CHAT del agente: a voz-sola o web-sola no les aplica.
   if (tiene("agente")) pasos.push("demo");
-  pasos.push("textos", "resumen");
+  // El paso de textos solo tiene contenido si hay sitio (su estilo) o mensajes
+  // que aprobar. A un cliente de solo-voz le salía una pantalla vacía.
+  if (tiene("web", "agente", "auto", "reactivacion")) pasos.push("textos");
+  pasos.push("resumen");
   return pasos;
 }
 
@@ -167,8 +203,15 @@ export type CuentaDef = {
   id: string;
   titulo: string;
   para: string;
+  /** Qué pasa con esa cuenta — escrito desde el lado del cliente, porque él ya
+   *  no la abre: la abrimos nosotros y él solo se entera de lo que le toca. */
   pasos: string[];
   nota?: string;
+  /** La única excepción al arranque concierge: cuentas donde el proveedor EXIGE
+   *  los clics del dueño. Hoy solo Meta (lección 2026-07-15: automatizar su
+   *  navegador nos restringió el negocio, así que los clics los da la persona).
+   *  Se marca para poder decírselo de frente en vez de que le sorprenda. */
+  tusManos?: boolean;
 };
 
 /** Qué cuentas necesita ESTE proyecto, según sus piezas y su plan. */
@@ -182,36 +225,64 @@ export function cuentasRequeridas(config: ArranqueDatos["config"]): CuentaDef[] 
     defs.push({
       id: "meta",
       titulo: "Meta — WhatsApp oficial",
-      para: "El número que atenderá tu asistente, verificado a nombre de tu clínica",
+      // Un cliente de solo recordatorios no tiene asistente: para él ese número
+      // no ATIENDE a nadie, solo manda. Decírselo mal le vende algo que no compró.
+      para: p.includes("agente")
+        ? "El número que atenderá tu asistente, verificado a nombre de tu inmobiliaria"
+        : "El número desde el que salen tus mensajes, verificado a nombre de tu inmobiliaria",
       pasos: [
-        "Se crea con la cuenta personal de Facebook del DUEÑO (una con historia, no recién creada).",
-        "Cuando llegues a este paso, escríbenos: te dictamos cada clic por WhatsApp — tú tecleas, nosotros guiamos.",
-        "Agrega tu método de pago (los recordatorios cuestan centavos por mensaje) y listo.",
+        "Meta exige que salga del Facebook personal del dueño, así que esta es la única que no podemos abrir solos.",
+        "Son ~10 minutos en videollamada: nosotros te dictamos cada clic, tú solo tecleas.",
+        "En esa misma videollamada le pones tu método de pago — cada mensaje cuesta centavos.",
       ],
       nota: "Es el paso más tardado (Meta puede tardar días en verificar) — por eso lo arrancamos primero.",
+      tusManos: true,
     });
   }
-  if (p.includes("agente")) {
+  // El cerebro lo usan las DOS piezas que conversan, no solo el chat: un cliente
+  // de solo-voz se quedaba sin la cuenta que hace hablar a su asistente.
+  if (p.includes("agente") || p.includes("voz")) {
     defs.push({
       id: "ia",
       titulo: "Anthropic — el cerebro de IA",
-      para: "El modelo de inteligencia artificial que conversa con tus pacientes",
+      para: "El modelo de inteligencia artificial que conversa con tus compradores",
       pasos: [
-        "Crea tu cuenta en console.anthropic.com con tu correo.",
-        "Agrega tu tarjeta y ACTIVA el tope de gasto (te decimos el monto sugerido para tu volumen).",
-        "La llave de la API la generas tú y va directo a tu lugar seguro — jamás nos la mandes por chat.",
+        "La abrimos nosotros a tu nombre, con el tope de gasto ya activado.",
+        // ⚠️ La tarjeta va al ABRIRLA, no al entregar: el asistente consume desde
+        // que lo construimos y lo probamos. Ponerla al final significaría que
+        // Upcore adelanta tu consumo, y esa es la regla de oro que no se rompe.
+        "En cuanto quede, te mandamos el link para que le pongas tu tarjeta: 2 minutos, la tecleas tú y nosotros nunca la vemos.",
+        "Su llave de acceso jamás viaja por chat, ni contigo ni con nadie.",
       ],
+    });
+  }
+  if (p.includes("voz")) {
+    defs.push({
+      id: "telefonia",
+      titulo: "Tu línea de voz",
+      para: "Por donde entran y se contestan las llamadas de tu asistente",
+      pasos: [
+        "La abrimos nosotros a tu nombre y te mandamos el link para que le pongas tu tarjeta: 2 minutos, la tecleas tú.",
+        "Se cobra por minuto hablado — te decimos el estimado según tus llamadas y se activa un tope de gasto.",
+        "Tu número de siempre no se toca: aquí solo vive la línea del asistente.",
+      ],
+      nota: "De todo lo que se consume al mes, esto es lo que más pesa — es normal, y te lo decimos de frente para que no te sorprenda.",
     });
   }
   if (p.includes("web")) {
     defs.push({
       id: "dominio",
-      titulo: "Tu dominio",
-      para: "La dirección de tu sitio (tuclinica.com), a tu nombre",
+      titulo: "Tu dominio (tuinmobiliaria.com)",
+      para: "La dirección de tu sitio, a tu nombre desde el día uno",
       pasos: [
-        "Si ya tienes dominio, solo confírmalo aquí abajo.",
-        "Si no, lo compramos juntos a TU nombre con nuestra guía (~$200–400 MXN al año).",
+        "Si ya tienes dominio, dínoslo y lo usamos — no compres otro.",
+        "Si no tienes, lo compramos NOSOTROS a tu nombre: ya va incluido en tu proyecto.",
+        "Tú solo dinos cómo te gustaría que se llame y lo revisamos juntos.",
       ],
+      nota:
+        config.plan === "gestionado"
+          ? "Mientras estemos contigo, el dominio va incluido en tu mensualidad."
+          : "El primer año corre por nuestra cuenta. Del segundo en adelante la renovación es tuya — te dejamos un video de cómo se hace.",
     });
   }
   if (usaWhatsApp && config.plan === "llave") {
@@ -220,8 +291,10 @@ export function cuentasRequeridas(config: ArranqueDatos["config"]): CuentaDef[] 
       titulo: "Tu servidor (hosting)",
       para: "Donde vive tu automatización — en tu propia cuenta, como todo lo demás",
       pasos: [
-        "Creamos juntos tu cuenta del servidor (~$110–220 MXN/mes), a tu nombre y con tu tarjeta.",
-        "Nosotros lo configuramos todo — tú solo creas la cuenta con nuestra guía.",
+        "La abrimos y la configuramos nosotros, a tu nombre.",
+        // ⚠️ Decía "~$110–220 MXN al mes": pesos mexicanos cotizados a un cliente
+        // de Miami que paga en dólares. Se cachó abriendo el portal, no leyendo.
+        "Te mandamos el link para que le pongas tu tarjeta (~$6–12 USD al mes) — la tecleas tú, nosotros nunca la vemos.",
       ],
     });
   }
@@ -233,8 +306,14 @@ export function cuentasRequeridas(config: ArranqueDatos["config"]): CuentaDef[] 
  * qué correo quedan y un teléfono donde nos conteste los códigos.
  */
 export function conciergeListo(c: ConciergeDatos): boolean {
-  if (c.modo !== "upcore") return false;
-  const correoOk = c.correoTipo === "nuevo" || (c.correoTipo === "mio" && c.correo.trim() !== "");
+  // ⚠️ Ya NO exige `modo` ni `correoTipo`: desde el 2026-08-16 las cuentas las
+  // crea siempre Upcore y el correo del proyecto SIEMPRE se crea nuevo, así que
+  // la pantalla dejó de preguntar las dos cosas. Pedir un campo que ya nadie
+  // llena dejaría todo arranque atascado en "en curso" para siempre — sin dar
+  // un solo error. Lo único que de verdad necesitamos es su teléfono.
+  // (Las filas viejas que eligieron "con un correo mío" siguen exigiendo ese
+  //  correo: su arranque se sigue midiendo con lo que a ellos se les pidió.)
+  const correoOk = c.correoTipo !== "mio" || c.correo.trim() !== "";
   return correoOk && c.telefono.trim() !== "";
 }
 
@@ -243,19 +322,24 @@ export function conciergeListo(c: ConciergeDatos): boolean {
  *  prueba del chat — serían requisitos inalcanzables y jamás llegaría a "completado". */
 export function estadoDe(d: ArranqueDatos): "en-curso" | "parte-inicial-lista" | "completado" {
   const visibles = new Set(pasosVisibles(d.config.productos ?? []));
+  // El tono solo se le pide a quien tiene algo que le hable a un paciente: a un
+  // proyecto de solo-panel esperarlo lo dejaría "en curso" para siempre.
+  const tonoOk = !pideTono(d.config.productos ?? []) || !!d.checklist.tono;
   const nucleoListo =
     d.checklist.servicios.some((s) => s.nombre.trim() !== "") &&
     d.checklist.horarios.trim() !== "" &&
-    !!d.checklist.tono &&
-    (!visibles.has("numero") || !!d.numero.decision);
+    tonoOk &&
+    (!visibles.has("numero") || !!d.numero.decision) &&
+    (!visibles.has("linea") || !!d.linea.decision);
   if (!nucleoListo) return "en-curso";
 
+  // Las cuentas las creamos nosotros: el cliente no tiene ninguna casilla que
+  // marcar, su parte termina cuando nos deja el correo y el teléfono. Antes esto
+  // caía a "que él marque cada cuenta como lista", y esa pantalla ya no existe:
+  // habría quedado esperando para siempre un clic que nadie le puede dar.
+  // Las filas viejas donde SÍ marcó cuentas siguen contando.
   const reqs = cuentasRequeridas(d.config);
-  // Si las creamos nosotros, el cliente no tiene nada que marcar: su parte termina
-  // cuando nos deja sus datos. Si no, se le esperaría por algo que no le toca hacer.
-  const cuentasOk = conciergeListo(d.concierge)
-    ? true
-    : reqs.every((r) => d.cuentas[r.id]?.lista);
+  const cuentasOk = conciergeListo(d.concierge) || reqs.every((r) => d.cuentas[r.id]?.lista);
   const calOk = !visibles.has("calendario") || d.calendario.compartido;
   const pruebaOk = !visibles.has("demo") || d.prueba.hecha;
   // Los `textos` son borradores de recordatorios: solo existen en proyectos con
@@ -269,8 +353,13 @@ export function estadoDe(d: ArranqueDatos): "en-curso" | "parte-inicial-lista" |
   return "parte-inicial-lista";
 }
 
-/** Giro del portal → parámetro g de la demo. */
-export function giroDemo(giro: string): "dental" | "estetica" | "medica" {
-  if (giro === "dental" || giro === "estetica") return giro;
-  return "medica";
+/**
+ * Giro del portal → parámetro `g` de la demo.
+ *
+ * ⚠️ Era la SÉPTIMA copia del concepto de giro, con los tres del nicho viejo escritos a
+ * mano. Ahora valida contra los giros que de verdad tienen guion de demo (GIROS_DEMO sale
+ * de lib/nicho.json) y, si el valor no existe, cae al de por defecto en vez de inventar uno.
+ */
+export function giroDemo(giro: string): string {
+  return GIROS_DEMO.includes(giro) ? giro : DEMO_DEFAULTS.giro;
 }

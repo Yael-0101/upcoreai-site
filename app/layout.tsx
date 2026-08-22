@@ -2,27 +2,27 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { Analytics } from "@vercel/analytics/react";
 import { JsonLd } from "@/components/JsonLd";
-import { jsonLdGlobal, SITE_NAME } from "@/lib/seo";
+import { jsonLdGlobal, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
-const title = "Upcore AI | Automatización con IA para clínicas";
+const title = "Upcore AI | Automatización con IA para inmobiliarias";
 const description =
-  "Llena tu agenda sin mover un dedo. Automatización con IA que confirma citas, responde WhatsApp 24/7 y recupera pacientes — para clínicas de salud y estética.";
+  "Ningún comprador sin respuesta. Automatización con IA que atiende tu WhatsApp y tu teléfono en español a cualquier hora, califica al comprador y agenda la visita — para inmobiliarias de preventa en Miami.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://upcoreai.com"),
+  metadataBase: new URL(SITE_URL),
   // Las páginas ponen su título "a secas" y el template agrega la marca.
   title: { default: title, template: `%s | ${SITE_NAME}` },
   description,
   keywords: [
-    "automatización para clínicas",
-    "IA para clínicas",
-    "agente de WhatsApp para clínicas",
-    "reducir no-shows",
-    "chatbot de citas médicas",
-    "automatización clínica dental",
-    "medicina estética automatización",
-    "dashboard para clínicas",
+    "automatización para inmobiliarias",
+    "IA para inmobiliarias",
+    "agente de WhatsApp para inmobiliarias",
+    "seguimiento de leads inmobiliarios",
+    "chatbot inmobiliario",
+    "preventa Miami",
+    "agente de voz inmobiliario",
+    "panel para inmobiliarias",
   ],
   authors: [{ name: "Upcore AI" }],
   // "./" se resuelve a la URL de cada ruta (con metadataBase); un valor fijo
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title,
     description,
-    url: "https://upcoreai.com",
+    url: SITE_URL,
     siteName: SITE_NAME,
     type: "website",
     locale: "es_MX",

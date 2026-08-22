@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { SOLUCIONES } from "./soluciones";
 import { ARTICULOS, HAY_BLOG } from "./blog";
+import { alternativas, LOCALE, ruta, IDIOMAS, ORIGEN, type Idioma } from "./idioma";
 
-export const SITE_URL = "https://upcoreai.com";
+// El host que de VERDAD sirve. Vive en lib/idioma.ts (ver el comentario de ORIGEN:
+// apuntar al apex, que redirige, hacía que Google descartara el hreflang).
+// Se re-exporta con el nombre de siempre para no tocar a quien ya lo importaba.
+export const SITE_URL = ORIGEN;
 export const SITE_NAME = "Upcore AI";
 
 // ============================================================================
@@ -14,7 +18,7 @@ export const ORGANIZACION = {
   telefono: "+1-424-447-2698",
   logo: `${SITE_URL}/icon-512.png`,
   descripcion:
-    "Automatización con IA para clínicas privadas de salud y estética: agentes de WhatsApp, reducción de no-shows, sistemas y dashboards a la medida.",
+    "Automatización con IA para inmobiliarias de preventa en el sur de Florida: agentes de WhatsApp y voz en español, seguimiento de prospectos, sitios y paneles a la medida.",
   // Perfiles oficiales de la marca — alimentan el sameAs del JSON-LD.
   // Pendiente de agregar: página de empresa de LinkedIn (cuando exista).
   sameAs: ["https://www.instagram.com/upcore.ai/"] as string[],
@@ -22,13 +26,13 @@ export const ORGANIZACION = {
   fundadorNombre: "Robert López",
   fundadorLinkedIn: "https://www.linkedin.com/in/robert-l%C3%B3pez-898923423/",
   knowsAbout: [
-    "automatización para clínicas",
+    "automatización para inmobiliarias",
     "agentes de WhatsApp con IA",
     "inteligencia artificial conversacional",
     "WhatsApp Business API",
-    "reducción de no-shows",
-    "recuperación de pacientes inactivos",
-    "dashboards para clínicas",
+    "seguimiento de leads inmobiliarios",
+    "preventa inmobiliaria en Miami",
+    "paneles para inmobiliarias",
   ],
 };
 
@@ -44,27 +48,50 @@ export function metaPagina({
   description,
   path,
   tipo = "website",
+  idioma = "es",
+  tituloAbsoluto = false,
 }: {
   /** Título SIN "| Upcore AI" — el template del layout agrega la marca */
   title: string;
   description: string;
-  /** Ruta relativa ("/precios") — se vuelve canonical y og:url vía metadataBase */
+  /**
+   * true = el título ya trae la marca y NO hay que volver a pegársela.
+   *
+   * ⚠️ Existe por un defecto real (2026-08-22): la portada quedó con el título
+   * "Upcore AI | AI automation for real estate firms | Upcore AI". El título de
+   * la portada SÍ lleva la marca al principio —es el de la marca— y el template
+   * del layout le añadía otra al final. Se vio abriendo la página, no leyendo el
+   * código: en el <title> del navegador, con la marca dos veces.
+   */
+  tituloAbsoluto?: boolean;
+  /** Ruta CANÓNICA en español ("/precios"). El prefijo del idioma lo pone esta
+   *  función: pasar "/en/precios" a mano rompería el par de `hreflang`. */
   path: string;
   tipo?: "website" | "article";
+  idioma?: Idioma;
 }): Metadata {
-  const tituloCompleto = `${title} | ${SITE_NAME}`;
+  const tituloCompleto = tituloAbsoluto ? title : `${title} | ${SITE_NAME}`;
+  const propia = ruta(idioma, path);
+  const alt = alternativas(path);
   return {
-    title,
+    title: tituloAbsoluto ? { absolute: title } : title,
     description,
-    alternates: { canonical: path },
+    alternates: {
+      // ⚠️ El canonical de cada página es ELLA MISMA, no la española: si el
+      // inglés declarara como canonical al español, le estaríamos pidiendo a
+      // Google que no indexe el inglés — y la traducción no serviría de nada.
+      // Lo que las empareja es `languages` (hreflang), no el canonical.
+      canonical: `${SITE_URL}${propia}`,
+      languages: alt.languages,
+    },
     openGraph: {
       // El template del layout NO aplica a og:title — se arma completo aquí.
       title: tituloCompleto,
       description,
-      url: path,
+      url: `${SITE_URL}${propia}`,
       siteName: SITE_NAME,
       type: tipo,
-      locale: "es_MX",
+      locale: LOCALE[idioma].og,
       // Sin `images`: las inyecta la convención opengraph-image.tsx, que
       // tiene prioridad y sobrevive a cualquier merge.
     },
@@ -102,7 +129,6 @@ export const RUTAS_INDEXABLES: {
     changeFrequency: "monthly" as const,
     lastModified: a.fechaActualizado ?? a.fechaPublicado,
   })),
-  { path: "/casos/clinica-dental-ejemplo", priority: 0.6, changeFrequency: "monthly" },
   { path: "/nosotros", priority: 0.5, changeFrequency: "yearly" },
   { path: "/privacidad", priority: 0.3, changeFrequency: "yearly" },
   { path: "/terminos", priority: 0.3, changeFrequency: "yearly" },
@@ -128,7 +154,11 @@ export function jsonLdGlobal() {
         email: ORGANIZACION.email,
         telephone: ORGANIZACION.telefono,
         founder: { "@id": `${SITE_URL}/#fundador` },
-        areaServed: { "@type": "Country", name: "México" },
+        // ⚠️ Decía `Country: México` — un resto del nicho anterior. Le estaba
+        // diciendo al buscador que atendemos México cuando el cliente está en el
+        // sur de Florida. No da error y no se ve en pantalla: solo hace que la
+        // ficha estructurada contradiga a todo el sitio.
+        areaServed: { "@type": "AdministrativeArea", name: "South Florida, United States" },
         knowsAbout: ORGANIZACION.knowsAbout,
         ...(ORGANIZACION.sameAs.length > 0 && { sameAs: ORGANIZACION.sameAs }),
         contactPoint: {
@@ -151,23 +181,33 @@ export function jsonLdGlobal() {
         "@id": `${SITE_URL}/#sitio`,
         url: SITE_URL,
         name: SITE_NAME,
-        inLanguage: "es-MX",
+        // El sitio existe en los dos idiomas; el original es el español.
+        inLanguage: IDIOMAS.map((i) => LOCALE[i].html),
         publisher: { "@id": `${SITE_URL}/#organizacion` },
       },
     ],
   };
 }
 
-/** Migas de pan. Solo rutas que EXISTEN como página (no inventar niveles). */
-export function breadcrumbJsonLd(items: { nombre: string; path: string }[]) {
+/** Migas de pan. Solo rutas que EXISTEN como página (no inventar niveles).
+ *  Los `path` se escriben SIEMPRE en su forma canónica española; el prefijo del
+ *  idioma lo pone esta función, para que la miga del inglés apunte a páginas
+ *  inglesas y no cruce al español a media navegación. */
+export function breadcrumbJsonLd(
+  items: { nombre: string; path: string }[],
+  idioma: Idioma = "es"
+) {
   return {
     "@type": "BreadcrumbList",
-    itemListElement: items.map((it, i) => ({
-      "@type": "ListItem",
-      position: i + 1,
-      name: it.nombre,
-      item: `${SITE_URL}${it.path === "/" ? "" : it.path}`,
-    })),
+    itemListElement: items.map((it, i) => {
+      const r = ruta(idioma, it.path);
+      return {
+        "@type": "ListItem",
+        position: i + 1,
+        name: it.nombre,
+        item: `${SITE_URL}${r === "/" ? "" : r}`,
+      };
+    }),
   };
 }
 
@@ -175,18 +215,22 @@ export function breadcrumbJsonLd(items: { nombre: string; path: string }[]) {
 export function articleJsonLd(a: {
   titulo: string;
   descripcion: string;
+  /** Ruta canónica española; el prefijo del idioma lo pone esta función. */
   path: string;
   fechaPublicado: string;
   fechaActualizado?: string;
   imagen?: string;
+  idioma?: Idioma;
 }) {
+  const idioma = a.idioma ?? "es";
+  const r = ruta(idioma, a.path);
   return {
     "@type": "Article",
     headline: a.titulo,
     description: a.descripcion,
-    url: `${SITE_URL}${a.path}`,
-    mainEntityOfPage: `${SITE_URL}${a.path}`,
-    inLanguage: "es-MX",
+    url: `${SITE_URL}${r}`,
+    mainEntityOfPage: `${SITE_URL}${r}`,
+    inLanguage: LOCALE[idioma].html,
     image: a.imagen ?? `${SITE_URL}/opengraph-image`,
     datePublished: a.fechaPublicado,
     dateModified: a.fechaActualizado ?? a.fechaPublicado,

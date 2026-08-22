@@ -1,14 +1,20 @@
 import { SectionTitle } from "./SectionTitle";
 import { Reveal } from "./Reveal";
-import { FAQ as FAQ_DATA } from "@/lib/content";
+import { contenido } from "@/lib/site-textos";
+import type { Idioma } from "@/lib/idioma";
 
 export function FAQ({
-  heading = FAQ_DATA.heading,
-  items = FAQ_DATA.items,
+  idioma = "es",
+  heading,
+  items,
 }: {
+  idioma?: Idioma;
   heading?: string;
   items?: { q: string; a: string }[];
 } = {}) {
+  const FAQ_DATA = contenido(idioma).faq;
+  heading = heading ?? FAQ_DATA.heading;
+  items = items ?? FAQ_DATA.items;
   return (
     <section id="faq" className="px-[6%] py-24 md:px-[10%] md:py-32">
       <SectionTitle title={heading} variant="maskReveal" />

@@ -1,21 +1,48 @@
-// Acuerdo de servicio — FUENTE ÚNICA del texto y de los datos.
+// Acuerdo de servicio — FUENTE ÚNICA de la estructura y de los datos.
 //
-// De aquí salen las DOS versiones del acuerdo, para que jamás digan cosas distintas:
+// De aquí salen TODAS las versiones del acuerdo, para que jamás digan cosas distintas:
 //   1. La página web  → app/acuerdo/[token]/page.tsx
-//   2. El .docx       → plantillas/cierre/acuerdo.md (generado, con guardián en el prebuild)
+//   2. El PDF         → lib/acuerdo-pdf.ts (lo que el cliente descarga y recibe por correo)
+//   3. El .docx       → plantillas/cierre/acuerdo.md (generado, con guardián en el prebuild)
+//   4. En español y en inglés → los textos viven en lib/acuerdo-textos.ts
 //
 // REGLA QUE SOSTIENE LA GARANTÍA DE "SIN ERRORES": aquí NADA se redacta al vuelo.
 // Cada hueco se llena copiando un campo ya congelado en la propuesta del cliente, o
 // eligiendo entre textos fijos según el plan. Si un dato falta, `datosAcuerdo` devuelve
 // null y no se genera acuerdo — nunca se inventa una cifra ni un alcance.
+//
+// ⚠️ EL ARMADOR ES UNO SOLO PARA LOS DOS IDIOMAS. Las secciones, los números, el orden y
+// las reglas por pieza se deciden aquí una vez; el idioma solo cambia las palabras. Dos
+// armadores paralelos se habrían desfasado igual que la propuesta contra el portal.
 
-import { partirEnDosPagos } from "./calc";
-import { piezasDeSnapshot, esWebSola } from "./propuesta-copy";
+import { partirEnDosPagos, type Money } from "./calc";
+import {
+  piezasDeSnapshot,
+  esWebSola,
+  usaApis,
+  bonos,
+  lineaSeo,
+  type PiezaClave,
+} from "./propuesta-copy";
+import {
+  TEXTOS,
+  LEY_POR_IDIOMA,
+  traducirRenglon,
+  type Idioma,
+  type Textos,
+} from "./acuerdo-textos";
+
+export type { Idioma };
+export { IDIOMAS, idiomaDe } from "./acuerdo-textos";
 
 // ── Lo que viene congelado de la propuesta ────────────────────────────────────
 // Espejo del snapshot que produce snapshotDeLead() del panel (upcore-panel/lib/propuesta.ts).
 
-export type Money = { mxn: string; usd: string };
+// ⚠️ `Money` ya NO se declara aquí: se importa de ./calc, que es su dueño. Había TRES
+// declaraciones paralelas del mismo tipo (calc.ts, este archivo y p/[token]/page.tsx), y
+// al renombrar sus campos las copias siguieron compilando con los nombres viejos. Mismo
+// patrón que las cinco listas de giros: una definición, un dueño, todos leen de ahí.
+export type { Money };
 
 export type Plan = {
   inversion: Money;
@@ -73,11 +100,15 @@ export const TIEMPOS: Record<
   string,
   { construccion: string; pruebas: string; entrega: string; total: string }
 > = {
+  // Bajado de ~2 semanas a 4 días (2026-08-16). Una pieza sola —un sitio, un
+  // agente— no necesita dos semanas, y prometer de más es regalarle al cliente
+  // tiempo para enfriarse. La construcción arranca el mismo día 1, mientras él
+  // llena su parte en el Portal de Arranque.
   "Solución esencial": {
-    construccion: "Días 2–6",
-    pruebas: "Días 7–9",
-    entrega: "≈ Día 10",
-    total: "≈ 2 semanas",
+    construccion: "Días 1–2",
+    pruebas: "Día 3",
+    entrega: "≈ Día 4",
+    total: "≈ 4 días",
   },
   "Sistema a la medida": {
     construccion: "Días 2–10",
@@ -94,6 +125,41 @@ export const TIEMPOS: Record<
 };
 
 export const TIEMPO_DEFAULT = TIEMPOS["Solución esencial"];
+
+/**
+ * Los plazos, dichos en inglés. Se TRADUCEN, no se recalculan: si aquí saliera un
+ * número distinto al del español, el documento prometería dos cosas.
+ *
+ * 🔴 Al principio solo estaban los totales, y la propuesta en inglés salía con
+ * "Días 2–14", "≈ Día 20" y "3–4 semanas" en medio de una página entera en inglés.
+ * No lo vio ningún guardián: los plazos viven aquí, no en la tabla de textos — es
+ * la misma lección de siempre, el defecto está donde el guardián no mira.
+ */
+const PLAZO_EN: Record<string, string> = {
+  "≈ 4 días": "≈ 4 days",
+  "≈ 3 semanas": "≈ 3 weeks",
+  "3–4 semanas": "3–4 weeks",
+  "Días 1–2": "Days 1–2",
+  "Día 3": "Day 3",
+  "≈ Día 4": "≈ Day 4",
+  "Días 2–10": "Days 2–10",
+  "Días 11–14": "Days 11–14",
+  "≈ Día 15": "≈ Day 15",
+  "Días 2–14": "Days 2–14",
+  "Días 15–18": "Days 15–18",
+  "≈ Día 20": "≈ Day 20",
+};
+
+/** Un plazo en el idioma pedido. Si falta la traducción devuelve el español, y el
+ *  guardián truena — mejor un plazo en español que un plazo inventado. */
+export const plazoEn = (v: string, idioma: Idioma) =>
+  idioma === "en" ? PLAZO_EN[v] ?? v : v;
+
+/** Los plazos que NO tienen traducción. Para el guardián. */
+export const plazosSinTraducir = () =>
+  Object.values(TIEMPOS)
+    .flatMap((t) => [t.construccion, t.pruebas, t.entrega, t.total])
+    .filter((v) => !PLAZO_EN[v]);
 
 // ── Forma del documento ───────────────────────────────────────────────────────
 // Estructura, no HTML ni markdown: la página la pinta en JSX y el generador la vuelca
@@ -120,50 +186,42 @@ export type DatosAcuerdo = {
   entrega: string;
   intro: string;
   secciones: Seccion[];
+  /** Opcional: los acuerdos congelados antes del 2026-08-22 no lo traen y son español. */
+  idioma?: Idioma;
 };
 
-// ── Textos fijos ──────────────────────────────────────────────────────────────
+// ── Qué toca cada pieza ───────────────────────────────────────────────────────
+// La sección 3 ya filtraba por pieza desde el 2026-08-10, pero las secciones 4, 7
+// y 11 seguían siendo texto FIJO para todos. Resultado: a un cliente que solo
+// compró su sitio el contrato le hablaba del asistente, de Meta, de WhatsApp y de
+// los proveedores de IA — piezas que no compró. Es el mismo defecto que Yael cazó
+// en el Portal de Arranque, aquí dentro de un documento que se firma.
 
-const INTRO =
-  "Esto no es un contrato de permanencia ni tiene letras chiquitas. Es el resumen por escrito " +
-  "de lo que ya platicamos, para que los dos tengamos claro qué entra, cuánto cuesta, para " +
-  "cuándo, y qué pasa si algo se sale del plan.";
+/** Piezas que le hablan al comprador por WhatsApp — las únicas que necesitan Meta. */
+const usaWhatsApp = (p: PiezaClave[]) =>
+  p.includes("agente") || p.includes("auto") || p.includes("reactivacion");
 
-/** Lo que nunca entra, sin importar qué piezas haya comprado. A esto se le suman las
- *  piezas del catálogo que NO contrató (vienen en `opcionales` de su propia propuesta). */
-const NO_INCLUYE_FIJO = [
-  "campañas de publicidad o pauta",
-  "creación de contenido para redes sociales",
-  "migración de tu expediente clínico",
-  "cualquier pieza que no esté en la lista de arriba",
-];
+/** ¿Hay algo que ATIENDA al comprador (contesta, responde dudas, agenda)? */
+const hayAsistente = (p: PiezaClave[]) => p.includes("agente") || p.includes("voz");
 
-const PLANES: Record<
-  TipoPlan,
-  { label: string; descripcion: string; filaMensualidad: string; operacion: string }
-> = {
-  llave: {
-    label: "Llave en Mano",
-    descripcion:
-      "Lo construyo, te lo entrego funcionando y te capacito. De ahí en adelante lo operas tú " +
-      "(o quien tú decidas). Pago único, sin mensualidad y sin permanencia. Si más adelante " +
-      "necesitas soporte puntual, se cobra por hora.",
-    filaMensualidad: "Mensualidad",
-    operacion: "Al entregar, te transfiero todos los accesos y **no conservo ninguno**.",
-  },
-  gestionado: {
-    label: "Gestionado",
-    descripcion:
-      "Lo construyo y además **yo lo opero, lo mantengo y lo mejoro** por ti: monitoreo, cambios " +
-      "y soporte incluidos en tu mensualidad. Tú no tienes que aprender a operarlo. Se cancela " +
-      "cuando quieras avisando con 30 días.",
-    filaMensualidad: "Mensualidad (operación y mantenimiento)",
-    operacion:
-      "Para poder operar tu sistema, conservo un acceso **acotado, documentado y revocable** en " +
-      "cualquier momento. La propiedad sigue siendo tuya: el acceso es para trabajar, no para " +
-      "retener nada.",
-  },
-};
+/**
+ * Los terceros de los que de verdad depende ESTE proyecto.
+ *
+ * ⚠️ Ningún elemento de la lista puede llevar "y"/"and" adentro, ni empezar con "el":
+ * el primero va detrás de "caídas de …" —y "de el" es "del"— y el último se une con
+ * " y ", así que un "WhatsApp y Meta" producía "…de tu dominio y tu internet" con dos
+ * "y" seguidas. Es la lección de la plantilla que no cabe en la frase: el dato
+ * interpolado tiene que leerse como un idioma, no solo compilar.
+ */
+function tercerosDe(p: PiezaClave[], t: Textos): string {
+  const lista: string[] = [];
+  if (usaWhatsApp(p)) lista.push(t.terceros.whatsapp, t.terceros.meta);
+  if (p.includes("voz")) lista.push(t.terceros.linea);
+  if (usaApis(p)) lista.push(t.terceros.ia);
+  if (p.includes("web")) lista.push(t.terceros.hosting, t.terceros.dominio);
+  lista.push(t.terceros.internet);
+  return t.unir(lista);
+}
 
 // ── El armador ────────────────────────────────────────────────────────────────
 
@@ -171,68 +229,118 @@ const PLANES: Record<
  * Convierte la propuesta congelada del cliente + el plan que aceptó en el acuerdo completo.
  * Devuelve null si falta un dato esencial (precio ilegible o sin piezas): más vale no generar
  * acuerdo que generar uno con un hueco o una cifra inventada.
+ *
+ * `idioma` solo cambia las palabras: la estructura, los números y las reglas por pieza
+ * son las mismas. El ESPAÑOL es la versión que gobierna (ver la cláusula de idioma).
  */
-export function datosAcuerdo(snap: Snapshot, plan: TipoPlan): DatosAcuerdo | null {
-  const cfg = PLANES[plan];
+export function datosAcuerdo(
+  snap: Snapshot,
+  plan: TipoPlan,
+  idioma: Idioma = "es"
+): DatosAcuerdo | null {
+  const t = TEXTOS[idioma];
+  if (!t) return null;
+  const cfg = t.planes[plan];
   if (!cfg) return null;
 
   const planDatos = snap[plan];
-  if (!planDatos?.inversion?.mxn) return null;
+  if (!planDatos?.inversion?.principal) return null;
 
-  const pagos = partirEnDosPagos(planDatos.inversion.mxn);
+  const pagos = partirEnDosPagos(planDatos.inversion.principal);
   if (!pagos) return null;
 
   const incluye = (snap.incluye || []).filter(Boolean);
   if (!incluye.length) return null;
+
+  // Los BONOS que la propuesta le prometió van también aquí, calculados con la
+  // MISMA función. Si el acuerdo no los nombrara, el cliente tendría dos textos
+  // del mismo trato diciendo cosas distintas — que es exactamente el error del
+  // dominio (2026-08-16): la propuesta se lo regalaba y el portal se lo cobraba.
+  const piezasSnap = piezasDeSnapshot({ piezas: snap.piezas, incluye });
+  const bonosDelTrato = bonos(piezasSnap, snap.diag?.agenda_hoy || "").map((b) =>
+    t.bono(idioma === "en" ? traducirRenglon(b.titulo) ?? b.titulo : b.titulo)
+  );
+  // El SEO del sitio va incluido: si la propuesta lo promete, el contrato lo
+  // nombra. Misma función, para que no puedan decir cosas distintas.
+  const seoDelTrato = lineaSeo(piezasSnap);
+
+  // Las cuentas que ESTE proyecto abre de verdad. Decía siempre "las cuentas de
+  // inteligencia artificial y WhatsApp", así que a un cliente de solo voz —que no
+  // lleva WhatsApp— el contrato le nombraba una cuenta que nunca se le va a abrir.
+  const cuentasVariables = t.unir([
+    usaApis(piezasSnap) ? t.cuentas.ia : "",
+    usaWhatsApp(piezasSnap) ? t.cuentas.whatsapp : "",
+    piezasSnap.includes("voz") ? t.cuentas.linea : "",
+  ]);
 
   const clinica = (snap.lead?.clinica || snap.lead?.nombre || "").trim();
   const contacto = (snap.lead?.nombre || "").trim();
   if (!clinica || !contacto) return null;
 
   const tiempo = TIEMPOS[snap.complejidad] || TIEMPO_DEFAULT;
+  const plazo = idioma === "en" ? PLAZO_EN[tiempo.total] || tiempo.total : tiempo.total;
   const mensualidad =
     plan === "gestionado"
-      ? snap.gestionado?.mensualidadUpcore?.mxn || ""
-      : "$0 — tú operas tu sistema";
+      ? snap.gestionado?.mensualidadUpcore?.principal || ""
+      : t.sinMensualidad;
   if (plan === "gestionado" && !mensualidad) return null;
 
-  // Lo que NO incluye: las piezas que su propia propuesta dejó como opcionales, más la
-  // lista fija. Así el documento nombra exactamente lo que él vio cotizado aparte.
+  // 🔴 El punto 1 y el "qué NO incluye" salen del CATÁLOGO (lib/calc.ts), que está en
+  // español. En la versión en inglés hay que traducirlos: si no, el contrato dice
+  // "What I will deliver" y debajo cinco renglones en español — la sección más
+  // importante del documento, ilegible para quien lo pidió en inglés.
+  //
+  // Si un renglón no tiene traducción se deja en español (mejor eso que no poder
+  // generar el contrato) y el guardián del prebuild truena, para que nunca llegue así
+  // a un cliente.
+  const alIdioma = (item: string) =>
+    idioma === "en" ? traducirRenglon(item) ?? item : item;
+
   const noIncluye = [
-    ...(snap.opcionales || []).map((o) => o.label.toLowerCase()),
-    ...NO_INCLUYE_FIJO,
+    ...(snap.opcionales || []).map((o) => alIdioma(o.label).toLowerCase()),
+    ...t.noIncluyeFijo,
   ];
+
+  const ley = LEY_POR_IDIOMA[idioma];
 
   const secciones: Seccion[] = [
     {
       n: 1,
-      titulo: "Qué voy a entregar",
+      titulo: t.sec.entregar.titulo,
       bloques: [
-        { tipo: "lista", items: incluye },
-        { tipo: "texto", texto: `**Qué NO incluye:** ${noIncluye.join(", ")}.` },
         {
-          tipo: "texto",
-          texto:
-            "Si algo de esta lista no lo necesitas, dímelo y lo quitamos: el precio baja. Nada " +
-            "aquí es un paquete cerrado.",
+          tipo: "lista",
+          items: [
+            ...incluye.map(alIdioma),
+            ...(seoDelTrato ? [alIdioma(seoDelTrato)] : []),
+            ...bonosDelTrato,
+          ],
         },
+        { tipo: "texto", texto: t.sec.entregar.noIncluye(noIncluye.join(", ")) },
+        { tipo: "texto", texto: t.sec.entregar.recortar },
       ],
     },
     {
       n: 2,
-      titulo: `Plan contratado: ${cfg.label}`,
+      titulo: t.sec.plan.titulo(cfg.label),
       bloques: [{ tipo: "texto", texto: cfg.descripcion }],
     },
     {
       n: 3,
-      titulo: "Inversión y forma de pago",
+      titulo: t.sec.inversion.titulo,
       bloques: [
         {
           tipo: "tabla",
           filas: [
-            ["Construcción (pago único)", planDatos.inversion.mxn],
-            ["Para arrancar (50%)", pagos.anticipo.mxn],
-            ["Contra entrega (50%)", pagos.resto.mxn],
+            [t.sec.inversion.construccion, planDatos.inversion.principal],
+            // ⛔ Antes decía "(50%)" en las dos filas. `partirEnDosPagos` redondea a
+            // centenas para que las cifras sean limpias al transferir, así que un
+            // precio de $4,500 se parte en $2,300 y $2,200 — o sea 51% y 49%. Poner
+            // "50%" junto a un número que no lo es, en un documento que se firma, es
+            // justo lo que un abogado circula. Se dice CUÁNDO se paga, que además le
+            // sirve más al cliente que el porcentaje.
+            [t.sec.inversion.anticipo, pagos.anticipo.principal],
+            [t.sec.inversion.resto, pagos.resto.principal],
             [cfg.filaMensualidad, mensualidad],
           ],
         },
@@ -240,219 +348,126 @@ export function datosAcuerdo(snap: Snapshot, plan: TipoPlan): DatosAcuerdo | nul
           tipo: "texto",
           // El texto nombra SOLO las cuentas que este proyecto abre de verdad: a una
           // web-sola no se le habla de cuentas de IA ni de WhatsApp (lección 2026-08-10).
-          texto: esWebSola(piezasDeSnapshot(snap))
-            ? "**Los costos variables son tuyos y van directo a tu tarjeta:** el dominio y el " +
-              "hosting se abren **a tu nombre** y tú pagas su consumo. Upcore no les agrega ni " +
-              "un peso de margen y nunca cobra por adelantado algo que no controla. Es poco — " +
-              "el dominio ronda los $200 a $400 pesos al año — y antes de arrancar te digo el " +
-              "estimado anual exacto."
-            : "**Los costos variables son tuyos y van directo a tu tarjeta:** las cuentas de " +
-              "inteligencia artificial, WhatsApp, dominio y hosting se abren **a tu nombre**, con " +
-              "tope de gasto activado, y tú pagas su consumo. Upcore no les agrega ni un peso de " +
-              "margen y nunca cobra por adelantado algo que no controla. Antes de arrancar te digo " +
-              "el estimado mensual con tu propio volumen.",
+          // ⚠️ El dominio del PRIMER AÑO lo pone Upcore y va dentro del precio
+          // (decisión 2026-08-16). Este texto decía lo contrario —"va directo a
+          // tu tarjeta"— y el acuerdo habría contradicho a la propuesta que el
+          // cliente acababa de aceptar. Se corrigió el 2026-08-16.
+          texto: esWebSola(piezasSnap)
+            ? t.sec.inversion.dominioWebSola
+            : t.sec.inversion.costosVariables(cuentasVariables),
         },
-        {
-          tipo: "texto",
-          texto:
-            "**Facturación:** por ahora emito **recibo simple**. La factura está disponible **a " +
-            "partir de octubre de 2026**. Si la necesitas desde el día uno, mejor lo dejamos " +
-            "agendado para entonces.",
-        },
+        { tipo: "texto", texto: t.sec.inversion.facturacion },
       ],
     },
     {
       n: 4,
-      titulo: "Tiempos",
+      titulo: t.sec.tiempos.titulo,
       bloques: [
         {
           tipo: "lista",
           items: [
-            "**Arranca** cuando se confirma el anticipo **y** llega tu parte del checklist de " +
-              "arranque (información de la clínica, servicios, horarios y accesos a tus cuentas). " +
-              "El reloj no corre sin esa información.",
-            `**Entrega estimada: ${tiempo.total}** desde el arranque.`,
-            "**Tu parte es poca:** alrededor de 1 hora en total — un checklist de unos 15 minutos, " +
-              "crear tus cuentas siguiendo un video (a tu nombre y con tus propios clics), y probar " +
-              "el sistema antes de que lo demos por entregado. Lo demás lo hago yo.",
-            "**La entrega incluye:** el sistema funcionando, un video corto explicando cómo usarlo, " +
-              "una guía de 1 página y la documentación.",
+            t.sec.tiempos.arranca,
+            t.sec.tiempos.entrega(plazo),
+            // ⛔ Antes decía "crear tus cuentas siguiendo un video (a tu nombre y
+            // con tus propios clics)". Ya no: las cuentas las abre Upcore
+            // (arranque concierge, 2026-08-16). La única excepción es Meta, que
+            // exige los clics del dueño, y se nombra tal cual para no prometer
+            // de menos.
+            t.sec.tiempos.tuParte,
+            // ⛔ Este punto decía "el WhatsApp oficial, **y solo si tu proyecto lo
+            // lleva**". Ese "si" era la confesión de que el texto no sabía qué había
+            // comprado el cliente — y nosotros sí lo sabemos.
+            ...(usaWhatsApp(piezasSnap) ? [t.sec.tiempos.meta] : []),
+            t.sec.tiempos.incluye,
           ],
         },
       ],
     },
     {
       n: 5,
-      titulo: "Cambios y ajustes",
-      bloques: [
-        {
-          tipo: "lista",
-          items: [
-            "**Durante la construcción:** los ajustes de tono, de respuestas y de detalles van " +
-              "incluidos. Para eso son los avances que te voy mandando.",
-            "**Después de entregar: 30 días de ajustes incluidos**, sin costo.",
-            "**Lo que agranda el alcance** (piezas nuevas, integraciones que no están en el punto " +
-              "1) se cotiza aparte y **siempre te aviso el precio antes de hacerlo**. Nunca se te " +
-              "cobra algo que no aprobaste.",
-            "Cualquier cambio de alcance queda por escrito antes de ejecutarse. Un mensaje de " +
-              "WhatsApp cuenta como “por escrito”.",
-          ],
-        },
-      ],
+      titulo: t.sec.cambios.titulo,
+      bloques: [{ tipo: "lista", items: t.sec.cambios.items }],
     },
     {
       n: 6,
-      titulo: "Garantía",
-      bloques: [
-        {
-          tipo: "texto",
-          texto:
-            "**Si no te entrego lo acordado funcionando, te devuelvo tu anticipo completo.** Sin " +
-            "discutir y sin condiciones.",
-        },
-        {
-          tipo: "texto",
-          texto:
-            "Lo que sí garantizo: que el sistema haga lo que dice el punto 1, que quede a tu " +
-            "nombre, y los 30 días de ajustes de arriba.",
-        },
-        {
-          tipo: "texto",
-          texto:
-            "Lo que no puedo garantizar —y te recomiendo desconfiar de quien te lo prometa— son " +
-            "números de resultado: cuántos pacientes más vas a tener o cuánto vas a vender. Las " +
-            "estimaciones de tu propuesta son eso, estimaciones, con los supuestos a la vista.",
-        },
-      ],
+      titulo: t.sec.garantia.titulo,
+      bloques: t.sec.garantia.items.map((texto) => ({ tipo: "texto" as const, texto })),
     },
     {
       n: 7,
-      titulo: "Si algo se atrasa",
+      titulo: t.sec.atrasos.titulo,
       bloques: [
         {
           tipo: "lista",
-          items: [
-            "**Si me atraso yo:** te aviso en cuanto lo sepa, con la fecha nueva. Si el atraso pasa " +
-              "de **15 días** sobre lo comprometido y no es por algo fuera de mi control, puedes " +
-              "cancelar y te devuelvo el anticipo completo.",
-            "**Si se atrasa tu parte** (información, accesos, aprobaciones): el reloj se pausa y la " +
-              "fecha de entrega se recorre lo mismo que haya tardado. No hay penalización.",
-            "**Si pasan 60 días sin tu información**, doy el trabajo por cerrado: te entrego lo " +
-              "avanzado y los accesos, y el anticipo queda como pago del trabajo ya hecho. Si " +
-              "después quieres retomarlo, se cotiza lo que falte.",
-            "Quedan fuera de esto las cosas que ninguno de los dos controla: caídas de WhatsApp o " +
-              "de Meta, cambios de política de un proveedor, fallas de internet, o causas de fuerza " +
-              "mayor. Si pasa algo así, te lo digo de frente y buscamos la salida juntos.",
-          ],
+          items: [...t.sec.atrasos.items, t.sec.atrasos.fuerzaMayor(tercerosDe(piezasSnap, t))],
         },
       ],
     },
     {
       n: 8,
-      titulo: "Si se cancela",
+      titulo: t.sec.cancelar.titulo,
       bloques: [
         {
           tipo: "lista",
           items: [
-            "**Antes de que arranque el trabajo:** te devuelvo el anticipo completo.",
-            "**Ya arrancado, si tú cancelas:** el anticipo cubre el trabajo hecho hasta ese momento " +
-              "y no se devuelve, pero **te entrego lo avanzado y todos los accesos** — no te quedas " +
-              "sin nada.",
-            "**Ya arrancado, si yo cancelo:** te devuelvo el anticipo completo, más lo avanzado y " +
-              "los accesos.",
-            "**Después de la entrega:** no hay devolución, porque el trabajo ya está entregado y es " +
-              "tuyo. Lo que sigue corriendo son los 30 días de ajustes.",
-            ...(plan === "gestionado"
-              ? [
-                  "**La mensualidad se cancela cuando quieras, avisando con 30 días.** No hay " +
-                    "permanencia ni penalización. Al cancelar, te entrego la operación completa y " +
-                    "quito mis accesos.",
-                ]
-              : []),
+            ...t.sec.cancelar.items,
+            ...(plan === "gestionado" ? [t.sec.cancelar.gestionado] : []),
           ],
         },
       ],
     },
     {
       n: 9,
-      titulo: "Propiedad",
+      titulo: t.sec.propiedad.titulo,
       bloques: [
-        {
-          tipo: "texto",
-          texto:
-            `**Todo lo construido es tuyo al 100%,** desde el primer día: el código, las cuentas, ` +
-            `el dominio y los accesos quedan a nombre de ${clinica}.`,
-        },
-        {
-          tipo: "texto",
-          texto:
-            "Si mañana quieres que otra persona lo mantenga, se lo llevas sin pedirme permiso y sin " +
-            "pagarme nada. Nunca quedas amarrado a mí, y no hay ninguna pieza escondida que solo yo " +
-            "pueda tocar.",
-        },
+        { tipo: "texto", texto: t.sec.propiedad.todoTuyo(clinica) },
+        { tipo: "texto", texto: t.sec.propiedad.portable },
         { tipo: "texto", texto: cfg.operacion },
       ],
     },
     {
       n: 10,
-      titulo: "Datos de pacientes y confidencialidad",
-      bloques: [
-        {
-          tipo: "lista",
-          items: [
-            "**Los datos de tus pacientes viven en tus cuentas, no en las mías.** Como todo se abre " +
-              "a tu nombre, la información nunca sale de tu control.",
-            "**No copio, no exporto ni comparto datos de pacientes.** Cualquier acceso que necesite " +
-              "para construir es acotado, documentado y lo puedes revocar cuando quieras.",
-            "**Confidencialidad:** todo lo que me cuentes de tu clínica —números, procesos, " +
-              "precios— se queda entre nosotros.",
-            "**El responsable del manejo de datos personales ante la ley eres tú**, como clínica, " +
-              "igual que hoy con tu expediente y tu agenda. Eso incluye tener tu aviso de " +
-              "privacidad al día. Mi trabajo es dejarte la herramienta configurada para que puedas " +
-              "cumplirlo, no sustituirte en esa responsabilidad.",
-          ],
-        },
-      ],
+      titulo: t.sec.datos.titulo,
+      bloques: [{ tipo: "lista", items: t.sec.datos.items }],
     },
     {
       n: 11,
-      titulo: "Hasta dónde llega mi responsabilidad",
+      titulo: t.sec.responsabilidad.titulo,
       bloques: [
-        { tipo: "texto", texto: "Para que no haya malentendidos, y dicho de frente:" },
+        { tipo: "texto", texto: t.sec.responsabilidad.intro },
         {
           tipo: "lista",
           items: [
-            "**Mi responsabilidad máxima es el monto que me hayas pagado por este trabajo.** No " +
-              "respondo por ganancias que se hayan dejado de tener, ni por daños indirectos.",
-            "**No respondo por fallas de servicios de terceros:** WhatsApp, Meta, los proveedores " +
-              "de inteligencia artificial, tu hosting o tu internet. Si alguno se cae o cambia sus " +
-              "reglas, te aviso y ayudo a resolverlo, pero no está en mis manos.",
-            "**El asistente no da consejos médicos ni sustituye criterio clínico.** Atiende " +
-              "mensajes o llamadas, agenda y responde dudas de servicio con la información que tú " +
-              "apruebes. Todo lo que tenga que ver con diagnóstico o tratamiento lo define tu " +
-              "clínica.",
-            "**La información que el sistema le da a tus pacientes es la que tú validas** (precios, " +
-              "horarios, servicios). Si cambia algo de tu lado, hay que actualizarlo.",
+            t.sec.responsabilidad.tope,
+            t.sec.responsabilidad.terceros(tercerosDe(piezasSnap, t)),
+            // ⛔ Este punto solo aplica si de verdad hay algo que ATIENDA al comprador.
+            // A un cliente que compró únicamente su sitio, el contrato le hablaba de
+            // "el asistente" — una pieza que no compró.
+            ...(hayAsistente(piezasSnap) ? [t.sec.responsabilidad.asistente] : []),
+            // 🔴 CORREGIDO 2026-08-21. Este punto decía: "La información que el sistema
+            // le da a tus compradores es la que tú validas (precios, disponibilidad,
+            // fechas de entrega, planes de pago)". Es exactamente lo contrario de la
+            // línea roja nº1 de LOS CUATRO productos: en preventa esos tres datos
+            // caducan solos. O sea que el contrato prometía por escrito justo lo que el
+            // sistema se niega a decir — y encima dentro de la cláusula de
+            // responsabilidad, que es la que se lee cuando algo ya salió mal.
+            t.sec.responsabilidad.noDice(hayAsistente(piezasSnap)),
+            t.sec.responsabilidad.siResponde,
           ],
         },
       ],
     },
     {
       n: 12,
-      titulo: "Vigencia y aceptación",
+      titulo: t.sec.vigencia.titulo,
       bloques: [
         {
           tipo: "lista",
           items: [
-            "El precio y el alcance de este acuerdo son válidos **15 días** a partir de la fecha de " +
-              "arriba.",
-            "El acuerdo está vigente desde que lo aceptas hasta la entrega, más los 30 días de " +
-              "ajustes." +
-              (plan === "gestionado"
-                ? " La parte de operación sigue mientras siga la mensualidad."
-                : ""),
-            "Lo que no esté previsto aquí se rige por los Términos de Servicio publicados en " +
-              "**upcoreai.com/terminos**, y por las leyes de los Estados Unidos Mexicanos.",
+            t.sec.vigencia.validez,
+            t.sec.vigencia.vigente(plan === "gestionado"),
+            t.sec.vigencia.ley(ley.ley, ley.foro),
+            t.clausulaIdioma,
           ],
         },
       ],
@@ -465,18 +480,56 @@ export function datosAcuerdo(snap: Snapshot, plan: TipoPlan): DatosAcuerdo | nul
     puesto: (snap.lead?.decisor || "").trim(),
     plan,
     planLabel: cfg.label,
-    precio: planDatos.inversion.mxn,
-    anticipo: pagos.anticipo.mxn,
-    resto: pagos.resto.mxn,
-    entrega: tiempo.total,
-    intro: INTRO,
+    precio: planDatos.inversion.principal,
+    anticipo: pagos.anticipo.principal,
+    resto: pagos.resto.principal,
+    entrega: plazo,
+    intro: t.intro,
     secciones,
+    idioma,
   };
 }
 
-/** Fecha larga en español, para encabezados. */
-export function fechaLarga(iso: string): string {
+/**
+ * La zona del CLIENTE, no la del servidor.
+ *
+ * 🔴 El servidor de Vercel corre en UTC, y `toLocaleDateString` sin zona usa la del
+ * servidor. Un cliente de Miami que acepta a las 10:15 p.m. del 20 de agosto recibía
+ * un contrato que decía "aceptado el 21 de agosto a las 02:15 a.m." — fecha equivocada
+ * y una hora a la que estaba dormido. Y no es cosmético: la sección 12 hace correr los
+ * 15 días de vigencia desde esa fecha.
+ */
+export const ZONA_CLIENTE = "America/New_York";
+
+/**
+ * LA LEY QUE RIGE — FUENTE ÚNICA (decisión de Yael, 2026-08-21).
+ *
+ * Antes decía "las leyes de los Estados Unidos Mexicanos". Yael decidió que se rija
+ * por ley de Estados Unidos.
+ *
+ * ⚠️ Se escribe **Florida**, no "Estados Unidos" a secas, porque en EE.UU. los
+ * contratos NO se rigen por ley federal: el derecho de contratos es estatal. Un
+ * acuerdo que dijera "las leyes de Estados Unidos" no señalaría ninguna ley
+ * concreta, y el abogado del cliente lo devolvería. Florida es donde están los
+ * clientes (Miami-Dade, Broward y Palm Beach), así que es la que su propio abogado
+ * espera leer.
+ *
+ * Estas dos constantes son las que importa la página /terminos, que va solo en
+ * español; el acuerdo las toma de LEY_POR_IDIOMA. El guardián comprueba que las dos
+ * fuentes digan lo mismo: si cada una nombrara su ley por su cuenta, el contrato
+ * remitiría a unos términos regidos por otra ley, sin dar ningún error.
+ */
+export const LEY_APLICABLE = LEY_POR_IDIOMA.es.ley;
+export const FORO = LEY_POR_IDIOMA.es.foro;
+
+/** Fecha larga, en la zona del cliente y en el idioma del documento. */
+export function fechaLarga(iso: string, idioma: Idioma = "es"): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
+  return d.toLocaleDateString(idioma === "en" ? "en-US" : "es-MX", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: ZONA_CLIENTE,
+  });
 }

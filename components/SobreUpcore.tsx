@@ -2,9 +2,11 @@ import { SectionTitle } from "./SectionTitle";
 import { Reveal } from "./Reveal";
 import { GlassCard } from "./GlassCard";
 import { Icon } from "./Icons";
-import { SOBRE } from "@/lib/content";
+import { contenido } from "@/lib/site-textos";
+import type { Idioma } from "@/lib/idioma";
 
-export function SobreUpcore() {
+export function SobreUpcore({ idioma = "es" }: { idioma?: Idioma }) {
+  const SOBRE = contenido(idioma).sobre;
   return (
     <section id="sobre" className="px-[6%] py-24 md:px-[10%] md:py-32">
       <SectionTitle title={SOBRE.heading} variant="blurIn" />

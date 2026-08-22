@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Upcore AI",
     short_name: "Upcore AI",
     description:
-      "Automatización con IA para clínicas privadas de salud y estética.",
+      "Automatización con IA para inmobiliarias de preventa en el sur de Florida.",
     lang: "es-MX",
     start_url: "/",
     display: "browser",

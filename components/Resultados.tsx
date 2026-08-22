@@ -1,8 +1,10 @@
 import { SectionTitle } from "./SectionTitle";
 import { Reveal } from "./Reveal";
-import { RESULTADOS } from "@/lib/content";
+import { contenido } from "@/lib/site-textos";
+import type { Idioma } from "@/lib/idioma";
 
-export function Resultados() {
+export function Resultados({ idioma = "es" }: { idioma?: Idioma }) {
+  const RESULTADOS = contenido(idioma).resultados;
   return (
     <section id="resultados" className="px-[6%] py-24 md:px-[10%] md:py-32">
       <SectionTitle

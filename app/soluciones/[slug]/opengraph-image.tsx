@@ -11,7 +11,7 @@ export function generateStaticParams() {
 export const dynamic = "force-static";
 export const size = OG_SIZE;
 export const contentType = "image/png";
-export const alt = "Upcore AI — Automatización con IA para clínicas";
+export const alt = "Upcore AI — Automatización con IA para inmobiliarias";
 
 export default async function Image({
   params,
@@ -23,8 +23,8 @@ export default async function Image({
   return new ImageResponse(
     (
       <PlantillaOG
-        eyebrow={s?.eyebrow ?? "Upcore AI"}
-        titulo={s?.h1 ?? "Automatización con IA para clínicas"}
+        eyebrow={s?.t.es.eyebrow ?? "Upcore AI"}
+        titulo={s?.t.es.h1 ?? "Automatización con IA para inmobiliarias"}
       />
     ),
     { ...OG_SIZE, fonts: fuentesOG() }

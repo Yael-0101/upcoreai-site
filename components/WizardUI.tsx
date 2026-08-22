@@ -147,12 +147,18 @@ export function NavBtns({
   onNext,
   nextEnabled,
   nextLabel,
+  backLabel = "← Atrás",
+  loadingLabel,
   loading = false,
 }: {
   onBack?: () => void;
   onNext: () => void;
   nextEnabled: boolean;
   nextLabel: string;
+  /** Los rótulos vienen de fuera porque el sitio es bilingüe. El valor por
+   *  defecto es el español, para no romper a quien todavía no los pasa. */
+  backLabel?: string;
+  loadingLabel?: string;
   loading?: boolean;
 }) {
   return (
@@ -163,7 +169,7 @@ export function NavBtns({
           onClick={onBack}
           className="rounded-full border border-[rgba(242,231,219,0.2)] px-6 py-2.5 text-sm font-semibold text-mocha transition-all hover:border-[rgba(242,231,219,0.4)] hover:text-sand"
         >
-          ← Atrás
+          {backLabel}
         </button>
       )}
       <button
@@ -172,7 +178,7 @@ export function NavBtns({
         disabled={!nextEnabled || loading}
         className="rounded-full bg-clay px-7 py-2.5 text-sm font-semibold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100"
       >
-        {loading ? "Enviando…" : nextLabel}
+        {loading ? (loadingLabel ?? nextLabel) : nextLabel}
       </button>
     </div>
   );

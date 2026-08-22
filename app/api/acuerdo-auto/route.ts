@@ -1,4 +1,4 @@
-import { randomBytes } from "crypto";
+import { nuevoToken } from "@/lib/token";
 import { NextResponse } from "next/server";
 import { datosAcuerdo, type Snapshot, type TipoPlan } from "@/lib/acuerdo";
 
@@ -72,14 +72,23 @@ export async function POST(req: Request) {
   }
 
   // 2. Llenar los huecos. Puro copiado — si algo no cuadra, devuelve null.
-  const doc = datosAcuerdo(snapshot, plan);
-  if (!doc) return NextResponse.json({ ok: false, motivo: "datos_insuficientes" });
+  //
+  // Se arman LAS DOS versiones, español e inglés, y las dos se congelan. El cliente
+  // habla los dos idiomas y su contador puede pedir el inglés; si la inglesa se
+  // generara al vuelo, el día que alguien retoque la plantilla el cliente vería un
+  // texto distinto al que aceptó. Un contrato congelado a medias no está congelado.
+  // El ESPAÑOL es el que gobierna, y el propio documento lo dice.
+  const doc = datosAcuerdo(snapshot, plan, "es");
+  const docEn = datosAcuerdo(snapshot, plan, "en");
+  if (!doc || !docEn) return NextResponse.json({ ok: false, motivo: "datos_insuficientes" });
 
   // 3. Congelar el documento ARMADO (no los datos crudos): si mañana cambia la
   //    plantilla, lo que este cliente firmó sigue diciendo lo mismo.
-  const token = randomBytes(18).toString("base64url");
+  // ⚠️ nuevoToken(), NO base64url: el link va por WhatsApp y los "_" se leen como
+  // cursiva, lo que mutila la URL y le deja al cliente un acuerdo muerto.
+  const token = nuevoToken();
   const fecha = new Date().toISOString();
-  const congelado = { version: 1, fecha, plan, doc, propuesta: tokenPropuesta };
+  const congelado = { version: 2, fecha, plan, doc, docEn, propuesta: tokenPropuesta };
 
   try {
     const res = await fetch(guardarUrl, {
