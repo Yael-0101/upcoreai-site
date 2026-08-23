@@ -111,11 +111,13 @@ export const IDIOMAS_DE_PIEZA: Record<string, FichaIdiomas> = {
     idiomas: ["es", "en"],
     principales: ["es", "en"],
     prueba:
-      "2026-08-22 · decisión de Yael: el sitio del cliente se entrega en los dos " +
-      "idiomas, con dirección propia por idioma y hreflang, igual que upcoreai.com. " +
-      "⚠️ La plantilla `productos/sitio-inmobiliaria` TODAVÍA está escrita solo en " +
-      "español: hacerla bilingüe es trabajo pendiente, y hasta que se haga esto es " +
-      "una promesa por cumplir, no una capacidad instalada.",
+      "2026-08-22 · CONSTRUIDO Y COMPROBADO. La plantilla " +
+      "`productos/sitio-inmobiliaria` sirve `/` y `/en` con canonical propio, " +
+      "hreflang en las dos direcciones y x-default; los textos del cliente van en " +
+      "`{es,en}` (no compila si falta uno) y el armazón en `lib/i18n.ts`. Se montó " +
+      "una firma de prueba, se compiló y se LEYÓ el sitio servido: " +
+      "`scripts/leer-ingles.mjs` dio 0 de 2 páginas con español. Ese lector queda " +
+      "en la plantilla y se corre antes de enseñarle el sitio a nadie.",
   },
   auto: {
     idiomas: ["es", "en"],
@@ -133,8 +135,12 @@ export const IDIOMAS_DE_PIEZA: Record<string, FichaIdiomas> = {
     idiomas: ["es", "en"],
     principales: ["es", "en"],
     prueba:
-      "2026-08-22 · decisión de Yael. ⚠️ La plantilla `productos/panel-inmobiliaria` " +
-      "está solo en español: pendiente igual que el sitio.",
+      "2026-08-22 · CONSTRUIDO Y COMPROBADO. `productos/panel-inmobiliaria` lleva " +
+      "botón de idioma con la preferencia guardada en galleta, todo el texto en " +
+      "`lib/i18n.ts` y guardián (`npm run verificar`) que no deja compilar con una " +
+      "frase escrita a mano. Se levantó y se pidieron las tres páginas en los dos " +
+      "idiomas: cambian entera la interfaz y el formato de fecha " +
+      "(sáb, 22 de ago, 5:00 p.m. · Sat, Aug 22, 5:00 PM).",
   },
 };
 
