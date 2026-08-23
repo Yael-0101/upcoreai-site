@@ -24,7 +24,7 @@ export function FAQ({
             <details className="card-soft group rounded-2xl">
               <summary className="glass-body flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 text-left font-medium text-sand [&::-webkit-details-marker]:hidden">
                 {f.q}
-                <span className="shrink-0 text-xl text-clay transition-transform duration-300 group-open:rotate-45">
+                <span className="shrink-0 text-xl text-clay-bright transition-transform duration-300 group-open:rotate-45">
                   +
                 </span>
               </summary>

@@ -42,7 +42,7 @@ export function BlogIndice({ idioma }: { idioma: Idioma }) {
         {/* Hero */}
         <section className="px-[6%] pb-14 pt-36 text-center md:px-[10%] md:pb-16 md:pt-44">
           <Reveal>
-            <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-clay">
+            <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-clay-bright">
               {t.eyebrow}
             </div>
           </Reveal>
@@ -68,7 +68,7 @@ export function BlogIndice({ idioma }: { idioma: Idioma }) {
                   className="card-soft block rounded-2xl p-7 transition-colors hover:border-clay"
                 >
                   <div className="glass-body">
-                    <div className="mb-2 text-xs font-light uppercase tracking-[0.08em] text-mocha/70">
+                    <div className="mb-2 text-xs font-light uppercase tracking-[0.08em] text-mocha/85">
                       {fechaBonita(a.fechaPublicado, idioma)}
                     </div>
                     <h2 className="mb-2 text-xl font-semibold leading-snug text-sand">
@@ -77,7 +77,7 @@ export function BlogIndice({ idioma }: { idioma: Idioma }) {
                     <p className="text-sm font-light leading-relaxed text-mocha">
                       {a.t[idioma].resumen}
                     </p>
-                    <div className="mt-3 text-sm font-medium text-clay">{t.leer}</div>
+                    <div className="mt-3 text-sm font-medium text-clay-bright">{t.leer}</div>
                   </div>
                 </a>
               </Reveal>

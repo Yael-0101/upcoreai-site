@@ -319,7 +319,7 @@ export function ArranquePortal({
           <button
             type="button"
             onClick={() => setStep(N.resumen)}
-            className="rounded-full border border-[rgba(242,231,219,0.2)] px-7 py-3 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay"
+            className="rounded-full border border-[rgba(242,231,219,0.2)] px-7 py-3 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
           >
             Volver a mi checklist
           </button>
@@ -350,7 +350,7 @@ export function ArranquePortal({
         <button
           type="button"
           onClick={cambiarIdioma}
-          className="rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay"
+          className="rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay-bright"
         >
           {T.ui.verEnOtroIdioma}
         </button>
@@ -406,7 +406,7 @@ export function ArranquePortal({
                   aria-label={T.desarrollos.quitar}
                   onClick={() => setChecklist({ servicios: d.checklist.servicios.filter((_, j) => j !== i) })}
                   disabled={d.checklist.servicios.length === 1}
-                  className="h-11 rounded-xl border border-[rgba(242,231,219,0.15)] px-3 text-mocha transition-colors hover:border-clay hover:text-clay disabled:opacity-30"
+                  className="h-11 rounded-xl border border-[rgba(242,231,219,0.15)] px-3 text-mocha transition-colors hover:border-clay hover:text-clay-bright disabled:opacity-30"
                 >
                   ✕
                 </button>
@@ -416,7 +416,7 @@ export function ArranquePortal({
           <button
             type="button"
             onClick={() => setChecklist({ servicios: [...d.checklist.servicios, { ...servicioVacio }] })}
-            className="mb-8 rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay"
+            className="mb-8 rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
           >
             + Agregar otro desarrollo
           </button>
@@ -540,7 +540,7 @@ export function ArranquePortal({
               <strong className="font-semibold text-sand">{T.prosa.codigosFuerte}</strong>{" "}
               {/* El punto va PEGADO al cierre del enlace: en su propia línea,
                   JSX mete un espacio y se lee "…2698 ." */}
-              <a href={CONTACT.whatsapp} className="font-semibold text-clay underline">
+              <a href={CONTACT.whatsapp} className="font-semibold text-clay-bright underline">
                 {CONTACT.whatsappDisplay}
               </a>{T.prosa.codigosDespues}
               <strong className="font-semibold text-sand">{T.prosa.codigosFuerte2}</strong>{T.prosa.codigosFinal}
@@ -626,7 +626,7 @@ export function ArranquePortal({
                     <div className="mb-1 flex flex-wrap items-center gap-2">
                       <span className="font-semibold text-sand">{c.titulo}</span>
                       {c.tusManos && (
-                        <span className="rounded-full bg-clay/20 px-3 py-1 text-xs font-semibold text-clay">
+                        <span className="rounded-full bg-clay/20 px-3 py-1 text-xs font-semibold text-clay-bright">
                           Necesitamos tus manos 10 min
                         </span>
                       )}
@@ -635,12 +635,12 @@ export function ArranquePortal({
                     <ul className="grid gap-1.5 text-sm font-light text-mocha">
                       {c.pasos.map((p) => (
                         <li key={p.slice(0, 30)} className="flex gap-2">
-                          <span className="text-clay">→</span>
+                          <span className="text-clay-bright">→</span>
                           {p}
                         </li>
                       ))}
                     </ul>
-                    {c.nota && <p className="mt-3 text-xs font-light text-clay">{c.nota}</p>}
+                    {c.nota && <p className="mt-3 text-xs font-light text-clay-bright">{c.nota}</p>}
                   </div>
                 ))}
               </div>
@@ -715,7 +715,7 @@ export function ArranquePortal({
             <div className="mb-2 text-sm font-semibold text-sand">{T.demoUi.ponloAPrueba}</div>
             <ul className="grid gap-1.5 text-sm font-light text-mocha">
               {T.demo.ideas.map((g) => (
-                <li key={g} className="flex gap-2"><span className="text-clay">→</span>{g}</li>
+                <li key={g} className="flex gap-2"><span className="text-clay-bright">→</span>{g}</li>
               ))}
             </ul>
           </div>
@@ -799,7 +799,7 @@ export function ArranquePortal({
                             },
                           })
                         }
-                        className="h-11 rounded-xl border border-[rgba(242,231,219,0.15)] px-3 text-mocha transition-colors hover:border-clay hover:text-clay"
+                        className="h-11 rounded-xl border border-[rgba(242,231,219,0.15)] px-3 text-mocha transition-colors hover:border-clay hover:text-clay-bright"
                       >
                         ✕
                       </button>
@@ -830,7 +830,7 @@ export function ArranquePortal({
                         web: { ...d.web, referencias: [...d.web.referencias, { url: "", nota: "" }] },
                       })
                     }
-                    className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay"
+                    className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
                   >
                     + Agregar una página de referencia (máx. 3)
                   </button>
@@ -857,7 +857,7 @@ export function ArranquePortal({
                         t.estado === "aprobado"
                           ? "bg-sage/20 text-sage"
                           : t.estado === "con-cambios"
-                            ? "bg-clay/20 text-clay"
+                            ? "bg-clay/20 text-clay-bright"
                             : "bg-[rgba(242,231,219,0.08)] text-mocha"
                       }`}
                     >
@@ -960,16 +960,16 @@ export function ArranquePortal({
                 : []),
             ].map((r) => (
               <div key={r.txt} className="flex items-center gap-3 border-b border-[rgba(242,231,219,0.07)] py-2 text-sm last:border-none">
-                <span className={r.ok ? "text-sage" : "text-mocha/50"}>{r.ok ? "✓" : "○"}</span>
+                <span className={r.ok ? "text-sage" : "text-mocha/75"}>{r.ok ? "✓" : "○"}</span>
                 <span className={`font-light ${r.ok ? "text-sand" : "text-mocha"}`}>
                   {r.txt}
-                  {r.req && !r.ok && <span className="ml-2 text-xs text-clay">(falta — es esencial)</span>}
+                  {r.req && !r.ok && <span className="ml-2 text-xs text-clay-bright">(falta — es esencial)</span>}
                 </span>
               </div>
             ))}
           </div>
           {!nucleoListo && (
-            <p className="mb-4 text-center text-sm font-light text-clay">
+            <p className="mb-4 text-center text-sm font-light text-clay-bright">
               Para avisarnos que arranquemos, completa lo marcado como esencial.
             </p>
           )}
@@ -986,7 +986,7 @@ export function ArranquePortal({
       )}
 
       {/* Indicador de guardado */}
-      <div className="mt-6 text-center text-xs font-light text-mocha/70" aria-live="polite">
+      <div className="mt-6 text-center text-xs font-light text-mocha/85" aria-live="polite">
         {chipGuardado || T.bienvenida.seGuarda}
       </div>
     </div>

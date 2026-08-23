@@ -50,7 +50,7 @@ export function Nosotros({ idioma }: { idioma: Idioma }) {
         {/* Hero */}
         <section className="px-[6%] pb-16 pt-36 text-center md:px-[10%] md:pb-20 md:pt-44">
           <Reveal>
-            <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-clay">
+            <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-clay-bright">
               {t.eyebrow}
             </div>
           </Reveal>
@@ -93,7 +93,7 @@ export function Nosotros({ idioma }: { idioma: Idioma }) {
               <a
                 key={s.slug}
                 href={ruta(idioma, `/soluciones/${s.slug}`)}
-                className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay"
+                className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
               >
                 {s.t[idioma].nombreCorto}
               </a>
@@ -128,7 +128,7 @@ export function Nosotros({ idioma }: { idioma: Idioma }) {
                 <div className="glass-body">
                   <h3 className="mb-1 font-semibold text-sand">{t.correo}</h3>
                   <p className="break-all text-sm font-light text-mocha">{ORGANIZACION.email}</p>
-                  <p className="mt-1 text-xs font-light text-mocha/70">{t.correoPie}</p>
+                  <p className="mt-1 text-xs font-light text-mocha/85">{t.correoPie}</p>
                 </div>
               </a>
             </Reveal>

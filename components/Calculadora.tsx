@@ -50,9 +50,9 @@ function MetricCard({
       <div className="mb-1 text-[0.66rem] font-medium uppercase tracking-wide text-mocha">
         {label}
       </div>
-      <div className="text-base font-semibold leading-tight text-clay">{value}</div>
+      <div className="text-base font-semibold leading-tight text-clay-bright">{value}</div>
       {usd && (
-        <div className="mt-0.5 text-[0.68rem] font-medium leading-tight text-mocha/70">{usd}</div>
+        <div className="mt-0.5 text-[0.68rem] font-medium leading-tight text-mocha/85">{usd}</div>
       )}
       {note && <div className="mt-1 text-[0.68rem] leading-tight text-mocha/80">{note}</div>}
     </div>
@@ -238,7 +238,7 @@ export function Calculadora({ idioma = "es" }: { idioma?: Idioma }) {
                     <button
                       type="button"
                       onClick={() => setStep("results")}
-                      className="text-xs text-mocha/70 underline transition-colors hover:text-mocha"
+                      className="text-xs text-mocha/85 underline transition-colors hover:text-mocha"
                     >
                       {t.omitir}
                     </button>
@@ -315,16 +315,16 @@ export function Calculadora({ idioma = "es" }: { idioma?: Idioma }) {
                   )}
 
                   <div className="mb-8 rounded-3xl border border-dashed border-[rgba(200,98,61,0.35)] bg-[rgba(200,98,61,0.03)] p-7">
-                    <h4 className="mb-4 text-sm font-semibold text-clay">{t.construiriamos}</h4>
+                    <h4 className="mb-4 text-sm font-semibold text-clay-bright">{t.construiriamos}</h4>
                     <ul className="space-y-2">
                       {result.incluye.map((x) => (
                         <li key={x} className="flex items-start gap-2 text-sm font-light text-sand">
-                          <span className="shrink-0 font-semibold text-clay">→</span>
+                          <span className="shrink-0 font-semibold text-clay-bright">→</span>
                           {x}
                         </li>
                       ))}
                     </ul>
-                    <p className="mt-5 text-xs font-light leading-relaxed text-mocha/70">
+                    <p className="mt-5 text-xs font-light leading-relaxed text-mocha/85">
                       {t.notaFinal}
                     </p>
                   </div>
@@ -338,7 +338,7 @@ export function Calculadora({ idioma = "es" }: { idioma?: Idioma }) {
                     <button
                       type="button"
                       onClick={reset}
-                      className="mx-auto mt-5 block text-xs text-mocha/60 underline transition-colors hover:text-mocha"
+                      className="mx-auto mt-5 block text-xs text-mocha/80 underline transition-colors hover:text-mocha"
                     >
                       {t.calcularOtra}
                     </button>

@@ -257,7 +257,7 @@ function PlanCard({
       {filas.map((f) => (
         <div key={f.k} className="border-t border-[rgba(242,231,219,0.08)] py-2.5">
           <div className="text-[0.68rem] uppercase tracking-[0.08em] text-mocha">{f.k}</div>
-          <div className="font-semibold text-clay">{f.v}</div>
+          <div className="font-semibold text-clay-bright">{f.v}</div>
           {f.n && <div className="text-xs font-light text-mocha">{f.n}</div>}
         </div>
       ))}
@@ -425,11 +425,11 @@ export default async function PropuestaPublica({
     <main className="pagina-propuesta min-h-screen bg-obsidian px-[6%] py-12 text-sand md:px-[10%]">
       <div className="mx-auto max-w-[860px]">
         <div className="mb-14 text-lg font-semibold tracking-tight">
-          Upcore <span className="text-clay">AI</span>
+          Upcore <span className="text-clay-bright">AI</span>
         </div>
 
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-          <span className="inline-block rounded-full border border-clay/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-clay">
+          <span className="inline-block rounded-full border border-clay/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-clay-bright">
             {T.etiquetaVigencia(venceTxt)}
           </span>
           {/* La propuesta se re-arma en cada visita desde el snapshot, así que los dos
@@ -437,7 +437,7 @@ export default async function PropuestaPublica({
               acuerdo, que sí congela el documento ya redactado. */}
           <a
             href={`/p/${encodeURIComponent(token)}${en ? "" : "?lang=en"}`}
-            className="no-print rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay"
+            className="no-print rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay-bright"
           >
             {T.verEnOtroIdioma}
           </a>
@@ -471,7 +471,7 @@ export default async function PropuestaPublica({
             rel="noopener noreferrer"
             className="mb-14 block rounded-3xl border border-clay/45 bg-clay/[0.07] p-7 transition-colors hover:border-clay hover:bg-clay/[0.11] sm:p-9"
           >
-            <span className="text-xs font-semibold uppercase tracking-[0.08em] text-clay">
+            <span className="text-xs font-semibold uppercase tracking-[0.08em] text-clay-bright">
               {txtBoceto.etiqueta}
             </span>
             <p className="mt-3 text-[1.35rem] font-semibold leading-snug sm:text-2xl">
@@ -527,7 +527,7 @@ export default async function PropuestaPublica({
                   <div className="text-[0.68rem] uppercase tracking-[0.08em] text-mocha">
                     {T.cadaMes}
                   </div>
-                  <div className="text-3xl font-bold tracking-tight text-clay">
+                  <div className="text-3xl font-bold tracking-tight text-clay-bright">
                     ~{dinero(n.perdidaMensual)}
                   </div>
                 </div>
@@ -535,7 +535,7 @@ export default async function PropuestaPublica({
                   <div className="text-[0.68rem] uppercase tracking-[0.08em] text-mocha">
                     {T.enUnAno}
                   </div>
-                  <div className="text-3xl font-bold tracking-tight text-clay">
+                  <div className="text-3xl font-bold tracking-tight text-clay-bright">
                     ~{dinero(n.perdidaAnual)}
                   </div>
                 </div>
@@ -630,7 +630,7 @@ export default async function PropuestaPublica({
                       <span className="font-light text-sand">
                         {icono(o.label)} {en ? traducirRenglon(o.label) ?? o.label : o.label}
                       </span>
-                      <span className="text-sm font-medium text-clay">+{o.precio.principal}</span>
+                      <span className="text-sm font-medium text-clay-bright">+{o.precio.principal}</span>
                     </div>
                     <p className="mt-1.5 text-sm font-light text-mocha">
                       {/* `razon` viaja en el snapshot congelado y siempre en español; para la
@@ -689,7 +689,7 @@ export default async function PropuestaPublica({
                 {T.filas.ahorro}
               </div>
               <div className="text-3xl font-bold tracking-tight">
-                {llave.ahorro.principal} <span className="text-clay">{llave.ahorro.equivalente}</span>
+                {llave.ahorro.principal} <span className="text-clay-bright">{llave.ahorro.equivalente}</span>
               </div>
               <div className="mt-1 text-sm font-light text-mocha">{llave.ahorroNota}</div>
             </div>
@@ -726,7 +726,7 @@ export default async function PropuestaPublica({
               </div>
             ))}
           </div>
-          <p className="mb-8 text-xs font-light text-mocha/70">
+          <p className="mb-8 text-xs font-light text-mocha/85">
             {T.pasos.nota(tiempos.total)}
           </p>
 
@@ -754,7 +754,7 @@ export default async function PropuestaPublica({
               <div className="grid gap-2.5">
                 {nuestraParte.map((x) => (
                   <div key={x} className="flex gap-2.5 text-sm font-light">
-                    <span className="text-clay">✓</span>
+                    <span className="text-clay-bright">✓</span>
                     <span>{x}</span>
                   </div>
                 ))}
@@ -768,7 +768,7 @@ export default async function PropuestaPublica({
             <div className="grid gap-2 sm:grid-cols-2">
               {noNecesitas(piezas, idioma).map((x) => (
                 <div key={x} className="flex gap-2.5 text-sm font-light text-mocha">
-                  <span className="text-clay">✗</span>
+                  <span className="text-clay-bright">✗</span>
                   <span>{x}</span>
                 </div>
               ))}
@@ -809,7 +809,7 @@ export default async function PropuestaPublica({
               href={`https://upcoreai.com/demo${p.lead.clinica ? `?c=${encodeURIComponent(p.lead.clinica)}` : ""}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-sand underline hover:text-clay"
+              className="font-medium text-sand underline hover:text-clay-bright"
             >
               {en ? "Try it yourself here" : "Pruébalo tú mismo aquí"}
             </a>{" "}
@@ -832,7 +832,7 @@ export default async function PropuestaPublica({
           </div>
         </div>
 
-        <footer className="border-t border-[rgba(242,231,219,0.08)] pt-7 text-center text-xs font-light text-mocha/60">
+        <footer className="border-t border-[rgba(242,231,219,0.08)] pt-7 text-center text-xs font-light text-mocha/80">
           {T.pie(p.lead.clinica || p.lead.nombre)}
         </footer>
       </div>

@@ -19,7 +19,7 @@ export function ComoFunciona({ idioma = "es" }: { idioma?: Idioma }) {
                   aria-hidden
                 />
               )}
-              <div className="relative z-10 mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-clay/40 bg-[rgba(200,98,61,0.1)] text-lg font-semibold text-clay md:mx-0">
+              <div className="relative z-10 mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-clay/40 bg-[rgba(200,98,61,0.1)] text-lg font-semibold text-clay-bright md:mx-0">
                 {s.n}
               </div>
               <h3 className="mb-2 text-xl font-semibold tracking-tight text-sand">

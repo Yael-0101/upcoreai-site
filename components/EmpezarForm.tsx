@@ -757,7 +757,7 @@ export function EmpezarForm({ idioma = "es" }: { idioma?: Idioma }) {
                     {t.aceptoA}
                     <a
                       href={ruta(idioma, "/privacidad")}
-                      className="text-clay transition-colors hover:text-clay-bright"
+                      className="text-clay-bright transition-colors hover:text-clay-bright"
                     >
                       {t.aceptoEnlace}
                     </a>
@@ -765,7 +765,7 @@ export function EmpezarForm({ idioma = "es" }: { idioma?: Idioma }) {
                   </span>
                 </label>
                 {error && (
-                  <p className="mb-4 text-center text-xs text-clay">{t.errorEnvio}</p>
+                  <p className="mb-4 text-center text-xs text-clay-bright">{t.errorEnvio}</p>
                 )}
                 <NavBtns
                   onBack={() => setStep(5)}
@@ -808,7 +808,7 @@ export function EmpezarForm({ idioma = "es" }: { idioma?: Idioma }) {
                         href={linkWhatsApp(idioma)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sand underline hover:text-clay"
+                        className="text-sand underline hover:text-clay-bright"
                       >
                         {t.dudasEnlace}
                       </a>

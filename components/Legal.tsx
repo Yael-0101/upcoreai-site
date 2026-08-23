@@ -19,7 +19,7 @@ function Trozo({ f, idioma }: { f: Frag; idioma: Idioma }) {
     <a
       href={href}
       {...(f.externo ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="break-all text-clay transition-colors hover:text-clay-bright"
+      className="break-all text-clay-bright transition-colors hover:text-clay-bright"
     >
       {f.enlace}
     </a>
@@ -56,14 +56,14 @@ export function PaginaLegal({
         <div className="mx-auto max-w-3xl">
           <a
             href={ruta(idioma, "/")}
-            className="mb-8 inline-block text-xs font-semibold uppercase tracking-[0.15em] text-mocha transition-colors hover:text-clay"
+            className="mb-8 inline-block text-xs font-semibold uppercase tracking-[0.15em] text-mocha transition-colors hover:text-clay-bright"
           >
             {t.volver}
           </a>
           <h1 className="text-gradient text-[clamp(2rem,5vw,3rem)] font-semibold tracking-[-0.03em]">
             {doc.titulo}
           </h1>
-          <p className="mb-10 mt-2 text-xs uppercase tracking-[0.15em] text-mocha/70">
+          <p className="mb-10 mt-2 text-xs uppercase tracking-[0.15em] text-mocha/85">
             {t.ultimaActualizacion} {doc.actualizado}
           </p>
           <div className="card-soft rounded-[28px] p-8 md:p-12">
@@ -95,7 +95,7 @@ export function PaginaLegal({
               ))}
             </div>
           </div>
-          <p className="mt-8 text-xs font-light leading-relaxed text-mocha/50">{t.aviso}</p>
+          <p className="mt-8 text-xs font-light leading-relaxed text-mocha/75">{t.aviso}</p>
         </div>
       </main>
       <Footer idioma={idioma} />

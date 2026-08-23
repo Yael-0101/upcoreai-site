@@ -24,7 +24,7 @@ export function Comparativa({ idioma = "es" }: { idioma?: Idioma }) {
               <div className="glass-body flex h-full flex-col">
                 <div
                   className={`mb-1 text-xs font-semibold uppercase tracking-[0.12em] ${
-                    o.destacado ? "text-clay" : "text-mocha/70"
+                    o.destacado ? "text-clay-bright" : "text-mocha/85"
                   }`}
                 >
                   {o.sub}
@@ -35,17 +35,17 @@ export function Comparativa({ idioma = "es" }: { idioma?: Idioma }) {
                     <li key={p.texto} className="flex gap-2.5 text-sm font-light leading-snug">
                       <span
                         aria-hidden
-                        className={`mt-0.5 shrink-0 ${p.ok ? "text-sage" : "text-mocha/50"}`}
+                        className={`mt-0.5 shrink-0 ${p.ok ? "text-sage" : "text-mocha/75"}`}
                       >
                         {p.ok ? "✓" : "✗"}
                       </span>
-                      <span className={p.ok ? "text-mocha" : "text-mocha/70"}>{p.texto}</span>
+                      <span className={p.ok ? "text-mocha" : "text-mocha/85"}>{p.texto}</span>
                     </li>
                   ))}
                 </ul>
                 <div
                   className={`mt-auto border-t border-[rgba(242,231,219,0.1)] pt-4 text-sm ${
-                    o.destacado ? "font-medium text-clay" : "font-light text-mocha"
+                    o.destacado ? "font-medium text-clay-bright" : "font-light text-mocha"
                   }`}
                 >
                   {o.costo}
@@ -60,7 +60,7 @@ export function Comparativa({ idioma = "es" }: { idioma?: Idioma }) {
           {t.cierre}{" "}
           <a
             href={ruta(idioma, "/demo")}
-            className="font-medium text-clay transition-colors hover:text-clay-bright"
+            className="font-medium text-clay-bright transition-colors hover:text-sand"
           >
             {t.cierreEnlace}
           </a>

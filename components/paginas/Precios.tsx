@@ -51,7 +51,7 @@ export function Precios({ idioma }: { idioma: Idioma }) {
         {/* Hero */}
         <section className="px-[6%] pb-16 pt-36 text-center md:px-[10%] md:pb-20 md:pt-44">
           <Reveal>
-            <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-clay">
+            <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-clay-bright">
               {t.eyebrow}
             </div>
           </Reveal>
@@ -77,7 +77,7 @@ export function Precios({ idioma }: { idioma: Idioma }) {
               </a>
               <a
                 href={ruta(idioma, "/demo")}
-                className="w-full rounded-full border border-[rgba(242,231,219,0.2)] px-8 py-4 font-medium text-sand transition-colors hover:border-clay hover:text-clay sm:w-auto"
+                className="w-full rounded-full border border-[rgba(242,231,219,0.2)] px-8 py-4 font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright sm:w-auto"
               >
                 {t.ctaSecundario}
               </a>
@@ -93,7 +93,7 @@ export function Precios({ idioma }: { idioma: Idioma }) {
               <Reveal key={f.title} delay={i * 0.06}>
                 <div className="card-soft h-full rounded-2xl p-7">
                   <div className="glass-body">
-                    <div className="mb-3 text-sm font-semibold text-clay">{f.n}</div>
+                    <div className="mb-3 text-sm font-semibold text-clay-bright">{f.n}</div>
                     <h3 className="mb-2 font-semibold text-sand">{f.title}</h3>
                     <p className="text-sm font-light leading-relaxed text-mocha">{f.body}</p>
                   </div>

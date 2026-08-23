@@ -110,7 +110,7 @@ export default async function ArranquePage({
         {/* Header minimal (sin nav de marketing: el cliente viene a trabajar) */}
         <div className="mb-10 flex flex-col items-center gap-2 text-center">
           <Logo markClass="h-8 w-8" textClass="text-[1.35rem]" />
-          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-clay">
+          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-clay-bright">
             {T.bienvenida.etiqueta(
               fila.clinica || d.config.clinica || (idioma === "en" ? "your firm" : "tu inmobiliaria")
             )}
@@ -155,7 +155,7 @@ export default async function ArranquePage({
                         lee, para no romper los datos que ya existen. */}
                     {T.ui.fases[a.fase] ?? a.fase}
                     {a.estado === "en-curso" && (
-                      <span className="ml-2 text-xs font-semibold uppercase tracking-wide text-clay">
+                      <span className="ml-2 text-xs font-semibold uppercase tracking-wide text-clay-bright">
                         {T.ui.estados["en-curso"]}
                       </span>
                     )}
@@ -166,16 +166,16 @@ export default async function ArranquePage({
                 </div>
               </div>
             ))}
-            <p className="mt-4 text-xs font-light text-mocha/70">
+            <p className="mt-4 text-xs font-light text-mocha/85">
               {T.ui.notaAvance}
             </p>
           </div>
         </section>
 
-        <footer className="mt-12 border-t border-[rgba(242,231,219,0.08)] pt-6 text-center text-xs font-light text-mocha/60">
+        <footer className="mt-12 border-t border-[rgba(242,231,219,0.08)] pt-6 text-center text-xs font-light text-mocha/80">
           {T.ui.pie(fila.clinica || (idioma === "en" ? "your firm" : "tu inmobiliaria"))} ·{" "}
           {T.ui.dudas} {T.ui.escribenos.replace(/ ?WhatsApp$/, "")}{" "}
-          <a href={CONTACT.whatsapp} className="underline hover:text-clay">
+          <a href={CONTACT.whatsapp} className="underline hover:text-clay-bright">
             WhatsApp
           </a>
         </footer>

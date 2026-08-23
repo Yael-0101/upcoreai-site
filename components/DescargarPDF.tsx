@@ -8,7 +8,7 @@ export function DescargarPDF() {
     <button
       type="button"
       onClick={() => window.print()}
-      className="no-print rounded-full border border-[rgba(242,231,219,0.25)] px-6 py-2.5 text-sm font-semibold text-mocha transition-colors hover:border-clay hover:text-clay"
+      className="no-print rounded-full border border-[rgba(242,231,219,0.25)] px-6 py-2.5 text-sm font-semibold text-mocha transition-colors hover:border-clay hover:text-clay-bright"
     >
       📄 Descargar en PDF
     </button>

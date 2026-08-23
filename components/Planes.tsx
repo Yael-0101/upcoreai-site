@@ -20,14 +20,14 @@ export function Planes({ idioma = "es" }: { idioma?: Idioma }) {
               }`}
             >
               {p.destacado && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-clay px-3 py-1 text-[0.62rem] font-semibold uppercase tracking-wider text-obsidian">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-clay px-3 py-1 text-[0.7rem] font-semibold uppercase tracking-wider text-obsidian">
                   {PLANES.recomendado}
                 </span>
               )}
               <h3 className="text-xl font-semibold tracking-tight text-sand">
                 {p.name}
               </h3>
-              <p className="mt-1 text-sm text-clay">{p.tagline}</p>
+              <p className="mt-1 text-sm text-clay-bright">{p.tagline}</p>
               <p className="mt-4 text-xs font-medium uppercase tracking-wide text-mocha">
                 {p.pago}
               </p>
@@ -37,13 +37,13 @@ export function Planes({ idioma = "es" }: { idioma?: Idioma }) {
               <ul className="mb-6 mt-5 space-y-2">
                 {p.incluye.map((x) => (
                   <li key={x} className="flex items-center gap-2 text-sm text-sand/90">
-                    <span className="text-clay">✔</span>
+                    <span className="text-clay-bright">✔</span>
                     {x}
                   </li>
                 ))}
               </ul>
               <div className="mt-auto">
-                <p className="mb-4 text-center text-[0.7rem] font-medium uppercase tracking-[0.12em] text-mocha/70">
+                <p className="mb-4 text-center text-[0.7rem] font-medium uppercase tracking-[0.12em] text-mocha/85">
                   {PLANES.precioNota}
                 </p>
                 <AgendarCTA
@@ -52,7 +52,7 @@ export function Planes({ idioma = "es" }: { idioma?: Idioma }) {
                   className={`block w-full rounded-full px-6 py-3 text-center text-sm font-semibold transition-all duration-300 hover:scale-[1.03] ${
                     p.destacado
                       ? "bg-clay text-obsidian hover:bg-clay-bright"
-                      : "border border-[rgba(242,231,219,0.2)] text-sand hover:border-clay hover:text-clay"
+                      : "border border-[rgba(242,231,219,0.2)] text-sand hover:border-clay hover:text-clay-bright"
                   }`}
                 />
               </div>

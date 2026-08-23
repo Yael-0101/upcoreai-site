@@ -50,7 +50,7 @@ export function NavClient({
       href={otroIdiomaHref}
       hrefLang={idioma === "en" ? "es-MX" : "en-US"}
       aria-label={textos.otroIdiomaAria}
-      className="rounded-full border border-[rgba(242,231,219,0.2)] px-3 py-1.5 text-xs font-semibold tracking-[0.08em] text-mocha transition-colors hover:border-clay hover:text-clay"
+      className="rounded-full border border-[rgba(242,231,219,0.2)] px-3 py-1.5 text-xs font-semibold tracking-[0.08em] text-mocha transition-colors hover:border-clay hover:text-clay-bright"
     >
       {textos.otroIdioma}
     </a>
@@ -119,7 +119,7 @@ export function NavClient({
           onClick={() => setAbierto((v) => !v)}
           aria-expanded={abierto}
           aria-label={abierto ? textos.cerrarMenu : textos.abrirMenu}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(242,231,219,0.2)] text-sand transition-colors hover:border-clay lg:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(242,231,219,0.2)] text-sand transition-colors hover:border-clay lg:hidden"
         >
           <svg
             width="18"
@@ -154,14 +154,14 @@ export function NavClient({
             {enlaces.map((e) =>
               e.items ? (
                 <div key={e.label} className="pb-2">
-                  <div className="px-2 pb-1 pt-3 text-xs font-semibold uppercase tracking-[0.14em] text-mocha/60">
+                  <div className="px-2 pb-1 pt-3 text-xs font-semibold uppercase tracking-[0.14em] text-mocha/80">
                     {e.label}
                   </div>
                   {e.items.map((it) => (
                     <a
                       key={it.href}
                       href={it.href}
-                      className="block rounded-xl px-2 py-2.5 text-[15px] text-sand transition-colors hover:text-clay"
+                      className="block rounded-xl px-2 py-2.5 text-[15px] text-sand transition-colors hover:text-clay-bright"
                     >
                       {it.label}
                     </a>
@@ -171,7 +171,7 @@ export function NavClient({
                 <a
                   key={e.href}
                   href={e.href}
-                  className="block rounded-xl px-2 py-2.5 text-[15px] font-medium text-sand transition-colors hover:text-clay"
+                  className="block rounded-xl px-2 py-2.5 text-[15px] font-medium text-sand transition-colors hover:text-clay-bright"
                 >
                   {e.label}
                 </a>

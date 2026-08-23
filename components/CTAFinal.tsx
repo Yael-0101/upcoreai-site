@@ -28,7 +28,7 @@ export function CTAFinal({ idioma = "es" }: { idioma?: Idioma }) {
               href={linkWhatsApp(idioma)}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-5 inline-block text-sm text-mocha underline-offset-4 transition-colors hover:text-clay hover:underline"
+              className="mt-5 inline-block text-sm text-mocha underline-offset-4 transition-colors hover:text-clay-bright hover:underline"
             >
               {CTA_FINAL.ctaWhatsapp}
             </a>

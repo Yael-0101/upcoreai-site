@@ -69,14 +69,14 @@ export function BlogArticulo({ a, idioma }: { a: Articulo; idioma: Idioma }) {
         <section className="px-[6%] pb-12 pt-36 md:px-[10%] md:pb-14 md:pt-44">
           <div className="mx-auto max-w-3xl">
             <Reveal>
-              <div className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-clay">
+              <div className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-clay-bright">
                 <a
                   href={ruta(idioma, "/blog")}
                   className="transition-colors hover:text-clay-bright"
                 >
                   {t.migaAqui}
                 </a>
-                <span className="font-light normal-case tracking-normal text-mocha/70">
+                <span className="font-light normal-case tracking-normal text-mocha/85">
                   {fechaBonita(a.fechaPublicado, idioma)}
                 </span>
               </div>
@@ -139,7 +139,7 @@ export function BlogArticulo({ a, idioma }: { a: Articulo; idioma: Idioma }) {
                   <a
                     key={rel.slug}
                     href={ruta(idioma, `/soluciones/${rel.slug}`)}
-                    className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay"
+                    className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
                   >
                     {rel.t[idioma].nombreCorto}
                   </a>

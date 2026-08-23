@@ -191,11 +191,11 @@ export default async function AcuerdoPublico({
     <main className="pagina-propuesta min-h-screen bg-obsidian px-[6%] py-12 text-sand md:px-[10%]">
       <div className="mx-auto max-w-[820px]">
         <div className="mb-12 text-lg font-semibold tracking-tight">
-          Upcore <span className="text-clay">AI</span>
+          Upcore <span className="text-clay-bright">AI</span>
         </div>
 
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-          <span className="inline-block rounded-full border border-clay/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-clay">
+          <span className="inline-block rounded-full border border-clay/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-clay-bright">
             {aceptado ? t.ui.etiquetaAceptado : t.ui.etiquetaActivo}
           </span>
           {/* El cambio de idioma solo aparece si ESTE acuerdo trae la versión en inglés
@@ -204,7 +204,7 @@ export default async function AcuerdoPublico({
           {hayIngles && (
             <a
               href={`/acuerdo/${encodeURIComponent(token)}${en ? "" : "?lang=en"}`}
-              className="no-print rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay"
+              className="no-print rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay-bright"
             >
               {t.ui.verEnOtroIdioma}
             </a>
@@ -221,7 +221,7 @@ export default async function AcuerdoPublico({
 
         <h1 className="mb-3 text-[clamp(1.9rem,4.5vw,2.8rem)] font-semibold leading-[1.12] tracking-[-0.03em]">
           {en ? "Agreement between Upcore AI and" : "Acuerdo entre Upcore AI y"}{" "}
-          <em className="not-italic text-clay">{doc.clinica}</em>
+          <em className="not-italic text-clay-bright">{doc.clinica}</em>
         </h1>
 
         <p className="mb-8 font-light text-mocha">
@@ -261,7 +261,7 @@ export default async function AcuerdoPublico({
               <div className="border-t border-sand/40 pt-2">
                 <p className="font-semibold text-sand">Yael López</p>
                 <p className="text-sm font-light text-mocha">Upcore AI</p>
-                <p className="mt-1 text-sm font-light text-mocha/70">{fechaTxt}</p>
+                <p className="mt-1 text-sm font-light text-mocha/85">{fechaTxt}</p>
               </div>
             </div>
 
@@ -274,7 +274,7 @@ export default async function AcuerdoPublico({
                   <div className="border-t border-sand/40 pt-2">
                     <p className="font-semibold text-sand">{fila.aceptadoPor}</p>
                     <p className="text-sm font-light text-mocha">{doc.clinica}</p>
-                    <p className="mt-1 text-sm font-light text-mocha/70">
+                    <p className="mt-1 text-sm font-light text-mocha/85">
                       {t.ui.aceptadoEl(
                         new Date(fila.aceptadoEl).toLocaleString(en ? "en-US" : "es-MX", {
                           day: "numeric",
@@ -306,19 +306,19 @@ export default async function AcuerdoPublico({
           <div className="no-print mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
             <a
               href={`/api/acuerdo-pdf?token=${encodeURIComponent(token)}${en ? "&lang=en" : ""}`}
-              className="rounded-full border border-sand/30 px-6 py-3 text-sm font-semibold text-sand transition-colors hover:border-clay hover:text-clay"
+              className="rounded-full border border-sand/30 px-6 py-3 text-sm font-semibold text-sand transition-colors hover:border-clay hover:text-clay-bright"
             >
               {t.ui.descargarPdf}
             </a>
-            <span className="text-xs font-light text-mocha/60">
+            <span className="text-xs font-light text-mocha/80">
               {t.ui.guardalo}
             </span>
           </div>
         </section>
 
-        <p className="mt-12 text-center text-xs font-light text-mocha/60">
+        <p className="mt-12 text-center text-xs font-light text-mocha/80">
           Upcore AI · upcoreai.com · {t.ui.dudas}{" "}
-          <a href={CONTACT.whatsapp} className="text-clay underline">
+          <a href={CONTACT.whatsapp} className="text-clay-bright underline">
             {t.ui.escribenos}
           </a>
         </p>

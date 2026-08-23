@@ -27,7 +27,7 @@ export function Resultados({ idioma = "es" }: { idioma?: Idioma }) {
         </div>
       </Reveal>
       <Reveal delay={0.2}>
-        <p className="mx-auto mt-8 max-w-2xl text-center text-xs font-light leading-relaxed text-mocha/60">
+        <p className="mx-auto mt-8 max-w-2xl text-center text-xs leading-relaxed text-mocha/80">
           {RESULTADOS.disclaimer}
         </p>
       </Reveal>

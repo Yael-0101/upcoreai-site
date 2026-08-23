@@ -37,7 +37,10 @@ const MENSUALIDAD_CENTINELA = 4321;
 
 function plantilla(plan) {
   const base = {
-    clinica: "dental",
+    // El giro del nicho vigente (lib/nicho.json). Hasta el 2026-08-23 decía "dental":
+    // el snapshot centinela con el que se genera la plantilla del acuerdo se había
+    // quedado en el nicho anterior.
+    clinica: "comercializadora",
     productos: ["agente"],
     modo: "normal",
     operacion: null,

@@ -31,6 +31,13 @@ body {
   color: var(--sand);
 }
 
+/* Anillo de foco visible SOLO al navegar con teclado (accesible sin ensuciar el tacto).
+   Mismo criterio que el panel: una casa, un foco. */
+:where(a, button, [role="button"], select, input, textarea, summary):focus-visible {
+  outline: 2px solid rgba(214, 117, 79, 0.7);
+  outline-offset: 2px;
+}
+
 @layer components {
   .glass {
     position: relative;
@@ -228,6 +235,7 @@ body {
     animation: none !important;
   }
   .pagina-propuesta .text-clay,
+  .pagina-propuesta .text-clay-bright,
   .pagina-propuesta em {
     color: #c8623d !important;
   }

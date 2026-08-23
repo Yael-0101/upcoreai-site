@@ -19,7 +19,7 @@ export function Sistema({ idioma = "es" }: { idioma?: Idioma }) {
         <GlassCard variant="glass" className="mx-auto mb-6 max-w-5xl p-8 md:p-10">
           <div className="grid gap-8 md:grid-cols-2 md:items-center">
             <div>
-              <span className="mb-4 inline-flex items-center rounded-full border border-[rgba(200,98,61,0.35)] bg-[rgba(200,98,61,0.1)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-clay">
+              <span className="mb-4 inline-flex items-center rounded-full border border-[rgba(200,98,61,0.35)] bg-[rgba(200,98,61,0.1)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-clay-bright">
                 {SISTEMA.dashboard.tag}
               </span>
               <h3 className="mb-3 flex items-center gap-3 text-2xl font-semibold tracking-tight text-sand md:text-3xl">
@@ -43,7 +43,7 @@ export function Sistema({ idioma = "es" }: { idioma?: Idioma }) {
             </div>
           </div>
           <div className="mt-8 border-t border-[rgba(242,231,219,0.1)] pt-6">
-            <p className="mb-3 text-sm font-semibold text-clay">
+            <p className="mb-3 text-sm font-semibold text-clay-bright">
               {SISTEMA.dashboard.ajustesTitle}
             </p>
             <div className="flex flex-wrap gap-2">

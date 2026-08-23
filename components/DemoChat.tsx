@@ -132,7 +132,7 @@ export function DemoChat({
               {T.enLinea}
             </div>
           </div>
-          <span className="shrink-0 rounded-full border border-mocha/30 px-2 py-0.5 text-[0.6rem] font-medium uppercase tracking-wide text-mocha">
+          <span className="shrink-0 rounded-full border border-mocha/30 px-2 py-0.5 text-[0.7rem] font-medium uppercase tracking-wide text-mocha">
             {T.demoFicticia}
           </span>
         </div>
@@ -160,7 +160,7 @@ export function DemoChat({
                     <AgendarCTA
                       idioma={idioma}
                       label={T.quieroEsto}
-                      className="btn-shine mt-2.5 inline-block rounded-full bg-clay px-4 py-2 text-xs font-semibold text-white transition-transform active:scale-95"
+                      className="btn-shine mt-2.5 inline-block rounded-full bg-clay px-4 py-2 text-xs font-semibold text-obsidian transition-transform active:scale-95"
                     />
                   </div>
                 ) : (
@@ -174,10 +174,10 @@ export function DemoChat({
                     <p className="whitespace-pre-wrap text-[0.85rem] leading-relaxed text-sand">
                       {m.text}
                     </p>
-                    <div className="mt-0.5 flex items-center justify-end gap-1 text-[0.6rem] text-mocha/70">
+                    <div className="mt-0.5 flex items-center justify-end gap-1 text-[0.7rem] text-mocha/85">
                       {m.hora}
                       {m.from === "user" && (
-                        <span className={m.leido ? "text-sage" : "text-mocha/50"}>✓✓</span>
+                        <span className={m.leido ? "text-sage" : "text-mocha/75"}>✓✓</span>
                       )}
                     </div>
                   </div>
@@ -235,7 +235,7 @@ export function DemoChat({
             placeholder={done ? T.placeholderFin : T.placeholder}
             disabled={escribiendo || done}
             aria-label={T.aria}
-            className="min-w-0 flex-1 rounded-full border border-white/10 bg-obsidian px-4 py-2.5 text-sm text-sand outline-none transition-colors placeholder:text-mocha/50 focus:border-clay/60 disabled:opacity-50"
+            className="min-w-0 flex-1 rounded-full border border-white/10 bg-obsidian px-4 py-2.5 text-sm text-sand outline-none transition-colors placeholder:text-mocha/75 focus:border-clay/60 disabled:opacity-50"
           />
           <button
             type="button"

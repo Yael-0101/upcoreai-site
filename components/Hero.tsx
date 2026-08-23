@@ -75,7 +75,7 @@ export function Hero({ idioma = "es" }: { idioma?: Idioma }) {
         />
         <a
           href="#calculadora"
-          className="rounded-full border border-[rgba(242,231,219,0.2)] px-7 py-4 text-sm font-semibold text-sand transition-all duration-300 hover:border-clay hover:text-clay"
+          className="rounded-full border border-[rgba(242,231,219,0.2)] px-7 py-4 text-sm font-semibold text-sand transition-all duration-300 hover:border-clay hover:text-clay-bright"
         >
           {HERO.ctaSecondary}
         </a>
@@ -85,7 +85,7 @@ export function Hero({ idioma = "es" }: { idioma?: Idioma }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1 }}
-        className="absolute bottom-10 left-1/2 z-10 -translate-x-1/2 text-mocha/60"
+        className="absolute bottom-10 left-1/2 z-10 -translate-x-1/2 text-mocha/80"
         aria-hidden
       >
         <div className="mx-auto h-9 w-5 rounded-full border border-mocha/40 p-1">

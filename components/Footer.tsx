@@ -16,7 +16,7 @@ export function Footer({ idioma = "es" }: { idioma?: Idioma }) {
         </a>
       </div>
       <nav aria-label={t.footer.soluciones} className="mb-8">
-        <div className="mb-4 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-mocha/60">
+        <div className="mb-4 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-mocha/80">
           {t.footer.soluciones}
         </div>
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
@@ -24,7 +24,7 @@ export function Footer({ idioma = "es" }: { idioma?: Idioma }) {
             <a
               key={s.slug}
               href={ruta(idioma, `/soluciones/${s.slug}`)}
-              className="text-xs text-mocha transition-colors hover:text-clay"
+              className="inline-block py-1 text-xs text-mocha transition-colors hover:text-clay-bright"
             >
               {s.t[idioma].nombreCorto}
             </a>
@@ -35,33 +35,33 @@ export function Footer({ idioma = "es" }: { idioma?: Idioma }) {
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
           <a
             href={ruta(idioma, "/precios")}
-            className="text-xs text-mocha transition-colors hover:text-clay"
+            className="inline-block py-1 text-xs text-mocha transition-colors hover:text-clay-bright"
           >
             {t.nav.precios}
           </a>
           <a
             href={ruta(idioma, "/nosotros")}
-            className="text-xs text-mocha transition-colors hover:text-clay"
+            className="inline-block py-1 text-xs text-mocha transition-colors hover:text-clay-bright"
           >
             {t.nav.nosotros}
           </a>
           {HAY_BLOG && (
             <a
               href={ruta(idioma, "/blog")}
-              className="text-xs text-mocha transition-colors hover:text-clay"
+              className="inline-block py-1 text-xs text-mocha transition-colors hover:text-clay-bright"
             >
               {t.nav.blog}
             </a>
           )}
           <a
             href={ruta(idioma, "/demo")}
-            className="text-xs text-mocha transition-colors hover:text-clay"
+            className="inline-block py-1 text-xs text-mocha transition-colors hover:text-clay-bright"
           >
             {t.nav.demoEnVivo}
           </a>
           <a
             href={ruta(idioma, "/empezar")}
-            className="text-xs text-mocha transition-colors hover:text-clay"
+            className="inline-block py-1 text-xs text-mocha transition-colors hover:text-clay-bright"
           >
             {t.nav.diagnosticoGratis}
           </a>
@@ -70,18 +70,18 @@ export function Footer({ idioma = "es" }: { idioma?: Idioma }) {
       <div className="mb-8 flex flex-col items-center justify-center gap-4 md:flex-row md:gap-8">
         <a
           href={ruta(idioma, "/privacidad")}
-          className="text-xs uppercase tracking-[0.1em] text-mocha transition-colors hover:text-clay"
+          className="text-xs uppercase tracking-[0.1em] text-mocha transition-colors hover:text-clay-bright"
         >
           {t.footer.privacidad}
         </a>
         <a
           href={ruta(idioma, "/terminos")}
-          className="text-xs uppercase tracking-[0.1em] text-mocha transition-colors hover:text-clay"
+          className="text-xs uppercase tracking-[0.1em] text-mocha transition-colors hover:text-clay-bright"
         >
           {t.footer.terminos}
         </a>
       </div>
-      <div className="text-xs tracking-wide text-mocha/50">{t.footer.derechos}</div>
+      <div className="text-xs tracking-wide text-mocha/75">{t.footer.derechos}</div>
     </footer>
   );
 }

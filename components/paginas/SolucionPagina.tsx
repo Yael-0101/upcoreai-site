@@ -66,7 +66,7 @@ export function SolucionPagina({ s, idioma }: { s: Solucion; idioma: Idioma }) {
         {/* Hero */}
         <section className="px-[6%] pb-16 pt-36 text-center md:px-[10%] md:pb-24 md:pt-44">
           <Reveal>
-            <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-clay">
+            <div className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-clay-bright">
               {c.eyebrow}
             </div>
           </Reveal>
@@ -90,7 +90,7 @@ export function SolucionPagina({ s, idioma }: { s: Solucion; idioma: Idioma }) {
               </a>
               <a
                 href={ruta(idioma, "/empezar")}
-                className="w-full rounded-full border border-[rgba(242,231,219,0.2)] px-8 py-4 font-medium text-sand transition-colors hover:border-clay hover:text-clay sm:w-auto"
+                className="w-full rounded-full border border-[rgba(242,231,219,0.2)] px-8 py-4 font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright sm:w-auto"
               >
                 {t.ctaDiagnostico}
               </a>
@@ -134,7 +134,7 @@ export function SolucionPagina({ s, idioma }: { s: Solucion; idioma: Idioma }) {
               <Reveal key={x.title} delay={i * 0.08}>
                 <div className="card-soft h-full rounded-2xl p-7">
                   <div className="glass-body">
-                    <div className="mb-3 text-sm font-semibold text-clay">
+                    <div className="mb-3 text-sm font-semibold text-clay-bright">
                       {String(i + 1).padStart(2, "0")}
                     </div>
                     <h3 className="mb-2 font-semibold text-sand">{x.title}</h3>
@@ -155,7 +155,7 @@ export function SolucionPagina({ s, idioma }: { s: Solucion; idioma: Idioma }) {
                 <Reveal key={p.title} delay={i * 0.05}>
                   <div className="card-soft rounded-2xl p-6">
                     <div className="glass-body flex gap-5">
-                      <div className="pt-0.5 text-sm font-semibold text-clay">
+                      <div className="pt-0.5 text-sm font-semibold text-clay-bright">
                         {String(i + 1).padStart(2, "0")}
                       </div>
                       <div>
@@ -187,7 +187,7 @@ export function SolucionPagina({ s, idioma }: { s: Solucion; idioma: Idioma }) {
             </div>
           </Reveal>
           <Reveal delay={0.2}>
-            <p className="mx-auto mt-8 max-w-2xl text-center text-xs font-light leading-relaxed text-mocha/60">
+            <p className="mx-auto mt-8 max-w-2xl text-center text-xs font-light leading-relaxed text-mocha/80">
               {contenido(idioma).resultados.disclaimer}
             </p>
           </Reveal>
@@ -250,7 +250,7 @@ export function SolucionPagina({ s, idioma }: { s: Solucion; idioma: Idioma }) {
                     <a
                       key={slugRel}
                       href={ruta(idioma, `/soluciones/${rel.slug}`)}
-                      className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay"
+                      className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
                     >
                       {rel.t[idioma].nombreCorto}
                     </a>

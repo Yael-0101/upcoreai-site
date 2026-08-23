@@ -73,7 +73,7 @@ export function AcuerdoAceptar({
           onChange={(e) => setNombre(e.target.value)}
           placeholder={t.ui.tuNombre}
           autoComplete="name"
-          className="w-full rounded-xl border border-sand/25 bg-sand/5 px-4 py-3 text-sand outline-none transition-colors placeholder:text-mocha/50 focus:border-clay"
+          className="w-full rounded-xl border border-sand/25 bg-sand/5 px-4 py-3 text-sand outline-none transition-colors placeholder:text-mocha/75 focus:border-clay"
         />
         <p className="mt-2 text-sm font-light text-mocha">{clinica}</p>
 
@@ -87,9 +87,9 @@ export function AcuerdoAceptar({
           placeholder={t.ui.tuCorreo}
           autoComplete="email"
           inputMode="email"
-          className="mt-3 w-full rounded-xl border border-sand/25 bg-sand/5 px-4 py-3 text-sand outline-none transition-colors placeholder:text-mocha/50 focus:border-clay"
+          className="mt-3 w-full rounded-xl border border-sand/25 bg-sand/5 px-4 py-3 text-sand outline-none transition-colors placeholder:text-mocha/75 focus:border-clay"
         />
-        <p className="mt-2 text-xs font-light text-mocha/60">{t.ui.correoNota}</p>
+        <p className="mt-2 text-xs font-light text-mocha/80">{t.ui.correoNota}</p>
 
         <label className="mt-4 flex cursor-pointer items-start gap-3 text-sm font-light text-mocha">
           <input
@@ -105,16 +105,16 @@ export function AcuerdoAceptar({
           type="button"
           onClick={aceptar}
           disabled={!listo}
-          className="mt-5 w-full rounded-full bg-clay px-6 py-3.5 font-semibold text-obsidian transition-colors hover:bg-clay-bright disabled:cursor-not-allowed disabled:bg-sand/15 disabled:text-mocha/60"
+          className="mt-5 w-full rounded-full bg-clay px-6 py-3.5 font-semibold text-obsidian transition-colors hover:bg-clay-bright disabled:cursor-not-allowed disabled:bg-sand/15 disabled:text-mocha/80"
         >
           {estado === "enviando" ? t.ui.registrando : t.ui.aceptar}
         </button>
 
         {estado === "error" && (
-          <p className="mt-3 text-sm font-light text-clay">⚠️ {t.ui.errorAceptar}</p>
+          <p className="mt-3 text-sm font-light text-clay-bright">⚠️ {t.ui.errorAceptar}</p>
         )}
 
-        <p className="mt-4 text-xs font-light leading-relaxed text-mocha/60">{t.ui.notaFinal}</p>
+        <p className="mt-4 text-xs font-light leading-relaxed text-mocha/80">{t.ui.notaFinal}</p>
       </div>
     </div>
   );

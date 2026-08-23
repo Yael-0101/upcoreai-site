@@ -103,8 +103,8 @@ export function Field({
   type?: "number" | "text" | "tel" | "email";
 }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-sm text-mocha">{label}</label>
+    <label className="flex flex-col gap-1.5">
+      <span className="text-sm text-mocha">{label}</span>
       <input
         type={type}
         min={type === "number" ? 0 : undefined}
@@ -113,7 +113,7 @@ export function Field({
         onChange={(e) => onChange(e.target.value)}
         className="w-full rounded-xl border border-[rgba(242,231,219,0.2)] bg-[rgba(242,231,219,0.03)] px-5 py-3 font-semibold text-sand outline-none transition-all focus:border-clay focus:bg-[rgba(200,98,61,0.05)]"
       />
-    </div>
+    </label>
   );
 }
 
@@ -129,8 +129,8 @@ export function TextArea({
   onChange: (v: string) => void;
 }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-sm text-mocha">{label}</label>
+    <label className="flex flex-col gap-1.5">
+      <span className="text-sm text-mocha">{label}</span>
       <textarea
         value={value}
         placeholder={placeholder}
@@ -138,7 +138,7 @@ export function TextArea({
         rows={4}
         className="w-full resize-none rounded-xl border border-[rgba(242,231,219,0.2)] bg-[rgba(242,231,219,0.03)] px-5 py-3 font-light text-sand outline-none transition-all focus:border-clay focus:bg-[rgba(200,98,61,0.05)]"
       />
-    </div>
+    </label>
   );
 }
 

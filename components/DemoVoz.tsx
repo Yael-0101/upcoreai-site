@@ -167,7 +167,7 @@ export function DemoVoz({ clinica, giro, idioma = "es" }: Props) {
             {estado === "hablando" ? (
               <button
                 onClick={colgar}
-                className="rounded-full border border-[rgba(242,231,219,0.25)] px-6 py-3 text-sm font-semibold text-sand transition-colors hover:border-clay hover:text-clay"
+                className="rounded-full border border-[rgba(242,231,219,0.25)] px-6 py-3 text-sm font-semibold text-sand transition-colors hover:border-clay hover:text-clay-bright"
               >
                 {t.colgar}
               </button>

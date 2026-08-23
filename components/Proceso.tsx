@@ -33,14 +33,14 @@ export function Proceso() {
           {FASES.map((f, i) => (
             <Reveal key={f.fase} variant="blurIn" delay={i * 0.14}>
               <GlassCard className="h-full p-8">
-                <div className="mb-4 inline-flex h-8 items-center rounded-full border border-[rgba(200,98,61,0.35)] bg-[rgba(200,98,61,0.1)] px-3 text-xs font-semibold uppercase tracking-[0.18em] text-clay">
+                <div className="mb-4 inline-flex h-8 items-center rounded-full border border-[rgba(200,98,61,0.35)] bg-[rgba(200,98,61,0.1)] px-3 text-xs font-semibold uppercase tracking-[0.18em] text-clay-bright">
                   {f.fase}
                 </div>
                 <h3 className="mb-3 text-xl font-semibold tracking-tight text-sand">
                   {f.title}
                 </h3>
                 <p className="text-sm font-light text-mocha">
-                  <span className="font-medium text-clay">{f.tag}:</span> {f.detail}
+                  <span className="font-medium text-clay-bright">{f.tag}:</span> {f.detail}
                 </p>
               </GlassCard>
             </Reveal>
@@ -57,7 +57,7 @@ export function Proceso() {
             <div className="mb-10 flex flex-wrap justify-center gap-x-8 gap-y-3 text-mocha">
               {RESULTADOS.map((r) => (
                 <span key={r} className="flex items-center gap-2">
-                  <span className="text-clay">✔</span>
+                  <span className="text-clay-bright">✔</span>
                   {r}
                 </span>
               ))}

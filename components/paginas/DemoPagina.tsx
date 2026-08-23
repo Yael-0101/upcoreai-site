@@ -28,7 +28,7 @@ export function DemoPagina({
       <main className="relative z-[2] px-[6%] pb-24 pt-32 md:px-[10%]">
         <div className="mx-auto max-w-5xl">
           <div className="mb-10 text-center">
-            <span className="mb-4 inline-block rounded-full border border-clay/40 bg-clay/10 px-4 py-1.5 text-xs font-medium uppercase tracking-wide text-clay">
+            <span className="mb-4 inline-block rounded-full border border-clay/40 bg-clay/10 px-4 py-1.5 text-xs font-medium uppercase tracking-wide text-clay-bright">
               {t.etiqueta}
             </span>
             <h1 className="text-gradient mx-auto max-w-2xl text-[clamp(1.9rem,5vw,3rem)] font-semibold leading-tight tracking-tight">
@@ -55,7 +55,7 @@ export function DemoPagina({
             <AgendarCTA
               idioma={idioma}
               label={t.cta}
-              className="btn-shine inline-block rounded-full bg-clay px-8 py-3.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
+              className="btn-shine inline-block rounded-full bg-clay px-8 py-3.5 text-sm font-semibold text-obsidian shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
             />
           </div>
         </div>

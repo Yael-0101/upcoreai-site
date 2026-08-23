@@ -30,7 +30,7 @@ export function DemoTeaser({ idioma = "es" }: { idioma?: Idioma }) {
                 </span>
                 <div>
                   <div className="text-xs font-semibold text-sand">{t.chatTitulo}</div>
-                  <div className="text-[0.6rem] text-sage">{t.chatEstado}</div>
+                  <div className="text-[0.7rem] text-sage">{t.chatEstado}</div>
                 </div>
               </div>
               {t.burbujas.map((b, i) => (
@@ -61,19 +61,19 @@ export function DemoTeaser({ idioma = "es" }: { idioma?: Idioma }) {
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center md:justify-start">
             <Link
               href={ruta(idioma, "/demo")}
-              className="btn-shine inline-block rounded-full bg-clay px-7 py-3.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
+              className="btn-shine inline-block rounded-full bg-clay px-7 py-3.5 text-sm font-semibold text-obsidian shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
             >
               {t.ctaChat}
             </Link>
             <Link
               href={ruta(idioma, "/soluciones/agente-de-voz-para-inmobiliarias#demo-voz")}
-              className="inline-block rounded-full border border-[rgba(242,231,219,0.25)] px-7 py-3.5 text-sm font-semibold text-sand transition-colors hover:border-clay hover:text-clay"
+              className="inline-block rounded-full border border-[rgba(242,231,219,0.25)] px-7 py-3.5 text-sm font-semibold text-sand transition-colors hover:border-clay hover:text-clay-bright"
             >
               {t.ctaVoz}
             </Link>
           </div>
 
-          <p className="mt-3 text-xs font-light text-mocha/70">{t.nota}</p>
+          <p className="mt-3 text-xs font-light text-mocha/85">{t.nota}</p>
         </Reveal>
       </div>
     </section>
