@@ -17,6 +17,7 @@ import {
 } from "./WizardUI";
 import { CONTACT } from "@/lib/content";
 import { TA } from "@/lib/arranque-textos";
+import { pegarDesarrollos, MAX_PEGADAS } from "@/lib/pegar-desarrollos";
 import { idiomaDe, type Idioma } from "@/lib/acuerdo-textos";
 import {
   conciergeListo,
@@ -270,6 +271,21 @@ export function ArranquePortal({
   const setTexto = (id: string, p: Partial<TextoItem>) =>
     patch({ textos: d.textos.map((t) => (t.id === id ? { ...t, ...p } : t)) });
 
+  // ── Pegar la lista de desarrollos de golpe (2026-08-23) ───────────────────
+  // Llenarlo de a uno son tres campos y un clic por desarrollo; una firma con quince torres
+  // ya tiene esa lista escrita en algún lado. `pegado` guarda lo que escribió y `leido` lo
+  // que se entendió, para ENSEÑÁRSELO antes de aplicarlo: aquí no se adivina en silencio.
+  const [pegando, setPegando] = useState(false);
+  const [pegado, setPegado] = useState("");
+  const leido = pegarDesarrollos(pegado);
+
+  const aplicarPegado = () => {
+    if (!leido.filas.length) return;
+    setChecklist({ servicios: leido.filas });
+    setPegando(false);
+    setPegado("");
+  };
+
   // ── Validaciones por paso ─────────────────────────────────────────────────
   const step2Ready = d.checklist.servicios.some((s) => s.nombre.trim() !== "");
   // El tono solo se pide si algo de lo suyo le habla a un paciente: exigírselo a
@@ -381,6 +397,97 @@ export function ArranquePortal({
       {step === N.servicios && (
         <div>
           <StepHeader {...copyServicios(piezas, idioma)} />
+
+          {/* Atajo: pegar la lista de golpe. Va ARRIBA de los campos porque el que trae su
+              lista lo necesita antes de empezar a teclear; el que no, lo ignora y sigue. */}
+          {!pegando ? (
+            <button
+              type="button"
+              onClick={() => setPegando(true)}
+              className="mb-4 inline-flex items-center gap-2 rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
+            >
+              📋 {T.desarrollos.pegarAbrir}
+            </button>
+          ) : (
+            <div className="mb-6 rounded-2xl border border-clay/40 bg-[rgba(242,231,219,0.03)] p-4">
+              <label htmlFor="pegar-desarrollos" className="mb-1 block text-sm font-medium text-sand">
+                {T.desarrollos.pegarTitulo}
+              </label>
+              <p className="mb-3 text-xs font-light leading-relaxed text-mocha">
+                {T.desarrollos.pegarHint}
+              </p>
+              <textarea
+                id="pegar-desarrollos"
+                autoFocus
+                rows={6}
+                value={pegado}
+                onChange={(e) => setPegado(e.target.value)}
+                placeholder={T.desarrollos.pegarEjemplo}
+                className="w-full rounded-xl border border-[rgba(242,231,219,0.15)] bg-obsidian px-3 py-2 font-mono text-sm text-sand outline-none transition-colors placeholder:text-mocha/40 focus:border-clay"
+              />
+
+              {/* Lo que se entendió, ANTES de aplicarlo. Si una columna se interpretó mal,
+                  el cliente lo ve aquí y lo corrige — no el día de la entrega. */}
+              {pegado.trim() !== "" && (
+                <div className="mt-3 text-xs font-light text-mocha">
+                  {leido.filas.length === 0 ? (
+                    <p className="text-clay-bright">{T.desarrollos.pegarNada}</p>
+                  ) : (
+                    <>
+                      <p className="mb-2 text-sage">
+                        {leido.filas.length}{" "}
+                        {leido.filas.length === 1
+                          ? T.desarrollos.labelNombre.toLowerCase()
+                          : T.desarrollos.q.toLowerCase()}
+                      </p>
+                      <ul className="max-h-40 overflow-y-auto">
+                        {leido.filas.slice(0, 8).map((f, i) => (
+                          // ⚠️ Los valores se sacan a un array ANTES de meterlos en la
+                          // cadena: `${f.duracion}` dentro del texto hacía que el guardián
+                          // de vocabulario lo leyera como palabra visible del nicho viejo
+                          // ("duración" era la de una cita, un condominio no dura). El
+                          // campo se sigue llamando así porque es la llave del dato.
+                          <li key={i} className="truncate">
+                            · <span className="text-sand">{f.nombre}</span>
+                            {[f.precio, f.duracion]
+                              .filter(Boolean)
+                              .map((extra) => ` — ${extra}`)
+                              .join("")}
+                          </li>
+                        ))}
+                        {leido.filas.length > 8 && <li>· …+{leido.filas.length - 8}</li>}
+                      </ul>
+                      {leido.ignorados > 0 && <p className="mt-1">{T.desarrollos.pegarEncabezado}</p>}
+                      {leido.recortado && <p className="mt-1">{T.desarrollos.pegarRecortado}</p>}
+                      <p className="mt-2">{T.desarrollos.pegarPisa}</p>
+                    </>
+                  )}
+                </div>
+              )}
+
+              <div className="mt-4 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={aplicarPegado}
+                  disabled={leido.filas.length === 0}
+                  className="rounded-full bg-clay px-5 py-2 text-sm font-semibold text-obsidian transition-all hover:bg-clay-bright disabled:opacity-40"
+                >
+                  {T.desarrollos.pegarUsar}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPegando(false);
+                    setPegado("");
+                  }}
+                  className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-mocha transition-colors hover:text-sand"
+                >
+                  {T.desarrollos.pegarCancelar}
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="mb-4 grid gap-3">
             {d.checklist.servicios.map((s, i) => (
               <div key={i} className="grid gap-2 rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-4 sm:grid-cols-[2fr_1fr_1fr_auto] sm:items-end">
@@ -418,16 +525,16 @@ export function ArranquePortal({
             onClick={() => setChecklist({ servicios: [...d.checklist.servicios, { ...servicioVacio }] })}
             className="mb-8 rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
           >
-            + Agregar otro desarrollo
+            {/* ⚠️ Antes decía "+ Agregar otro desarrollo" escrito a mano: a un cliente con el
+                portal en inglés le salía en español. La llave ya existía sin usarse. */}
+            {T.desarrollos.agregar}
           </button>
           {/* ⚠️ El botón se apagaba sin decir por qué: el cliente veía "Siguiente"
               muerto y no tenía forma de saber que le faltaba escribir al menos un
               nombre. Un botón deshabilitado y mudo es un callejón sin salida. */}
+          {/* El texto también estaba escrito a mano en español; su llave ya existía. */}
           {!step2Ready && (
-            <p className="mb-3 text-sm font-light text-mocha">
-              Escribe al menos un desarrollo o unidad para continuar. El precio y el
-              tamaño puedes dejarlos en blanco.
-            </p>
+            <p className="mb-3 text-sm font-light text-mocha">{T.desarrollos.faltan}</p>
           )}
           <NavBtns onBack={() => irA(N.bienvenida)} onNext={() => irA(N.horarios)} nextEnabled={step2Ready} nextLabel={T.ui.siguiente} />
         </div>

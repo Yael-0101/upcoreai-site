@@ -371,6 +371,76 @@ casos++;
     fallos.push("[agente] perdió la frase que explica para qué son sus precios");
 }
 
+// ── 6 · Promesas que NO podemos cumplir ─────────────────────────────────────
+//
+// 🔴 2026-08-23. El portal le decía al cliente: "Al entregarte el proyecto te pasamos su
+// acceso EN PERSONA o por videollamada". Upcore opera en remoto desde México y el cliente
+// está en Florida: ir en persona no es algo que se pueda cumplir. Lo cachó Yael leyendo su
+// propio portal.
+//
+// Una promesa rota duele más aquí que en cualquier otra pantalla, porque es justo donde le
+// pedimos confianza para manejar sus cuentas.
+//
+// Se revisan LOS DOS IDIOMAS y TODAS las cadenas de la tabla, no solo las que arma el copy:
+// esta frase vive en `arranque-textos.ts` y no pasa por ninguna de las funciones de arriba,
+// así que las secciones 1-5 no la veían.
+{
+  const { TA } = jiti(path.join(AQUI, "..", "lib", "arranque-textos.ts"));
+
+  // Fronteras a mano, nunca \b (en español falla junto a una vocal acentuada).
+  const PROHIBIDO = [
+    { re: /(?<![a-záéíóúüñ])en persona(?![a-záéíóúüñ])/i, que: "promete entrega EN PERSONA" },
+    { re: /(?<![a-záéíóúüñ])presencial(?:es|mente)?(?![a-záéíóúüñ])/i, que: "promete algo PRESENCIAL" },
+    { re: /(?<![a-z])in person(?![a-z])/i, que: 'promete entrega "in person"' },
+  ];
+
+  // ⚠️ RECORRIDO RECURSIVO, no `Object.entries` a secas. La primera versión de este bloque
+  // solo miraba el primer nivel y la frase vive anidada en `prosa`, así que NO la veía —
+  // habría salido en verde con el defecto puesto. Lo delató la mitad gemela de abajo.
+  const cadenas = (obj, ruta = []) =>
+    Object.entries(obj || {}).flatMap(([k, v]) =>
+      typeof v === "string"
+        ? [[[...ruta, k].join("."), v]]
+        : v && typeof v === "object"
+          ? cadenas(v, [...ruta, k])
+          : []
+    );
+
+  for (const idioma of ["es", "en"]) {
+    const tabla = TA[idioma];
+    if (!tabla) {
+      fallos.push(`falta la tabla de textos del portal en "${idioma}"`);
+      continue;
+    }
+    const todas = cadenas(tabla);
+    // Si el recorrido no encuentra nada, es que la tabla cambió de forma y este guardián
+    // se quedó mirando al vacío. Falla ruidoso en vez de dar el visto bueno.
+    if (todas.length < 50) {
+      fallos.push(`[${idioma}] solo se leyeron ${todas.length} textos del portal — ¿cambió la forma de la tabla?`);
+      continue;
+    }
+    for (const [clave, valor] of todas) {
+      casos++;
+      for (const p of PROHIBIDO) {
+        if (p.re.test(valor)) {
+          fallos.push(`[${idioma}] ${clave} ${p.que}: "${valor.trim().slice(0, 70)}…"`);
+        }
+      }
+    }
+  }
+
+  // La mitad gemela: que NO se haya "arreglado" vaciando la frase. Se sigue diciendo por
+  // dónde se entrega el acceso — solo que por videollamada.
+  for (const idioma of ["es", "en"]) {
+    casos++;
+    const t = String(TA[idioma]?.prosa?.correoFinal || "").toLowerCase();
+    const dice = idioma === "es" ? "videollamada" : "video call";
+    if (!t.includes(dice)) {
+      fallos.push(`[${idioma}] prosa.correoFinal ya no dice cómo se entrega el acceso ("${dice}")`);
+    }
+  }
+}
+
 // ── Veredicto ───────────────────────────────────────────────────────────────
 console.log(`Casos probados: ${casos}`);
 if (fallos.length) {

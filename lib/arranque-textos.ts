@@ -67,6 +67,17 @@ export type TextosArranque = {
     quitar: string;
     agregar: string;
     faltan: string;
+    /** Atajo para pegar la lista de golpe (2026-08-23). */
+    pegarAbrir: string;
+    pegarTitulo: string;
+    pegarHint: string;
+    pegarEjemplo: string;
+    pegarUsar: string;
+    pegarCancelar: string;
+    pegarNada: string;
+    pegarPisa: string;
+    pegarRecortado: string;
+    pegarEncabezado: string;
   };
 
   // ── 3 · Horarios y estilo ─────────────────────────────────────────────────
@@ -338,6 +349,21 @@ const ES: TextosArranque = {
     quitar: "Quitar desarrollo",
     agregar: "+ Agregar otro desarrollo",
     faltan: "Escribe al menos un desarrollo para seguir.",
+    // 🔴 2026-08-23: llenarlo de a uno son tres campos y un clic por desarrollo. Una firma
+    // con quince torres YA tiene esa lista escrita en algún lado; pegarla es el camino corto.
+    // El texto dice que se PUEDE revisar después, porque el atajo solo sirve si da confianza.
+    pegarAbrir: "¿Tienes tu lista a la mano? Pégala de golpe",
+    pegarTitulo: "Pega tu lista — un desarrollo por renglón",
+    pegarHint:
+      "Sirve tal cual desde una hoja de cálculo, un correo o tu página. Si además traes precio y tamaño, sepáralos con una raya | o con tabulador. Después puedes revisar y corregir cada uno.",
+    pegarEjemplo:
+      "Torre Brickell — 2 recámaras | desde 480,000 | 1,100 ft²\nAventura Park\nDoral Towers — penthouse",
+    pegarUsar: "Usar esta lista",
+    pegarCancelar: "Cancelar",
+    pegarNada: "No encontré ningún desarrollo ahí. Escribe uno por renglón.",
+    pegarPisa: "Esto reemplaza lo que ya tengas escrito arriba.",
+    pegarRecortado: "Solo se tomaron los primeros 60. Agrega el resto a mano si hacen falta.",
+    pegarEncabezado: "Se ignoró el encabezado de tu tabla.",
   },
 
   horarios: {
@@ -523,8 +549,13 @@ const ES: TextosArranque = {
     correoFuerte1: "tú no haces nada",
     correoMedio: ". Además deja ",
     correoFuerte2: "todas las cuentas de tu inmobiliaria en un solo lugar",
+    // ⛔ NO se promete entrega EN PERSONA (2026-08-23, dicho por Yael): Upcore opera en
+    // remoto y el cliente está en Florida, así que ir en persona no es algo que se pueda
+    // cumplir. Prometerlo aquí es una promesa rota escrita por nosotros, en la pantalla
+    // donde le estamos pidiendo confianza para manejar sus cuentas.
+    // Lo vigila scripts/probar-arranque.mjs.
     correoFinal:
-      ", sin revolverse con tu correo personal. Al entregarte el proyecto te pasamos su acceso en persona o por videollamada, y queda tuyo con todo adentro.",
+      ", sin revolverse con tu correo personal. Al entregarte el proyecto te pasamos su acceso por videollamada, y queda tuyo con todo adentro.",
     calAntes: "En tu Google Calendar: ",
     calFuerte: "Configuración del calendario → Compartir con determinadas personas → Añadir",
     calDespues: ", y agrega el correo que te mandaremos por WhatsApp, con permiso de “Realizar cambios en eventos”.",
@@ -615,6 +646,18 @@ const EN: TextosArranque = {
     quitar: "Remove development",
     agregar: "+ Add another development",
     faltan: "Add at least one development to continue.",
+    pegarAbrir: "Have your list handy? Paste it all at once",
+    pegarTitulo: "Paste your list — one development per line",
+    pegarHint:
+      "Works straight from a spreadsheet, an email or your website. If you also have price and size, separate them with a | or a tab. You can review and fix each one afterwards.",
+    pegarEjemplo:
+      "Brickell Tower — 2 bedrooms | from 480,000 | 1,100 sq ft\nAventura Park\nDoral Towers — penthouse",
+    pegarUsar: "Use this list",
+    pegarCancelar: "Cancel",
+    pegarNada: "I could not find any developments there. Write one per line.",
+    pegarPisa: "This replaces whatever you already typed above.",
+    pegarRecortado: "Only the first 60 were taken. Add the rest by hand if you need them.",
+    pegarEncabezado: "Your table header was ignored.",
   },
 
   horarios: {
@@ -798,8 +841,9 @@ const EN: TextosArranque = {
     correoFuerte1: "you do nothing",
     correoMedio: ". It also keeps ",
     correoFuerte2: "all of your firm's accounts in one place",
+    // ⛔ Igual que en español: nada de "in person". Ver el comentario de la versión en español.
     correoFinal:
-      ", without getting mixed up with your personal email. When we hand the project over we give you its access in person or on a video call, and it is yours with everything inside.",
+      ", without getting mixed up with your personal email. When we hand the project over we give you its access on a video call, and it is yours with everything inside.",
     calAntes: "In your Google Calendar: ",
     calFuerte: "Calendar settings → Share with specific people → Add",
     calDespues: ", and add the email we will send you on WhatsApp, with “Make changes to events” permission.",
