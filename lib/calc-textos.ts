@@ -84,35 +84,43 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
       "Ya es rentable, pero a tu volumen quizá te convenga empezar en Llave en Mano (sin mensualidad) " +
       "y subir a Gestionado más adelante.",
     piezas: {
+      // ⚠️ ESTA TABLA ES LA QUE GANA. `calculate()` la prefiere sobre el
+      // `desc`/`alcance` de PRODUCTO_OPTIONS (lib/calc.ts), que quedan de
+      // respaldo. El 2026-08-22 se actualizó allá para decir que los productos
+      // atienden en inglés, el guardián salió VERDE —solo comparaba la tabla
+      // inglesa— y la propuesta seguía diciendo "responde WhatsApp en español".
+      // Se vio IMPRIMIENDO lo que devuelve el motor, no leyendo el código.
+      // Ahora `probar-idiomas-producto.mjs` revisa los dos idiomas y además
+      // exige que esta tabla y PRODUCTO_OPTIONS digan exactamente lo mismo.
       agente: {
         label: "Agente de WhatsApp 24/7",
-        desc: "Responde en español a cualquier hora",
+        desc: "Contesta en español e inglés, a cualquier hora",
         alcance:
-          "responde WhatsApp en español a cualquier hora y en cualquier huso horario, resuelve las dudas de siempre, califica al comprador (presupuesto, plazo y si necesita financiamiento) y deja agendada la visita o la videollamada",
+          "responde WhatsApp en español, inglés o portugués según en qué idioma le escriban, a cualquier hora y en cualquier huso horario, resuelve las dudas de siempre, califica al comprador (presupuesto, plazo y si necesita financiamiento) y deja agendada la visita o la videollamada",
       },
       voz: {
         label: "Agente de voz 24/7",
-        desc: "Contesta el teléfono y agenda",
+        desc: "Contesta el teléfono en español e inglés",
         alcance:
           "contesta las llamadas que hoy se pierden, atiende en español o en inglés según quien llame, resuelve dudas hablando, agenda en tu calendario y avisa al asesor — conservando tu número actual",
       },
       web: {
         label: "Sitio web con agenda",
-        desc: "Capta y agenda solo",
+        desc: "En español e inglés; capta y agenda solo",
         alcance:
-          "sitio en español con la ficha de cada desarrollo, formulario que califica y agenda en línea, listo para recibir tráfico de anuncios",
+          "sitio en español e inglés, con la ficha de cada desarrollo, formulario que califica y agenda en línea, listo para recibir tráfico de anuncios",
       },
       auto: {
         label: "Seguimiento automático",
         desc: "Que ningún prospecto se enfríe",
         alcance:
-          "seguimiento que aguanta los meses que dura una preventa: recordatorios de cada etapa de pago, avisos de avance de obra y reactivación del prospecto que dejó de contestar",
+          "seguimiento en el idioma de cada comprador —español o inglés— que aguanta los meses que dura una preventa: recordatorios de cada etapa de pago, avisos de avance de obra y reactivación del prospecto que dejó de contestar",
       },
       reactivacion: {
         label: "Reactivación de prospectos",
         desc: "Recupera a los que nunca cerraron",
         alcance:
-          "campaña para volver a tocar a los prospectos viejos que quedaron en la lista y nunca compraron",
+          "campaña en español o en inglés para volver a tocar a los prospectos viejos que quedaron en la lista y nunca compraron",
       },
     },
     opciones: {
@@ -132,7 +140,7 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
       otro: "Otra inmobiliaria",
     },
     panelIncluye:
-      "Dashboard + sistema integrado — todo operando junto, con tu ROI a la vista",
+      "Dashboard en español e inglés + sistema integrado — todo operando junto, con tu ROI a la vista",
   },
   en: {
     precioCerrado: "Fixed price",
@@ -179,33 +187,33 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
     piezas: {
       agente: {
         label: "24/7 WhatsApp agent",
-        desc: "Replies in Spanish at any hour",
+        desc: "Replies in Spanish and English, at any hour",
         alcance:
-          "answers WhatsApp in Spanish at any hour and in any time zone, handles the usual questions, qualifies the buyer (budget, timeline and whether they need financing) and leaves the visit or video call booked",
+          "answers WhatsApp in Spanish, English or Portuguese depending on the language they write in, at any hour and in any time zone, handles the usual questions, qualifies the buyer (budget, timeline and whether they need financing) and leaves the visit or video call booked",
       },
       voz: {
         label: "24/7 voice agent",
-        desc: "Answers the phone and books",
+        desc: "Answers the phone in Spanish and English",
         alcance:
           "answers the calls that are lost today, handles them in Spanish or English depending on who calls, resolves questions out loud, books on your calendar and notifies the agent — while you keep your current number",
       },
       web: {
         label: "Website with booking",
-        desc: "Captures and books on its own",
+        desc: "In Spanish and English; captures and books on its own",
         alcance:
-          "a Spanish-language site with a page for each development, a form that qualifies and books online, ready to receive ad traffic",
+          "a site in Spanish and English, with a page for each development, a form that qualifies and books online, ready to receive ad traffic",
       },
       auto: {
         label: "Automated follow-up",
         desc: "So no lead goes cold",
         alcance:
-          "follow-up that lasts the months a preconstruction sale takes: reminders for every payment milestone, construction progress updates and re-engagement of the lead who stopped replying",
+          "follow-up in each buyer's own language — Spanish or English — that lasts the months a preconstruction sale takes: reminders for every payment milestone, construction progress updates and re-engagement of the lead who stopped replying",
       },
       reactivacion: {
         label: "Lead re-engagement",
         desc: "Recover the ones who never closed",
         alcance:
-          "a campaign to go back to the old leads sitting on your list who never bought",
+          "a campaign in Spanish or English to go back to the old leads sitting on your list who never bought",
       },
     },
     opciones: {
@@ -225,6 +233,6 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
       otro: "Other real estate firm",
     },
     panelIncluye:
-      "Dashboard + integrated system — everything running together, with your ROI in plain view",
+      "Dashboard in Spanish and English + integrated system — everything running together, with your ROI in plain view",
   },
 };

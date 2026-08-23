@@ -778,13 +778,19 @@ export const TEXTOS: Record<Idioma, Textos> = { es: ES, en: EN };
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Clave: el nombre en español tal como sale del catálogo (lo de antes del " — "). */
+// Se exporta solo para que los guardianes puedan leerlo (`probar-idiomas-
+// producto.mjs` comprueba que el acuerdo no prometa menos idiomas que la
+// propuesta). El acuerdo se arma con `traducirRenglon()`, no leyendo esto.
+export const CATALOGO_EN_PARA_PRUEBAS = () => CATALOGO_EN;
+
 const CATALOGO_EN: Record<string, { label: string; alcance: string }> = {
   "Agente de WhatsApp 24/7": {
     label: "24/7 WhatsApp agent",
     alcance:
-      "answers WhatsApp in Spanish at any hour and in any time zone, handles the usual " +
-      "questions, qualifies the buyer (budget, timeline, and whether they need financing) " +
-      "and books the visit or the video call",
+      "answers WhatsApp in Spanish, English or Portuguese depending on the language they " +
+      "write in, at any hour and in any time zone, handles the usual questions, qualifies " +
+      "the buyer (budget, timeline, and whether they need financing) and books the visit " +
+      "or the video call",
   },
   "Agente de voz 24/7": {
     label: "24/7 voice agent",
@@ -796,32 +802,35 @@ const CATALOGO_EN: Record<string, { label: string; alcance: string }> = {
   "Sitio web con agenda": {
     label: "Website with booking",
     alcance:
-      "a Spanish-language site with a page for each development, a form that qualifies, and " +
-      "online booking, ready to receive ad traffic",
+      "a site in Spanish and English, with a page for each development, a form that " +
+      "qualifies, and online booking, ready to receive ad traffic",
   },
   "Seguimiento automático": {
     label: "Automated follow-up",
     alcance:
-      "follow-up that holds up over the months a preconstruction sale takes: reminders for " +
-      "each payment milestone, construction progress updates, and re-engagement of the " +
-      "buyer who went quiet",
+      "follow-up in each buyer's own language — Spanish or English — that holds up over " +
+      "the months a preconstruction sale takes: reminders for each payment milestone, " +
+      "construction progress updates, and re-engagement of the buyer who went quiet",
   },
   "Reactivación de prospectos": {
     label: "Prospect reactivation",
     alcance:
-      "a campaign to reach back out to the old prospects sitting in your list who never bought",
+      "a campaign in Spanish or English to reach back out to the old prospects sitting in " +
+      "your list who never bought",
   },
-  "Dashboard + sistema integrado": {
-    label: "Dashboard + integrated system",
+  "Dashboard en español e inglés + sistema integrado": {
+    label: "Dashboard in Spanish and English + integrated system",
     alcance: "everything running together, with your ROI in plain sight",
   },
 };
 
 /** Renglones sueltos del punto 1 que no vienen del catálogo (SEO y bonos). */
 const RENGLONES_EN: Record<string, string> = {
-  "Dejarlo listo para Google: su título y su descripción, tu ficha de negocio declarada (nombre, dirección, teléfono y a qué te dedicas) y la página cargando rápido en el celular":
-    "Set up for Google: its title and description, your business listing declared (name, " +
-    "address, phone and what you do) and the page loading fast on a phone",
+  "Dejarlo listo para Google: su título y su descripción en los dos idiomas —cada uno con su propia dirección, para que el buscador indexe las dos versiones y no las tome por repetidas—, tu ficha de negocio declarada (nombre, dirección, teléfono y a qué te dedicas) y la página cargando rápido en el celular":
+    "Set up for Google: its title and description in both languages —each with its own " +
+    "address, so the search engine indexes both versions instead of treating them as " +
+    "duplicates—, your business listing declared (name, address, phone and what you do) " +
+    "and the page loading fast on a phone",
   "Tu ficha de Google, al día y conectada": "Your Google Business listing, updated and linked",
   "Tu agenda digital, montada": "Your digital calendar, set up",
 };

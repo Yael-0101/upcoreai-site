@@ -1,7 +1,8 @@
 import { SOLUCIONES } from "@/lib/soluciones";
 import { HAY_BLOG } from "@/lib/blog";
 import { contenido } from "@/lib/site-textos";
-import { ruta, type Idioma } from "@/lib/idioma";
+import type { Idioma } from "@/lib/idioma";
+import { ruta } from "@/lib/rutas";
 import { NavClient, type EnlaceNav } from "./NavClient";
 
 // Server component: arma los enlaces (datos) y se los pasa serializados al

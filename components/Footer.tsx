@@ -2,7 +2,8 @@ import { Logo } from "./Logo";
 import { SOLUCIONES } from "@/lib/soluciones";
 import { HAY_BLOG } from "@/lib/blog";
 import { contenido } from "@/lib/site-textos";
-import { ruta, type Idioma } from "@/lib/idioma";
+import type { Idioma } from "@/lib/idioma";
+import { ruta } from "@/lib/rutas";
 
 export function Footer({ idioma = "es" }: { idioma?: Idioma }) {
   const t = contenido(idioma);

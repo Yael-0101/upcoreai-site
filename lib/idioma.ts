@@ -43,24 +43,16 @@ export const LOCALE: Record<Idioma, { html: string; og: string }> = {
 export const PREFIJO: Record<Idioma, string> = { es: "", en: "/en" };
 
 /**
- * Convierte una ruta canónica (siempre escrita en español, con `/` al inicio) a
- * la ruta del idioma pedido.
+ * ⚠️ `ruta()` y `alternativas()` YA NO VIVEN AQUÍ: están en `lib/rutas.ts`.
  *
- *   ruta("es", "/precios") → "/precios"
- *   ruta("en", "/precios") → "/en/precios"
- *   ruta("en", "/")        → "/en"
+ * Se mudaron el 2026-08-22, al traducir también las direcciones (`/en/pricing`
+ * en vez de `/en/precios`). Para traducirlas hacen falta los slugs, que viven
+ * en `soluciones.ts` y `blog.ts` — y esos archivos importan el tipo `Idioma` de
+ * aquí. Dejarlas en este archivo habría creado un ciclo de importaciones.
  *
- * ⚠️ Los slugs NO se traducen (`/en/soluciones/agente-de-voz-para-inmobiliarias`).
- * Es a propósito: con el mismo slug en los dos idiomas, cada página sabe cuál es
- * su pareja sin ningún diccionario, y el `hreflang` y el sitemap salen solos. Si
- * algún día el inglés tiene que posicionar por su cuenta, ahí sí hará falta un
- * slug propio — y con él, un mapa en las dos direcciones.
+ * Este archivo se queda con lo primitivo y NO IMPORTA NADA, que es lo que le
+ * permite ser la base de la que cuelga todo lo demás.
  */
-export function ruta(idioma: Idioma, path: string): string {
-  const limpio = path.startsWith("/") ? path : `/${path}`;
-  if (idioma === "es") return limpio;
-  return limpio === "/" ? "/en" : `/en${limpio}`;
-}
 
 /**
  * El origen del sitio, para canonical y hreflang absolutos.
@@ -79,17 +71,3 @@ export function ruta(idioma: Idioma, path: string): string {
  * `scripts/probar-produccion.mjs` comprueba que el canonical publicado no redirija.
  */
 export const ORIGEN = "https://www.upcoreai.com";
-
-/** Las dos direcciones de una misma página, para las etiquetas `hreflang`.
- *  Se incluye `x-default` apuntando al español: es el idioma original y el que
- *  debe recibir a quien llegue sin preferencia declarada. */
-export function alternativas(path: string) {
-  return {
-    canonical: `${ORIGEN}${ruta("es", path)}`,
-    languages: {
-      "es-MX": `${ORIGEN}${ruta("es", path)}`,
-      "en-US": `${ORIGEN}${ruta("en", path)}`,
-      "x-default": `${ORIGEN}${ruta("es", path)}`,
-    },
-  };
-}

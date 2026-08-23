@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { contenido } from "@/lib/site-textos";
-import { ruta, type Idioma } from "@/lib/idioma";
+import type { Idioma } from "@/lib/idioma";
+import { ruta } from "@/lib/rutas";
 
 // Botón único "Haz tu diagnóstico": al hacer clic abre los caminos para empezar.
 // Decisión de Yael (2026-07-23): SIN opciones de llamada en el embudo de diagnóstico

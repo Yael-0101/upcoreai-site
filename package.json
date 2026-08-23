@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/probar-acuerdo.mjs && node scripts/probar-propuesta.mjs && node scripts/probar-propuesta-vocabulario.mjs && node scripts/probar-arranque.mjs && node scripts/probar-arranque-vocabulario.mjs && node scripts/probar-sitio.mjs && node scripts/probar-sitio-bilingue.mjs && node scripts/probar-token.mjs && node scripts/generar-acuerdo-md.mjs --verificar",
+    "prebuild": "node scripts/probar-acuerdo.mjs && node scripts/probar-propuesta.mjs && node scripts/probar-propuesta-vocabulario.mjs && node scripts/probar-arranque.mjs && node scripts/probar-arranque-vocabulario.mjs && node scripts/probar-sitio.mjs && node scripts/probar-sitio-bilingue.mjs && node scripts/probar-idiomas-producto.mjs && node scripts/probar-token.mjs && node scripts/generar-acuerdo-md.mjs --verificar && node scripts/generar-redirecciones.mjs --verificar",
     "build": "next build",
     "start": "next start",
     "probar:acuerdo": "node scripts/probar-acuerdo.mjs",
     "generar:acuerdo": "node scripts/generar-acuerdo-md.mjs",
     "verificar:acuerdo": "node scripts/generar-acuerdo-md.mjs --verificar",
     "probar:bilingue": "node scripts/probar-sitio-bilingue.mjs",
+  "probar:idiomas": "node scripts/probar-idiomas-producto.mjs",
+  "generar:redirecciones": "node scripts/generar-redirecciones.mjs",
     "leer:ingles": "node scripts/leer-ingles.mjs",
     "probar:produccion": "node scripts/probar-produccion.mjs"
   },

@@ -57,9 +57,24 @@ export type TextoSolucion = {
 };
 
 export type Solucion = {
+  /** El slug ESPAÑOL. Es además el identificador interno de la solución: es el
+   *  que se escribe en `relacionadas` y el que reciben `getSolucion()` y
+   *  `ruta()`, en los dos idiomas. */
   slug: string;
+  /**
+   * El slug INGLÉS, que es el que se publica bajo `/en/solutions/…`.
+   *
+   * ⚠️ Es obligatorio a propósito: agregar una solución sin traducir su slug NO
+   * COMPILA. Hasta el 2026-08-22 la versión inglesa vivía en la dirección
+   * española (`/en/soluciones/agente-de-voz-para-inmobiliarias`), que es medio
+   * trabajo: la página estaba traducida y su dirección no, justo donde el
+   * buscador lee de qué trata. La traducción de las dos direcciones la hace
+   * `lib/rutas.ts`, y hay guardián que comprueba que no se repitan ni queden
+   * escritos como el español.
+   */
+  slugEn: string;
   giroDemo: Giro;
-  /** Slugs de otras soluciones → enlaces internos (opcional) */
+  /** Slugs ESPAÑOLES de otras soluciones → enlaces internos (opcional) */
   relacionadas?: string[];
   /** ISO "2026-07-22" → lastModified del sitemap (solo fechas reales) */
   actualizado?: string;
@@ -100,6 +115,7 @@ export const SOLUCIONES: Solucion[] = [
   // ─────────────────────────────────────────────────────────────────────────
   {
     slug: "chatbot-whatsapp-para-inmobiliarias",
+    slugEn: "whatsapp-chatbot-for-real-estate",
     giroDemo: "comercializadora",
     relacionadas: [
       "agente-de-voz-para-inmobiliarias",
@@ -325,6 +341,7 @@ export const SOLUCIONES: Solucion[] = [
   // ─────────────────────────────────────────────────────────────────────────
   {
     slug: "asistente-virtual-para-inmobiliarias",
+    slugEn: "virtual-assistant-for-real-estate",
     giroDemo: "equipo",
     relacionadas: [
       "chatbot-whatsapp-para-inmobiliarias",
@@ -495,6 +512,7 @@ export const SOLUCIONES: Solucion[] = [
   // ─────────────────────────────────────────────────────────────────────────
   {
     slug: "agente-de-voz-para-inmobiliarias",
+    slugEn: "ai-voice-agent-for-real-estate",
     giroDemo: "comercializadora",
     relacionadas: [
       "chatbot-whatsapp-para-inmobiliarias",
@@ -635,6 +653,7 @@ export const SOLUCIONES: Solucion[] = [
   // ─────────────────────────────────────────────────────────────────────────
   {
     slug: "seguimiento-de-leads-inmobiliarios",
+    slugEn: "real-estate-lead-follow-up",
     giroDemo: "equipo",
     relacionadas: [
       "automatizacion-para-inmobiliarias",
@@ -775,6 +794,7 @@ export const SOLUCIONES: Solucion[] = [
   // ─────────────────────────────────────────────────────────────────────────
   {
     slug: "automatizacion-para-inmobiliarias",
+    slugEn: "real-estate-automation",
     giroDemo: "desarrolladora",
     relacionadas: [
       "seguimiento-de-leads-inmobiliarios",
@@ -790,7 +810,7 @@ export const SOLUCIONES: Solucion[] = [
         eyebrow: "Automatización para inmobiliarias",
         h1: "No piezas sueltas: la parte digital de tu inmobiliaria, completa.",
         intro:
-          "Sitio con la ficha de cada desarrollo, agenda en línea, WhatsApp, teléfono y un panel para el director comercial. Todo montado por nosotros, conectado al CRM que ya usas y operando junto — para que no acabes con cinco herramientas que no se hablan entre ellas.",
+          "Sitio con la ficha de cada desarrollo, agenda en línea, WhatsApp, teléfono y un panel para el director comercial. Todo en español e inglés, montado por nosotros, conectado al CRM que ya usas y operando junto — para que no acabes con cinco herramientas que no se hablan entre ellas.",
         nombreCorto: "Automatización",
         dolores: [
           {
@@ -869,7 +889,7 @@ export const SOLUCIONES: Solucion[] = [
         eyebrow: "Real estate automation",
         h1: "Not loose pieces: the digital side of your firm, complete.",
         intro:
-          "A site with a page for every development, online booking, WhatsApp, phone and a dashboard for the sales director. All set up by us, wired into the CRM you already use and running as one thing — so you do not end up with five tools that never talk to each other.",
+          "A site with a page for every development, online booking, WhatsApp, phone and a dashboard for the sales director. All of it in Spanish and English, set up by us, wired into the CRM you already use and running as one thing — so you do not end up with five tools that never talk to each other.",
         nombreCorto: "Automation",
         dolores: [
           {
@@ -947,6 +967,7 @@ export const SOLUCIONES: Solucion[] = [
   // ─────────────────────────────────────────────────────────────────────────
   {
     slug: "vender-preventa-en-miami-a-compradores-latinos",
+    slugEn: "selling-miami-preconstruction-to-latin-buyers",
     giroDemo: "comercializadora",
     relacionadas: [
       "chatbot-whatsapp-para-inmobiliarias",
@@ -1089,6 +1110,17 @@ export const SOLUCIONES: Solucion[] = [
 ];
 
 /** Busca una solución por slug. Devuelve undefined si no existe (la página hace notFound). */
-export function getSolucion(slug: string): Solucion | undefined {
-  return SOLUCIONES.find((s) => s.slug === slug);
+/**
+ * Busca una solución por el slug del idioma pedido: en español por `slug`, en
+ * inglés por `slugEn`.
+ *
+ * ⚠️ Es ESTRICTO a propósito. La tentación es aceptar cualquiera de los dos
+ * slugs "por si acaso", y eso publicaría la misma página inglesa en dos
+ * direcciones — que es exactamente el contenido duplicado que traducir las
+ * direcciones venía a evitar. Las direcciones viejas se resuelven con una
+ * redirección permanente (ver `redireccionesViejas()` en lib/rutas.ts), no
+ * sirviendo la página dos veces.
+ */
+export function getSolucion(slug: string, idioma: Idioma = "es"): Solucion | undefined {
+  return SOLUCIONES.find((s) => (idioma === "en" ? s.slugEn : s.slug) === slug);
 }

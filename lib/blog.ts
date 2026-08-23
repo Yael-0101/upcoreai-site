@@ -42,7 +42,12 @@ export type TextoArticulo = {
 };
 
 export type Articulo = {
+  /** El slug ESPAÑOL, que hace además de identificador interno del artículo. */
   slug: string;
+  /** El slug INGLÉS, el que se publica bajo `/en/blog/…`. Obligatorio: un
+   *  artículo nuevo sin su slug traducido no compila. Ver la nota larga en
+   *  `Solucion.slugEn` (lib/soluciones.ts). */
+  slugEn: string;
   /** ISO "2026-07-22" — alimenta JSON-LD y sitemap (solo fechas reales) */
   fechaPublicado: string;
   fechaActualizado?: string;
@@ -55,6 +60,7 @@ export const ARTICULOS: Articulo[] = [
   // ─────────────────────────────────────────────────────────────────────────
   {
     slug: "prospectos-que-se-enfrian-seguimiento-inmobiliario",
+    slugEn: "leads-lost-to-late-follow-up",
     fechaPublicado: "2026-08-19",
     fechaActualizado: "2026-08-22",
     solucionesRelacionadas: [
@@ -203,6 +209,7 @@ export const ARTICULOS: Articulo[] = [
   // ─────────────────────────────────────────────────────────────────────────
   {
     slug: "comprador-latinoamericano-preventa-miami",
+    slugEn: "latin-american-buyer-miami-preconstruction",
     fechaPublicado: "2026-08-19",
     fechaActualizado: "2026-08-22",
     solucionesRelacionadas: [
@@ -333,6 +340,7 @@ export const ARTICULOS: Articulo[] = [
   // ─────────────────────────────────────────────────────────────────────────
   {
     slug: "cuanto-cuesta-automatizar-atencion-inmobiliaria",
+    slugEn: "cost-to-automate-real-estate-inbound",
     fechaPublicado: "2026-08-19",
     fechaActualizado: "2026-08-22",
     solucionesRelacionadas: [
@@ -477,6 +485,7 @@ export const ARTICULOS: Articulo[] = [
   // ─────────────────────────────────────────────────────────────────────────
   {
     slug: "whatsapp-business-api-inmobiliarias-guia",
+    slugEn: "whatsapp-business-api-real-estate-guide",
     fechaPublicado: "2026-08-19",
     fechaActualizado: "2026-08-22",
     solucionesRelacionadas: [
@@ -591,6 +600,7 @@ export const ARTICULOS: Articulo[] = [
   // ─────────────────────────────────────────────────────────────────────────
   {
     slug: "llamadas-perdidas-inmobiliaria-quien-contesta",
+    slugEn: "missed-calls-real-estate-who-answers",
     fechaPublicado: "2026-08-19",
     fechaActualizado: "2026-08-22",
     solucionesRelacionadas: [
@@ -724,8 +734,10 @@ export const ARTICULOS: Articulo[] = [
 
 export const HAY_BLOG = ARTICULOS.length > 0;
 
-export function getArticulo(slug: string): Articulo | undefined {
-  return ARTICULOS.find((a) => a.slug === slug);
+/** Busca un artículo por el slug del idioma pedido. Estricto a propósito: ver
+ *  la nota de `getSolucion()` en lib/soluciones.ts. */
+export function getArticulo(slug: string, idioma: Idioma = "es"): Articulo | undefined {
+  return ARTICULOS.find((a) => (idioma === "en" ? a.slugEn : a.slug) === slug);
 }
 
 /** La fecha, escrita como la escribe cada idioma. En inglés se pone el mes primero:

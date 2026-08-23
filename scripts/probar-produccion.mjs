@@ -15,28 +15,38 @@
 // Es la regla de la casa de "al comprobar producción, busca un dato que sepas que
 // cambió, no solo que la página responda 200".
 
+// ⚠️ La lista NO se escribe a mano. Salía así hasta el 2026-08-22, y ese mismo
+// día se quedó obsoleta entera al traducir las direcciones (`/en/precios` pasó a
+// `/en/pricing`): un verificador de producción apuntando a las rutas viejas
+// habría comprobado 10 redirecciones y las habría dado por buenas. Ahora sale de
+// RUTAS_INDEXABLES —la misma fuente que el sitemap— pasada por `ruta()`, así que
+// crece y se traduce sola. Es la regla de "un guardián comprueba coherencia, no
+// una lista fija".
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import createJiti from "jiti";
+
+const AQUI = path.dirname(fileURLToPath(import.meta.url));
+const RAIZ = path.join(AQUI, "..");
+const jiti = createJiti(path.join(AQUI, "x.mjs"), {
+  cache: false,
+  requireCache: false,
+  interopDefault: true,
+});
+const { RUTAS_INDEXABLES } = jiti(path.join(RAIZ, "lib", "seo.ts"));
+const { ruta } = jiti(path.join(RAIZ, "lib", "rutas.ts"));
+
 const RUTAS = [
-  "/",
-  "/en",
-  "/precios",
-  "/en/precios",
-  "/nosotros",
-  "/en/nosotros",
-  "/blog",
-  "/en/blog",
-  "/demo",
-  "/en/demo",
-  "/empezar",
-  "/en/empezar",
-  "/privacidad",
-  "/en/privacidad",
-  "/terminos",
-  "/en/terminos",
-  "/soluciones/agente-de-voz-para-inmobiliarias",
-  "/en/soluciones/agente-de-voz-para-inmobiliarias",
-  "/blog/cuanto-cuesta-automatizar-atencion-inmobiliaria",
-  "/en/blog/cuanto-cuesta-automatizar-atencion-inmobiliaria",
-];
+  ...RUTAS_INDEXABLES.flatMap((r) => [ruta("es", r.path), ruta("en", r.path)]),
+  // La demo no está en el sitemap con entrada propia y el Nav sí la enlaza.
+  ruta("es", "/demo"),
+  ruta("en", "/demo"),
+].filter((v, i, a) => a.indexOf(v) === i);
+
+if (RUTAS.length < 10) {
+  console.error("❌ La lista de rutas salió casi vacía: el lector de lib/seo.ts falló.");
+  process.exit(1);
+}
 
 const BASE = process.argv[2] || "https://www.upcoreai.com";
 const fallos = [];

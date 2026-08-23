@@ -13,7 +13,8 @@ import { getSolucion, type Solucion } from "@/lib/soluciones";
 import { contenido } from "@/lib/site-textos";
 import { paginas } from "@/lib/paginas-textos";
 import { SITE_URL, breadcrumbJsonLd } from "@/lib/seo";
-import { ruta, LOCALE, type Idioma } from "@/lib/idioma";
+import { LOCALE, type Idioma } from "@/lib/idioma";
+import { ruta } from "@/lib/rutas";
 
 export const SLUG_VOZ = "agente-de-voz-para-inmobiliarias";
 

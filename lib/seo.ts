@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { SOLUCIONES } from "./soluciones";
 import { ARTICULOS, HAY_BLOG } from "./blog";
-import { alternativas, LOCALE, ruta, IDIOMAS, ORIGEN, type Idioma } from "./idioma";
+import { LOCALE, IDIOMAS, ORIGEN, type Idioma } from "./idioma";
+import { alternativas, ruta } from "./rutas";
 
 // El host que de VERDAD sirve. Vive en lib/idioma.ts (ver el comentario de ORIGEN:
 // apuntar al apex, que redirige, hacía que Google descartara el hreflang).
@@ -18,7 +19,7 @@ export const ORGANIZACION = {
   telefono: "+1-424-447-2698",
   logo: `${SITE_URL}/icon-512.png`,
   descripcion:
-    "Automatización con IA para inmobiliarias de preventa en el sur de Florida: agentes de WhatsApp y voz en español, seguimiento de prospectos, sitios y paneles a la medida.",
+    "Automatización con IA para inmobiliarias de preventa en el sur de Florida: agentes de WhatsApp y voz en español e inglés, seguimiento de prospectos, sitios y paneles a la medida.",
   // Perfiles oficiales de la marca — alimentan el sameAs del JSON-LD.
   // Pendiente de agregar: página de empresa de LinkedIn (cuando exista).
   sameAs: ["https://www.instagram.com/upcore.ai/"] as string[],

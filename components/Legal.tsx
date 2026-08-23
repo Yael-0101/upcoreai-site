@@ -4,7 +4,8 @@ import { Footer } from "./Footer";
 import { Backdrop } from "./Backdrop";
 import { legal, MARCA_WHATSAPP, type DocLegal, type Frag } from "@/lib/legal-textos";
 import { linkWhatsApp } from "@/lib/content";
-import { ruta, type Idioma } from "@/lib/idioma";
+import type { Idioma } from "@/lib/idioma";
+import { ruta } from "@/lib/rutas";
 
 // Shell de las páginas legales. El texto es DATO (lib/legal-textos.ts) y aquí solo
 // se pinta: así los dos idiomas tienen la misma forma y no puede quedarse media

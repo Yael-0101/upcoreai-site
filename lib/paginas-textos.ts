@@ -258,7 +258,7 @@ const ES: TextosPaginas = {
   nosotros: {
     metaTitle: "Quiénes somos",
     metaDescription:
-      "Upcore AI (upcoreai.com) es una agencia mexicana de automatización con IA especializada en inmobiliarias de preventa del sur de Florida: agentes de WhatsApp y voz en español, seguimiento y sistemas que quedan a tu nombre.",
+      "Upcore AI (upcoreai.com) es una agencia mexicana de automatización con IA especializada en inmobiliarias de preventa del sur de Florida: agentes de WhatsApp y voz en español e inglés, seguimiento y sistemas que quedan a tu nombre.",
     eyebrow: "Nosotros",
     h1: "Automatización con IA, hecha para inmobiliarias.",
     intro:
@@ -404,7 +404,7 @@ const ES: TextosPaginas = {
   demoVoz: {
     titulo: "Háblale como si fueras tu comprador",
     intro:
-      "Marca, pregunta por una visita y escucha lo que oiría quien llama a tu firma. Usa el micrófono de tu compu — no hace falta ningún número.",
+      "Marca, pregunta por una visita y escucha lo que oiría quien llama a tu firma. Contesta en español, como te llaman tus compradores — háblale en inglés y se cambia. Usa el micrófono de tu compu; no hace falta ningún número.",
     enLlamada: "En llamada ·",
     hablaNormal: "Habla normal, te está escuchando",
     terminada:
@@ -529,7 +529,7 @@ const EN: TextosPaginas = {
   nosotros: {
     metaTitle: "About us",
     metaDescription:
-      "Upcore AI (upcoreai.com) is a Mexican AI automation agency specializing in South Florida preconstruction sales: WhatsApp and voice agents in Spanish, lead follow-up, and systems that stay in your name.",
+      "Upcore AI (upcoreai.com) is a Mexican AI automation agency specializing in South Florida preconstruction sales: WhatsApp and voice agents in Spanish and English, lead follow-up, and systems that stay in your name.",
     eyebrow: "About",
     h1: "AI automation, built for real estate.",
     intro:
@@ -684,7 +684,7 @@ const EN: TextosPaginas = {
     // se afirma. La página del agente de voz sí lo dice, porque ahí es una
     // capacidad del producto que se configura al desplegarlo.
     intro:
-      "Call, ask about a visit and hear what someone phoning your firm would hear. Use your computer's microphone — no phone number needed. The demo picks up in Spanish, the way your buyers call.",
+      "Call, ask about a visit and hear what someone phoning your firm would hear. It picks up in Spanish, the way your buyers call — speak to it in English and it switches. Use your computer's microphone; no phone number needed.",
     enLlamada: "On the call ·",
     hablaNormal: "Speak normally, it is listening",
     terminada:

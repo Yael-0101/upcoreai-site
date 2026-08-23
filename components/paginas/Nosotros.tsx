@@ -12,7 +12,8 @@ import { SOLUCIONES } from "@/lib/soluciones";
 import { CONTACT, linkWhatsApp } from "@/lib/content";
 import { breadcrumbJsonLd, ORGANIZACION, SITE_URL } from "@/lib/seo";
 import { paginas } from "@/lib/paginas-textos";
-import { ruta, LOCALE, type Idioma } from "@/lib/idioma";
+import { LOCALE, type Idioma } from "@/lib/idioma";
+import { ruta } from "@/lib/rutas";
 
 export function Nosotros({ idioma }: { idioma: Idioma }) {
   const t = paginas(idioma).nosotros;

@@ -13,7 +13,8 @@ import { Reveal } from "@/components/Reveal";
 import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbJsonLd } from "@/lib/seo";
 import { paginas } from "@/lib/paginas-textos";
-import { ruta, LOCALE, type Idioma } from "@/lib/idioma";
+import { LOCALE, type Idioma } from "@/lib/idioma";
+import { ruta } from "@/lib/rutas";
 
 export function Precios({ idioma }: { idioma: Idioma }) {
   const t = paginas(idioma).precios;

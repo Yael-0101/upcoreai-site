@@ -439,13 +439,13 @@ const ES: TextosProp = {
     reactivacion: "Revisas y apruebas los mensajes con tu propia lista antes de que salga el primero — nada se manda sin tu visto bueno.",
     generico: "Lo pruebas con calma y ajustamos lo que pidas antes de darlo por entregado.",
   },
-  seo: "Dejarlo listo para Google: su título y su descripción, tu ficha de negocio declarada (nombre, dirección, teléfono y a qué te dedicas) y la página cargando rápido en el celular",
+  seo: "Dejarlo listo para Google: su título y su descripción en los dos idiomas —cada uno con su propia dirección, para que el buscador indexe las dos versiones y no las tome por repetidas—, tu ficha de negocio declarada (nombre, dirección, teléfono y a qué te dedicas) y la página cargando rápido en el celular",
   entrega: {
     web: "Un video corto de dónde te caen las visitas y cómo bloquear desde tu celular los días que no atiendes",
     otro: "Capacitarte con un video corto + guía de 1 página",
   },
   nuestra: {
-    primeraWeb: "Diseñar y construir tu sitio completo, de punta a punta — estructura, textos y agenda de visitas incluidos",
+    primeraWeb: "Diseñar y construir tu sitio completo, de punta a punta — estructura, textos en español e inglés y agenda de visitas incluidos",
     primeraReactivacion: "Armar la campaña completa, de punta a punta — lista, mensajes y seguimiento",
     primeraSistema: "Construir el sistema completo, de punta a punta",
     probarlo: "Probarlo contigo hasta que quede como acordamos",
@@ -767,13 +767,13 @@ const EN: TextosProp = {
     reactivacion: "You review and approve the messages against your own list before the first one goes out — nothing is sent without your sign-off.",
     generico: "You test it at your own pace and we adjust whatever you ask before calling it delivered.",
   },
-  seo: "Set up for Google: its title and description, your business listing declared (name, address, phone and what you do) and the page loading fast on a phone",
+  seo: "Set up for Google: its title and description in both languages —each with its own address, so the search engine indexes both versions instead of treating them as duplicates—, your business listing declared (name, address, phone and what you do) and the page loading fast on a phone",
   entrega: {
     web: "A short video showing where your visits land and how to block off, from your phone, the days you are not available",
     otro: "Training you with a short video + a 1-page guide",
   },
   nuestra: {
-    primeraWeb: "Designing and building your entire site, end to end — structure, copy and visit booking included",
+    primeraWeb: "Designing and building your entire site, end to end — structure, copy in Spanish and English and visit booking included",
     primeraReactivacion: "Putting the whole campaign together, end to end — list, messages and follow-up",
     primeraSistema: "Building the complete system, end to end",
     probarlo: "Testing it with you until it is the way we agreed",

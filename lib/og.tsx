@@ -46,12 +46,26 @@ export function fuentesOG() {
   ];
 }
 
+/** El pie de la tarjeta, en cada idioma.
+ *
+ *  🔴 Estaba FIJO en español, y se descubrió el 2026-08-22 DESCARGANDO la
+ *  imagen inglesa y mirándola: el título salía en inglés y abajo, en letra
+ *  chica, "Automatización con IA para inmobiliarias". Ningún guardián lo veía
+ *  —es un texto dentro de un PNG— y en la pantalla tampoco se ve: una tarjeta
+ *  OG solo aparece cuando alguien comparte el enlace. */
+const PIE: Record<"es" | "en", string> = {
+  es: "Automatización con IA para inmobiliarias",
+  en: "AI automation for real estate firms",
+};
+
 export function PlantillaOG({
   eyebrow,
   titulo,
+  idioma = "es",
 }: {
   eyebrow?: string;
   titulo: string;
+  idioma?: "es" | "en";
 }) {
   // Títulos largos bajan de cuerpo para no desbordar las 3 líneas disponibles.
   const cuerpoTitulo = titulo.length > 70 ? 56 : titulo.length > 45 ? 64 : 76;
@@ -142,7 +156,7 @@ export function PlantillaOG({
             upcoreai.com
           </div>
           <div style={{ display: "flex", fontSize: 26, color: "#B9A897" }}>
-            Automatización con IA para inmobiliarias
+            {PIE[idioma]}
           </div>
         </div>
       </div>

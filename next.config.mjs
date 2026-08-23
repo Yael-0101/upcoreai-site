@@ -1,3 +1,16 @@
+import { readFileSync } from "node:fs";
+
+// Las direcciones VIEJAS del inglés (`/en/precios`, `/en/soluciones/…`), que
+// estuvieron publicadas antes de que las rutas se tradujeran el 2026-08-22.
+// La lista la escribe `scripts/generar-redirecciones.mjs` leyendo lib/rutas.ts,
+// y el prebuild falla si se desfasa: este archivo es JavaScript y no puede
+// importar TypeScript, así que el JSON es el puente. Se lee con fs y no con
+// `import ... with { type: "json" }` para no depender de los atributos de
+// importación en la versión de Node con la que compile Vercel.
+const REDIRECCIONES_IDIOMA = JSON.parse(
+  readFileSync(new URL("./redirecciones.json", import.meta.url), "utf8")
+);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -19,6 +32,7 @@ const nextConfig = {
         destination: "/terminos",
         permanent: true,
       },
+      ...REDIRECCIONES_IDIOMA,
     ];
   },
 };

@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Reveal } from "./Reveal";
 import { SectionTitle } from "./SectionTitle";
 import { contenido } from "@/lib/site-textos";
-import { ruta, type Idioma } from "@/lib/idioma";
+import type { Idioma } from "@/lib/idioma";
+import { ruta } from "@/lib/rutas";
 
 // Teaser de la demo en el home: mini-teléfono ESTÁTICO (no gasta API) + CTA a /demo.
 //

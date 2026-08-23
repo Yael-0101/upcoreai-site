@@ -15,7 +15,8 @@ import {
 import { CLINICA_OPTIONS, PRODUCTO_OPTIONS, opcionEn } from "@/lib/calc";
 import { linkWhatsApp } from "@/lib/content";
 import { empezar, etiqueta, TE, type Etiquetas } from "@/lib/empezar-textos";
-import { ruta, type Idioma } from "@/lib/idioma";
+import type { Idioma } from "@/lib/idioma";
+import { ruta } from "@/lib/rutas";
 
 type Step = 1 | 2 | 3 | 4 | 5 | 6 | "enviado";
 

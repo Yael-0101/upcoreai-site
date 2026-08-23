@@ -39,8 +39,9 @@ const jiti = require("jiti")(fileURLToPath(import.meta.url), {
 const problemas = [];
 const marca = (donde, que, porque, txt = "") => problemas.push({ donde, que, porque, txt });
 
-const { IDIOMAS } = jiti(path.join(RAIZ, "lib", "idioma.ts"));
-const { ruta, alternativas, LOCALE } = jiti(path.join(RAIZ, "lib", "idioma.ts"));
+const { IDIOMAS, LOCALE } = jiti(path.join(RAIZ, "lib", "idioma.ts"));
+const { ruta, alternativas, SEGMENTOS } = jiti(path.join(RAIZ, "lib", "rutas.ts"));
+const { RUTAS_INDEXABLES } = jiti(path.join(RAIZ, "lib", "seo.ts"));
 const { contenido } = jiti(path.join(RAIZ, "lib", "site-textos.ts"));
 const { paginas } = jiti(path.join(RAIZ, "lib", "paginas-textos.ts"));
 const { legal } = jiti(path.join(RAIZ, "lib", "legal-textos.ts"));
@@ -224,40 +225,119 @@ for (const a of ARTICULOS) revisarIngles(a.t.en, `artículo ${a.slug}`);
 
 // ── 4 · Las rutas y el hreflang ──────────────────────────────────────────────
 {
-  if (ruta("es", "/precios") !== "/precios") marca("lib/idioma.ts", "ruta es", "el español no vive en la raíz");
-  if (ruta("en", "/precios") !== "/en/precios") marca("lib/idioma.ts", "ruta en", "el inglés no vive bajo /en");
-  if (ruta("en", "/") !== "/en") marca("lib/idioma.ts", "ruta en /", "la portada inglesa no es /en");
+  if (ruta("es", "/precios") !== "/precios") marca("lib/rutas.ts", "ruta es", "el español no vive en la raíz");
+  if (ruta("en", "/precios") !== "/en/pricing") marca("lib/rutas.ts", "ruta en", "la ruta inglesa no se tradujo", ruta("en", "/precios"));
+  if (ruta("en", "/") !== "/en") marca("lib/rutas.ts", "ruta en /", "la portada inglesa no es /en");
+
+  // Lo que va detrás de `#` o de `?` tiene que sobrevivir: hay enlaces del sitio
+  // que apuntan a un ancla (`#demo-voz`) y a la demo con un giro (`?g=`).
+  const conAncla = ruta("en", "/soluciones/agente-de-voz-para-inmobiliarias#demo-voz");
+  if (!conAncla.endsWith("#demo-voz") || conAncla.includes("agente-de-voz")) {
+    marca("lib/rutas.ts", "ruta con ancla", "se perdió el ancla o no se tradujo el slug", conAncla);
+  }
+
+  // ⚠️ Una ruta que no sabe traducir tiene que TRONAR, no devolverse a medias.
+  // Media traducción es un enlace roto publicado sin un solo error: la página
+  // existiría en español y en inglés daría 404.
+  let trono = false;
+  try {
+    ruta("en", "/una-ruta-que-no-existe");
+  } catch {
+    trono = true;
+  }
+  if (!trono) marca("lib/rutas.ts", "ruta desconocida", "se tragó una ruta que no sabe traducir en vez de tronar");
 
   const alt = alternativas("/precios");
   for (const clave of ["es-MX", "en-US", "x-default"]) {
-    if (!alt.languages[clave]) marca("lib/idioma.ts", `hreflang ${clave}`, "falta en las alternativas");
+    if (!alt.languages[clave]) marca("lib/rutas.ts", `hreflang ${clave}`, "falta en las alternativas");
   }
   if (alt.languages["x-default"] !== alt.languages["es-MX"]) {
-    marca("lib/idioma.ts", "x-default", "no apunta al idioma original (español)");
+    marca("lib/rutas.ts", "x-default", "no apunta al idioma original (español)");
+  }
+  if (!alt.languages["en-US"].endsWith("/en/pricing")) {
+    marca("lib/rutas.ts", "hreflang en-US", "apunta a la dirección española", alt.languages["en-US"]);
   }
 
   // Cada página inglesa tiene que EXISTIR como archivo. Un `hreflang` que apunta
   // a un 404 es peor que no tenerlo: Google deja de confiar en el par.
-  const RUTAS = ["", "/precios", "/nosotros", "/blog", "/demo", "/empezar", "/privacidad", "/terminos"];
-  for (const r of RUTAS) {
-    const f = path.join(RAIZ, "app", "en", r.replace(/^\//, ""), "page.tsx");
-    if (!fs.existsSync(f)) marca("app/en", `falta ${r || "/"}`, "el hreflang apunta a una página que no existe");
+  //
+  // ⚠️ La lista NO se escribe a mano: sale de RUTAS_INDEXABLES, que es de donde
+  // sale el sitemap. Así el guardián revisa exactamente lo que se publica, y no
+  // se queda corto al agregar una página (lección del 2026-08-06).
+  const carpetas = new Set();
+  for (const r of RUTAS_INDEXABLES) {
+    const en = ruta("en", r.path).replace(/^\/en\/?/, "");
+    const tramos = en.split("/").filter(Boolean);
+    // Un segundo tramo es un slug de contenido: el archivo es el de `[slug]`.
+    carpetas.add(tramos.length >= 2 ? `${tramos[0]}/[slug]` : tramos[0] ?? "");
   }
-  for (const d of ["soluciones/[slug]", "blog/[slug]"]) {
-    if (!fs.existsSync(path.join(RAIZ, "app", "en", d, "page.tsx"))) {
-      marca("app/en", `falta ${d}`, "el hreflang apunta a una página que no existe");
+  for (const c of carpetas) {
+    const f = path.join(RAIZ, "app", "en", c, "page.tsx");
+    if (!fs.existsSync(f)) {
+      marca("app/en", `falta /${c}`, "el hreflang y el sitemap apuntan a una página que no existe");
+    }
+  }
+  // La demo no está en el sitemap con su propia entrada en todos los casos, y
+  // aun así el Nav enlaza a ella en los dos idiomas.
+  if (!fs.existsSync(path.join(RAIZ, "app", "en", "demo", "page.tsx"))) {
+    marca("app/en", "falta /demo", "el Nav inglés enlaza a una página que no existe");
+  }
+}
+
+// ── 5 · Los slugs están traducidos de verdad ─────────────────────────────────
+// Desde el 2026-08-22 el inglés tiene su propia dirección. Un `slugEn` copiado
+// del español compila igual, pasa desapercibido, y deja la mitad del trabajo
+// hecha justo donde el buscador mira. Aquí se comprueba que de verdad cambien,
+// que no se repitan y que no arrastren palabras en español.
+{
+  const RASTRO_ES = /(^|-)(para|de|del|la|los|las|el|inmobiliarias?|preventa|agente|seguimiento|automatizacion|comprador(es)?)(-|$)/;
+  for (const [seccion, lista] of [["soluciones", SOLUCIONES], ["blog", ARTICULOS]]) {
+    const vistos = new Set();
+    for (const x of lista) {
+      const donde = `${seccion === "blog" ? "artículo" : "solución"} ${x.slug}`;
+      if (!x.t.es || !x.t.en) marca(donde, "t", "le falta uno de los dos idiomas");
+      if (!x.slugEn) {
+        marca(donde, "slugEn", "no tiene slug en inglés");
+        continue;
+      }
+      if (x.slugEn === x.slug) marca(donde, "slugEn", "es idéntico al español: no se tradujo");
+      if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(x.slugEn)) {
+        marca(donde, "slugEn", "no es un slug válido (solo minúsculas, números y guiones)", x.slugEn);
+      }
+      if (RASTRO_ES.test(x.slugEn)) {
+        marca(donde, "slugEn", "trae una palabra en español", x.slugEn);
+      }
+      if (vistos.has(x.slugEn)) marca(donde, "slugEn", "está repetido: dos páginas en la misma dirección", x.slugEn);
+      vistos.add(x.slugEn);
+      // Y que la ruta salga de verdad por el camino bueno.
+      const esperada = `/en/${SEGMENTOS[seccion]}/${x.slugEn}`;
+      const real = ruta("en", `/${seccion}/${x.slug}`);
+      if (real !== esperada) marca(donde, "ruta en", `debería ser ${esperada}`, real);
     }
   }
 }
 
-// ── 5 · El slug es el mismo en los dos idiomas ───────────────────────────────
-// Si algún día se traducen, el par de hreflang y el sitemap dejan de salir solos
-// y hará falta un mapa en las dos direcciones. Mientras tanto, se vigila.
-for (const s of SOLUCIONES) {
-  if (!s.t.es || !s.t.en) marca(`solución ${s.slug}`, "t", "le falta uno de los dos idiomas");
-}
-for (const a of ARTICULOS) {
-  if (!a.t.es || !a.t.en) marca(`artículo ${a.slug}`, "t", "le falta uno de los dos idiomas");
+// ── 5b · Cada árbol de idioma tiene su propia imagen OG ──────────────────────
+// Hasta el 2026-08-22 las páginas inglesas heredaban la imagen de la raíz, que
+// está escrita en español: al compartir la página inglesa, la tarjeta salía en
+// otro idioma que la página. No se ve navegando el sitio — solo al compartirlo.
+for (const og of ["opengraph-image.tsx", "solutions/[slug]/opengraph-image.tsx", "blog/[slug]/opengraph-image.tsx"]) {
+  const f = path.join(RAIZ, "app", "en", og);
+  if (!fs.existsSync(f)) {
+    marca("app/en", `falta ${og}`, "el inglés heredaría la imagen OG en español");
+    continue;
+  }
+  const src = fs.readFileSync(f, "utf8");
+  if (/\.t\.es\b/.test(src)) marca(`app/en/${og}`, "t.es", "la imagen del inglés lee los textos en español");
+  // ⚠️ Y tiene que pasarle el idioma a la plantilla. La plantilla trae un PIE
+  // propio ("Automatización con IA para inmobiliarias") que hasta el 2026-08-22
+  // estaba fijo en español: la tarjeta inglesa salía con el título en inglés y
+  // esa línea en español debajo. No lo vio ningún guardián —es texto dentro de
+  // un PNG— ni se ve navegando: una tarjeta OG solo aparece al COMPARTIR el
+  // enlace. Se descubrió descargando la imagen y mirándola.
+  if (!/idioma=\{?["{]?(en|IDIOMA)/.test(src)) {
+    marca(`app/en/${og}`, "idioma", "no le pasa el idioma a PlantillaOG: el pie de la tarjeta saldrá en español");
+  }
 }
 
 // ── 6 · La línea roja se cumple en LOS DOS idiomas ───────────────────────────

@@ -12,16 +12,35 @@
 // ya renderizado y se lee lo que el visitante lee.
 // Es la prueba que ninguna tabla puede sustituir: la lección de la propuesta y del
 // Portal fue que el guardián salía verde y la página publicada tenía frases en español.
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import createJiti from "jiti";
+
 const BASE = process.argv[2] || "http://localhost:3100";
+
+// ⚠️ Las rutas salen de RUTAS_INDEXABLES pasadas por `ruta()`, no de una lista a
+// mano: la de antes se quedó obsoleta el mismo día en que las direcciones se
+// tradujeron, y un lector apuntando a rutas viejas lee redirecciones y las da
+// por buenas.
+const AQUI = path.dirname(fileURLToPath(import.meta.url));
+const RAIZ = path.join(AQUI, "..");
+const jiti = createJiti(path.join(AQUI, "x.mjs"), {
+  cache: false,
+  requireCache: false,
+  interopDefault: true,
+});
+const { RUTAS_INDEXABLES } = jiti(path.join(RAIZ, "lib", "seo.ts"));
+const { ruta } = jiti(path.join(RAIZ, "lib", "rutas.ts"));
+
 const RUTAS = [
-  "/en", "/en/precios", "/en/nosotros", "/en/blog", "/en/demo", "/en/empezar",
-  "/en/privacidad", "/en/terminos",
-  "/en/soluciones/chatbot-whatsapp-para-inmobiliarias",
-  "/en/soluciones/agente-de-voz-para-inmobiliarias",
-  "/en/soluciones/automatizacion-para-inmobiliarias",
-  "/en/blog/cuanto-cuesta-automatizar-atencion-inmobiliaria",
-  "/en/blog/llamadas-perdidas-inmobiliaria-quien-contesta",
-];
+  ...RUTAS_INDEXABLES.map((r) => ruta("en", r.path)),
+  ruta("en", "/demo"),
+].filter((v, i, a) => a.indexOf(v) === i);
+
+if (RUTAS.length < 8) {
+  console.error("❌ La lista de rutas salió casi vacía: el lector de lib/seo.ts falló.");
+  process.exit(1);
+}
 const DELATORAS = ["que","para","con","los","las","una","por","más","cómo","qué","sin","también","cada","está","están","nuestro","nuestra","cliente","clientes","comprador","compradores","inmobiliaria","asesor","asesores","visita","visitas","gratis","precio","precios","diagnóstico","correo","llamada","llamadas","mensualidad","pago","pagos","prospecto","prospectos","seguimiento","sitio","agenda","empresa","meses","mes","días","semana","semanas","horario","equipo","firma","tu","tus","dónde","cuánto","hacer","desde","hasta","pero","como","este","esta","todo","toda"];
 const frontera = (p) => new RegExp(`(?<![a-záéíóúüñ0-9])${p}(?![a-záéíóúüñ0-9])`, "i");
 
@@ -31,12 +50,7 @@ const frontera = (p) => new RegExp(`(?<![a-záéíóúüñ0-9])${p}(?![a-záéí
 // posicionamiento. Se quita ese texto ANTES de buscar, leyéndolo de su propia fuente
 // para que no se desfase: si mañana cambia una burbuja, esto la sigue reconociendo.
 // Un lector que siempre sale en rojo se deja de mirar, y entonces no sirve de nada.
-import path from "node:path";
-import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
-const require_ = createRequire(import.meta.url);
-const RAIZ = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const jiti = require_("jiti")(fileURLToPath(import.meta.url), { cache: false, requireCache: false, interopDefault: true });
+// (`path`, `jiti` y `RAIZ` ya están arriba, donde se arma la lista de rutas.)
 const { contenido } = jiti(path.join(RAIZ, "lib", "site-textos.ts"));
 const { GIROS, demoGreeting, DEMO_DEFAULTS } = jiti(path.join(RAIZ, "lib", "demo-config.ts"));
 

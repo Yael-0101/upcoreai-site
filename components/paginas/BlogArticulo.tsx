@@ -11,7 +11,8 @@ import { fechaBonita, type Articulo } from "@/lib/blog";
 import { getSolucion } from "@/lib/soluciones";
 import { SITE_URL, breadcrumbJsonLd, articleJsonLd } from "@/lib/seo";
 import { paginas } from "@/lib/paginas-textos";
-import { ruta, LOCALE, type Idioma } from "@/lib/idioma";
+import { LOCALE, type Idioma } from "@/lib/idioma";
+import { ruta } from "@/lib/rutas";
 
 export function BlogArticulo({ a, idioma }: { a: Articulo; idioma: Idioma }) {
   const c = a.t[idioma];

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { RUTAS_INDEXABLES, SITE_URL } from "@/lib/seo";
-import { alternativas, IDIOMAS, ruta } from "@/lib/idioma";
+import { IDIOMAS } from "@/lib/idioma";
+import { alternativas, ruta } from "@/lib/rutas";
 
 // El sitemap lista LAS DOS versiones de cada página, y cada entrada declara a su
 // pareja con `alternates.languages` (hreflang). Sin eso, Google ve dos páginas que

@@ -297,7 +297,7 @@ const ES: TextosSitio = {
       {
         icon: "IconChat",
         title: "Agentes de IA",
-        body: "Atienden WhatsApp en español a cualquier hora, califican al comprador y agendan la visita.",
+        body: "Atienden WhatsApp y el teléfono a cualquier hora, en español o en inglés según en qué idioma les hablen, califican al comprador y agendan la visita.",
       },
       {
         icon: "IconRefresh",
@@ -314,7 +314,7 @@ const ES: TextosSitio = {
       {
         icon: "IconSparkle",
         title: "Sitios web inteligentes",
-        body: "Webs en español con la ficha de cada desarrollo, que califican y agendan solas.",
+        body: "Webs en español e inglés con la ficha de cada desarrollo, que califican y agendan solas.",
       },
       {
         icon: "IconChip",
@@ -478,7 +478,7 @@ const ES: TextosSitio = {
       },
       {
         q: "¿Atiende en inglés también?",
-        a: "Sí. El asistente detecta en qué idioma le escriben y contesta igual. En español está afinado para el comprador latinoamericano, que es de donde viene la mayor parte de la demanda de preventa en Miami.",
+        a: "Sí, y no solo el chat: todo lo que te entregamos va en los dos idiomas. El agente de WhatsApp detecta en qué idioma le escriben —español, inglés o portugués— y contesta igual. El agente de voz reconoce si le hablan en inglés y se cambia en la misma llamada. Y tu sitio y tu panel se entregan en español e inglés. En español está más afinado, porque de ahí viene la mayor parte de la demanda de preventa en Miami.",
       },
       {
         q: "¿Ustedes dónde están?",
@@ -687,7 +687,7 @@ const EN: TextosSitio = {
       {
         icon: "IconChat",
         title: "AI agents",
-        body: "They answer WhatsApp in Spanish at any hour, qualify the buyer and book the appointment.",
+        body: "They answer WhatsApp and the phone at any hour, in Spanish or English depending on the language they are addressed in, qualify the buyer and book the appointment.",
       },
       {
         icon: "IconRefresh",
@@ -703,7 +703,7 @@ const EN: TextosSitio = {
       {
         icon: "IconSparkle",
         title: "Smart websites",
-        body: "Spanish-language sites with a page for each development, that qualify and book on their own.",
+        body: "Sites in Spanish and English with a page for each development, that qualify and book on their own.",
       },
       {
         icon: "IconChip",
@@ -864,7 +864,7 @@ const EN: TextosSitio = {
       },
       {
         q: "Does it handle English too?",
-        a: "Yes. The assistant detects the language it is written in and replies in kind. In Spanish it is tuned for the Latin American buyer, which is where most of Miami's preconstruction demand comes from.",
+        a: "Yes, and not just the chat: everything we hand over comes in both languages. The WhatsApp agent detects the language it is written in — Spanish, English or Portuguese — and replies in kind. The voice agent picks up when it is spoken to in English and switches mid-call. And your site and your dashboard are delivered in Spanish and English. Spanish is where it is most finely tuned, because that is where most of Miami's preconstruction demand comes from.",
       },
       {
         q: "Where are you based?",

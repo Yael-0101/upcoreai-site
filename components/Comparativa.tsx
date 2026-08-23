@@ -1,7 +1,8 @@
 import { SectionTitle } from "./SectionTitle";
 import { Reveal } from "./Reveal";
 import { contenido } from "@/lib/site-textos";
-import { ruta, type Idioma } from "@/lib/idioma";
+import type { Idioma } from "@/lib/idioma";
+import { ruta } from "@/lib/rutas";
 
 // Comparación por CATEGORÍA (sin nombrar marcas): las 3 formas reales de
 // resolver la atención de una inmobiliaria. Los textos viven en
