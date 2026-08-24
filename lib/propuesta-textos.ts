@@ -148,6 +148,14 @@ export type TextosProp = {
   faqDeDonde: { q: string; a: string };
   faqApis: { q: string; a: string };
   faqDominio: { q: string; a: string };
+  // 🔴 Las dos preguntas que TODO prospecto hace y que la propuesta no contestaba.
+  // El sitio y el acuerdo sí las responden; el documento de en medio —el que se lee
+  // justo antes de decidir— no decía ni una palabra. `faqHumano` solo se muestra con
+  // una pieza que hable con compradores; `faqOffmarket` tiene versión de asistente y
+  // versión de sitio, porque una web sola no conversa ni escala a nadie.
+  faqHumano: { q: string; a: string };
+  faqOffmarket: { q: string; a: string };
+  faqOffmarketWeb: { q: string; a: string };
   dia1: {
     checklist: string;
     numeroWa: string;
@@ -420,6 +428,18 @@ const ES: TextosProp = {
   faqDominio: {
     q: "¿Y el dominio de mi página?",
     a: "Lo compramos nosotros y va incluido en el precio, a nombre de la inmobiliaria desde el primer día. A partir del segundo año se renueva por unos $15 a $25 dólares al año, que pasan a su tarjeta — o corren por nuestra cuenta si se queda con el mantenimiento. La dirección es suya siempre: nadie se la puede quitar.",
+  },
+  faqHumano: {
+    q: "¿Y si el comprador quiere hablar con una persona?",
+    a: "Se lo pasa sin discutir. No insiste ni intenta convencerlo de seguir con el asistente: toma su nombre y su teléfono, avisa a tu equipo en el momento, y le dice quién le va a contactar y cuándo — nadie se queda esperando sin saber qué sigue. Tú eliges a qué asesor le llega ese aviso y por qué vía.",
+  },
+  faqOffmarket: {
+    q: "¿Y si un desarrollo ya se agotó? ¿lo va a seguir ofreciendo?",
+    a: "No. Lo pausas tú desde tu celular y desde ese momento el asistente deja de mencionarlo y de agendar visitas para él; a quien pregunte, lo pasa con tu asesor. Lo que no hace nunca —tampoco con los activos— es decir cuántas unidades quedan ni en qué precio andan, porque eso cambia por línea, piso y etapa. Es a propósito: un dato así, por escrito, se convierte en un reclamo.",
+  },
+  faqOffmarketWeb: {
+    q: "¿Y si un desarrollo ya se agotó?",
+    a: "Lo pausas tú desde tu celular y deja de aparecer en tu sitio en unos minutos — no tienes que avisarnos ni esperar a nadie. Por eso tu página tampoco publica cuántas unidades quedan ni en qué precio andan: eso cambia por línea, piso y etapa, y una página con datos vencidos hace más daño que una sin ellos. Quien se interesa deja sus datos y tu equipo le da los números al día.",
   },
   dia1: {
     checklist: "el checklist de tu inmobiliaria (15 min)",
@@ -748,6 +768,18 @@ const EN: TextosProp = {
   faqDominio: {
     q: "What about my site's domain?",
     a: "We buy it and it is included in the price, in your firm's name from day one. From the second year it renews for about $15 to $25 a year, which moves to your card — or stays on us if you keep the maintenance plan. The address is always yours: nobody can take it from you.",
+  },
+  faqHumano: {
+    q: "What if the buyer wants to talk to a person?",
+    a: "It hands them over, no argument. It does not push back or try to keep them with the assistant: it takes their name and phone number, alerts your team on the spot, and tells them who will reach out and when — nobody is left waiting without knowing what comes next. You choose which agent gets that alert and how.",
+  },
+  faqOffmarket: {
+    q: "What if a development is already sold out? Will it keep offering it?",
+    a: "No. You pause it yourself from your phone and from then on the assistant stops mentioning it and stops booking tours for it; anyone who asks gets handed to your agent. What it never does — not even for active ones — is say how many units are left or what they cost, because that changes by line, floor and phase. It is deliberate: a figure like that, in writing, turns into a complaint.",
+  },
+  faqOffmarketWeb: {
+    q: "What if a development is already sold out?",
+    a: "You pause it yourself from your phone and it stops showing on your site within minutes — no need to tell us or wait on anyone. That is also why your site does not publish how many units are left or what they cost: that changes by line, floor and phase, and a page with expired figures does more damage than a page without them. Anyone interested leaves their details and your team gives them the current numbers.",
   },
   dia1: {
     checklist: "your firm's checklist (15 min)",

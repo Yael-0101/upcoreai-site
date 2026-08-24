@@ -37,7 +37,30 @@ export type TextosCalc = {
     /** Los giros del nicho, por su `key` (lib/nicho.json solo trae el español). */
     giros: Record<string, string>;
     panelIncluye: string;
+    /**
+     * LA CONSOLA: los mandos que van INCLUIDOS con cada pieza.
+     *
+     * No es el panel. El panel se cobra aparte ($3,000) y sirve para VER cómo va
+     * el negocio —métricas, retorno, a quién llamar—; la consola sirve para
+     * MANDAR sobre el asistente, y va incluida porque sin ella el cliente estaría
+     * comprando algo que no puede controlar. Esa fue exactamente su objeción.
+     *
+     * `mandos` se arma con las piezas que compró (ver MANDOS_DE_PIEZA en calc.ts):
+     * un cliente de solo-web no lee que puede tomar un chat que nunca va a tener.
+     */
+    consola: {
+      /** El renglón entero. `lista` ya viene unida y sin punto final. */
+      frase: (lista: string) => string;
+      mandos: Record<MandoKey, string>;
+      /** Une la lista: "a, b y c" en español, "a, b and c" en inglés. */
+      une: (partes: string[]) => string;
+    };
   };
+
+/** Los cuatro mandos posibles. El orden de esta lista es el orden en que se leen. */
+export const MANDOS: readonly MandoKey[] = ["conversaciones", "desarrollos", "asistente", "textos"];
+
+export type MandoKey = "conversaciones" | "desarrollos" | "asistente" | "textos";
 
 export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
   es: {
@@ -140,7 +163,29 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
       otro: "Otra inmobiliaria",
     },
     panelIncluye:
-      "Dashboard en español e inglés + sistema integrado — todo operando junto, con tu ROI a la vista",
+      "Dashboard en español e inglés + sistema integrado — además de tus controles: cómo va cada comprador, a quién hay que llamar hoy y tu retorno a la vista",
+    consola: {
+      // Una sola frase y SIN punto final, para que case con los demás renglones
+      // del punto 1 ("Label — alcance"). Se vio imprimiendo la lista completa: el
+      // único renglón que terminaba en punto delataba que lo había añadido otro.
+      frase: (lista) =>
+        `Tus controles, incluidos — desde tu celular puedes ${lista}, sin llamarnos y sin esperar a nadie`,
+      mandos: {
+        conversaciones: "ver cada conversación y tomar el chat cuando quieras",
+        desarrollos: "elegir qué desarrollos se ofrecen",
+        asistente: "apagar el asistente en un toque",
+        textos: "aprobar los textos antes del primer envío",
+      },
+      une: (partes) => {
+        if (partes.length <= 1) return partes[0] ?? "";
+        const ultima = partes[partes.length - 1];
+        // En español la "y" se vuelve "e" delante del sonido /i/ ("apagar e
+        // informar"), salvo en "hie-" (hielo, hierba). Nada de la lista de hoy
+        // empieza así, pero la regla va escrita para que siga bien mañana.
+        const nexo = /^(i|hi(?![ae]))/i.test(ultima) ? "e" : "y";
+        return `${partes.slice(0, -1).join(", ")} ${nexo} ${ultima}`;
+      },
+    },
   },
   en: {
     precioCerrado: "Fixed price",
@@ -233,6 +278,21 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
       otro: "Other real estate firm",
     },
     panelIncluye:
-      "Dashboard in Spanish and English + integrated system — everything running together, with your ROI in plain view",
+      "Dashboard in Spanish and English + integrated system — on top of your controls: how every buyer is doing, who to call today and your return in plain view",
+    consola: {
+      frase: (lista) =>
+        `Your controls, included — from your phone you can ${lista}, without calling us and without waiting on anyone`,
+      mandos: {
+        conversaciones: "see every conversation and take over any chat",
+        desarrollos: "choose which developments are offered",
+        asistente: "switch the assistant off with one tap",
+        textos: "approve the texts before the first send",
+      },
+      une: (partes) => {
+        if (partes.length <= 1) return partes[0] ?? "";
+        if (partes.length === 2) return `${partes[0]} and ${partes[1]}`;
+        return `${partes.slice(0, -1).join(", ")}, and ${partes[partes.length - 1]}`;
+      },
+    },
   },
 };

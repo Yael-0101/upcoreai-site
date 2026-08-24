@@ -181,7 +181,11 @@ export const SOLUCIONES: Solucion[] = [
           },
           {
             q: "¿Y si el comprador quiere hablar con una persona?",
-            a: "El asistente lo detecta y avisa a tu equipo al momento. Nunca deja a un comprador atrapado con un robot.",
+            a: "El asistente lo detecta y avisa a tu equipo al momento, sin insistir ni intentar convencerlo de seguir con el robot. Le dice quién le va a escribir y cuándo, para que no se quede esperando. Nunca deja a un comprador atrapado con un robot.",
+          },
+          {
+            q: "¿Y si un desarrollo ya se agotó? ¿lo va a seguir ofreciendo?",
+            a: "No. Tú marcas ese desarrollo como pausado y desde ese momento el asistente deja de mencionarlo y de agendar visitas para él; a quien pregunte, lo pasa con tu asesor. Y se marca una sola vez: se calla en tu WhatsApp, en tu sitio y en tu teléfono el mismo día.",
           },
           {
             q: "¿Da precios o fechas de entrega?",
@@ -287,7 +291,11 @@ export const SOLUCIONES: Solucion[] = [
           },
           {
             q: "What if the buyer wants to talk to a person?",
-            a: "The assistant picks that up and alerts your team right away. It never leaves a buyer trapped with a robot.",
+            a: "The assistant picks that up and alerts your team right away, without pushing back or trying to keep them with the bot. It tells them who will reach out and when, so they are not left waiting. It never leaves a buyer trapped with a robot.",
+          },
+          {
+            q: "What if a development is already sold out? Will it keep offering it?",
+            a: "No. You mark that development as paused and from then on the assistant stops mentioning it and stops booking tours for it; anyone who asks gets handed to your agent. And you mark it once: it goes quiet on your WhatsApp, your site and your phone the same day.",
           },
           {
             q: "Does it give prices or delivery dates?",
@@ -579,7 +587,17 @@ export const SOLUCIONES: Solucion[] = [
           },
           {
             q: "¿Y si el que llama pide hablar con alguien?",
-            a: "Pasa la llamada o avisa a tu equipo en el momento, según cómo lo configures. Nunca deja atrapado a quien insiste en hablar con una persona.",
+            // 🔴 Decía "Pasa la llamada o avisa a tu equipo, según cómo lo
+            // configures". La transferencia de llamada NO está construida (Retell la
+            // trae de fábrica y nunca se ha configurado): lo único que hace hoy
+            // `escalar_a_asesor` es avisar. Prometer una transferencia a quien acaba
+            // de pedir una persona, y colgarle, es la peor forma de perderlo.
+            // Vuelve tal cual cuando exista — ver productos/panel-inmobiliaria/LEEME.md.
+            a: "Toma sus datos y avisa a tu equipo en el momento, sin discutir ni intentar convencerlo de seguir con el asistente. Antes de colgar le dice quién le va a marcar y cuándo, para que nadie se quede esperando. Tú eliges a qué asesor le llega ese aviso y por qué vía.",
+          },
+          {
+            q: "¿Y si un desarrollo ya se agotó? ¿lo va a seguir ofreciendo?",
+            a: "No. Tú marcas ese desarrollo como pausado y el agente deja de mencionarlo y de agendar visitas para él; a quien pregunte por él, lo pasa con tu asesor. Lo que no hace nunca es decir cuántas unidades quedan ni en qué precio andan, porque eso cambia por línea, piso y etapa. Es a propósito: por teléfono un dato así se dice con toda seguridad y luego alguien lo reclama.",
           },
         ],
         seguridad: SEGURIDAD_ES,
@@ -642,7 +660,11 @@ export const SOLUCIONES: Solucion[] = [
           },
           {
             q: "What if the caller asks for a person?",
-            a: "It transfers the call or alerts your team on the spot, depending on how you set it up. It never traps someone who insists on talking to a human.",
+            a: "It takes their details and alerts your team on the spot, without arguing or trying to keep them with the assistant. Before hanging up it tells them who will call and when, so nobody is left waiting. You choose which agent gets that alert and how.",
+          },
+          {
+            q: "What if a development is already sold out? Will it keep offering it?",
+            a: "No. You mark that development as paused and the agent stops mentioning it and stops booking tours for it; anyone who asks about it gets handed to your agent. What it never does is say how many units are left or what they cost, because that changes by line, floor and phase. It is deliberate: on a call a figure like that is said with total confidence, and later someone holds you to it.",
           },
         ],
         seguridad: SEGURIDAD_EN,

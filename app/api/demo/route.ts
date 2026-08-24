@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import {
   DEMO_CIERRE,
+  DEMO_DISCULPAS,
   DEMO_FALLBACK,
   DEMO_LIMITS,
   DEMO_DEFAULTS,
@@ -65,7 +66,7 @@ export async function POST(req: Request) {
   const ip = (req.headers.get("x-forwarded-for") ?? "?").split(",")[0].trim();
   if (rateLimited(ip)) {
     return NextResponse.json(
-      { ok: true, reply: "Vas muy rápido 🙂 dame un minuto y seguimos.", done: false },
+      { ok: true, reply: DEMO_DISCULPAS.muyRapido, done: false },
       { status: 429 }
     );
   }
@@ -173,7 +174,7 @@ export async function POST(req: Request) {
 
       return NextResponse.json({
         ok: true,
-        reply: texto || "Perdón, se me trabó un segundo. ¿Me lo repites?",
+        reply: texto || DEMO_DISCULPAS.trabado,
         agendado,
         done: false,
       });
@@ -181,12 +182,24 @@ export async function POST(req: Request) {
     // Se agotaron las iteraciones de tools (rarísimo): disculpa fija.
     return NextResponse.json({
       ok: true,
-      reply: "Perdón, tuve un detalle técnico. ¿Me repites lo último?",
+      reply: DEMO_DISCULPAS.tecnico,
       agendado,
       done: false,
     });
-  } catch {
-    // Límite del workspace agotado, timeout o error de la API → degradación elegante.
+  } catch (e) {
+    // Límite del workspace agotado, timeout o error de la API → degradación elegante
+    // para el prospecto, que no tiene por qué ver un error técnico.
+    //
+    // ⚠️ Pero el error SE REGISTRA. Antes este catch era mudo, y el 2026-08-24 una
+    // llamada cayó en el fallback sin dejar rastro: no había forma de saber si fue
+    // el tope del workspace, un timeout o un fallo de la API. Un catch silencioso
+    // convierte cada incidente en una adivinanza, y el mensaje que ve el prospecto
+    // es idéntico en los tres casos.
+    const err = e as { status?: number; name?: string; message?: string };
+    console.error(
+      "[demo] cayó al fallback:",
+      JSON.stringify({ status: err?.status, name: err?.name, message: err?.message?.slice(0, 200) })
+    );
     return NextResponse.json({ ok: true, reply: DEMO_FALLBACK, done: true });
   }
 }

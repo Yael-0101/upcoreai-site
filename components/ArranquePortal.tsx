@@ -45,8 +45,10 @@ import {
   etiquetaDemo,
   etiquetaNumero,
   hayMensajes,
+  hayVoz,
   hayWeb,
   normalizarPiezas,
+  pideEscalacion,
 } from "@/lib/arranque-copy";
 
 type Step = number | "listo";
@@ -85,6 +87,9 @@ const N = {
 // único que cambia de idioma es lo que el cliente lee.
 const ICONO_TONO: Record<string, string> = {
   calido: "🤗", profesional: "🤝", elegante: "✨", fresco: "😌",
+};
+const ICONO_VIA: Record<string, string> = {
+  whatsapp: "💬", correo: "✉️", ambos: "🔔",
 };
 const tonoOptions = (idioma: Idioma): Option[] =>
   TA[idioma].tonos.map((t) => ({ val: t.val, label: t.label, icon: ICONO_TONO[t.val] ?? "💬", desc: t.desc }));
@@ -259,6 +264,8 @@ export function ArranquePortal({
   // ── Helpers de secciones ──────────────────────────────────────────────────
   const setChecklist = (p: Partial<ArranqueDatos["checklist"]>) =>
     patch({ checklist: { ...d.checklist, ...p } });
+  const setEscalacion = (p: Partial<ArranqueDatos["escalacion"]>) =>
+    patch({ escalacion: { ...d.escalacion, ...p } });
   const setServicio = (i: number, p: Partial<ServicioItem>) =>
     setChecklist({
       servicios: d.checklist.servicios.map((s, j) => (j === i ? { ...s, ...p } : s)),
@@ -288,10 +295,21 @@ export function ArranquePortal({
 
   // ── Validaciones por paso ─────────────────────────────────────────────────
   const step2Ready = d.checklist.servicios.some((s) => s.nombre.trim() !== "");
-  // El tono solo se pide si algo de lo suyo le habla a un paciente: exigírselo a
+  // El tono solo se pide si algo de lo suyo le habla a un comprador: exigírselo a
   // un proyecto de solo-panel sería pedirle algo que ni siquiera ve en pantalla.
+  //
+  // 🔴 La escalación es requisito SOLO con asistente, y por la misma razón: una web
+  // sola no conversa ni escala a nadie, así que un cliente de solo-web se quedaría
+  // esperando por un dato que su pantalla nunca le pide — un checklist imposible de
+  // terminar, en silencio (lección 2026-08-16).
+  const escalacionPedida = pideEscalacion(piezas);
   const step3Ready =
-    d.checklist.horarios.trim() !== "" && (!txtHorarios.pideTono || !!d.checklist.tono);
+    d.checklist.horarios.trim() !== "" &&
+    (!txtHorarios.pideTono || !!d.checklist.tono) &&
+    (!escalacionPedida ||
+      (d.escalacion.nombre.trim() !== "" &&
+        d.escalacion.telefono.trim() !== "" &&
+        !!d.escalacion.via));
   // Si el paso no aplica a sus piezas, no puede ser requisito: sería esperar por
   // una decisión que nadie le va a pedir.
   const stepNumeroReady = !visibleNum.has(N.numero) || !!d.numero.decision;
@@ -585,6 +603,48 @@ export function ArranquePortal({
                 placeholder={T.horarios.ejLogo}
                 onChange={(v) => setChecklist({ logoColores: v })}
               />
+            )}
+            {escalacionPedida && (
+              <div className="rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5">
+                <div className="mb-1 text-sm font-semibold text-sand">
+                  {T.horarios.escalacionTitulo}
+                </div>
+                <p className="mb-4 text-sm font-light text-mocha">
+                  {T.horarios.escalacionHint}
+                </p>
+                <div className="grid gap-4">
+                  <Field
+                    label={T.horarios.escalacionNombre}
+                    type="text"
+                    value={d.escalacion.nombre}
+                    placeholder={T.horarios.ejEscalacionNombre}
+                    onChange={(v) => setEscalacion({ nombre: v })}
+                  />
+                  <Field
+                    label={T.horarios.escalacionTel}
+                    type="tel"
+                    value={d.escalacion.telefono}
+                    placeholder={T.horarios.ejEscalacionTel}
+                    onChange={(v) => setEscalacion({ telefono: v })}
+                  />
+                  <p className="text-xs font-light leading-relaxed text-mocha">
+                    {hayVoz(piezas) ? T.horarios.escalacionAvisoVoz : T.horarios.escalacionAvisoChat}
+                  </p>
+                  <div>
+                    <div className="mb-2 text-sm text-mocha">{T.horarios.escalacionVia}</div>
+                    <div className="grid grid-cols-3 gap-3">
+                      {T.viasAviso.map((v) => (
+                        <OptionBtn
+                          key={v.val}
+                          opt={{ val: v.val, label: v.label, icon: ICONO_VIA[v.val] ?? "🔔", desc: v.desc }}
+                          selected={d.escalacion.via === v.val}
+                          onClick={() => setEscalacion({ via: v.val })}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
           <NavBtns onBack={() => irA(N.servicios)} onNext={() => irA(N.numero)} nextEnabled={step3Ready} nextLabel={T.ui.siguiente} />

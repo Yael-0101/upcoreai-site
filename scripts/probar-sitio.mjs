@@ -62,8 +62,12 @@ function archivos() {
 // está bien —hace falta para negarlos—; lo que no se vale es prometerlos. Un
 // verificador que marcara la palabra suelta tumbaría la frase correcta.
 const AFIRMA = /(precios?|disponibilidad|inventario|unidades disponibles|quedan unidades|fechas? de entrega)/i;
+// ⚠️ «lo confirma TU asesor» hace falta además de «su asesor». El sitio le habla al
+// cliente de TÚ y los guiones del agente le hablan al comprador de USTED: reconocer
+// solo la forma de usted bloquea copy correcto del sitio. Es el fallo de `de el`/`a el`
+// del 2026-08-08, del lado que estorba en vez del que deja pasar.
 const NIEGA =
-  /\bno\s+(da|dice|publica|promete|cotiza|menciona|confirma|se publica)\b|no se publica|nunca (lo dice|da)|cambian? (a diario|por l[ií]nea|seguido)|caduca|pasa (a|al) (tu )?asesor|lo confirma su asesor|se la confirma|es a prop[óo]sito|disponibilidad ininterrumpida/i;
+  /\bno\s+(da|dice|publica|promete|cotiza|menciona|confirma|se publica)\b|no se publica|nunca (lo dice|da|los da|las da)|cambian? (a diario|por l[ií]nea|seguido)|caduca|pasa (a|al) (tu |su )?asesor|lo(s|as)? confirma (tu|su) asesor|se l(a|o)s? confirma|es a prop[óo]sito|disponibilidad ininterrumpida/i;
 const SUJETO = /(asistente|sistema|sitio|p[áa]gina|web|bot|panel|agente)/i;
 
 /** Una palabra COMPLETA en español.
@@ -170,9 +174,117 @@ for (const a of archivos()) {
     [/cu[aá]ntas unidades quedan|disponibilidad/i, "no le prohíbe afirmar disponibilidad"],
     [/fecha de entrega/i, "no le prohíbe dar fechas de entrega"],
     [/vivienda justa/i, "no le recuerda la ley de vivienda justa"],
+    // 🔴 El prompt no decía NADA sobre pedir un humano, y es justo la frase que el
+    // Portal de Arranque le dice al cliente que pruebe ("Di: quiero hablar con una
+    // persona"). El prospecto que la escribía en la demo se topaba con lo que al
+    // modelo se le ocurriera — probablemente insistir, que es lo contrario del
+    // producto: "nunca deja a un comprador atrapado con un robot" (lib/soluciones.ts).
+    [
+      /PIDE HABLAR CON UNA PERSONA/i,
+      "no le dice qué hacer cuando el comprador pide un humano — y es la frase que el Portal le pide probar al cliente",
+    ],
   ];
   for (const [re, porque] of exigidos) {
     if (!re.test(demo)) marca("lib/demo.ts", "prompt de la demo", porque);
+  }
+}
+
+// ── 3a · Todo lo que el ASISTENTE dice trata de USTED ────────────────────────
+// 🔴 El prompt de la demo pide usted y da su motivo: quien escribe está pensando en
+// una compra grande desde otro país. Pero el SALUDO tuteaba —"puedo resolver TUS
+// dudas… ¿en qué TE ayudo?"— y ese saludo entra literal en el prompt como "ya
+// saludaste así". El modelo copiaba el ejemplo, no la regla, y salían frases
+// mezcladas: "eso se lo confirma SU asesor… ¿cuál desarrollo TE interesa?".
+//
+// ⚠️ Solo se revisan los textos que son MENSAJES DEL ASISTENTE. El copy de Upcore
+// tutea a propósito (le habla al dueño de la inmobiliaria, no a su comprador), así
+// que meterlo aquí marcaría media web correcta.
+{
+  const cfg = jiti(path.join(RAIZ, "lib", "demo-config.ts"));
+  const textos = jiti(path.join(RAIZ, "lib", "site-textos.ts"));
+  const delAsistente = [
+    ["lib/demo-config.ts · demoGreeting", cfg.demoGreeting("Inmobiliaria Demo")],
+    ...Object.entries(cfg.DEMO_DISCULPAS ?? {}).map(([k, v]) => [
+      `lib/demo-config.ts · DEMO_DISCULPAS.${k}`,
+      v,
+    ]),
+    ...["es", "en"].flatMap((idi) =>
+      (textos.contenido(idi)?.demo?.burbujas ?? [])
+        .filter((b) => b.de === "bot")
+        .map((b, i) => [`lib/site-textos.ts · burbuja ${idi}#${i + 1}`, b.texto])
+    ),
+  ];
+  // Frontera a mano: `\b` no reconoce vocales acentuadas y marcaría dentro de
+  // palabras ("agen-te", "vis-tus"). Regla de la casa.
+  const TUTEO = [
+    "t[úu]", "te", "tus", "tu", "tienes", "quieres", "puedes", "necesitas",
+    "contigo", "d[íi]game.*t[úu]",
+  ].map((p) => new RegExp(`(?<![a-záéíóúüñ])${p}(?![a-záéíóúüñ])`, "i"));
+  for (const [donde, txt] of delAsistente) {
+    for (const re of TUTEO) {
+      const m = String(txt).match(re);
+      if (m)
+        marca(
+          donde,
+          `tutea: «${m[0]}»`,
+          "los mensajes del ASISTENTE van de usted — y este texto entra al prompt como ejemplo, así que el modelo lo copia",
+          String(txt).slice(0, 110)
+        );
+    }
+  }
+  // Y que la regla siga escrita en el prompt, no solo en el ejemplo.
+  const demo = fs.readFileSync(path.join(RAIZ, "lib", "demo.ts"), "utf8");
+  if (!/USTED EN TODO EL MENSAJE/i.test(demo))
+    marca("lib/demo.ts", "prompt de la demo", "perdió la regla de no mezclar tú y usted en la misma frase");
+
+  // ⚠️ Y que nadie vuelva a escribir un mensaje del asistente SUELTO en la ruta de
+  // la API. Ahí vivían dos disculpas que tuteaban ("¿Me lo repites?") y que este
+  // guardián no veía, porque miraba la config y las burbujas pero no el endpoint.
+  // Es la capa que siempre se olvida: la que envuelve.
+  const ruta = fs.readFileSync(path.join(RAIZ, "app", "api", "demo", "route.ts"), "utf8");
+  for (const m of soloVivo(ruta).matchAll(/reply:\s*"([^"]{12,})"/g)) {
+    marca(
+      "app/api/demo/route.ts",
+      `mensaje del asistente escrito a mano: «${m[1].slice(0, 40)}…»`,
+      "los textos que dice el asistente viven en lib/demo-config.ts, donde el guardián los revisa"
+    );
+  }
+}
+
+// ── 3b · La lista de servicios de la demo NO declara lo prohibido ────────────
+// `lib/nicho.json` está fuera del barrido de arriba (lo excluye EXCLUIR, y con razón:
+// es datos, no texto de página). El problema es que `demo.servicios` acaba DENTRO del
+// prompt, inyectado con "resuelve dudas usando SOLO esta lista" (lib/demo.ts). Así que
+// una lista sucia contradice los LÍMITES del mismo prompt, y gana la que el modelo lea
+// más cerca de la pregunta.
+//
+// Lo que había el 2026-08-24: `desarrolladora` declaraba "unidades disponibles del
+// desarrollo" y "avance de obra y fecha estimada de entrega" — los dos datos que el
+// propio prompt prohíbe tres párrafos abajo — y `equipo` declaraba "estimación de renta
+// y retorno", que es la línea roja 5 (promesas sobre el dinero de alguien).
+//
+// ⚠️ Los `chips` NO se revisan, a propósito: son preguntas del COMPRADOR, no cosas que
+// el asistente diga. "¿Cuándo entregan?" es un chip legítimo — el mejor momento de la
+// demo es ver el desvío elegante en vivo.
+{
+  const nicho = JSON.parse(fs.readFileSync(path.join(RAIZ, "lib", "nicho.json"), "utf8"));
+  const PROHIBIDO = [
+    [/precios?|cu[aá]nto cuesta/i, "precios"],
+    [/unidades disponibles|disponibilidad|cu[aá]ntas unidades|quedan unidades/i, "disponibilidad"],
+    [/fechas? (estimada )?de entrega|cu[aá]ndo entregan/i, "fechas de entrega"],
+    [/plusval[ií]a|revaloriza|renta garantizada|retorno garantizado|estimaci[oó]n de (renta|retorno)/i, "promesas de rendimiento"],
+  ];
+  for (const g of nicho.giros ?? []) {
+    for (const s of g.demo?.servicios ?? []) {
+      for (const [re, que] of PROHIBIDO) {
+        if (re.test(s))
+          marca(
+            `lib/nicho.json · giro "${g.key}"`,
+            `servicio «${s}»`,
+            `declara ${que} como tema en alcance, y esta lista entra en el prompt de la demo con "usando SOLO esta lista"`
+          );
+      }
+    }
   }
 }
 

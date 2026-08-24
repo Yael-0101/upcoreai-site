@@ -47,7 +47,7 @@ const tiene = (p: string[], ...cuales: Pieza[]) => cuales.some((c) => p.includes
 // Nombradas por lo que COMPARTEN, no por el producto: así el texto se escribe
 // una vez para todas las piezas que se comportan igual.
 
-/** Piezas que conversan con el paciente en nombre de la clínica. */
+/** Piezas que conversan con el comprador en nombre de la inmobiliaria. */
 export const hayAsistente = (p: string[]) => tiene(p, "agente", "voz");
 /** Piezas que mandan mensajes por WhatsApp (necesitan número y textos). */
 export const hayMensajes = (p: string[]) => tiene(p, "agente", "auto", "reactivacion");
@@ -55,9 +55,24 @@ export const hayWeb = (p: string[]) => tiene(p, "web");
 export const hayVoz = (p: string[]) => tiene(p, "voz");
 export const hayChat = (p: string[]) => tiene(p, "agente");
 
-/** ¿Le pedimos el tono? Solo si algo de lo suyo le habla a un paciente. */
+/** ¿Le pedimos el tono? Solo si algo de lo suyo le habla a un comprador. */
 export const pideTono = (p: string[]) =>
   hayAsistente(p) || hayWeb(p) || hayMensajes(p);
+
+/**
+ * ¿A quién avisamos cuando un comprador pide hablar con una persona?
+ *
+ * 🔴 Solo con asistente (chat o voz): una web sola no conversa ni escala a nadie.
+ *
+ * Hasta el 2026-08-24 esto NO se preguntaba en ninguna pantalla, ni aquí ni en el
+ * diagnóstico: `{{TELEFONO_HUMANO_ESCALACION}}` era un placeholder sin origen que
+ * alguien tenía que resolver a mano antes de construir.
+ *
+ * ⚠️ Y tiene que ser un número DIRECTO, distinto del teléfono público de la firma:
+ * con desvío de llamadas el agente de voz entra JUSTAMENTE porque ese número ya no
+ * contestó, así que mandar el aviso ahí es un bucle.
+ */
+export const pideEscalacion = (p: string[]) => hayAsistente(p);
 /** Las preguntas frecuentes alimentan al asistente o llenan el sitio. */
 export const pideFaqs = (p: string[]) => hayAsistente(p) || hayWeb(p);
 export const pideLogo = (p: string[]) => tiene(p, "web", "panel");

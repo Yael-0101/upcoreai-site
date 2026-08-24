@@ -52,8 +52,19 @@ export function sanitizeGiro(raw?: string | null): Giro {
 }
 
 // Saludo inicial: lo pinta el CLIENTE al abrir el chat (cero costo de API).
+// 🔴 DE USTED, y no es un detalle de estilo (lección 2026-08-24).
+//
+// Este saludo entra LITERAL en el prompt ("ya saludaste al comprador con: «...»"),
+// así que es el último mensaje que el modelo se ve a sí mismo escribiendo. Cuando
+// tuteaba —"puedo resolver TUS dudas… ¿en qué TE ayudo?"— el modelo copiaba ese
+// trato y salían respuestas mezcladas en la misma frase: "eso se lo confirma SU
+// asesor… ¿cuál desarrollo TE interesa?".
+//
+// El modelo no estaba desobedeciendo la regla: estaba siguiendo el EJEMPLO, que le
+// gana a la regla. Igual que la burbuja de ejemplo de la portada, que siempre trató
+// de usted. Hay guardián en scripts/probar-sitio.mjs.
 export function demoGreeting(clinica: string): string {
-  return `¡Hola! 👋 Soy el asistente de ${clinica}. Puedo resolver tus dudas o agendarte una visita en menos de un minuto. ¿En qué te ayudo?`;
+  return `¡Hola! 👋 Soy el asistente de ${clinica}. Puedo resolver sus dudas o agendarle una visita en menos de un minuto. ¿En qué le ayudo?`;
 }
 
 // Límites (el servidor los aplica de verdad; el cliente solo los refleja en la UI).
@@ -61,6 +72,20 @@ export const DEMO_LIMITS = {
   maxTurnosUsuario: 15,
   maxCharsMensaje: 300,
   maxMensajesHistorial: 24,
+};
+
+// 🔴 Las disculpas TAMBIÉN las dice el asistente, así que van de usted y viven aquí.
+//
+// Estaban escritas a mano dentro de app/api/demo/route.ts —"¿Me lo repites?"— y por
+// eso el guardián no las veía: revisaba este archivo y las burbujas de la portada,
+// pero no la ruta de la API. Es la capa que siempre se olvida. Ahora hay una sola
+// fuente y el guardián las revisa con todo lo demás.
+export const DEMO_DISCULPAS = {
+  trabado: "Perdón, se me trabó un segundo. ¿Me lo repite?",
+  tecnico: "Perdón, tuve un detalle técnico. ¿Me repite lo último?",
+  // Este lo encontró el guardián, no yo leyendo: decía "Vas muy rápido 🙂 dame un
+  // minuto y seguimos" — tuteo en el mensaje del límite de peticiones.
+  muyRapido: "Va muy rápido 🙂 deme un minuto y seguimos.",
 };
 
 // Mensaje cuando la demo descansa (sin llave, límite del mes agotado o error de API).

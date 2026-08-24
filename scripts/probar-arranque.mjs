@@ -29,6 +29,8 @@ const jiti = require("jiti")(fileURLToPath(import.meta.url));
 
 const C = jiti(path.join(AQUI, "..", "lib", "arranque-copy.ts"));
 const A = jiti(path.join(AQUI, "..", "lib", "arranque.ts"));
+// Los textos sueltos del paso 3 (los que no pasan por copyHorarios) viven aquí.
+const TA = jiti(path.join(AQUI, "..", "lib", "arranque-textos.ts")).TA;
 
 const PIEZAS = ["agente", "voz", "web", "auto", "reactivacion", "panel"];
 
@@ -72,6 +74,20 @@ function textoDe(piezas) {
   partes.push(hor.q, hor.hint);
   if (hor.pideTono) partes.push(hor.tonoLabel);
   if (hor.pideFaqs) partes.push(hor.faqsLabel);
+  // 🔴 A quién avisamos cuando piden una persona. Solo con asistente: a un cliente
+  // de solo-web le hablaría de un asistente que no compró, y además le pediría un
+  // dato que su producto nunca usa.
+  if (C.pideEscalacion(piezas)) {
+    const h = TA.es.horarios;
+    partes.push(
+      h.escalacionTitulo,
+      h.escalacionHint,
+      h.escalacionNombre,
+      h.escalacionTel,
+      C.hayVoz(piezas) ? h.escalacionAvisoVoz : h.escalacionAvisoChat,
+      h.escalacionVia
+    );
+  }
 
   if (ve("numero")) {
     const n = C.copyNumero(piezas);
@@ -170,6 +186,43 @@ for (const piezas of subconjuntos(PIEZAS)) {
   for (const p of prohibidos) {
     const pega = typeof p === "string" ? bajo.includes(p) : p.test(bajo);
     if (pega) fallos.push(`${etiqueta} nombra algo que NO compró: "${p}"`);
+  }
+
+  // 🔴 La pregunta de escalación, en las DOS direcciones.
+  //
+  // Antes del 2026-08-24 no se preguntaba en ninguna pantalla, así que
+  // {{TELEFONO_HUMANO_ESCALACION}} era un placeholder que alguien resolvía a mano
+  // antes de construir — o no. Ahora que existe, hay que vigilar los dos fallos:
+  // que no le llegue a quien no compró asistente, y que no se pierda para quien sí.
+  const preguntaEscalacion = /le avisamos cuando alguien pide hablar/i.test(bajo);
+  if (t("agente", "voz") && !preguntaEscalacion)
+    fallos.push(`${etiqueta} compró asistente y NO se le pregunta a quién avisar cuando piden una persona`);
+  if (!t("agente", "voz") && preguntaEscalacion)
+    fallos.push(`${etiqueta} no compró asistente y aun así se le pide a quién escalar`);
+
+  // Y que el checklist se pueda TERMINAR: si la escalación fuera requisito para
+  // alguien a quien no se le pregunta, su portal se quedaría incompleto para
+  // siempre, sin dar ningún error.
+  if (C.pideEscalacion(piezas) !== preguntaEscalacion)
+    fallos.push(`${etiqueta} el requisito de escalación y la pregunta en pantalla no coinciden`);
+
+  // 🔴 Las FASES del avance también se filtran por piezas (lección 2026-08-24).
+  //
+  // Eran una lista fija, así que un cliente de solo-voz veía "WhatsApp oficial con
+  // Meta" en su propio avance: un trámite que su proyecto nunca va a tener. Se
+  // encontró abriendo un portal de prueba y LEYÉNDOLO — este guardián revisaba el
+  // copy de los pasos y las fases no las miraba nadie.
+  const fases = A.fasesDe(piezas).map((f) => f.fase);
+  const tieneMeta = fases.some((f) => /whatsapp/i.test(f));
+  const deberiaMeta = t("agente", "auto", "reactivacion");
+  if (tieneMeta && !deberiaMeta)
+    fallos.push(`${etiqueta} su avance anuncia el trámite de WhatsApp con Meta, que no le toca`);
+  if (!tieneMeta && deberiaMeta)
+    fallos.push(`${etiqueta} escribe por WhatsApp y su avance NO incluye el trámite con Meta`);
+  // Nadie se queda sin las fases comunes: un avance vacío no le dice nada al cliente.
+  for (const comun of ["Preparación", "Construcción", "Pruebas", "Entrega"]) {
+    if (!fases.some((f) => f.includes(comun)))
+      fallos.push(`${etiqueta} perdió la fase común "${comun}"`);
   }
 }
 

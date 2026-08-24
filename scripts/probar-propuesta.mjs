@@ -113,6 +113,43 @@ for (const sub of subconjuntos(["web", "agente", "voz", "auto", "reactivacion"])
     for (const p of prohibidos) {
       if (bajo.includes(p)) fallos.push(`${etiqueta} contiene texto de pieza ausente: "${p}"`);
     }
+
+    // 🔴 Las dos preguntas que TODO prospecto hace, en las DOS direcciones. Hasta el
+    // 2026-08-24 la propuesta no contestaba ninguna: el sitio y el acuerdo sí, y el
+    // documento de en medio —el que se lee justo antes de decidir— guardaba silencio
+    // sobre "¿y si un desarrollo ya se agotó?" y "¿y si quiere hablar con alguien?".
+    //
+    // Se revisan las dos direcciones porque un filtro por piezas se rompe por ambos
+    // lados: colando lo que no compró, o perdiendo lo que sí (lección 2026-08-16).
+    const preguntas = C.faq(piezas).map((f) => f.q.toLowerCase());
+    const hay = (re) => preguntas.some((q) => re.test(q));
+    const HUMANO = /hablar con (una persona|alguien)/;
+    const OFFMARKET = /se agot[óo]/;
+
+    if (t("agente", "voz")) {
+      if (!hay(HUMANO))
+        fallos.push(`${etiqueta} habla con compradores y NO contesta qué pasa si piden un humano`);
+      if (!hay(OFFMARKET))
+        fallos.push(`${etiqueta} habla con compradores y NO contesta qué pasa con un desarrollo agotado`);
+    } else {
+      if (hay(HUMANO))
+        fallos.push(`${etiqueta} no compró asistente y aun así le hablan de escalar a una persona`);
+      // Una web sola SÍ lleva su versión: el sitio muestra desarrollos, aunque no converse.
+      if (t("web") && !hay(OFFMARKET))
+        fallos.push(`${etiqueta} tiene sitio y NO contesta qué pasa con un desarrollo agotado`);
+      if (!t("web") && hay(OFFMARKET))
+        fallos.push(`${etiqueta} no tiene sitio ni asistente y aun así le hablan de desarrollos agotados`);
+    }
+
+    // ⚠️ Y que no salga DOS VECES. Hay dos versiones de la pregunta del desarrollo
+    // agotado —una de asistente y una de sitio— y al probar esto rompiéndolo se vio
+    // que un cliente con web + agente se llevaba las dos: nadie lo cazaba, porque
+    // "existe al menos una" seguía siendo cierto. Una FAQ que repite la misma
+    // pregunta con dos respuestas distintas se lee como descuido.
+    const repetidas = preguntas.filter((q, i) => preguntas.indexOf(q) !== i);
+    if (repetidas.length) fallos.push(`${etiqueta} repite preguntas en el FAQ: ${repetidas.join(" · ")}`);
+    if (preguntas.filter((q) => OFFMARKET.test(q)).length > 1)
+      fallos.push(`${etiqueta} lleva DOS versiones de la pregunta del desarrollo agotado`);
   }
 }
 

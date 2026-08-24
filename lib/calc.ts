@@ -5,7 +5,7 @@
 // ============================================================================
 
 import nicho from "./nicho.json";
-import { CALC_TEXTOS } from "./calc-textos";
+import { CALC_TEXTOS, MANDOS, type MandoKey } from "./calc-textos";
 
 /** Idiomas en los que se pueden emitir las notas. Union literal a propósito: este
  *  archivo se espeja al panel y no puede importar de fuera de lo que se espeja. */
@@ -114,10 +114,56 @@ export const MENSUALIDAD_POR_PIEZA_EXTRA = 150;
 // En este nicho el panel pesa más que en el anterior: quien firma es el director comercial,
 // y lo que esa persona quiere es ver qué pasó con cada prospecto y cómo va su equipo. Aun
 // así se OFRECE, no se impone (regla de la casa).
+//
+// ⚠️ PANEL ≠ CONSOLA, y confundirlos sería cobrar dos veces por lo mismo o regalar lo que
+// se vende. El **panel** es para VER cómo va el negocio (métricas, retorno, a quién llamar)
+// y se cobra. La **consola** es para MANDAR sobre el asistente, y va INCLUIDA — ver abajo.
 export const PANEL_ADICIONAL = {
   setupUSD: 3000,
   varMax: 15, // hosting/BD si escala; el piso suele ser $0
 };
+
+// ── LA CONSOLA: los mandos incluidos ────────────────────────────────────────
+//
+// 🔴 POR QUÉ VA INCLUIDA Y NO SE COBRA (decisión de Yael, 2026-08-24).
+// La objeción que abrió todo esto fue suya, poniéndose en los zapatos del cliente:
+// *"¿para qué contrato algo que no puedo controlar, que va a estar vendiendo
+// propiedades que están fuera del mercado?"*. La consola ES la respuesta a esa
+// objeción. Cobrarla aparte sería vender el asistente sin el volante.
+//
+// Qué mando trae cada pieza. ⚠️ Esta tabla es **la misma decisión** que vive en
+// `productos/panel-inmobiliaria/app/lib/piezas.ts`, que es quien de verdad enseña o
+// esconde cada pantalla. Son dos proyectos distintos y no se pueden importar entre
+// sí, así que hay guardián (`scripts/probar-consola.mjs`) que compara las dos copias:
+// si se separan, la propuesta prometería un control que el panel no muestra.
+export const MANDOS_DE_PIEZA: Record<string, MandoKey[]> = {
+  agente: ["conversaciones", "desarrollos", "asistente"],
+  voz: ["desarrollos", "asistente"],
+  web: ["desarrollos"],
+  auto: ["textos"],
+  reactivacion: ["textos"],
+};
+
+/** Los mandos de estas piezas, sin repetir y en el orden en que se leen. */
+export function mandosDe(vals: string[]): MandoKey[] {
+  const suyos = new Set<MandoKey>();
+  for (const v of vals) for (const m of MANDOS_DE_PIEZA[v] ?? []) suyos.add(m);
+  return MANDOS.filter((m) => suyos.has(m));
+}
+
+/**
+ * El renglón de la consola para estas piezas, en el idioma pedido.
+ *
+ * Devuelve `null` si ninguna pieza trae mandos — hoy todas traen alguno, pero si
+ * mañana se agrega una que no, el renglón desaparece solo en vez de quedarse
+ * prometiendo una lista vacía.
+ */
+export function lineaConsola(vals: string[], idioma: IdiomaCalc = "es"): string | null {
+  const T = CALC_TEXTOS[idioma] ?? CALC_TEXTOS.es;
+  const suyos = mandosDe(vals);
+  if (suyos.length === 0) return null;
+  return T.consola.frase(T.consola.une(suyos.map((m) => T.consola.mandos[m])));
+}
 
 export const MODO_OPTIONS: Option[] = [
   { val: "sistema", label: "Con sistema completo", desc: "Dashboard + todo integrado", icon: "🧩" },
@@ -447,6 +493,15 @@ export function calculate(s: CalcState): CalcResult {
     const tp = T.piezas[p.val];
     return `${tp?.label ?? p.label} — ${tp?.alcance ?? p.alcance}`;
   });
+  // La consola va en su PROPIO renglón, no metida dentro del alcance de cada pieza.
+  // Con dos motivos: se dice una sola vez (repetir "incluye tus controles" en cinco
+  // renglones se lee a plantilla, que es la lección de la ráfaga de agosto), y queda
+  // en paralelo al renglón del panel, que es justo la distinción que hay que enseñar.
+  const consola = lineaConsola(
+    list.map((p) => p.val),
+    s.idioma ?? "es"
+  );
+  if (consola) incluye.push(consola);
   if (sistema) incluye.push(T.panelIncluye);
 
   return {

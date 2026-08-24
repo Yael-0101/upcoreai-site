@@ -56,6 +56,14 @@ export type TextosEmpezar = {
   hintAgenda: string;
   campoSoftware: string;
   ejemploSoftware: string;
+  // 🔴 Dónde vive su lista de desarrollos. Sin este dato no se puede cotizar la
+  // pieza que evita el peor escenario del producto: que el asistente siga ofreciendo
+  // una torre agotada. Y hasta el 2026-08-24 el diagnóstico no lo preguntaba, aunque
+  // /precios anuncia "Tus integraciones" como uno de los cuatro factores del precio.
+  bloqueInventario: string;
+  hintInventario: string;
+  campoCrm: string;
+  ejemploCrm: string;
   bloqueDolores: string;
   campoMensaje: string;
   ejemploMensaje: string;
@@ -98,6 +106,7 @@ export type TextosEmpezar = {
   prospectos: Etiquetas;
   canales: Etiquetas;
   agenda: Etiquetas;
+  inventario: Etiquetas;
   dolores: Etiquetas;
   urgencia: Etiquetas;
   papel: Etiquetas;
@@ -149,6 +158,10 @@ const ES: TextosEmpezar = {
   hintAgenda: "Elige todas las que usen — casi nadie usa una sola",
   campoSoftware: "¿Cuál software o sistema? (opcional)",
   ejemploSoftware: "Ej: Follow Up Boss, kvCORE, una hoja de cálculo…",
+  bloqueInventario: "¿Dónde vive hoy tu lista de desarrollos y su estado?",
+  hintInventario: "Nos dice a qué conectarnos para que el asistente no ofrezca lo que ya se agotó",
+  campoCrm: "¿Cuál CRM? (opcional)",
+  ejemploCrm: "Ej: Follow Up Boss, kvCORE, HubSpot…",
   bloqueDolores: "¿Qué es lo que más te duele hoy?",
   campoMensaje: "¿Algo más que quieras contarnos? (opcional)",
   ejemploMensaje: "Ej: Somos 3 asesores, vendemos preventa en Brickell y Edgewater…",
@@ -213,6 +226,12 @@ const ES: TextosEmpezar = {
     telefono: "Teléfono",
     software: "Un software o sistema",
     papel: "Papel o Excel",
+  },
+  inventario: {
+    crm: "En un CRM",
+    hoja: "En un Excel o Google Sheets",
+    desarrollador: "Nos la manda el desarrollador",
+    cabeza: "No hay lista fija — la trae el equipo en la cabeza",
   },
   dolores: {
     noshows: "Prospectos que se enfrían sin seguimiento",
@@ -347,6 +366,10 @@ const EN: TextosEmpezar = {
   hintAgenda: "Pick all the ones you use — almost nobody uses just one",
   campoSoftware: "Which software or system? (optional)",
   ejemploSoftware: "e.g. Follow Up Boss, kvCORE, a spreadsheet…",
+  bloqueInventario: "Where does your list of developments and their status live today?",
+  hintInventario: "It tells us what to connect to, so the assistant never offers what is already sold out",
+  campoCrm: "Which CRM? (optional)",
+  ejemploCrm: "e.g. Follow Up Boss, kvCORE, HubSpot…",
   bloqueDolores: "What hurts most right now?",
   campoMensaje: "Anything else you want to tell us? (optional)",
   ejemploMensaje: "e.g. We are 3 agents, we sell preconstruction in Brickell and Edgewater…",
@@ -411,6 +434,12 @@ const EN: TextosEmpezar = {
     telefono: "Phone",
     software: "Some software or system",
     papel: "Paper or Excel",
+  },
+  inventario: {
+    crm: "In a CRM",
+    hoja: "In Excel or Google Sheets",
+    desarrollador: "The developer sends it to us",
+    cabeza: "No fixed list — the team keeps it in their heads",
   },
   dolores: {
     noshows: "Leads that go cold without follow-up",

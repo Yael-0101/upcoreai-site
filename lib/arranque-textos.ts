@@ -103,7 +103,23 @@ export type TextosArranque = {
     ejIndicaciones: string;
     logo: string;
     ejLogo: string;
+    // 🔴 A quién avisamos cuando un comprador pide una persona. Solo con asistente
+    // (chat o voz) — ver `pideEscalacion` en arranque-copy.ts.
+    escalacionTitulo: string;
+    escalacionHint: string;
+    escalacionNombre: string;
+    ejEscalacionNombre: string;
+    escalacionTel: string;
+    ejEscalacionTel: string;
+    // Dos versiones a propósito: el motivo REAL del número directo es el bucle del
+    // desvío, y ese solo existe con agente de voz. A un cliente de solo chat el
+    // guardián lo cazó leyendo "no alcanzó a tomar la llamada" — un teléfono que
+    // nunca compró.
+    escalacionAvisoVoz: string;
+    escalacionAvisoChat: string;
+    escalacionVia: string;
   };
+  viasAviso: Array<{ val: string; label: string; desc: string }>;
   tonos: Array<{ val: string; label: string; desc: string }>;
 
   // ── 4 · Número de WhatsApp ────────────────────────────────────────────────
@@ -332,10 +348,14 @@ const ES: TextosArranque = {
     // TU información real… los precios pueden ser rangos"). Ni el sitio ni el
     // asistente dan precios: en preventa caducan solos y por eso el producto ni
     // siquiera tiene el campo. Ahora se dice para qué SÍ sirve el dato.
+    // ⚠️ La coletilla de "lo pausas tú" va SOLO en estos dos hint, no en los cuatro:
+    // el interruptor de desarrollos es de las piezas que los ofrecen (agente, voz y
+    // web). A un cliente de solo seguimiento o solo panel se le estaría prometiendo
+    // un botón que su consola no le muestra.
     hintAsistente:
-      "Con esto tu asistente habla de tus desarrollos reales. El rango de precios es para tu equipo: el asistente nunca lo dice — en preventa cambia por línea, piso y etapa, y pasa la consulta a tu asesor.",
+      "Con esto tu asistente habla de tus desarrollos reales. El rango de precios es para tu equipo: el asistente nunca lo dice — en preventa cambia por línea, piso y etapa, y pasa la consulta a tu asesor. Y no queda escrito en piedra: cuando uno se agote lo pausas tú desde tu celular, sin avisarnos.",
     hintWeb:
-      "Es lo que verán tus compradores en tu sitio: el nombre de cada desarrollo, dónde está y qué tipo de unidades. El rango de precios NO se publica —caduca solo— pero nos sirve para escribir bien la página.",
+      "Es lo que verán tus compradores en tu sitio: el nombre de cada desarrollo, dónde está y qué tipo de unidades. El rango de precios NO se publica —caduca solo— pero nos sirve para escribir bien la página. Y no queda escrito en piedra: cuando uno se agote lo pausas tú desde tu celular y deja de aparecer.",
     hintMensajes:
       "Con esto tus mensajes hablan de tus proyectos reales. El rango de precios queda para tu equipo: los mensajes no lo dicen.",
     hintPanel:
@@ -388,7 +408,28 @@ const ES: TextosArranque = {
     ejIndicaciones: "Ej. El sales center está en el lobby de la torre. Valet gratis para visitas…",
     logo: "Logo y colores de tu marca (opcional)",
     ejLogo: "Ej. Logo me lo mandas por WhatsApp · azul marino y dorado",
+    escalacionTitulo: "¿A quién le avisamos cuando alguien pide hablar con una persona?",
+    escalacionHint:
+      "Tu asistente nunca discute con quien pide un humano: toma sus datos y avisa al momento. Aquí decides a quién.",
+    escalacionNombre: "Nombre de quien recibe el aviso *",
+    ejEscalacionNombre: "Ej. Laura Medina, asesora de guardia",
+    escalacionTel: "Su número directo *",
+    ejEscalacionTel: "Ej. +1 305 555 0142",
+    escalacionAvisoVoz:
+      "⚠️ Que sea un número DIRECTO, no el teléfono general de la oficina. Tu agente de voz entra justo cuando el general no alcanzó a contestar: si el aviso cae ahí, se pierde igual.",
+    escalacionAvisoChat:
+      "⚠️ Que sea el número DIRECTO de esa persona, no un buzón que revisa todo el equipo. Un aviso que es de todos no es de nadie, y quien esperaba respuesta se enfría.",
+    escalacionVia: "¿Por dónde le llega el aviso? *",
   },
+  // ⚠️ Aquí NO va la opción "llamada", y no es un olvido: el guardián la cazó
+  // colándose en el portal de un cliente que solo compró el asistente de chat, y
+  // tenía razón — leer "te avisamos por llamada" ahí hace pensar que también le
+  // pusimos un agente de voz. Se arregló el texto, no la medida.
+  viasAviso: [
+    { val: "whatsapp", label: "WhatsApp", desc: "Lo ve al momento" },
+    { val: "correo", label: "Correo", desc: "Queda registro" },
+    { val: "ambos", label: "Los dos", desc: "Aviso al momento y registro" },
+  ],
   tonos: [
     { val: "calido", label: "Cálido y cercano", desc: "Como un asesor de confianza" },
     { val: "profesional", label: "Profesional y directo", desc: "Claro, sin rodeos" },
@@ -630,9 +671,9 @@ const EN: TextosArranque = {
   desarrollos: {
     q: "Your developments and prices",
     hintAsistente:
-      "This is how your assistant talks about your actual developments. The price range is for your team: the assistant never says it — in preconstruction it changes by line, floor and phase, so it hands the question to your agent.",
+      "This is how your assistant talks about your actual developments. The price range is for your team: the assistant never says it — in preconstruction it changes by line, floor and phase, so it hands the question to your agent. And it is not set in stone: when one sells out you pause it yourself from your phone, without telling us.",
     hintWeb:
-      "This is what your buyers will see on your site: the name of each development, where it is and what kind of units. The price range is NOT published —it goes stale on its own— but it helps us write the page properly.",
+      "This is what your buyers will see on your site: the name of each development, where it is and what kind of units. The price range is NOT published —it goes stale on its own— but it helps us write the page properly. And it is not set in stone: when one sells out you pause it yourself from your phone and it stops showing.",
     hintMensajes:
       "This is how your messages talk about your actual developments. The price range stays with your team: the messages do not say it.",
     hintPanel:
@@ -682,7 +723,24 @@ const EN: TextosArranque = {
     ejIndicaciones: "e.g. The sales center is in the tower lobby. Free valet for visits…",
     logo: "Your brand's logo and colors (optional)",
     ejLogo: "e.g. I'll send you the logo on WhatsApp · navy blue and gold",
+    escalacionTitulo: "Who do we alert when someone asks to talk to a person?",
+    escalacionHint:
+      "Your assistant never argues with someone who asks for a human: it takes their details and alerts on the spot. Here you decide who gets it.",
+    escalacionNombre: "Name of whoever gets the alert *",
+    ejEscalacionNombre: "e.g. Laura Medina, agent on duty",
+    escalacionTel: "Their direct number *",
+    ejEscalacionTel: "e.g. +1 305 555 0142",
+    escalacionAvisoVoz:
+      "⚠️ Make it a DIRECT number, not the office main line. Your voice agent steps in precisely when the main line did not get picked up: if the alert lands there, it is lost all the same.",
+    escalacionAvisoChat:
+      "⚠️ Make it that person's DIRECT number, not an inbox the whole team checks. An alert that belongs to everyone belongs to no one, and whoever was waiting goes cold.",
+    escalacionVia: "How should the alert reach them? *",
   },
+  viasAviso: [
+    { val: "whatsapp", label: "WhatsApp", desc: "They see it right away" },
+    { val: "correo", label: "Email", desc: "Leaves a record" },
+    { val: "ambos", label: "Both", desc: "Instant alert and a record" },
+  ],
   tonos: [
     { val: "calido", label: "Warm and personal", desc: "Like a trusted advisor" },
     { val: "profesional", label: "Professional and direct", desc: "Clear, no detours" },

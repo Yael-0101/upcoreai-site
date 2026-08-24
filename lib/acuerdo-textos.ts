@@ -30,6 +30,9 @@ export type { Idioma } from "./idioma";
 export { IDIOMAS, idiomaDe } from "./idioma";
 
 import type { Idioma } from "./idioma";
+// El renglón de la consola se traduce recomponiéndolo, no por diccionario: ver
+// `traducirConsola()` abajo. calc-textos no importa nada, así que no hay ciclo.
+import { CALC_TEXTOS, MANDOS } from "./calc-textos";
 
 export type Textos = {
   /** Cómo se llama el documento y su encabezado. */
@@ -818,9 +821,15 @@ const CATALOGO_EN: Record<string, { label: string; alcance: string }> = {
       "a campaign in Spanish or English to reach back out to the old prospects sitting in " +
       "your list who never bought",
   },
+  // ⚠️ Tiene que decir lo MISMO que `CALC_TEXTOS.en.panelIncluye`, que es de donde
+  // sale este renglón en la propuesta. Son dos copias de la misma frase y hay
+  // guardián (`probar-consola.mjs`) que las compara: si se separan, el cliente
+  // compraría leyendo una y firmaría leyendo la otra.
   "Dashboard en español e inglés + sistema integrado": {
     label: "Dashboard in Spanish and English + integrated system",
-    alcance: "everything running together, with your ROI in plain sight",
+    alcance:
+      "on top of your controls: how every buyer is doing, who to call today and your " +
+      "return in plain view",
   },
 };
 
@@ -836,6 +845,32 @@ const RENGLONES_EN: Record<string, string> = {
 };
 
 /**
+ * El renglón de la CONSOLA no cabe en un diccionario de frases exactas: se arma con
+ * las piezas del cliente, así que hay una variante por cada combinación. Se traduce
+ * **recomponiéndolo**: se mira qué mandos nombra el español y se vuelve a armar en
+ * inglés con la misma función que lo generó.
+ *
+ * ⚠️ La red de seguridad es el paso de en medio: con los mandos reconocidos se
+ * REHACE el español y se exige que salga idéntico al que entró. Si alguien agrega un
+ * mando, cambia la frase o mete texto de más, no coincide, esto devuelve `null` y el
+ * guardián truena — en vez de traducir a medias y perder un trozo en silencio, que es
+ * como se cuela media frase en español dentro de un contrato en inglés.
+ */
+function traducirConsola(item: string): string | null {
+  const es = CALC_TEXTOS.es.consola;
+  const en = CALC_TEXTOS.en.consola;
+  const cabeza = es.frase("").split(" — ")[0];
+  if (!item.startsWith(`${cabeza} — `)) return null;
+
+  const suyos = MANDOS.filter((m) => item.includes(es.mandos[m]));
+  if (suyos.length === 0) return null;
+  const rehecho = es.frase(es.une(suyos.map((m) => es.mandos[m])));
+  if (rehecho !== item) return null;
+
+  return en.frase(en.une(suyos.map((m) => en.mandos[m])));
+}
+
+/**
  * Traduce un renglón del punto 1. Devuelve `null` si no hay traducción — el que llama
  * decide: en producción se deja el español (mejor un renglón sin traducir que un
  * contrato que no se genera), y el guardián del prebuild TRUENA para que eso nunca
@@ -844,6 +879,11 @@ const RENGLONES_EN: Record<string, string> = {
 export function traducirRenglon(item: string): string | null {
   const suelto = RENGLONES_EN[item];
   if (suelto) return suelto;
+
+  // Antes de partir por " — ": el renglón de la consola también lo lleva, y si se
+  // partiera acabaría buscando "Tus controles, incluidos" en el catálogo de piezas.
+  const consola = traducirConsola(item);
+  if (consola) return consola;
   const corte = item.indexOf(" — ");
   // ⚠️ Los nombres llegan de DOS formas: con alcance ("Sitio web con agenda — sitio en
   // español…") en el punto 1, y **pelados** ("Sitio web con agenda") en la lista de lo

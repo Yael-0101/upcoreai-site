@@ -282,15 +282,22 @@ const ES: TextosSitio = {
         "Gastos de tu asistente",
         "Tu retorno",
       ],
-      ajustesTitle: "Y ajustas lo esencial tú mismo:",
+      // 🔴 Esta lista es lo que el cliente puede tocar ÉL MISMO, así que cada
+      // renglón tiene que existir de verdad en su panel (productos/panel-inmobiliaria).
+      // Decía "Cómo responde tu asistente (su tono y qué dice)" y eso NO se puede
+      // cambiar desde ahí — ni se va a poder: dejar que el cliente reescriba el guion
+      // sería dejarle borrar el bloque de vivienda justa o la regla de no dar precios,
+      // que son las que lo protegen a él. El tono se define una vez, en el arranque.
+      ajustesTitle: "Y los controles vienen incluidos con cada pieza — desde tu celular:",
       ajustes: [
-        "Cómo responde tu asistente (su tono y qué dice)",
-        "Tus mensajes y recordatorios de seguimiento",
-        "Tus horarios de atención",
         // 🔴 Decía "Los proyectos, precios y planes de pago que menciona". El
         // asistente NO menciona precios: es la línea roja nº1 del producto.
-        "Los proyectos y las generalidades que menciona",
-        "Activar o pausar cuando quieras",
+        "Qué desarrollos ofrece y cuáles no",
+        "Ver cada conversación y tomar el chat cuando quieras",
+        "A qué asesor le llega el aviso cuando alguien pide una persona",
+        "Tus horarios de atención",
+        "Tus mensajes de seguimiento, antes de que salgan",
+        "Apagarlo en un toque",
       ],
     },
     items: [
@@ -475,6 +482,14 @@ const ES: TextosSitio = {
       {
         q: "¿Funciona con el CRM que ya usamos?",
         a: "Sí, y esa es la idea. No te pedimos cambiarte de sistema: nos integramos al que ya tienes para que tus datos sigan viviendo donde viven hoy. Si no usas ninguno, te montamos el panel — pero se ofrece, no se impone.",
+      },
+      {
+        q: "¿Y si un desarrollo ya se agotó? ¿lo va a seguir ofreciendo?",
+        a: "No. Tú marcas ese desarrollo como pausado y desde ese momento el asistente deja de mencionarlo y de agendar visitas para él; a quien pregunte, lo pasa con tu asesor. Lo que no hace nunca —tampoco con los desarrollos activos— es decir cuántas unidades quedan ni en qué precio andan, porque eso cambia por línea, piso y etapa. Es a propósito: un dato así, por escrito, se convierte en un reclamo.",
+      },
+      {
+        q: "¿Y si el comprador quiere hablar con una persona?",
+        a: "Se lo pasa sin discutir. No insiste ni intenta convencerlo de seguir con el robot: toma su nombre y su teléfono, avisa a tu equipo en el momento, y le dice al comprador quién le va a marcar y cuándo. Tú decides a quién le llega ese aviso y por qué vía.",
       },
       {
         q: "¿Atiende en inglés también?",
@@ -673,14 +688,15 @@ const EN: TextosSitio = {
         "What your assistant costs",
         "Your return",
       ],
-      ajustesTitle: "And you adjust the essentials yourself:",
+      ajustesTitle: "And the controls come included with every component — from your phone:",
       ajustes: [
-        "How your assistant replies (its tone and what it says)",
-        "Your follow-up messages and reminders",
-        "Your business hours",
         // 🔴 Misma línea roja que en español: nada de precios.
-        "Which projects it talks about, and in what general terms",
-        "Turn it on or pause it whenever you want",
+        "Which developments it offers and which it does not",
+        "See every conversation and take over any chat",
+        "Which agent gets the alert when someone asks for a person",
+        "Your business hours",
+        "Your follow-up messages, before they go out",
+        "Switch it off with one tap",
       ],
     },
     items: [
@@ -861,6 +877,14 @@ const EN: TextosSitio = {
       {
         q: "Does it work with the CRM we already use?",
         a: "Yes, and that is the point. We do not ask you to switch systems: we integrate with the one you have so your data keeps living where it lives today. If you do not use one, we set up the dashboard — but it is offered, never imposed.",
+      },
+      {
+        q: "What if a development is already sold out? Will it keep offering it?",
+        a: "No. You mark that development as paused and from then on the assistant stops mentioning it and stops booking tours for it; anyone who asks gets handed to your agent. What it never does — not even for active developments — is state how many units are left or what they cost, because that changes by line, floor and phase. It is deliberate: a figure like that, in writing, turns into a complaint.",
+      },
+      {
+        q: "What if the buyer wants to talk to a person?",
+        a: "It hands them over, no argument. It does not push back or try to keep them with the bot: it takes their name and phone number, alerts your team on the spot, and tells the buyer who will call them and when. You decide who gets that alert and how.",
       },
       {
         q: "Does it handle English too?",

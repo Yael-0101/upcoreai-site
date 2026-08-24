@@ -60,6 +60,18 @@ const AGENDA_OPTIONS: Option[] = [
   { val: "papel", label: "Papel o Excel", icon: "📒" },
 ];
 
+// 🔴 Dónde vive su lista de desarrollos y su estado. Es lo que decide a qué nos
+// conectamos para que el asistente deje de ofrecer una torre agotada — la objeción
+// número uno del producto. Hasta el 2026-08-24 no se preguntaba en ningún lado, ni
+// aquí ni en el Portal de Arranque, aunque /precios anuncia "Tus integraciones" como
+// uno de los cuatro factores del precio.
+const INVENTARIO_OPTIONS: Option[] = [
+  { val: "crm", label: "En un CRM", icon: "🗂️" },
+  { val: "hoja", label: "En un Excel o Google Sheets", icon: "📊" },
+  { val: "desarrollador", label: "Nos la manda el desarrollador", icon: "🏗️" },
+  { val: "cabeza", label: "No hay lista fija — la trae el equipo en la cabeza", icon: "🧠" },
+];
+
 // Una pregunta específica por producto (multi, de un toque).
 const PREGUNTAS_POR_PRODUCTO: Record<string, { q: string; options: Option[] }> = {
   agente: {
@@ -206,6 +218,8 @@ type LeadState = {
   sinPreferencia: boolean;
   agendaHoy: string[];
   agendaSoftware: string;
+  inventarioHoy: string[];
+  inventarioCrm: string;
   respuestas: Record<string, string[]>;
   dolores: string[];
   mensaje: string;
@@ -231,6 +245,8 @@ const empty: LeadState = {
   sinPreferencia: false,
   agendaHoy: [],
   agendaSoftware: "",
+  inventarioHoy: [],
+  inventarioCrm: "",
   respuestas: {},
   dolores: [],
   mensaje: "",
@@ -262,7 +278,7 @@ export function EmpezarForm({ idioma = "es" }: { idioma?: Idioma }) {
   const [propuestaUrl, setPropuestaUrl] = useState<string | null>(null);
 
   const set = (patch: Partial<LeadState>) => setS((p) => ({ ...p, ...patch }));
-  const toggleIn = (key: "canales" | "agendaHoy" | "dolores" | "productos") => (val: string) =>
+  const toggleIn = (key: "canales" | "agendaHoy" | "inventarioHoy" | "dolores" | "productos") => (val: string) =>
     setS((p) => ({
       ...p,
       ...(key === "productos" ? { sinPreferencia: false } : {}),
@@ -333,6 +349,28 @@ export function EmpezarForm({ idioma = "es" }: { idioma?: Idioma }) {
           })
           .join(" · ");
 
+    // 🔴 Dónde vive su inventario viaja DENTRO de `detalle`, etiquetado.
+    //
+    // No lleva campo propio a propósito: `/api/lead` filtra la carga por una lista
+    // fija de claves y las columnas de las data tables de n8n solo se agregan a mano
+    // en su interfaz — una clave nueva se perdería en silencio hasta que alguien la
+    // cree y la mapee. Aquí lo lee una PERSONA (Yael, en la ficha del lead) para
+    // saber a qué conectarse.
+    //
+    // ⚠️ El día que este dato tenga que DECIDIR algo (puntuar, filtrar, cotizar),
+    // primero se crea la columna en n8n: no se deduce leyendo esta prosa.
+    const inventarioTxt = INVENTARIO_OPTIONS.filter((o) => s.inventarioHoy.includes(o.val))
+      .map((o) =>
+        o.val === "crm" && s.inventarioCrm.trim()
+          ? `${o.label} (${s.inventarioCrm.trim()})`
+          : o.label
+      )
+      .join(" + ");
+
+    const detalleFinal = [detalleTxt, inventarioTxt && `Inventario hoy: ${inventarioTxt}`]
+      .filter(Boolean)
+      .join(" · ");
+
     try {
       const res = await fetch("/api/lead", {
         method: "POST",
@@ -348,7 +386,7 @@ export function EmpezarForm({ idioma = "es" }: { idioma?: Idioma }) {
           canales: labelsDe(CANALES_OPTIONS, s.canales).join(", "),
           productos: productosTxt,
           agenda_hoy: agendaTxt,
-          detalle: detalleTxt,
+          detalle: detalleFinal,
           urgencia: labelDe(URGENCIA_OPTIONS, s.urgencia),
           decisor: labelDe(PAPEL_OPTIONS, s.papel),
           horario_contacto: labelDe(HORARIO_OPTIONS, s.horario),
@@ -582,6 +620,32 @@ export function EmpezarForm({ idioma = "es" }: { idioma?: Idioma }) {
                         value={s.agendaSoftware}
                         placeholder={t.ejemploSoftware}
                         onChange={(v) => set({ agendaSoftware: v })}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="mb-7">
+                  <BlockLabel hint={t.hintInventario}>{t.bloqueInventario}</BlockLabel>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    {INVENTARIO_OPTIONS.map(tr(t.inventario)).map((o) => (
+                      <OptionBtn
+                        key={o.val}
+                        opt={o}
+                        check
+                        selected={s.inventarioHoy.includes(o.val)}
+                        onClick={() => toggleIn("inventarioHoy")(o.val)}
+                      />
+                    ))}
+                  </div>
+                  {s.inventarioHoy.includes("crm") && (
+                    <div className="mt-4">
+                      <Field
+                        label={t.campoCrm}
+                        type="text"
+                        value={s.inventarioCrm}
+                        placeholder={t.ejemploCrm}
+                        onChange={(v) => set({ inventarioCrm: v })}
                       />
                     </div>
                   )}

@@ -46,7 +46,11 @@
 
   "demo": {
     "negocioDemo": "Inmobiliaria Demo",
-    "giroPorDefecto": "comercializadora"
+    "giroPorDefecto": "comercializadora",
+
+    "_servicios": "🔴 LÍNEA ROJA. 'servicios' es la lista que el prompt de la demo inyecta con 'resuelve dudas usando SOLO esta lista' (lib/demo.ts). Por eso NO puede nombrar precios, unidades disponibles ni fechas de entrega: declararlos aquí contradice los LÍMITES del mismo prompt. Hasta el 2026-08-24, 'desarrolladora' declaraba 'unidades disponibles del desarrollo' y 'avance de obra y fecha estimada de entrega', y 'equipo' declaraba 'estimación de renta y retorno' (línea roja 5, promesas de rendimiento). Hay guardián: scripts/probar-sitio.mjs.",
+
+    "_chips": "Los chips SÍ pueden nombrar lo prohibido, y es a propósito: son preguntas del COMPRADOR, no cosas que el asistente diga. '¿Cuándo entregan?' se deja porque el mejor momento de venta de la demo es ver el desvío elegante en vivo. 'Quiero hablar con una persona' está en los tres giros para que el prospecto compruebe que el asistente lo pasa sin discutir."
   },
 
   "giros": [
@@ -61,8 +65,8 @@
       "demo": {
         "label": "comercializadora de preventa en Miami",
         "servicios": [
-          "proyectos en preventa disponibles",
-          "planes de pago por etapas de obra",
+          "proyectos en preventa",
+          "cómo funcionan los pagos por etapas de obra",
           "opciones de financiamiento para compradores extranjeros",
           "compra a nombre de persona física o de LLC",
           "visita al sales center o recorrido por video",
@@ -72,7 +76,8 @@
         "chips": [
           "¿Qué proyectos tienen en preventa?",
           "¿Puedo comprar desde fuera de Estados Unidos?",
-          "¿Cómo son los pagos durante la obra?"
+          "¿Cómo son los pagos durante la obra?",
+          "Quiero hablar con una persona"
         ]
       }
     },
@@ -89,7 +94,7 @@
         "servicios": [
           "búsqueda de propiedad según presupuesto y objetivo",
           "proyectos en preventa y propiedades listas para entregar",
-          "estimación de renta y retorno",
+          "conexión con el asesor para revisar renta y retorno",
           "conexión con financiamiento y con abogado",
           "visita presencial o por videollamada",
           "seguimiento hasta la escrituración"
@@ -97,7 +102,8 @@
         "chips": [
           "Quiero invertir en Miami",
           "¿Qué zona me conviene?",
-          "¿Cuánto necesito para empezar?"
+          "¿Cuánto necesito para empezar?",
+          "Quiero hablar con una persona"
         ]
       }
     },
@@ -112,17 +118,16 @@
       "demo": {
         "label": "desarrolladora en Miami",
         "servicios": [
-          "unidades disponibles del desarrollo",
-          "avance de obra y fecha estimada de entrega",
+          "en qué etapa está cada desarrollo (preventa, en obra o listo para entregar)",
           "amenidades y planos por tipo de unidad",
-          "esquema de pagos y reservación",
+          "cómo funciona el esquema de pagos por etapas",
           "cita en el sales center",
           "contacto con la comercializadora asignada"
         ],
         "chips": [
-          "¿Qué unidades quedan?",
           "¿Cuándo entregan?",
-          "Quiero agendar una visita"
+          "Quiero agendar una visita",
+          "Quiero hablar con una persona"
         ]
       }
     },

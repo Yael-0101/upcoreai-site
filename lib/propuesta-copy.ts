@@ -182,8 +182,18 @@ const FAQ_DOMINIO = {
  */
 export const faq = (p: PiezaClave[], conNumeros = true, idioma: Idioma = "es") => {
   const t = TP[idioma];
+  // 🔴 Las dos preguntas que todo prospecto hace —"¿y si un desarrollo ya se agotó?"
+  // y "¿y si quiere hablar con una persona?"— no estaban en la propuesta. El sitio y
+  // el acuerdo las contestan; el documento que se lee JUSTO ANTES DE DECIDIR, no.
+  //
+  // Se filtran por pieza, como todo lo demás del documento: una web sola no conversa
+  // ni escala a nadie, así que le tocaría una FAQ sobre un asistente que no compró
+  // (es el fallo del Portal de Arranque del 2026-08-16).
+  const hablaConCompradores = tiene(p, "agente", "voz");
   return [
     ...t.faqBase,
+    ...(hablaConCompradores ? [t.faqHumano, t.faqOffmarket] : []),
+    ...(!hablaConCompradores && tiene(p, "web") ? [t.faqOffmarketWeb] : []),
     conNumeros ? t.faqNumeros : t.faqDeDonde,
     esWebSola(p) ? t.faqDominio : t.faqApis,
   ];

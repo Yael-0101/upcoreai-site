@@ -1,4 +1,4 @@
-import { pideTono } from "./arranque-copy";
+import { normalizarPiezas, pideTono } from "./arranque-copy";
 // Los giros válidos de la demo salen de lib/nicho.json (fuente única del nicho).
 import { GIROS_DEMO, DEMO_DEFAULTS } from "./demo-config";
 
@@ -71,6 +71,10 @@ export type ArranqueDatos = {
   numero: { decision: string | null }; // actual | nuevo | asesoria
   /** Solo agente de voz: qué pasa con su teléfono. desvio | nuevo | asesoria */
   linea: { decision: string | null };
+  /** Solo con asistente (chat o voz): a quién avisamos cuando un comprador pide
+   *  hablar con una persona. El teléfono es DIRECTO, nunca el público de la firma
+   *  (con desvío, el agente entra porque ese ya no contestó). Ver `pideEscalacion`. */
+  escalacion: { nombre: string; telefono: string; via: string | null };
   concierge: ConciergeDatos;
   cuentas: Record<string, CuentaEstado>;
   calendario: { compartido: boolean; tipo: string };
@@ -95,14 +99,36 @@ export type ArranqueDatos = {
   idioma?: "es" | "en";
 };
 
-/** Las 5 fases del proyecto (espejo del checklist interno de despliegue). */
-export const FASES_DEFAULT: AvanceItem[] = [
-  { fase: "Preparación: checklist y cuentas", estado: "pendiente" },
-  { fase: "WhatsApp oficial con Meta", estado: "pendiente" },
-  { fase: "Construcción del sistema", estado: "pendiente" },
-  { fase: "Pruebas contigo", estado: "pendiente" },
-  { fase: "Entrega y capacitación", estado: "pendiente" },
-];
+/**
+ * Las fases del proyecto (espejo del checklist interno de despliegue).
+ *
+ * 🔴 SE FILTRAN POR PIEZAS (lección 2026-08-24). Esta lista era fija, y a un cliente
+ * que solo compró el agente de VOZ su propio avance le anunciaba "WhatsApp oficial
+ * con Meta" — un trámite que nunca va a existir en su proyecto. Se descubrió abriendo
+ * un portal de prueba y LEYÉNDOLO: el guardián revisaba el copy de los pasos, pero
+ * las fases eran texto fijo que nadie miraba.
+ *
+ * Es exactamente el defecto del 2026-08-16 (el filtro llega hasta el texto, no solo
+ * hasta qué bloques se muestran), en la única sección del portal donde no se había
+ * aplicado.
+ */
+const FASE_WHATSAPP = "WhatsApp oficial con Meta";
+
+export function fasesDe(productos: string[]): AvanceItem[] {
+  const p = normalizarPiezas(productos);
+  // El trámite de Meta solo existe si algo suyo escribe por WhatsApp.
+  const conMeta = ["agente", "auto", "reactivacion"].some((x) => p.includes(x));
+  return [
+    { fase: "Preparación: checklist y cuentas", estado: "pendiente" },
+    ...(conMeta ? [{ fase: FASE_WHATSAPP, estado: "pendiente" as const }] : []),
+    { fase: "Construcción del sistema", estado: "pendiente" },
+    { fase: "Pruebas contigo", estado: "pendiente" },
+    { fase: "Entrega y capacitación", estado: "pendiente" },
+  ];
+}
+
+/** Compatibilidad: la lista completa. Usar `fasesDe(productos)` en pantalla. */
+export const FASES_DEFAULT: AvanceItem[] = fasesDe([]);
 
 /** Rellena huecos con defaults — snapshots viejos o parciales no truenan. */
 export function normalizarDatos(d: unknown): ArranqueDatos {
@@ -132,6 +158,7 @@ export function normalizarDatos(d: unknown): ArranqueDatos {
     },
     numero: { decision: null, ...(x.numero ?? {}) },
     linea: { decision: null, ...(x.linea ?? {}) },
+    escalacion: { nombre: "", telefono: "", via: null, ...(x.escalacion ?? {}) },
     concierge: {
       modo: null,
       correoTipo: null,
@@ -152,7 +179,26 @@ export function normalizarDatos(d: unknown): ArranqueDatos {
       };
     })(),
     textos: Array.isArray(x.textos) ? x.textos : [],
-    avances: Array.isArray(x.avances) && x.avances.length > 0 ? x.avances : FASES_DEFAULT,
+    // 🔴 Las fases se RECONCILIAN, no se leen tal cual (lección 2026-08-24).
+    //
+    // `avances` mezcla dos cosas distintas, y por eso el primer arreglo no sirvió:
+    //   · la LISTA de fases → es un DERIVADO de sus piezas, y se recalcula siempre;
+    //   · el ESTADO de cada fase → es un HECHO que pone Upcore, y se conserva.
+    //
+    // El portal hace autosave, así que la primera vez que se abre congela lo que
+    // haya en pantalla. Con la lista fija anterior, un cliente de solo-voz guardaba
+    // "WhatsApp oficial con Meta" en sus datos — y arreglar el default no lo
+    // limpiaba: el valor guardado ganaba para siempre, en silencio.
+    //
+    // Reconciliar deja las tres cosas bien: aparece lo que le toca, desaparece lo
+    // que no, y no se pierde el avance que Upcore ya marcó.
+    avances: (() => {
+      const guardadas = Array.isArray(x.avances) ? (x.avances as AvanceItem[]) : [];
+      const previo = new Map(guardadas.map((a) => [a?.fase, a]));
+      return fasesDe(Array.isArray(x.config?.productos) ? x.config.productos : []).map(
+        (f) => previo.get(f.fase) ?? f
+      );
+    })(),
     progreso: { pasoActual: 1, ...(x.progreso ?? {}) },
     idioma: x.idioma === "en" ? "en" : "es",
   };
