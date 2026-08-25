@@ -10,6 +10,12 @@ import { GIROS_DEMO, DEMO_DEFAULTS } from "./demo-config";
 
 export type ServicioItem = { nombre: string; precio: string; duracion: string };
 
+/** Una persona del equipo de ventas. `rol` es un valor guardado: no se traduce. */
+export type AsesorItem = { nombre: string; rol: string };
+
+/** Los dos roles del panel. La CLAVE viaja; la etiqueta se traduce en el copy. */
+export const ROLES_EQUIPO = ["asesor", "director"] as const;
+
 export type TextoItem = {
   id: string;
   titulo: string;
@@ -92,6 +98,29 @@ export type ArranqueDatos = {
    *                  `fuente` dice dónde la tiene
    */
   precios: { modo: string | null; publicado: string; fuente: string };
+  /**
+   * SU EQUIPO — solo con la pieza `panel` (2026-08-25).
+   *
+   * El panel del director enseña cómo va cada asesor y el retorno real. Para eso
+   * hacen falta dos cosas que antes no se le pedían a nadie:
+   *
+   *   · `asesores` → nombre y si dirige. Con esto le creamos su acceso a cada uno
+   *     (`npm run crear:usuario` en el panel). Sin ellos, su tablero sale con todo
+   *     el equipo en "Sin asignar" el día de la entrega.
+   *   · `comision` → cuánto deja en promedio una operación cerrada, en su moneda.
+   *     Es lo que el panel usa cuando el asesor marca una venta sin escribir el
+   *     importe.
+   *
+   * ⚠️ NO se le pide su tasa de cierre histórica, y es a propósito: el panel ya no
+   * la necesita para lo importante. Antes el retorno era una proyección (visitas ×
+   * comisión × tasa); ahora se cuenta lo que de verdad se cerró. Pedir un dato que
+   * casi nadie tiene a mano, para una cifra que ya no manda, es fricción a cambio
+   * de nada.
+   *
+   * ⚠️ El `rol` de cada asesor es un valor que se GUARDA ("director" | "asesor"):
+   * no se traduce nunca. Lo único que cambia de idioma es su etiqueta.
+   */
+  equipo: { asesores: AsesorItem[]; comision: string };
   concierge: ConciergeDatos;
   cuentas: Record<string, CuentaEstado>;
   calendario: { compartido: boolean; tipo: string };
@@ -179,6 +208,10 @@ export function normalizarDatos(d: unknown): ArranqueDatos {
     // Por defecto `transfiere`: es el modo que no le exige nada al cliente y el que
     // no puede decir un dato vencido. Los otros dos son una elección consciente suya.
     precios: { modo: null, publicado: "", fuente: "", ...(x.precios ?? {}) },
+    // Los portales anteriores al 2026-08-25 no traen `equipo`: se completa vacío y
+    // el paso se le pide igual. Sustituir el objeto en vez de completarlo borraría
+    // lo que sí venía — el fallo silencioso de agosto.
+    equipo: { asesores: [], comision: "", ...(x.equipo ?? {}) },
     concierge: {
       modo: null,
       correoTipo: null,
@@ -238,7 +271,38 @@ export type PasoId =
   | "calendario"
   | "demo"
   | "textos"
+  | "equipo"
   | "resumen";
+
+/**
+ * EL ORDEN DEL ASISTENTE — la única lista, y de aquí sale el número de cada paso.
+ *
+ * 🔴 POR QUÉ VIVE AQUÍ (2026-08-25). Esta lista estaba COPIADA dentro de
+ * `components/ArranquePortal.tsx` (`NUM_A_PASO`), y al agregar el paso del equipo se
+ * actualizó `pasosVisibles` y no la copia. Consecuencia: `numDePaso("equipo")`
+ * devolvía 0 —porque `indexOf` no lo encontraba— y **el paso no se pintaba nunca**,
+ * mientras su fila SÍ salía en el resumen marcada como esencial. O sea: un cliente
+ * con panel se quedaba con el portal imposible de terminar, sin ningún error.
+ *
+ * Los guardianes estaban en verde: revisaban `pasosVisibles`, no la copia. Se vio
+ * abriendo el portal y leyéndolo.
+ *
+ * Ahora hay una sola lista y el componente la importa. `pasosVisibles` devuelve un
+ * subconjunto de ésta, en este mismo orden.
+ */
+export const PASOS_EN_ORDEN: PasoId[] = [
+  "bienvenida",
+  "servicios",
+  "horarios",
+  "numero",
+  "linea",
+  "cuentas",
+  "calendario",
+  "demo",
+  "textos",
+  "equipo",
+  "resumen",
+];
 
 export function pasosVisibles(productos: string[]): PasoId[] {
   const p = productos ?? [];
@@ -261,6 +325,18 @@ export function pasosVisibles(productos: string[]): PasoId[] {
   // El paso de textos solo tiene contenido si hay sitio (su estilo) o mensajes
   // que aprobar. A un cliente de solo-voz le salía una pantalla vacía.
   if (tiene("web", "agente", "auto", "reactivacion")) pasos.push("textos");
+  // 🔴 SU EQUIPO — solo con la pieza `panel` (2026-08-25).
+  //
+  // El panel del director enseña **cómo va cada asesor**, y para eso hacen falta dos
+  // datos que hasta hoy no se le pedían a NADIE: quiénes son sus asesores (para
+  // crearles su acceso) y cuánto deja una operación cerrada (para poner cifras a lo
+  // que cierran). Eran una tarea invisible que alguien tendría que acordarse de
+  // preguntar el día del despliegue — o no, y entonces el panel se entrega con el
+  // equipo entero en "Sin asignar" y el retorno en cero.
+  //
+  // Es la lección de la casa: cada dato que un producto necesita tiene que tener un
+  // ORIGEN nombrado — qué pantalla se lo pregunta al cliente.
+  if (tiene("panel")) pasos.push("equipo");
   pasos.push("resumen");
   return pasos;
 }

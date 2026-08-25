@@ -25,6 +25,9 @@ import {
   estadoDe,
   giroDemo,
   pasosVisibles,
+  PASOS_EN_ORDEN,
+  ROLES_EQUIPO,
+  type AsesorItem,
   type ArranqueDatos,
   type PasoId,
   type ServicioItem,
@@ -53,20 +56,15 @@ import {
 } from "@/lib/arranque-copy";
 
 type Step = number | "listo";
-// Número de paso ↔ su id (índice + 1). El orden es el del wizard completo;
-// pasosVisibles() decide cuáles aplican a las piezas de ESTE proyecto.
-const NUM_A_PASO: PasoId[] = [
-  "bienvenida",
-  "servicios",
-  "horarios",
-  "numero",
-  "linea",
-  "cuentas",
-  "calendario",
-  "demo",
-  "textos",
-  "resumen",
-];
+// Número de paso ↔ su id (índice + 1).
+//
+// 🔴 ESTA LISTA ESTABA COPIADA AQUÍ y se desfasó (2026-08-25): al agregar el paso
+// del equipo se actualizó `pasosVisibles` y no esta copia, así que `numDePaso`
+// devolvía 0 y el paso **no se pintaba nunca** — mientras su fila salía en el
+// resumen marcada como esencial. Un portal imposible de terminar, sin un error.
+// Ahora se importa de `lib/arranque.ts`, que es su único dueño, y hay guardián que
+// comprueba que `pasosVisibles` no devuelva nada que no esté aquí.
+const NUM_A_PASO: PasoId[] = PASOS_EN_ORDEN;
 const TOTAL_PASOS = NUM_A_PASO.length;
 const numDePaso = (id: PasoId) => NUM_A_PASO.indexOf(id) + 1;
 /** El número del paso, por su id — para no volver a escribir 5, 6, 7 a mano.
@@ -81,6 +79,7 @@ const N = {
   calendario: numDePaso("calendario"),
   demo: numDePaso("demo"),
   textos: numDePaso("textos"),
+  equipo: numDePaso("equipo"),
   resumen: numDePaso("resumen"),
 };
 
@@ -143,6 +142,9 @@ const calendarioOptions = (idioma: Idioma): Option[] => {
 
 
 const servicioVacio: ServicioItem = { nombre: "", precio: "", duracion: "" };
+// El rol por defecto es el MENOS permisivo: si alguien se olvida de cambiarlo, esa
+// persona ve de menos, no de más. Falla cerrado.
+const asesorVacio: AsesorItem = { nombre: "", rol: "asesor" };
 
 export function ArranquePortal({
   token,
@@ -168,6 +170,16 @@ export function ArranquePortal({
         datosIniciales.checklist.servicios.length > 0
           ? datosIniciales.checklist.servicios
           : [{ ...servicioVacio }],
+    },
+    // Igual que los desarrollos: siempre al menos una fila en blanco. Sin esto la
+    // pantalla saldría vacía y con un solo botón, y quien la abre no sabría que ahí
+    // se escribe. (Y `setAsesor` no tendría sobre qué fila trabajar.)
+    equipo: {
+      ...datosIniciales.equipo,
+      asesores:
+        datosIniciales.equipo.asesores.length > 0
+          ? datosIniciales.equipo.asesores
+          : [{ ...asesorVacio }],
     },
   }));
   const [step, setStep] = useState<Step>(() => {
@@ -281,6 +293,10 @@ export function ArranquePortal({
   //  perder lo que marcaron las filas viejas.)
   const setConcierge = (p: Partial<ArranqueDatos["concierge"]>) =>
     patch({ concierge: { ...d.concierge, ...p } });
+  const setEquipo = (p: Partial<ArranqueDatos["equipo"]>) =>
+    patch({ equipo: { ...d.equipo, ...p } });
+  const setAsesor = (i: number, p: Partial<AsesorItem>) =>
+    setEquipo({ asesores: d.equipo.asesores.map((a, j) => (j === i ? { ...a, ...p } : a)) });
   const setTexto = (id: string, p: Partial<TextoItem>) =>
     patch({ textos: d.textos.map((t) => (t.id === id ? { ...t, ...p } : t)) });
 
@@ -330,7 +346,16 @@ export function ArranquePortal({
   // una decisión que nadie le va a pedir.
   const stepNumeroReady = !visibleNum.has(N.numero) || !!d.numero.decision;
   const stepLineaReady = !visibleNum.has(N.linea) || !!d.linea.decision;
-  const nucleoListo = step2Ready && step3Ready && stepNumeroReady && stepLineaReady;
+  // Su equipo: solo con la pieza `panel`, y por la misma razón de siempre. Se pide
+  // al menos una persona con nombre y la comisión promedio — sin lo primero el panel
+  // sale con todo el equipo en "Sin asignar"; sin lo segundo, una venta marcada sin
+  // importe no suma nada y el retorno se queda corto sin que nadie entienda por qué.
+  const equipoPedido = visibleNum.has(N.equipo);
+  const equipoListo =
+    !equipoPedido ||
+    (d.equipo.asesores.some((a) => a.nombre.trim() !== "") && d.equipo.comision.trim() !== "");
+  const nucleoListo =
+    step2Ready && step3Ready && stepNumeroReady && stepLineaReady && equipoListo;
 
   const cuentas = cuentasRequeridas(d.config);
   const nombreCorto = (d.config.nombre || "").trim().split(" ")[0];
@@ -423,7 +448,7 @@ export function ArranquePortal({
             <div className="flex gap-3"><span>🧭</span><span>{T.bienvenida.guiando}</span></div>
             <div className="flex gap-3"><span>🔒</span><span><strong className="font-semibold text-sand">{T.bienvenida.seguridadFuerte}</strong> {T.bienvenida.seguridadResto}</span></div>
           </div>
-          <NavBtns onNext={() => irA(N.servicios)} nextEnabled nextLabel={T.bienvenida.empezar} />
+          <NavBtns onNext={() => irA(N.servicios)} nextEnabled nextLabel={T.bienvenida.empezar} backLabel={T.ui.atras} />
         </div>
       )}
 
@@ -570,7 +595,7 @@ export function ArranquePortal({
           {!step2Ready && (
             <p className="mb-3 text-sm font-light text-mocha">{T.desarrollos.faltan}</p>
           )}
-          <NavBtns onBack={() => irA(N.bienvenida)} onNext={() => irA(N.horarios)} nextEnabled={step2Ready} nextLabel={T.ui.siguiente} />
+          <NavBtns onBack={() => irA(N.bienvenida)} onNext={() => irA(N.horarios)} nextEnabled={step2Ready} nextLabel={T.ui.siguiente} backLabel={T.ui.atras} />
         </div>
       )}
 
@@ -741,7 +766,7 @@ export function ArranquePortal({
               </div>
             )}
           </div>
-          <NavBtns onBack={() => irA(N.servicios)} onNext={() => irA(N.numero)} nextEnabled={step3Ready} nextLabel={T.ui.siguiente} />
+          <NavBtns onBack={() => irA(N.servicios)} onNext={() => irA(N.numero)} nextEnabled={step3Ready} nextLabel={T.ui.siguiente} backLabel={T.ui.atras} />
         </div>
       )}
 
@@ -758,7 +783,7 @@ export function ArranquePortal({
               <OptionBtn key={o.val} opt={o} selected={d.numero.decision === o.val} onClick={() => patch({ numero: { decision: o.val } })} />
             ))}
           </div>
-          <NavBtns onBack={() => irA(N.horarios)} onNext={() => irA(N.linea)} nextEnabled={stepNumeroReady} nextLabel={T.ui.siguiente} />
+          <NavBtns onBack={() => irA(N.horarios)} onNext={() => irA(N.linea)} nextEnabled={stepNumeroReady} nextLabel={T.ui.siguiente} backLabel={T.ui.atras} />
         </div>
       )}
 
@@ -775,7 +800,7 @@ export function ArranquePortal({
               <OptionBtn key={o.val} opt={o} selected={d.linea.decision === o.val} onClick={() => patch({ linea: { decision: o.val } })} />
             ))}
           </div>
-          <NavBtns onBack={() => irA(N.numero)} onNext={() => irA(N.cuentas)} nextEnabled={stepLineaReady} nextLabel={T.ui.siguiente} />
+          <NavBtns onBack={() => irA(N.numero)} onNext={() => irA(N.cuentas)} nextEnabled={stepLineaReady} nextLabel={T.ui.siguiente} backLabel={T.ui.atras} />
         </div>
       )}
 
@@ -911,8 +936,7 @@ export function ArranquePortal({
             onBack={() => irA(N.linea)}
             onNext={() => irA(N.calendario)}
             nextEnabled={d.concierge.telefono.trim() !== ""}
-            nextLabel={T.ui.siguiente}
-          />
+            nextLabel={T.ui.siguiente} backLabel={T.ui.atras} />
         </div>
       )}
 
@@ -954,7 +978,7 @@ export function ArranquePortal({
               {d.calendario.compartido ? T.calendarioPasos.marcado : T.calendarioPasos.marcar}
             </button>
           </div>
-          <NavBtns onBack={() => irA(N.cuentas)} onNext={() => irA(N.demo)} nextEnabled nextLabel={T.ui.siguiente} />
+          <NavBtns onBack={() => irA(N.cuentas)} onNext={() => irA(N.demo)} nextEnabled nextLabel={T.ui.siguiente} backLabel={T.ui.atras} />
         </div>
       )}
 
@@ -1002,7 +1026,7 @@ export function ArranquePortal({
               onChange={(v) => patch({ prueba: { ...d.prueba, comentarios: v } })}
             />
           </div>
-          <NavBtns onBack={() => irA(N.calendario)} onNext={() => irA(N.textos)} nextEnabled nextLabel={T.ui.siguiente} />
+          <NavBtns onBack={() => irA(N.calendario)} onNext={() => irA(N.textos)} nextEnabled nextLabel={T.ui.siguiente} backLabel={T.ui.atras} />
         </div>
       )}
 
@@ -1166,11 +1190,103 @@ export function ArranquePortal({
               ))}
             </div>
           )}
-          <NavBtns onBack={() => irA(N.demo)} onNext={() => irA(N.resumen)} nextEnabled nextLabel={T.ui.siguiente} />
+          <NavBtns onBack={() => irA(N.demo)} onNext={() => irA(N.equipo)} nextEnabled nextLabel={T.ui.siguiente} backLabel={T.ui.atras} />
         </div>
       )}
 
-      {/* 10 · Resumen y cierre */}
+      {/* 10 · Su equipo — SOLO con la pieza `panel`.
+          🔴 Estos dos datos no se le pedían a NADIE (2026-08-25). El panel del
+          director enseña cómo va cada asesor, y sin sus nombres sale con el equipo
+          entero en "Sin asignar" el día de la entrega. Era una tarea invisible que
+          alguien tendría que acordarse de preguntar. */}
+      {step === N.equipo && (
+        <div>
+          <StepHeader q={T.equipo.q} hint={T.equipo.hint} />
+          <div className="mx-auto max-w-md">
+            <div className="grid gap-3">
+              {d.equipo.asesores.map((a, i) => (
+                <div key={i} className="flex items-end gap-2">
+                  <div className="flex-1">
+                    <Field
+                      label={i === 0 ? T.equipo.labelNombre : ""}
+                      type="text"
+                      value={a.nombre}
+                      placeholder={T.equipo.ejNombre}
+                      onChange={(v) => setAsesor(i, { nombre: v })}
+                    />
+                  </div>
+                  <div className="w-40">
+                    {i === 0 && (
+                      <label className="mb-1 block text-xs font-light text-mocha">
+                        {T.equipo.labelRol}
+                      </label>
+                    )}
+                    {/* ⚠️ El `value` es la CLAVE que se guarda y acaba en su acceso;
+                        lo único traducido es lo que se lee. */}
+                    <select
+                      aria-label={T.equipo.labelRol}
+                      value={a.rol || "asesor"}
+                      onChange={(e) => setAsesor(i, { rol: e.target.value })}
+                      className="h-11 w-full rounded-xl border border-[rgba(242,231,219,0.15)] bg-[rgba(242,231,219,0.03)] px-3 text-sm text-sand outline-none focus:border-clay"
+                    >
+                      {ROLES_EQUIPO.map((r) => (
+                        <option key={r} value={r}>
+                          {T.equipo.roles[r]}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <button
+                    type="button"
+                    aria-label={T.equipo.quitar}
+                    onClick={() =>
+                      setEquipo({ asesores: d.equipo.asesores.filter((_, j) => j !== i) })
+                    }
+                    disabled={d.equipo.asesores.length === 1}
+                    className="h-11 rounded-xl border border-[rgba(242,231,219,0.15)] px-3 text-mocha transition-colors hover:border-clay hover:text-clay-bright disabled:opacity-30"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() =>
+                setEquipo({ asesores: [...d.equipo.asesores, { ...asesorVacio }] })
+              }
+              className="mt-3 min-h-[44px] rounded-xl border border-[rgba(242,231,219,0.15)] px-4 text-sm text-mocha transition-colors hover:border-clay hover:text-clay-bright"
+            >
+              + {T.equipo.agregar}
+            </button>
+            <p className="mt-2 text-xs font-light text-mocha">{T.equipo.rolAyuda}</p>
+
+            <div className="mt-7">
+              <Field
+                label={T.equipo.labelComision}
+                type="text"
+                value={d.equipo.comision}
+                placeholder={T.equipo.ejComision}
+                onChange={(v) => setEquipo({ comision: v })}
+              />
+              <p className="mt-2 text-xs font-light text-mocha">{T.equipo.comisionAyuda}</p>
+            </div>
+
+            {/* Cómo le llegan las claves. Va aquí y no en un correo: es justo donde
+                está pensando en darnos los nombres de su gente. */}
+            <p className="mt-7 rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-4 text-xs font-light text-mocha">
+              🔒 {T.equipo.nota}
+            </p>
+          </div>
+          <NavBtns
+            onBack={() => irA(N.textos)}
+            onNext={() => irA(N.resumen)}
+            nextEnabled={equipoListo}
+            nextLabel={T.ui.siguiente} backLabel={T.ui.atras} />
+        </div>
+      )}
+
+      {/* 11 · Resumen y cierre */}
       {step === N.resumen && (
         <div>
           <StepHeader q={T.resumenUi.titulo} hint={T.resumenUi.hint} />
@@ -1189,6 +1305,9 @@ export function ArranquePortal({
                 : []),
               ...(visibleNum.has(N.linea)
                 ? [{ ok: stepLineaReady, txt: T.resumenUi.llamadas, req: true }]
+                : []),
+              ...(equipoPedido
+                ? [{ ok: equipoListo, txt: T.equipo.q, req: true }]
                 : []),
               // Las cuentas las creamos nosotros: es UNA línea, no una por cuenta.
               // Listarle una por una algo que no le toca hacer se lee como tarea.
@@ -1224,24 +1343,23 @@ export function ArranquePortal({
                 <span className={r.ok ? "text-sage" : "text-mocha/75"}>{r.ok ? "✓" : "○"}</span>
                 <span className={`font-light ${r.ok ? "text-sand" : "text-mocha"}`}>
                   {r.txt}
-                  {r.req && !r.ok && <span className="ml-2 text-xs text-clay-bright">(falta — es esencial)</span>}
+                  {r.req && !r.ok && <span className="ml-2 text-xs text-clay-bright">{T.resumenUi.faltaEsencial}</span>}
                 </span>
               </div>
             ))}
           </div>
           {!nucleoListo && (
             <p className="mb-4 text-center text-sm font-light text-clay-bright">
-              Para avisarnos que arranquemos, completa lo marcado como esencial.
+              {T.resumenUi.completaEsenciales}
             </p>
           )}
           <div className="text-center">
             <NavBtns
-              onBack={() => irA(N.textos)}
+              onBack={() => irA(N.equipo)}
               onNext={finalizar}
               nextEnabled={nucleoListo}
               nextLabel={T.resumenUi.enviar}
-              loading={enviando}
-            />
+              loading={enviando} backLabel={T.ui.atras} />
           </div>
         </div>
       )}

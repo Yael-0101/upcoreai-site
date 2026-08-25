@@ -260,13 +260,57 @@ casos++;
   const panel = A.pasosVisibles(["panel"]);
   if (panel.includes("calendario")) fallos.push("[panel] se le pide compartir calendario");
   if (panel.includes("textos")) fallos.push("[panel] ve el paso de textos, que le saldría vacío");
+  // 🔴 SU EQUIPO (2026-08-25). El panel del director enseña cómo va cada asesor, y
+  // esos nombres no se le pedían a nadie: el portal se entregaba y alguien tenía que
+  // acordarse de preguntarlos — o no, y el tablero salía con el equipo entero en
+  // "Sin asignar". Se vigilan las DOS direcciones, como siempre.
+  if (!panel.includes("equipo")) fallos.push("[panel] NO se le pregunta quiénes son sus asesores");
+  for (const otra of ["agente", "voz", "web", "auto", "reactivacion"]) {
+    if (A.pasosVisibles([otra]).includes("equipo"))
+      fallos.push(`[${otra}] se le pide su equipo de ventas y no compró el panel`);
+  }
 
   const agente = A.pasosVisibles(["agente"]);
   if (agente.includes("linea")) fallos.push("[agente] se le pregunta por el desvío del teléfono");
 
+  // 🔴 CADA PASO TIENE QUE PODER PINTARSE (2026-08-25).
+  //
+  // El componente numera los pasos por su posición en `PASOS_EN_ORDEN`. Cuando esa
+  // lista estaba copiada dentro del componente y se le olvidó el paso nuevo,
+  // `numDePaso("equipo")` devolvía 0 —`indexOf` no lo encontraba— y ese paso **no se
+  // pintaba jamás**, mientras su fila SÍ salía en el resumen marcada como esencial:
+  // un portal imposible de terminar, sin un solo error. Los guardianes estaban en
+  // verde porque miraban `pasosVisibles`, no la copia.
+  //
+  // Esto lo caza aunque alguien vuelva a separarlas: todo lo que `pasosVisibles`
+  // pueda devolver tiene que tener sitio en el orden del asistente.
+  for (const p of [...PIEZAS, null]) {
+    for (const id of A.pasosVisibles(p ? [p] : [])) {
+      if (!A.PASOS_EN_ORDEN.includes(id))
+        fallos.push(`el paso "${id}" se le muestra a alguien pero NO está en PASOS_EN_ORDEN: no se pintaría nunca`);
+    }
+  }
+  // Y al revés: un paso en el orden que nadie ve jamás es código muerto que engaña.
+  for (const id of A.PASOS_EN_ORDEN) {
+    const loVeAlguien = [...PIEZAS, null].some((p) => A.pasosVisibles(p ? [p] : []).includes(id));
+    if (!loVeAlguien) fallos.push(`el paso "${id}" está en el orden y no se le muestra a NADIE`);
+  }
+
   // Fila vieja sin sembrar: se le muestra TODO (misma regla que en el copy).
+  //
+  // 🔴 Esto decía `!== 10`, un número escrito a mano — y al agregar el paso del
+  // equipo el guardián tumbó el build por un crecimiento normal. Es la lección de la
+  // casa: un guardián comprueba COHERENCIA, nunca una cantidad exacta de algo que
+  // crece. Ahora se compara contra todos los pasos que alguna combinación puede
+  // producir, así que agregar uno nuevo no lo rompe — pero olvidarse de enseñárselo
+  // a una fila sin sembrar, sí.
   const vacio = A.pasosVisibles([]);
-  if (vacio.length !== 10) fallos.push(`[sin piezas] debería ver los 10 pasos, ve ${vacio.length}`);
+  const TODOS_LOS_PASOS = new Set();
+  for (const p of PIEZAS) for (const id of A.pasosVisibles([p])) TODOS_LOS_PASOS.add(id);
+  for (const id of TODOS_LOS_PASOS) {
+    if (!vacio.includes(id))
+      fallos.push(`[sin piezas] no ve el paso "${id}" — a un proyecto sin sembrar no se le esconde nada`);
+  }
   if (C.normalizarPiezas([]).length !== 6)
     fallos.push("[sin piezas] el copy no lo trata como 'todas', y se desalinea con los pasos");
 }

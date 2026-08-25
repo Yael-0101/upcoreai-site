@@ -198,7 +198,25 @@ export type TextosArranque = {
     hintMensajes: string;
   };
 
-  // ── 10 · Resumen y cierre ─────────────────────────────────────────────────
+  // ── 10 · Su equipo (solo con la pieza `panel`) ────────────────────────────
+  equipo: {
+    q: string;
+    hint: string;
+    labelNombre: string;
+    ejNombre: string;
+    labelRol: string;
+    /** Las etiquetas de los roles, por su CLAVE guardada. La clave no se traduce. */
+    roles: Record<string, string>;
+    rolAyuda: string;
+    agregar: string;
+    quitar: string;
+    labelComision: string;
+    ejComision: string;
+    comisionAyuda: string;
+    nota: string;
+  };
+
+  // ── 11 · Resumen y cierre ─────────────────────────────────────────────────
   resumen: {
     etiquetaNumeroChat: string;
     etiquetaNumeroMensajes: string;
@@ -264,6 +282,11 @@ export type TextosArranque = {
     estiloSitio: string;
     textosAprobados: string;
     enviar: string;
+    /** 🔴 Estas dos estaban escritas a mano dentro del componente, en español, y
+     *  salían tal cual en el portal en INGLÉS (2026-08-25). El guardián de
+     *  vocabulario mira el copy, no el JSX. */
+    faltaEsencial: string;
+    completaEsenciales: string;
   };
 
   /** Frases largas que en el JSX van partidas por <strong>. Se guardan enteras y
@@ -575,6 +598,29 @@ const ES: TextosArranque = {
     hintMensajes: "Recordatorios y confirmaciones que mandará tu sistema — tú les das el visto bueno.",
   },
 
+  equipo: {
+    q: "Tu equipo de ventas",
+    hint:
+      "Tu panel te enseña cómo va cada asesor, así que necesitamos saber quiénes son. " +
+      "A cada uno le creamos su propio acceso: ve sus compradores y sus visitas, y nada más. " +
+      "Quien dirige ve a todo el equipo.",
+    labelNombre: "Nombre",
+    ejNombre: "Ana Ruiz",
+    labelRol: "Qué ve",
+    // ⚠️ Las CLAVES no se traducen: son lo que se guarda y lo que acaba en su acceso.
+    roles: { asesor: "Solo lo suyo", director: "Todo el equipo" },
+    rolAyuda: "Puedes poner a más de una persona como dirección.",
+    agregar: "Agregar a alguien",
+    quitar: "Quitar",
+    labelComision: "Lo que te deja una venta, en promedio",
+    ejComision: "18,000",
+    comisionAyuda:
+      "Solo lo usamos cuando un asesor marca una venta sin escribir el importe. Es tuyo y no se publica en ningún lado.",
+    nota:
+      "Sus claves las creamos nosotros y te las pasamos por videollamada, una por persona. " +
+      "Nunca van por chat ni por correo, y tampoco las guardamos escritas.",
+  },
+
   resumen: {
     etiquetaNumeroChat: "Decisión del número de WhatsApp",
     etiquetaNumeroMensajes: "Número desde el que salen tus mensajes",
@@ -643,6 +689,8 @@ const ES: TextosArranque = {
     estiloSitio: "Estilo de tu sitio: paleta y referencias",
     textosAprobados: "Textos aprobados",
     enviar: "Mi parte está lista 🚀",
+    faltaEsencial: "(falta — es esencial)",
+    completaEsenciales: "Para avisarnos que arranquemos, completa lo marcado como esencial.",
   },
 
   prosa: {
@@ -935,6 +983,28 @@ const EN: TextosArranque = {
     hintMensajes: "Reminders and confirmations your system will send — you sign off on them.",
   },
 
+  equipo: {
+    q: "Your sales team",
+    hint:
+      "Your dashboard shows you how each agent is doing, so we need to know who they are. " +
+      "We create a separate login for each one: they see their own buyers and visits, and nothing else. " +
+      "Whoever runs the team sees everyone.",
+    labelNombre: "Name",
+    ejNombre: "Ana Ruiz",
+    labelRol: "What they see",
+    roles: { asesor: "Only their own", director: "The whole team" },
+    rolAyuda: "You can set more than one person as management.",
+    agregar: "Add someone",
+    quitar: "Remove",
+    labelComision: "What a sale leaves you, on average",
+    ejComision: "18,000",
+    comisionAyuda:
+      "We only use it when an agent marks a sale without entering the amount. It is yours and it is never published anywhere.",
+    nota:
+      "We create their keys and hand them to you on a video call, one per person. " +
+      "They never travel by chat or email, and we do not keep them written down either.",
+  },
+
   resumen: {
     etiquetaNumeroChat: "WhatsApp number decision",
     etiquetaNumeroMensajes: "Number your messages go out from",
@@ -1001,6 +1071,8 @@ const EN: TextosArranque = {
     estiloSitio: "Your site's style: palette and references",
     textosAprobados: "Copy approved",
     enviar: "My part is ready 🚀",
+    faltaEsencial: "(missing — this one is essential)",
+    completaEsenciales: "To tell us to get started, fill in everything marked as essential.",
   },
 
   prosa: {
