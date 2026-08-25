@@ -49,6 +49,7 @@ import {
   hayWeb,
   normalizarPiezas,
   pideEscalacion,
+  pidePrecios,
 } from "@/lib/arranque-copy";
 
 type Step = number | "listo";
@@ -90,6 +91,9 @@ const ICONO_TONO: Record<string, string> = {
 };
 const ICONO_VIA: Record<string, string> = {
   whatsapp: "💬", correo: "✉️", ambos: "🔔",
+};
+const ICONO_PRECIO: Record<string, string> = {
+  transfiere: "🤝", publicado: "🌐", "en-vivo": "🔄",
 };
 const tonoOptions = (idioma: Idioma): Option[] =>
   TA[idioma].tonos.map((t) => ({ val: t.val, label: t.label, icon: ICONO_TONO[t.val] ?? "💬", desc: t.desc }));
@@ -266,6 +270,8 @@ export function ArranquePortal({
     patch({ checklist: { ...d.checklist, ...p } });
   const setEscalacion = (p: Partial<ArranqueDatos["escalacion"]>) =>
     patch({ escalacion: { ...d.escalacion, ...p } });
+  const setPrecios = (p: Partial<ArranqueDatos["precios"]>) =>
+    patch({ precios: { ...d.precios, ...p } });
   const setServicio = (i: number, p: Partial<ServicioItem>) =>
     setChecklist({
       servicios: d.checklist.servicios.map((s, j) => (j === i ? { ...s, ...p } : s)),
@@ -303,9 +309,19 @@ export function ArranquePortal({
   // esperando por un dato que su pantalla nunca le pide — un checklist imposible de
   // terminar, en silencio (lección 2026-08-16).
   const escalacionPedida = pideEscalacion(piezas);
+  // Qué hace con los precios: mismo criterio que la escalación — solo con asistente,
+  // porque una web sola no le contesta a nadie. Y cada modo exige lo suyo: pedirle la
+  // frase de su web a quien eligió transferir dejaría su checklist sin poder terminar.
+  const preciosPedidos = pidePrecios(piezas);
+  const preciosListos =
+    !preciosPedidos ||
+    (d.precios.modo === "transfiere" ||
+      (d.precios.modo === "publicado" && d.precios.publicado.trim() !== "") ||
+      (d.precios.modo === "en-vivo" && d.precios.fuente.trim() !== ""));
   const step3Ready =
     d.checklist.horarios.trim() !== "" &&
     (!txtHorarios.pideTono || !!d.checklist.tono) &&
+    preciosListos &&
     (!escalacionPedida ||
       (d.escalacion.nombre.trim() !== "" &&
         d.escalacion.telefono.trim() !== "" &&
@@ -644,6 +660,84 @@ export function ArranquePortal({
                     </div>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* 🔄 Qué hace con los precios — lo elige el cliente (2026-08-25).
+                Se pregunta de DÓNDE sale el dato, nunca "¿puede decir precios?": con un
+                sí/no casi todos dirían que sí sin pensarlo, y acabaríamos con asistentes
+                diciendo precios vencidos con total seguridad, que es justo el daño que la
+                regla vieja evitaba. Por eso no hay ningún campo donde teclear un número. */}
+            {preciosPedidos && (
+              <div className="rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5">
+                <div className="mb-1 text-sm font-semibold text-sand">
+                  {T.horarios.preciosTitulo}
+                </div>
+                <p className="mb-4 text-sm font-light text-mocha">{T.horarios.preciosHint}</p>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {T.modosPrecio.map((m) => (
+                    <OptionBtn
+                      key={m.val}
+                      opt={{ val: m.val, label: m.label, icon: ICONO_PRECIO[m.val] ?? "💬", desc: m.desc }}
+                      selected={d.precios.modo === m.val}
+                      onClick={() => setPrecios({ modo: m.val })}
+                    />
+                  ))}
+                </div>
+                {/* El campo de detalle sale SOLO con el modo que lo necesita: pedirle la
+                    frase de su web a quien eligió transferir es ruido, y un campo vacío
+                    que nadie va a usar deja su checklist incompleto para siempre. */}
+                {d.precios.modo === "publicado" && (
+                  <div className="mt-4">
+                    <Field
+                      label={T.horarios.preciosPublicadoLabel}
+                      type="text"
+                      value={d.precios.publicado}
+                      placeholder={T.horarios.ejPreciosPublicado}
+                      onChange={(v) => setPrecios({ publicado: v })}
+                    />
+                  </div>
+                )}
+                {d.precios.modo === "en-vivo" && (
+                  <div className="mt-4">
+                    <Field
+                      label={T.horarios.preciosFuenteLabel}
+                      type="text"
+                      value={d.precios.fuente}
+                      placeholder={T.horarios.ejPreciosFuente}
+                      onChange={(v) => setPrecios({ fuente: v })}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 🔒 El suelo: lo único que NO puede quitar, y lo VE (decisión de Yael,
+                2026-08-25). Enseñárselo es argumento de venta, no letra chica: le dice
+                que sabemos lo que hacemos. Escondido, el día que pregunte "¿por qué mi
+                asistente dijo eso?" parecería que le ocultamos algo. */}
+            {escalacionPedida && (
+              <div className="rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5">
+                <div className="mb-1 flex items-center gap-2 text-sm font-semibold text-sand">
+                  <span aria-hidden>🔒</span>
+                  {T.horarios.sueloTitulo}
+                </div>
+                <p className="mb-4 text-sm font-light text-mocha">{T.horarios.sueloHint}</p>
+                <ul className="grid gap-3">
+                  {T.suelo.map((s) => (
+                    <li
+                      key={s.titulo}
+                      className="rounded-xl border border-[rgba(242,231,219,0.1)] bg-[rgba(242,231,219,0.02)] p-4"
+                    >
+                      <div className="text-sm font-semibold text-sand">{s.titulo}</div>
+                      <p className="mt-1 text-sm font-light leading-relaxed text-mocha">{s.que}</p>
+                      <p className="mt-1.5 text-xs font-light leading-relaxed text-mocha">
+                        <span className="font-semibold text-clay-bright">Por qué: </span>
+                        {s.porque}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
           </div>

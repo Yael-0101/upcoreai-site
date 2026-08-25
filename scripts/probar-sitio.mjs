@@ -68,6 +68,20 @@ const AFIRMA = /(precios?|disponibilidad|inventario|unidades disponibles|quedan 
 // del 2026-08-08, del lado que estorba en vez del que deja pasar.
 const NIEGA =
   /\bno\s+(da|dice|publica|promete|cotiza|menciona|confirma|se publica)\b|no se publica|nunca (lo dice|da|los da|las da)|cambian? (a diario|por l[ií]nea|seguido)|caduca|pasa (a|al) (tu |su )?asesor|lo(s|as)? confirma (tu|su) asesor|se l(a|o)s? confirma|es a prop[óo]sito|disponibilidad ininterrumpida/i;
+
+// 🔄 AMPLIADO EL 2026-08-25 — antes esta regla ENCODEABA la política vieja.
+//
+// Desde esa fecha el cliente elige qué hace su asistente con precios, disponibilidad y
+// fechas. Así que "el sitio no puede afirmar que los da" dejó de ser cierto: lo que no
+// puede es prometerlos **a secas**, como si salieran de la nada. Si el texto dice que lo
+// elige el cliente, o de qué fuente salen, es exacto y tiene que poder decirse.
+//
+// Lo que la regla sigue protegiendo, que es lo importante: que el marketing no prometa un
+// número que nadie mantiene. Un asistente inventándose un precio de preventa es el reclamo
+// que todo esto existe para evitar — y por eso "nunca se lo inventa" sigue siendo la frase
+// que acompaña siempre.
+const LO_ELIGE_EL_CLIENTE =
+  /t[úu] decides|t[úu] eliges|si prefieres|lo eliges|se configura|la fuente que t[úu]|tu lista de precios|que ya publicas|you decide|you choose|if you'?d rather|configured separately|the source you keep|you already publish/i;
 const SUJETO = /(asistente|sistema|sitio|p[áa]gina|web|bot|panel|agente)/i;
 
 /** Una palabra COMPLETA en español.
@@ -109,7 +123,13 @@ for (const a of archivos()) {
       // Oración por oración suelta, ninguna de las dos disparaba: la primera no
       // nombra al sistema y la segunda no nombra el dato. Mirando el par, sí.
       const par = [oraciones[i], oraciones[i + 1] ?? ""].join(" ");
-      if (AFIRMA.test(par) && SUJETO.test(par) && HABLA.test(par) && !NIEGA.test(par)) {
+      if (
+        AFIRMA.test(par) &&
+        SUJETO.test(par) &&
+        HABLA.test(par) &&
+        !NIEGA.test(par) &&
+        !LO_ELIGE_EL_CLIENTE.test(par)
+      ) {
         marca(
           `${rel}:${linea}`,
           "promete precio / disponibilidad / fecha de entrega",

@@ -118,9 +118,25 @@ export type TextosArranque = {
     escalacionAvisoVoz: string;
     escalacionAvisoChat: string;
     escalacionVia: string;
+    // 🔄 Qué hace su asistente con precios, disponibilidad y fechas de entrega
+    // (decisión de Yael, 2026-08-25: lo elige el cliente). Ver `pidePrecios`.
+    preciosTitulo: string;
+    preciosHint: string;
+    preciosPublicadoLabel: string;
+    ejPreciosPublicado: string;
+    preciosFuenteLabel: string;
+    ejPreciosFuente: string;
+    // 🔒 Las reglas que NO puede quitar, y que VE. No es desconfianza: son las dos
+    // únicas donde el daño no tiene marcha atrás, y las dos son de ley de EE.UU.
+    sueloTitulo: string;
+    sueloHint: string;
   };
   viasAviso: Array<{ val: string; label: string; desc: string }>;
   tonos: Array<{ val: string; label: string; desc: string }>;
+  /** De dónde salen los precios que dice el asistente. Nunca "sí/no". */
+  modosPrecio: Array<{ val: string; label: string; desc: string }>;
+  /** Las reglas del suelo, tal como las lee el cliente. */
+  suelo: Array<{ id: string; titulo: string; que: string; porque: string }>;
 
   // ── 4 · Número de WhatsApp ────────────────────────────────────────────────
   numero: {
@@ -420,6 +436,16 @@ const ES: TextosArranque = {
     escalacionAvisoChat:
       "⚠️ Que sea el número DIRECTO de esa persona, no un buzón que revisa todo el equipo. Un aviso que es de todos no es de nadie, y quien esperaba respuesta se enfría.",
     escalacionVia: "¿Por dónde le llega el aviso? *",
+    preciosTitulo: "¿Qué hace con los precios? *",
+    preciosHint:
+      "Cuando un comprador pregunta cuánto cuesta una unidad, si queda disponibilidad o cuándo entregan. Tú decides — y lo que eliges es de dónde sale el dato, no si puede decirlo.",
+    preciosPublicadoLabel: "¿Qué dice tu web hoy? Cópialo tal cual, con el link",
+    ejPreciosPublicado: "Preventa desde $230,000 — tusitio.com/proyectos",
+    preciosFuenteLabel: "¿Dónde tienes tu lista de precios al día?",
+    ejPreciosFuente: "Follow Up Boss / una hoja de Google / nuestro sistema propio",
+    sueloTitulo: "Tres cosas que tu asistente hace siempre",
+    sueloHint:
+      "Todo lo demás lo eliges tú. Estas tres no se pueden quitar, y te las decimos de frente porque son las que te protegen a ti.",
   },
   // ⚠️ Aquí NO va la opción "llamada", y no es un olvido: el guardián la cazó
   // colándose en el portal de un cliente que solo compró el asistente de chat, y
@@ -435,6 +461,49 @@ const ES: TextosArranque = {
     { val: "profesional", label: "Profesional y directo", desc: "Claro, sin rodeos" },
     { val: "elegante", label: "Elegante y discreto", desc: "Tono de firma premium" },
     { val: "fresco", label: "Fresco y relajado", desc: "Juvenil, sin perder respeto" },
+  ],
+  // ⚠️ El `val` NUNCA se traduce: es lo que se guarda y lo que lee el sistema. Si
+  // cambiara con el idioma, el cliente elegiría una cosa y se guardaría otra.
+  modosPrecio: [
+    {
+      val: "transfiere",
+      label: "Que lo pase con un asesor",
+      desc: "No dice precios ni disponibilidad: te pasa al comprador con lo que ya averiguó. En llamada te lo pasa en caliente, con el caso resumido.",
+    },
+    {
+      val: "publicado",
+      label: "Solo lo que ya publico",
+      desc: "Puede repetir el rango que ya está en tu web (“desde $230,000”), nunca el precio de una unidad concreta. Nos das la frase y el link.",
+    },
+    {
+      val: "en-vivo",
+      label: "Que lo consulte en el momento",
+      desc: "Lee tu lista de precios cada vez que alguien pregunta, igual que ya hace con tu calendario. El dato está tan al día como tu fuente. Necesita conectarse a donde la tengas.",
+    },
+  ],
+  // ⚠️ El `id` NO se traduce, igual que los `val`: es lo que permite comprobar que una
+  // regla sigue siendo la que dice ser. Sin él, el guardián solo podía buscar palabras
+  // sueltas en el bloque — y al cambiar el título por lo contrario no se enteraba,
+  // porque la palabra seguía apareciendo en el motivo.
+  suelo: [
+    {
+      id: "vivienda-justa",
+      titulo: "Nunca opina sobre un vecindario ni sobre quién vive ahí",
+      que: "Da datos objetivos —dónde está, a cuánto del aeropuerto— y pasa al asesor cualquier pregunta sobre el perfil de la zona.",
+      porque: "Lo prohíbe la ley federal de vivienda justa, y la responsabilidad cae en el bróker. Es la regla que más fácil se rompe sin querer, porque el comprador la pregunta con toda inocencia.",
+    },
+    {
+      id: "se-identifica",
+      titulo: "Siempre dice que es un asistente, y avisa si la llamada se graba",
+      que: "Lo dice en la primera frase, antes de nada.",
+      porque: "Florida exige el consentimiento de las dos partes: grabar sin avisar no es una falta de estilo, es un delito estatal.",
+    },
+    {
+      id: "no-inventa",
+      titulo: "Nunca inventa",
+      que: "Si no tiene el dato, lo dice o te lo pasa. No se lo imagina.",
+      porque: "Un dato equivocado dicho con seguridad es peor que no darlo, y te lo reclaman a ti.",
+    },
   ],
 
   numero: {
@@ -735,6 +804,16 @@ const EN: TextosArranque = {
     escalacionAvisoChat:
       "⚠️ Make it that person's DIRECT number, not an inbox the whole team checks. An alert that belongs to everyone belongs to no one, and whoever was waiting goes cold.",
     escalacionVia: "How should the alert reach them? *",
+    preciosTitulo: "What does it do about pricing? *",
+    preciosHint:
+      "For when a buyer asks what a unit costs, whether anything is left, or when it delivers. You decide — and what you're choosing is where the number comes from, not whether it may say it.",
+    preciosPublicadoLabel: "What does your site say today? Copy it exactly, with the link",
+    ejPreciosPublicado: "Pre-construction from $230,000 — yoursite.com/projects",
+    preciosFuenteLabel: "Where do you keep your up-to-date price list?",
+    ejPreciosFuente: "Follow Up Boss / a Google Sheet / our own system",
+    sueloTitulo: "Three things your assistant always does",
+    sueloHint:
+      "Everything else is your call. These three can't be removed, and we tell you upfront because they're the ones protecting you.",
   },
   viasAviso: [
     { val: "whatsapp", label: "WhatsApp", desc: "They see it right away" },
@@ -746,6 +825,45 @@ const EN: TextosArranque = {
     { val: "profesional", label: "Professional and direct", desc: "Clear, no detours" },
     { val: "elegante", label: "Elegant and understated", desc: "A premium firm's tone" },
     { val: "fresco", label: "Fresh and relaxed", desc: "Youthful, still respectful" },
+  ],
+  // ⚠️ Los `val` son IDÉNTICOS a los del español: es lo que se guarda y lo que lee el
+  // sistema. Solo cambian las etiquetas.
+  modosPrecio: [
+    {
+      val: "transfiere",
+      label: "Hand it to an advisor",
+      desc: "It gives no pricing or availability: it hands you the buyer with what it already learned. On a call it transfers live, with the case summarized.",
+    },
+    {
+      val: "publicado",
+      label: "Only what I already publish",
+      desc: "It can repeat the range already on your site (“from $230,000”), never the price of a specific unit. You give us the wording and the link.",
+    },
+    {
+      val: "en-vivo",
+      label: "Look it up in the moment",
+      desc: "It reads your price list every time someone asks, the same way it already reads your calendar. The number is as current as your source. It needs to connect to wherever you keep it.",
+    },
+  ],
+  suelo: [
+    {
+      id: "vivienda-justa",
+      titulo: "It never comments on a neighborhood or on who lives there",
+      que: "It gives objective facts — where it is, how far from the airport — and hands any question about the area's profile to your advisor.",
+      porque: "Federal fair housing law prohibits it, and the liability falls on the broker. It's the rule that's easiest to break by accident, because buyers ask it in all innocence.",
+    },
+    {
+      id: "se-identifica",
+      titulo: "It always says it's an assistant, and warns if the call is recorded",
+      que: "In the first sentence, before anything else.",
+      porque: "Florida requires two-party consent: recording without warning isn't a matter of style, it's a state crime.",
+    },
+    {
+      id: "no-inventa",
+      titulo: "It never makes anything up",
+      que: "If it doesn't have the answer, it says so or hands it to you. It doesn't guess.",
+      porque: "A wrong answer delivered confidently is worse than no answer, and you're the one who gets the complaint.",
+    },
   ],
 
   numero: {

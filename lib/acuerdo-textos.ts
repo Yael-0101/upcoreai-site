@@ -426,15 +426,37 @@ const ES: Textos = {
         "información que tú apruebes y agenda visitas. Impuestos, FIRPTA, cómo conviene " +
         "escriturar, condiciones de crédito o temas de visa se derivan a tu equipo, a tu " +
         "abogado o a tu contador — el asistente lo dice así de claro.",
+      // 🔄 Reescrita el 2026-08-25. Antes prometía que el sistema NO da precios,
+      // disponibilidad ni fechas — y desde esa fecha eso lo elige el CLIENTE. Un contrato
+      // que promete lo contrario de lo que compró es justo el defecto del 21 de agosto.
+      //
+      // ⚠️ Y no puede nombrar el modo concreto: este acuerdo se firma ANTES del Portal de
+      // Arranque, así que cuando lo lee todavía no ha elegido. Por eso dice que lo elige
+      // él y con qué consecuencia, no lo que eligió.
       noDice: (conAsistente) =>
-        `**Lo que el sistema NO dice, por diseño:** no da precios, ni disponibilidad de ` +
-        `unidades, ni fechas de entrega. En preventa esos tres datos cambian por línea, piso ` +
-        `y etapa, y un dato vencido por escrito es una promesa que alguien te va a reclamar. ` +
+        `**Qué dice y qué no lo defines tú.** Al arrancar eliges qué hace el sistema con ` +
+        `los precios, la disponibilidad y las fechas de entrega: no darlos y pasar la ` +
+        `conversación a tu asesor —lo predeterminado—, repetir solo lo que ya publicas, o ` +
+        `consultarlos en el momento en la fuente que tú mantengas. **Si eliges que los diga, ` +
+        `salen de esa fuente y tú respondes por ella:** en preventa esos datos cambian por ` +
+        `línea, piso y etapa, y un dato vencido por escrito es una promesa que alguien te va ` +
+        `a reclamar. ` +
         (conAsistente
-          ? `Cuando un comprador pregunta eso, el asistente se lo dice con claridad y lo pasa ` +
-            `a tu asesor. `
-          : `Por eso no se publican en el sitio. `) +
-        `Es una decisión de diseño para protegerte, no una limitación.`,
+          ? `Con la opción predeterminada, cuando un comprador pregunta eso el asistente se ` +
+            `lo dice con claridad y lo pasa a tu asesor. `
+          : `El sitio no los publica salvo que tú lo indiques. `) +
+        `\n\n**Lo que no se puede cambiar, y va siempre:** el sistema nunca opina sobre un ` +
+        `vecindario ni sobre quién vive ahí —lo prohíbe la ley federal de vivienda justa y ` +
+        `la responsabilidad recae en el bróker—, ` +
+        // ⚠️ Identificarse y avisar de la grabación solo tiene sentido si hay algo que
+        // conversa. En un contrato de solo-web o solo-panel, nombrar al asistente es
+        // hablarle de una pieza que no compró (lección 2026-08-16).
+        (conAsistente
+          ? `siempre dice que es un asistente y avisa si la llamada puede grabarse —Florida ` +
+            `exige el consentimiento de las dos partes—, y `
+          : ``) +
+        `nunca inventa: si no tiene el dato, lo dice o lo deja en manos de tu equipo. ` +
+        `Son las reglas que no puedes quitar, y las ves en tu configuración.`,
       siResponde:
         "**Lo que sí responde es la información que tú apruebas** (ubicación, amenidades, " +
         "generalidades del desarrollo, cómo es el proceso de compra). Si cambia algo de tu " +
@@ -732,14 +754,26 @@ const EN: Textos = {
         "financing terms or visa matters are referred to your team, your attorney or your " +
         "accountant — and the assistant says so plainly.",
       noDice: (conAsistente) =>
-        `**What the system does NOT say, by design:** it gives no prices, no unit availability, ` +
-        `and no delivery dates. In preconstruction those three change by line, floor and phase, ` +
-        `and a stale figure in writing is a promise someone will hold you to. ` +
+        `**What it says and what it doesn't is up to you.** At kickoff you choose what the ` +
+        `system does with prices, availability and delivery dates: withhold them and hand the ` +
+        `conversation to your agent —the default—, repeat only what you already publish, or ` +
+        `look them up in the moment from a source you keep current. **If you choose to have it ` +
+        `state them, they come from that source and you stand behind it:** in preconstruction ` +
+        `those figures change by line, floor and phase, and a stale one in writing is a promise ` +
+        `someone will hold you to. ` +
         (conAsistente
-          ? `When a buyer asks for that, the assistant says so clearly and hands them to your ` +
-            `agent. `
-          : `That is why they are not published on the site. `) +
-        `It is a design decision to protect you, not a limitation.`,
+          ? `On the default setting, when a buyer asks for that the assistant says so clearly ` +
+            `and hands them to your agent. `
+          : `The site does not publish them unless you say otherwise. `) +
+        `\n\n**What cannot be changed, and always applies:** the system never comments on a ` +
+        `neighborhood or on who lives there —federal fair housing law prohibits it and the ` +
+        `liability falls on the broker—, ` +
+        (conAsistente
+          ? `it always states that it is an assistant and warns that a call may be recorded ` +
+            `—Florida requires two-party consent—, and `
+          : ``) +
+        `it never makes anything up: if it lacks the answer, it says so or leaves it to your ` +
+        `team. Those are the rules you cannot remove, and you see them in your settings.`,
       siResponde:
         "**What it does answer is the information you approve** (location, amenities, general " +
         "details of the development, how the buying process works). If something changes on " +

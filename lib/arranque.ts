@@ -75,6 +75,23 @@ export type ArranqueDatos = {
    *  hablar con una persona. El teléfono es DIRECTO, nunca el público de la firma
    *  (con desvío, el agente entra porque ese ya no contestó). Ver `pideEscalacion`. */
   escalacion: { nombre: string; telefono: string; via: string | null };
+  /**
+   * Qué hace el asistente con precios, disponibilidad y fechas de entrega.
+   *
+   * 🔄 Antes era una línea roja de la casa (no los daba y punto). Desde el 2026-08-25
+   * lo elige el CLIENTE, junto con el resto del comportamiento.
+   *
+   * ⚠️ Lo que elige es de DÓNDE sale el dato, nunca el dato: no hay ningún campo donde
+   * teclear un precio, y eso es a propósito. Un número escrito a mano está vencido en
+   * semanas y el asistente lo dice con toda seguridad — que es el daño exacto que la
+   * regla vieja evitaba.
+   *   · transfiere → no los da, pasa al asesor (por defecto)
+   *   · publicado  → repite el rango que ya está en su web; `publicado` lleva la frase
+   *                  textual y su URL
+   *   · en-vivo    → consulta su fuente en el momento, como ya hacemos con la agenda;
+   *                  `fuente` dice dónde la tiene
+   */
+  precios: { modo: string | null; publicado: string; fuente: string };
   concierge: ConciergeDatos;
   cuentas: Record<string, CuentaEstado>;
   calendario: { compartido: boolean; tipo: string };
@@ -159,6 +176,9 @@ export function normalizarDatos(d: unknown): ArranqueDatos {
     numero: { decision: null, ...(x.numero ?? {}) },
     linea: { decision: null, ...(x.linea ?? {}) },
     escalacion: { nombre: "", telefono: "", via: null, ...(x.escalacion ?? {}) },
+    // Por defecto `transfiere`: es el modo que no le exige nada al cliente y el que
+    // no puede decir un dato vencido. Los otros dos son una elección consciente suya.
+    precios: { modo: null, publicado: "", fuente: "", ...(x.precios ?? {}) },
     concierge: {
       modo: null,
       correoTipo: null,

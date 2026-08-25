@@ -38,14 +38,16 @@ const ARCHIVOS = [
   "app/arranque/[token]/page.tsx",
 ];
 
-/** Quita comentarios de línea y de bloque: queda el código + el texto visible. */
-const soloVivo = (s) =>
-  s
-    .split("\n")
-    .map((l) => l.replace(/(^|\s)\/\/.*$/, "$1"))
-    .join("\n")
-    .replace(/\/\*[\s\S]*?\*\//g, " ")
-    .replace(/\{\/\*[\s\S]*?\*\/\}/g, " ");
+// 🔴 ANTES ESTO ERA UNA COPIA PEGADA, y pasó exactamente lo que su módulo advertía
+// (2026-08-25). `lib-textos-visibles.mjs` nació para que los dos guardianes compartieran
+// esta función, y su comentario dice: "una copia pegada se desfasa: el día que uno
+// aprenda a ver un caso nuevo, el otro se quedaría ciego". Aquí la copia se quedó.
+//
+// Al arreglar en el módulo el bug del `split("\n")` —que con saltos de Windows dejaba un
+// "\r" y hacía que NO se borraran los comentarios—, este guardián siguió con el defecto:
+// marcaba como fugas del nicho los comentarios que documentan fugas ya arregladas, y con
+// eso tumbaba el build. Ahora se importa, y no hay dónde desfasarse.
+import { soloVivo } from "./lib-textos-visibles.mjs";
 
 /**
  * Cada regla mira SOLO dentro de cadenas entrecomilladas o de texto JSX, porque

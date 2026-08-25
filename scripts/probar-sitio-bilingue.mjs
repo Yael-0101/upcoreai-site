@@ -359,6 +359,17 @@ for (const og of ["opengraph-image.tsx", "solutions/[slug]/opengraph-image.tsx",
   const HABLA_EN =
     /\b(says?|tells?|gives?|answers?|replies|reply|mentions?|quotes?|confirms?|shares?|provides?|responds?|discloses?)\b/i;
 
+  // 🔄 AMPLIADO EL 2026-08-25, igual que en probar-sitio.mjs: desde esa fecha el cliente
+  // elige qué hace su asistente con esos datos, así que afirmarlos DICIENDO que lo elige
+  // él —o de qué fuente salen— es exacto y tiene que poder decirse. Lo que se sigue
+  // prohibiendo es prometerlos a secas, como si el número saliera de la nada.
+  //
+  // ⚠️ Este guardián es el tercero con esta misma regla (los otros: probar-sitio.mjs y
+  // probar-acuerdo.mjs). Al cambiar la política hubo que perseguirla por los tres, y este
+  // fue el último en aparecer — solo disparaba en INGLÉS, que es donde nadie mira.
+  const LO_ELIGE_EN =
+    /you decide|you choose|if you'?d rather|you'?d like it to|configured separately|the source you keep|you already publish|up to you/i;
+
   const revisarLinea = (obj, donde) => {
     for (const [r, txt] of cadenas(obj)) {
       const oraciones = txt.split(/(?<=[.;])\s+/);
@@ -373,7 +384,8 @@ for (const og of ["opengraph-image.tsx", "solutions/[slug]/opengraph-image.tsx",
           AFIRMA_EN.test(par) &&
           SUJETO_EN.test(par) &&
           HABLA_EN.test(par) &&
-          !NIEGA_EN.test(par)
+          !NIEGA_EN.test(par) &&
+          !LO_ELIGE_EN.test(par)
         ) {
           marca(donde, `promete precio/disponibilidad/fecha en ${r}`, "línea roja nº1 del producto", par.slice(0, 120));
         }

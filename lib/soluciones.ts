@@ -192,7 +192,10 @@ export const SOLUCIONES: Solucion[] = [
             // 🔴 Decía "Solo los que tú apruebes, y nunca inventa" — o sea, sí los
             // daba. Es la línea roja nº1 del producto y estaba prometida al revés
             // en la página que vende esa pieza.
-            a: "No, y es a propósito. En preventa el precio, la disponibilidad y la fecha de entrega cambian por línea, piso y etapa: un dato así caduca solo, y por escrito se convierte en un reclamo. El asistente lo dice con naturalidad —\"eso se lo confirma su asesor, porque cambia seguido\"— y agenda la llamada donde sí se lo dan al detalle. Impuestos, FIRPTA, escrituración o crédito los deriva siempre a tu asesor o a tu abogado.",
+            // 🔄 Reescrita el 2026-08-25: ahora lo elige el cliente. Lo que se dice es de
+            // DÓNDE sale el dato, nunca un "sí" a secas — un asistente inventándose un
+            // precio de preventa es el reclamo que esta respuesta existe para evitar.
+            a: "Tú decides, y lo que eliges es de dónde sale el dato. Por defecto no los da: pasa la conversación a tu asesor con lo que ya averiguó. Si prefieres que sí, puede repetir el rango que ya publicas en tu web, o consultar tu lista de precios en el momento —igual que ya consulta tu calendario—, así que el número está tan al día como tu fuente. Lo que nunca hace es inventárselo: en preventa el precio, la disponibilidad y la fecha cambian por línea, piso y etapa, y por escrito se convierten en un reclamo. Impuestos, FIRPTA, escrituración o crédito los deriva siempre a tu asesor o a tu abogado.",
           },
         ],
         pasos: [
@@ -299,7 +302,7 @@ export const SOLUCIONES: Solucion[] = [
           },
           {
             q: "Does it give prices or delivery dates?",
-            a: "No, and that is deliberate. In preconstruction the price, the availability and the delivery date change by line, floor and phase: a figure like that expires on its own, and in writing it turns into a complaint. The assistant says so naturally — \"your agent will confirm that, it changes often\" — and books the call where they get it in full. Taxes, FIRPTA, closing or financing are always handed to your agent or your attorney.",
+            a: "You decide, and what you choose is where the figure comes from. By default it doesn't give them: it hands the conversation to your agent with what it already learned. If you'd rather it did, it can repeat the range you already publish on your site, or look your price list up in the moment —the same way it already reads your calendar— so the number is as current as your source. What it never does is make one up: in preconstruction the price, the availability and the date change by line, floor and phase, and in writing they turn into a complaint. Taxes, FIRPTA, closing or financing are always handed to your agent or your attorney.",
           },
         ],
         pasos: [
@@ -597,7 +600,7 @@ export const SOLUCIONES: Solucion[] = [
           },
           {
             q: "¿Y si un desarrollo ya se agotó? ¿lo va a seguir ofreciendo?",
-            a: "No. Tú marcas ese desarrollo como pausado y el agente deja de mencionarlo y de agendar visitas para él; a quien pregunte por él, lo pasa con tu asesor. Lo que no hace nunca es decir cuántas unidades quedan ni en qué precio andan, porque eso cambia por línea, piso y etapa. Es a propósito: por teléfono un dato así se dice con toda seguridad y luego alguien lo reclama.",
+            a: "No. Tú marcas ese desarrollo como pausado y el agente deja de mencionarlo y de agendar visitas para él; a quien pregunte por él, lo pasa con tu asesor. Y nunca dice \"se agotó\" ni \"ya se vendió\": eso también es hablar de inventario, y en preventa cambia por línea, piso y etapa. Si quieres que sí dé precios o disponibilidad, se configura aparte y sale de la fuente que tú mantengas — lo que no hace en ningún caso es inventarse el dato, porque por teléfono se dice con toda seguridad y luego alguien lo reclama.",
           },
         ],
         seguridad: SEGURIDAD_ES,
@@ -664,7 +667,7 @@ export const SOLUCIONES: Solucion[] = [
           },
           {
             q: "What if a development is already sold out? Will it keep offering it?",
-            a: "No. You mark that development as paused and the agent stops mentioning it and stops booking tours for it; anyone who asks about it gets handed to your agent. What it never does is say how many units are left or what they cost, because that changes by line, floor and phase. It is deliberate: on a call a figure like that is said with total confidence, and later someone holds you to it.",
+            a: "No. You mark that development as paused and the agent stops mentioning it and stops booking tours for it; anyone who asks about it gets handed to your agent. And it never says \"sold out\" either: that is talking inventory too, and in preconstruction it changes by line, floor and phase. If you do want it to give prices or availability, that is configured separately and comes from the source you keep current — what it never does, either way, is make the figure up, because on a call it is said with total confidence and later someone holds you to it.",
           },
         ],
         seguridad: SEGURIDAD_EN,

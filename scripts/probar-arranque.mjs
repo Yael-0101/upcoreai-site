@@ -494,6 +494,105 @@ casos++;
   }
 }
 
+// ── 9 · Los precios los elige el cliente, y su checklist se puede TERMINAR ───
+//
+// 🔄 Desde el 2026-08-25 el cliente decide qué hace su asistente con precios,
+// disponibilidad y fechas. Aquí se vigila lo mismo que en el resto del portal, en las
+// DOS direcciones: que no se le pregunte a quien no compró asistente, y que sí se le
+// pregunte a quien sí. Y sobre todo, que cada modo se pueda completar: un requisito
+// que nadie le pide deja el checklist incompleto para siempre, sin dar error.
+for (const piezas of subconjuntos(PIEZAS)) {
+  casos++;
+  const hayAsistente = piezas.includes("agente") || piezas.includes("voz");
+  if (C.pidePrecios(piezas) !== hayAsistente) {
+    fallos.push(
+      `pidePrecios([${piezas}]) = ${C.pidePrecios(piezas)}; una web o un panel no conversan con nadie`
+    );
+  }
+  // Y la voz solo se elige si compró voz.
+  if (C.pideVoz(piezas) !== piezas.includes("voz")) {
+    fallos.push(`pideVoz([${piezas}]) no coincide con haber comprado el agente de voz`);
+  }
+}
+
+// Cada modo tiene que poder quedar completo. Se replica la MISMA condición que usa la
+// pantalla; si algún día se separan, esta prueba deja de valer — por eso se comprueban
+// los tres modos y también el caso de no elegir ninguno.
+const listo = (modo, publicado, fuente) =>
+  modo === "transfiere" ||
+  (modo === "publicado" && publicado.trim() !== "") ||
+  (modo === "en-vivo" && fuente.trim() !== "");
+
+for (const [modo, pub, fue, esperado] of [
+  ["transfiere", "", "", true],
+  ["publicado", "Preventa desde $230,000 — x.com", "", true],
+  ["publicado", "", "", false],
+  ["en-vivo", "", "Follow Up Boss", true],
+  ["en-vivo", "", "", false],
+  [null, "", "", false],
+]) {
+  casos++;
+  if (listo(modo, pub, fue) !== esperado) {
+    fallos.push(`modo de precios "${modo}" con detalle "${pub}${fue}": debería quedar ${esperado ? "completo" : "incompleto"}`);
+  }
+}
+
+// ── 10 · Los `val` NO se traducen, y el suelo está en los dos idiomas ────────
+//
+// El `val` es lo que se guarda y lo que lee el sistema: si cambiara con el idioma, el
+// cliente elegiría una cosa en inglés y se guardaría otra.
+casos++;
+const valsEs = (TA.es.modosPrecio || []).map((m) => m.val).join("|");
+const valsEn = (TA.en.modosPrecio || []).map((m) => m.val).join("|");
+if (valsEs !== valsEn || !valsEs) {
+  fallos.push(`los modos de precio no coinciden entre idiomas: es="${valsEs}" en="${valsEn}"`);
+}
+
+// 🔒 El suelo tiene que existir en los dos idiomas y nombrar sus dos motivos legales.
+// Si alguien lo vacía "para simplificar", el cliente deja de ver lo único que no puede
+// quitar — y el día que pregunte por qué su asistente dijo algo, no tiene dónde mirarlo.
+for (const idioma of ["es", "en"]) {
+  casos++;
+  const suelo = TA[idioma]?.suelo || [];
+  if (suelo.length < 3) {
+    fallos.push(`[${idioma}] el suelo no editable tiene ${suelo.length} reglas; deberían ser 3`);
+    continue;
+  }
+  // Se comprueba por ID, no buscando palabras en el bloque entero.
+  //
+  // 🔴 La primera versión juntaba título + qué + porqué y buscaba "fair housing" ahí
+  // dentro. Al cambiar el TÍTULO de la regla por su contrario ("responde lo que quieras
+  // sobre la zona") pasaba limpia, porque la palabra seguía apareciendo en el motivo.
+  // Buscar una palabra en un montón no comprueba nada: hay que mirar la pieza concreta.
+  const ids = suelo.map((s) => s.id).sort().join("|");
+  if (ids !== "no-inventa|se-identifica|vivienda-justa") {
+    fallos.push(`[${idioma}] los ids del suelo son "${ids}"; deberían ser los tres de siempre`);
+  }
+  // Y las dos prohibiciones tienen que seguir siendo PROHIBICIONES en su título: es
+  // exactamente por ahí por donde se convertiría una regla en su contraria.
+  for (const id of ["vivienda-justa", "no-inventa"]) {
+    casos++;
+    const r = suelo.find((s) => s.id === id);
+    if (!r) continue;
+    const niega = idioma === "es" ? /\bnunca\b/i : /\bnever\b/i;
+    if (!niega.test(r.titulo)) {
+      fallos.push(`[${idioma}] la regla "${id}" dejó de estar redactada como prohibición: "${r.titulo}"`);
+    }
+  }
+  // La de identificarse es una obligación, no una prohibición: se comprueba al revés.
+  casos++;
+  const ident = suelo.find((s) => s.id === "se-identifica");
+  const afirma = idioma === "es" ? /\bsiempre\b/i : /\balways\b/i;
+  if (ident && !afirma.test(ident.titulo)) {
+    fallos.push(`[${idioma}] la regla "se-identifica" dejó de decir que SIEMPRE lo hace: "${ident.titulo}"`);
+  }
+  // Cada regla dice POR QUÉ. Una prohibición sin motivo se lee como capricho nuestro.
+  casos++;
+  if (suelo.some((s) => !String(s.porque || "").trim())) {
+    fallos.push(`[${idioma}] alguna regla del suelo se quedó sin su motivo`);
+  }
+}
+
 // ── Veredicto ───────────────────────────────────────────────────────────────
 console.log(`Casos probados: ${casos}`);
 if (fallos.length) {

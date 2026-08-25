@@ -73,6 +73,33 @@ export const pideTono = (p: string[]) =>
  * contestó, así que mandar el aviso ahí es un bucle.
  */
 export const pideEscalacion = (p: string[]) => hayAsistente(p);
+
+/**
+ * ¿Le preguntamos qué hace su asistente con los precios?
+ *
+ * 🔄 CAMBIO DE POLÍTICA (decisión de Yael, 2026-08-25). Antes era una línea roja de la casa:
+ * el asistente no daba precios, disponibilidad ni fechas, y punto. Ahora **lo elige el
+ * cliente** — junto con el resto del comportamiento.
+ *
+ * ⚠️ Y lo que se elige es de DÓNDE sale el dato, nunca el dato en sí. Ese matiz es lo único
+ * que evita el daño que la regla vieja prevenía: un precio tecleado en la configuración está
+ * vencido en semanas y el asistente lo dice con toda seguridad. Por eso las opciones son
+ * transferir / repetir lo que él ya publica / consultar su fuente en vivo — y en ninguna hay
+ * un campo donde escribir un número.
+ *
+ * Solo con asistente: una web sola no conversa con nadie.
+ */
+export const pidePrecios = (p: string[]) => hayAsistente(p);
+
+/**
+ * ¿Le pedimos que elija la voz? Solo si compró el agente de voz.
+ *
+ * ⚠️ La elige OYENDO muestras, no leyendo etiquetas: el 19 de agosto casi ponemos en el
+ * teléfono de un comprador una voz "latinoamericana" cuya muestra estaba en inglés — de su
+ * español no habíamos oído una palabra. La etiqueta del proveedor dice la intención, no el
+ * resultado.
+ */
+export const pideVoz = (p: string[]) => hayVoz(p);
 /** Las preguntas frecuentes alimentan al asistente o llenan el sitio. */
 export const pideFaqs = (p: string[]) => hayAsistente(p) || hayWeb(p);
 export const pideLogo = (p: string[]) => tiene(p, "web", "panel");

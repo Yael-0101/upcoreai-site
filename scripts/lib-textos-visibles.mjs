@@ -19,7 +19,18 @@
  *  de verdad. */
 export const soloVivo = (s) =>
   s
-    .split("\n")
+    // 🔴 `split(/\r?\n/)`, NUNCA `split("\n")` (bug encontrado 2026-08-25, lección del
+    // 2026-08-05 aplicada aquí por fin). Estos archivos se guardan con saltos de Windows:
+    // partiendo solo por "\n" cada línea se queda con un "\r" invisible al final, y en
+    // JavaScript el "." de una expresión regular NO lo acepta — así que `\/\/.*$` no
+    // llegaba al final de la línea y el comentario NO se borraba.
+    //
+    // El daño era doble y silencioso: los dos guardianes que usan esto (el del Portal y
+    // el de la propuesta) marcaban como defecto los COMENTARIOS que documentan defectos
+    // ya arreglados —que por definición contienen las palabras prohibidas—, y con eso el
+    // build del sitio llevaba roto sin que ninguno de esos 3 "fallos" fuera real. Un
+    // guardián que grita en falso se acaba ignorando, y ahí es donde se cuela el de verdad.
+    .split(/\r?\n/)
     .map((l) => l.replace(/(^|\s)\/\/.*$/, "$1"))
     .join("\n")
     .replace(/\/\*[\s\S]*?\*\//g, " ")

@@ -235,16 +235,59 @@ for (const piezas of subconjuntos(VALS)) {
       // lo que la vuelve mala: nombrar esos datos está bien —hace falta para negarlos—;
       // lo que no se vale es afirmarlos. Un verificador que marcara la palabra suelta
       // tumbaría la frase correcta, que es el error del "cuántas" del 6 de agosto.
+      // 🔄 ACTUALIZADA EL 2026-08-25, porque la regla vieja pasó a ENCODEAR el defecto.
+      //
+      // Desde esa fecha el cliente elige qué hace su asistente con esos datos, así que
+      // exigir que el contrato lo NIEGUE ya no protege a nadie: obligaría al acuerdo a
+      // prometer lo contrario de lo que el cliente compró. Cuando una medida se pone roja
+      // por un cambio que sabes correcto, se comprueba cuál de los dos tiene razón — y
+      // aquí el equivocado era el guardián.
+      //
+      // Lo que sí se sigue vigilando, y es lo que de verdad importa: que el contrato no
+      // prometa esos datos **a secas**. Si dice que el sistema los da, tiene que decir en
+      // la misma oración que lo elige el cliente o que él responde por la fuente. Sin eso,
+      // el contrato estaría asumiendo por escrito una responsabilidad que no es nuestra.
       for (const oracion of texto.split(/(?<=[.;])\s+/)) {
         const nombraDatos =
           /precios?/i.test(oracion) &&
           /(disponibilidad|fechas? de entrega|inventario)/i.test(oracion);
         const loNiega = /\bno\s+(da|dice|publica|promete|cotiza|maneja)\b/i.test(oracion);
-        const esSobreElSistema = /(sistema|asistente|sitio|p[áa]gina)/i.test(oracion);
-        if (nombraDatos && esSobreElSistema && !loNiega) {
-          fallos.push(
-            `${etiqueta} afirma que el sistema da precios/disponibilidad/entregas: "${oracion.trim().slice(0, 80)}"`
+        const loEligeElCliente =
+          /(eliges|defines|elijes|t[úu] decides|si eliges|salvo que t[úu]|respondes por|mantengas|apruebes)/i.test(
+            oracion
           );
+        const esSobreElSistema = /(sistema|asistente|sitio|p[áa]gina)/i.test(oracion);
+        if (nombraDatos && esSobreElSistema && !loNiega && !loEligeElCliente) {
+          fallos.push(
+            `${etiqueta} promete precios/disponibilidad/entregas sin decir que los elige el cliente: "${oracion.trim().slice(0, 80)}"`
+          );
+        }
+      }
+
+      // 10b. 🔒 EL SUELO tiene que estar en el contrato, siempre.
+      //
+      // Es lo único que el cliente NO puede quitar, y las dos primeras son de ley de
+      // EE.UU. Si desaparecen del acuerdo, el documento deja de decir lo que de verdad
+      // no se negocia — y ahí es donde antes vivía la protección que daba la línea roja.
+      // ⚠️ Y se comprueba POR PIEZAS, no "siempre a secas". La primera versión de esta
+      // regla exigía el aviso de grabación en TODOS los contratos, y saltó en los de
+      // solo-web: ahí no hay nada que hable ni llamada que grabar, así que nombrarlo sería
+      // hablarle de una pieza que no compró. Un guardián que exige de más obliga a meter
+      // texto falso para callarlo — que es peor que el defecto que vigila.
+      const conAsistente = piezas.includes("agente") || piezas.includes("voz");
+      const delSuelo = [
+        ["vivienda justa", /vivienda justa|fair housing/i, true],
+        ["que no inventa", /nunca inventa|never makes anything up/i, true],
+        ["el aviso de grabación", /grabars?e|grabaci[óo]n|recorded/i, conAsistente],
+      ];
+      for (const [que, re, aplica] of delSuelo) {
+        if (aplica && !re.test(texto)) {
+          fallos.push(`${etiqueta} ya no menciona ${que} (es del suelo, no se puede quitar)`);
+        }
+        // Y la dirección contraria: no colar el aviso de grabación a quien no compró
+        // nada que hable. Las dos direcciones, siempre.
+        if (!aplica && que === "el aviso de grabación" && /avisa si la llamada|call may be recorded/i.test(texto)) {
+          fallos.push(`${etiqueta} habla de grabar llamadas y no compró asistente`);
         }
       }
 
@@ -431,7 +474,10 @@ casos++;
     doc.precio,
     "Florida",
     "Miami-Dade",
-    "no da precios",
+    // 🔄 Antes se exigía literalmente "no da precios". Desde el 2026-08-25 eso lo elige
+    // el cliente, así que el imprescindible pasa a ser lo que de verdad no se negocia:
+    // la regla de vivienda justa, que es ley federal y va en todos los contratos.
+    "vivienda justa",
     "Ramírez Núñez",
     "E-SIGN",
     "72.14.201.55",
