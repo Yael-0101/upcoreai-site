@@ -274,13 +274,17 @@ const ES: TextosSitio = {
       tag: "El centro de todo",
       title: "Panel del director comercial",
       body: "Un panel simple donde ves qué pasó con cada prospecto, cómo va cada asesor y qué proyecto está jalando — sin depender de nadie y sin tocar nada que pueda romper el sistema.",
+      // 🔴 2026-08-25. Esta lista decía "Prospectos, Pendientes de seguimiento, A
+      // quién llamar hoy" — que son pantallas de la consola INCLUIDA, listada aquí
+      // abajo mismo en `ajustes`. La misma página vendía como extra lo que regalaba
+      // dos párrafos más abajo. Aquí solo va lo que el panel añade de verdad:
+      // separar por asesor y seguir al comprador hasta el final.
       views: [
-        "Tus automatizaciones",
-        "Prospectos",
-        "Pendientes de seguimiento",
-        "A quién llamar hoy",
-        "Gastos de tu asistente",
-        "Tu retorno",
+        "Cada asesor con su propio acceso",
+        "Cómo va cada asesor",
+        "El camino de cada comprador hasta la venta",
+        "Qué desarrollo está jalando",
+        "Tu retorno real, no el estimado",
       ],
       // 🔴 Esta lista es lo que el cliente puede tocar ÉL MISMO, así que cada
       // renglón tiene que existir de verdad en su panel (productos/panel-inmobiliaria).
@@ -680,13 +684,14 @@ const EN: TextosSitio = {
       tag: "The center of it all",
       title: "Sales director's dashboard",
       body: "A simple dashboard where you see what happened with each lead, how each agent is doing and which project is pulling — without depending on anyone and without touching anything that could break the system.",
+      // 🔴 Misma corrección que en español: lo que va incluido en la consola no se
+      // puede listar aquí como si fuera parte de lo que se cobra.
       views: [
-        "Your automations",
-        "Leads",
-        "Follow-ups pending",
-        "Who to call today",
-        "What your assistant costs",
-        "Your return",
+        "Every agent with their own login",
+        "How each agent is doing",
+        "Every buyer's path all the way to the sale",
+        "Which development is pulling",
+        "Your real return, not the estimate",
       ],
       ajustesTitle: "And the controls come included with every component — from your phone:",
       ajustes: [

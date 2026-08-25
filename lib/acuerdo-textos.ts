@@ -859,11 +859,11 @@ const CATALOGO_EN: Record<string, { label: string; alcance: string }> = {
   // sale este renglón en la propuesta. Son dos copias de la misma frase y hay
   // guardián (`probar-consola.mjs`) que las compara: si se separan, el cliente
   // compraría leyendo una y firmaría leyendo la otra.
-  "Dashboard en español e inglés + sistema integrado": {
-    label: "Dashboard in Spanish and English + integrated system",
+  "Panel del director comercial": {
+    label: "Sales director's dashboard",
     alcance:
-      "on top of your controls: how every buyer is doing, who to call today and your " +
-      "return in plain view",
+      "in Spanish and English: every agent with their own login, how each one is doing " +
+      "and every buyer's path all the way to the sale, with your real return in plain view",
   },
 };
 

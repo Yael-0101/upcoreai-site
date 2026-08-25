@@ -234,6 +234,45 @@ for (const idioma of ["es", "en"]) {
         T.panelIncluye.slice(0, 90)
       );
     }
+
+    // 🔴 LA MITAD QUE FALTABA (2026-08-25).
+    //
+    // La comprobación de arriba solo exigía que el panel NOMBRARA el retorno. Con eso
+    // pasaba en verde una frase que además prometía "cómo va cada comprador y a quién
+    // hay que llamar hoy" — que son literalmente dos pantallas de la consola INCLUIDA
+    // (Compradores y Pendientes). O sea: el guardián vigilaba que la consola no se
+    // metiera en el terreno del panel, y nunca al revés. Cobrábamos $3,000 por algo
+    // que el cliente ya tenía abierto en otra pestaña.
+    //
+    // Es el mismo defecto que ya conocemos en otro eje: una medida que solo mira una
+    // dirección da la falsa sensación de estar cubierto.
+    const PISA_LA_CONSOLA =
+      idioma === "es"
+        ? [
+            [/a qui[ée]n\s+(hay que\s+)?(llamar|escribir)/i, "a quién llamar hoy → pantalla Pendientes"],
+            [/pendientes?\s+de\s+seguimiento/i, "pendientes de seguimiento → pantalla Pendientes"],
+            [/c[oó]mo va cada comprador/i, "cómo va cada comprador → pantalla Compradores"],
+            [/tomar el chat|cada conversaci[oó]n/i, "las conversaciones → pantalla Conversaciones"],
+            [/apagar(lo)? (el asistente|en un toque)/i, "apagar el asistente → mando incluido"],
+            [/qu[ée] desarrollos? (se ofrecen|ofrece)/i, "elegir desarrollos → mando incluido"],
+          ]
+        : [
+            [/who to (call|message|contact)/i, "who to call today → Pendientes screen"],
+            [/follow-?ups? pending|pending follow-?ups?/i, "pending follow-ups → Pendientes screen"],
+            [/how every buyer is doing/i, "how every buyer is doing → Compradores screen"],
+            [/take over any chat|every conversation/i, "the conversations → Conversaciones screen"],
+            [/turn it off/i, "turning it off → included control"],
+            [/which developments? it offers/i, "choosing developments → included control"],
+          ];
+    for (const [re, que] of PISA_LA_CONSOLA) {
+      if (re.test(T.panelIncluye)) {
+        marca(
+          `panel · ${idioma}`,
+          "el panel COBRA algo que ya va incluido en la consola: " + que,
+          T.panelIncluye.slice(0, 120)
+        );
+      }
+    }
   }
 
   // Y las dos copias de la frase del panel tienen que decir lo mismo.

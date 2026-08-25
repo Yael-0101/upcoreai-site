@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "probar:acuerdo": "node scripts/probar-acuerdo.mjs",
+    "probar:consola-inyectar": "node scripts/probar-consola-inyectar.mjs",
     "generar:acuerdo": "node scripts/generar-acuerdo-md.mjs",
     "verificar:acuerdo": "node scripts/generar-acuerdo-md.mjs --verificar",
     "probar:bilingue": "node scripts/probar-sitio-bilingue.mjs",

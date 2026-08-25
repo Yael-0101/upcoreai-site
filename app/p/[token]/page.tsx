@@ -103,6 +103,9 @@ type Snapshot = {
     alcance: string;
     precio: Money;
     razon: string;
+    /** v8 — el mismo motivo en inglés, congelado. Las propuestas anteriores no lo
+     *  traen: ver el comentario del render, abajo. */
+    razonEn?: string;
   }>;
   complejidad: string;
   llave: Plan;
@@ -633,9 +636,20 @@ export default async function PropuestaPublica({
                       <span className="text-sm font-medium text-clay-bright">+{o.precio.principal}</span>
                     </div>
                     <p className="mt-1.5 text-sm font-light text-mocha">
-                      {/* `razon` viaja en el snapshot congelado y siempre en español; para la
-                          versión en inglés se traduce el único valor que produce el motor. */}
-                      {en && /puede esperar/i.test(o.razon) ? T.puedeEsperar : o.razon}
+                      {/* 🔴 2026-08-25. Este bloque salía ENTERO en español dentro de la
+                          propuesta en inglés: el nombre de la pieza porque "Panel de control"
+                          no estaba en el catálogo del acuerdo, y el motivo porque solo se
+                          traducía si contenía "puede esperar" — y ninguno de los cinco motivos
+                          la contiene. Se vio abriendo `?lang=en` y leyendo la página, no
+                          revisando las tablas: el guardián de idioma miraba el copy del sitio,
+                          y esto viaja congelado dentro del snapshot.
+                          Ahora el motivo en inglés se congela junto al español (`razonEn`, v8).
+                          El reconocimiento por frase se conserva SOLO para las propuestas
+                          viejas, que no traen el campo. */}
+                      {!en
+                        ? o.razon
+                        : (o.razonEn ??
+                          (/puede esperar/i.test(o.razon) ? T.puedeEsperar : o.razon))}
                     </p>
                   </div>
                 ))}

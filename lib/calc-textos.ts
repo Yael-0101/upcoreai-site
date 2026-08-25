@@ -40,10 +40,18 @@ export type TextosCalc = {
     /**
      * LA CONSOLA: los mandos que van INCLUIDOS con cada pieza.
      *
-     * No es el panel. El panel se cobra aparte ($3,000) y sirve para VER cómo va
-     * el negocio —métricas, retorno, a quién llamar—; la consola sirve para
-     * MANDAR sobre el asistente, y va incluida porque sin ella el cliente estaría
-     * comprando algo que no puede controlar. Esa fue exactamente su objeción.
+     * No es el panel. El panel se cobra aparte ($3,000) y es el tablero de quien
+     * DIRIGE —cada asesor con su acceso, el embudo hasta la venta, el retorno
+     * real—; la consola sirve para MANDAR sobre el asistente, y va incluida
+     * porque sin ella el cliente estaría comprando algo que no puede controlar.
+     * Esa fue exactamente su objeción.
+     *
+     * ⚠️ 2026-08-25: la frase del panel decía "cómo va cada comprador, a quién hay
+     * que llamar hoy y tu retorno a la vista" — y esas TRES cosas ya salen en la
+     * consola incluida (pantallas Resumen, Compradores y Pendientes). O sea que
+     * cobrábamos $3,000 por lo que ya entregábamos, en el documento donde le
+     * pedimos al cliente que confíe. Lo que el panel añade tiene que ser algo que
+     * la consola NO haga; hay guardián que lo comprueba (probar-consola.mjs §6).
      *
      * `mandos` se arma con las piezas que compró (ver MANDOS_DE_PIEZA en calc.ts):
      * un cliente de solo-web no lee que puede tomar un chat que nunca va a tener.
@@ -163,7 +171,7 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
       otro: "Otra inmobiliaria",
     },
     panelIncluye:
-      "Dashboard en español e inglés + sistema integrado — además de tus controles: cómo va cada comprador, a quién hay que llamar hoy y tu retorno a la vista",
+      "Panel del director comercial — en español e inglés: cada asesor con su propio acceso, cómo va cada uno y el camino de cada comprador hasta la venta, con tu retorno real a la vista",
     consola: {
       // Una sola frase y SIN punto final, para que case con los demás renglones
       // del punto 1 ("Label — alcance"). Se vio imprimiendo la lista completa: el
@@ -278,7 +286,7 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
       otro: "Other real estate firm",
     },
     panelIncluye:
-      "Dashboard in Spanish and English + integrated system — on top of your controls: how every buyer is doing, who to call today and your return in plain view",
+      "Sales director's dashboard — in Spanish and English: every agent with their own login, how each one is doing and every buyer's path all the way to the sale, with your real return in plain view",
     consola: {
       frase: (lista) =>
         `Your controls, included — from your phone you can ${lista}, without calling us and without waiting on anyone`,
