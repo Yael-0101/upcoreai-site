@@ -269,10 +269,17 @@ const ES: TextosProp = {
   ademasSinCosto: "Además, sin costo",
   fueraAProposito: {
     titulo: "Esto lo dejamos fuera a propósito",
+    // 🔴 LA PROMESA DEL PRECIO (decisión de Yael, 2026-08-25). El precio de abajo ya
+    // lleva el descuento de paquete —`conDescuento()` en el motor—, así que la pieza
+    // aplazada NUNCA se cotiza como si fuera su primera compra. Faltaba DECIRLO: sin
+    // esta frase, "está caro" se convierte en un no, y con ella en una venta
+    // aplazada. Hay guardián que exige que la promesa esté y que el precio que se
+    // enseña sea de verdad el de paquete (`probar-panel-vs-consola.mjs`).
     texto:
       "No está incluido en el precio de abajo. Sirve, y en algún momento te va a convenir — pero " +
       "primero se resuelve lo que hoy te está costando ventas. Si lo quieres desde el arranque, " +
-      "esto es lo que sumaría:",
+      "esto es lo que sumaría — y si prefieres agregarlo más adelante, te respeto este mismo " +
+      "precio de paquete durante el primer año:",
   },
   puedeEsperar: "puede esperar",
 
@@ -608,7 +615,8 @@ const EN: TextosProp = {
     texto:
       "It is not included in the price below. It is useful, and at some point it will be worth it — " +
       "but first we fix what is costing you sales today. If you want it from the start, this is what " +
-      "it would add:",
+      "it would add — and if you would rather add it later, I will honor this same package price " +
+      "for the first year:",
   },
   puedeEsperar: "can wait",
 
