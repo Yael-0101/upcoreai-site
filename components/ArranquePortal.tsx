@@ -357,7 +357,7 @@ export function ArranquePortal({
   const nucleoListo =
     step2Ready && step3Ready && stepNumeroReady && stepLineaReady && equipoListo;
 
-  const cuentas = cuentasRequeridas(d.config);
+  const cuentas = cuentasRequeridas(d.config, idioma);
   const nombreCorto = (d.config.nombre || "").trim().split(" ")[0];
   const linkDemo = `/demo?c=${encodeURIComponent(d.config.clinica || "Tu Inmobiliaria")}&g=${giroDemo(d.config.giro)}`;
 
@@ -757,7 +757,7 @@ export function ArranquePortal({
                       <div className="text-sm font-semibold text-sand">{s.titulo}</div>
                       <p className="mt-1 text-sm font-light leading-relaxed text-mocha">{s.que}</p>
                       <p className="mt-1.5 text-xs font-light leading-relaxed text-mocha">
-                        <span className="font-semibold text-clay-bright">Por qué: </span>
+                        <span className="font-semibold text-clay-bright">{T.estilo.porQue}</span>
                         {s.porque}
                       </p>
                     </li>
@@ -837,18 +837,19 @@ export function ArranquePortal({
               Lo único que necesitamos es a nombre de quién quedan. */}
           <div className="mb-8">
             <div className="mb-5 rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5 text-sm font-light text-mocha">
+                {/* 🔴 Estaba escrito a mano en español y salía tal cual en el
+                    portal en inglés (2026-08-25). Ahora viene de la tabla. */}
                 <p className="mb-2">
-                  Nosotros les damos los clics. Las cuentas quedan{" "}
-                  <strong className="font-semibold text-sand">a tu nombre y son tuyas</strong> — si algún
-                  día te vas, se van contigo.
+                  {T.cuentas.losClicsAntes}
+                  <strong className="font-semibold text-sand">{T.cuentas.losClicsFuerte}</strong>
+                  {T.cuentas.losClicsDespues}
                 </p>
                 <p>
-                  Lo único que necesitamos de ti: un teléfono donde nos contestes.{" "}
+                  {T.cuentas.soloNecesitamosAntes}
                   <strong className="font-semibold text-sand">
-                    Tu contraseña no nos hace falta para nada
-                  </strong>{" "}
-                  — las cuentas se abren con un código de un solo uso, y la contraseña de cada una la
-                  defines tú al final.
+                    {T.cuentas.soloNecesitamosFuerte}
+                  </strong>
+                  {T.cuentas.soloNecesitamosDespues}
                 </p>
               </div>
               <div className="mx-auto grid max-w-lg gap-4">
@@ -860,7 +861,7 @@ export function ArranquePortal({
                     un buzón que administramos y él no hace nada. */}
                 <div className="rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5">
                   <p className="mb-2 text-sm font-semibold text-sand">
-                    ✨ Te creamos un correo nuevo para tu inmobiliaria
+                    {T.estilo.correoNuevoTitulo}
                   </p>
                   <p className="text-sm font-light text-mocha">
                     {T.prosa.correoAntes}
@@ -901,7 +902,7 @@ export function ArranquePortal({
           {cuentas.length > 0 && (
             <div className="mb-8">
               <div className="mb-3 text-sm font-semibold text-sand">
-                Esto es lo que te vamos a crear
+                {T.cuentas.estoTeCreamos}
               </div>
               <div className="grid gap-4">
                 {cuentas.map((c) => (
@@ -913,7 +914,7 @@ export function ArranquePortal({
                       <span className="font-semibold text-sand">{c.titulo}</span>
                       {c.tusManos && (
                         <span className="rounded-full bg-clay/20 px-3 py-1 text-xs font-semibold text-clay-bright">
-                          Necesitamos tus manos 10 min
+                          {T.cuentas.tusManos}
                         </span>
                       )}
                     </div>
@@ -956,7 +957,7 @@ export function ArranquePortal({
           )}
           {d.calendario.tipo === "software" && (
             <div className="mx-auto mb-5 max-w-lg rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5 text-sm font-light text-mocha">
-              Perfecto — <strong className="font-semibold text-sand">tu sistema no se toca</strong>: nos integramos a él. Cuéntanos por WhatsApp cuál usas y te decimos el siguiente paso (suele ser un acceso de solo-agenda o un calendario espejo).
+              {T.estilo.calendarioOtroAntes}<strong className="font-semibold text-sand">{T.estilo.calendarioOtroFuerte}</strong>{T.estilo.calendarioOtroDespues}
             </div>
           )}
           {d.calendario.tipo === "ninguno" && (
@@ -1036,10 +1037,9 @@ export function ArranquePortal({
           <StepHeader {...copyTextos(piezas, idioma)} />
           {tieneWeb && (
             <div className="mx-auto mb-8 max-w-md">
-              <div className="mb-3 text-sm font-semibold text-sand">🎨 El estilo de tu sitio</div>
+              <div className="mb-3 text-sm font-semibold text-sand">{T.estilo.tituloEstilo}</div>
               <p className="mb-4 text-sm font-light text-mocha">
-                Todo esto es opcional — pero entre más nos des, más tuyo se va a sentir el
-                primer borrador.
+                {T.estilo.opcionalPeroMejor}
               </p>
               <div className="grid gap-4">
                 <Field
@@ -1117,7 +1117,7 @@ export function ArranquePortal({
                     }
                     className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
                   >
-                    + Agregar una página de referencia (máx. 3)
+                    {T.estilo.agregarReferencia}
                   </button>
                 )}
               </div>
@@ -1162,7 +1162,7 @@ export function ArranquePortal({
                           : "border-[rgba(242,231,219,0.2)] text-mocha hover:border-sage hover:text-sand"
                       }`}
                     >
-                      ✓ Me gusta, apruébalo
+                      {T.estilo.meGusta}
                     </button>
                     <button
                       type="button"

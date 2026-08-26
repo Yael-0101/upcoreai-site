@@ -174,7 +174,21 @@ export function copyHorarios(piezas: string[], idioma: Idioma = "es") {
   else if (hayMensajes(p)) hint = t.hintMensajes;
   else hint = t.hintSolo;
 
-  const tonoLabel = asistente ? t.tonoAsistente : hayWeb(p) ? t.tonoSitio : t.tonoMensajes;
+  // 🔴 UN CHATBOT NO «SUENA», ESCRIBE (2026-08-25).
+  //
+  // Esta etiqueta era una sola para chat y para voz, y le preguntaba a un cliente de
+  // solo WhatsApp *"¿cómo debe SONAR tu asistente?"* — de algo que nunca va a hablar.
+  // Es chiquito y es justo lo que hace pensar «esto no lo escribieron para mí».
+  // Con las dos piezas se dice "hable", que sirve para escribir y para hablar.
+  const tonoLabel = hayChat(p) && hayVoz(p)
+    ? t.tonoAsistenteAmbos
+    : hayVoz(p)
+      ? t.tonoAsistenteVoz
+      : hayChat(p)
+        ? t.tonoAsistenteChat
+        : hayWeb(p)
+          ? t.tonoSitio
+          : t.tonoMensajes;
   // Solo se muestra si pideFaqs; aun así la etiqueta se calcula bien para las dos
   // familias, para que nadie herede una frase falsa al mover el gate.
   const faqsLabel = hayAsistente(p) ? t.faqsAsistente : hayWeb(p) ? t.faqsWeb : t.faqsAsistente;
@@ -253,9 +267,18 @@ export function copyTextos(piezas: string[], idioma: Idioma = "es") {
   const t = TA[idioma].textos;
   const p = normalizarPiezas(piezas);
   const web = hayWeb(p);
-  const mensajes = hayMensajes(p);
-  if (web && mensajes) return { q: t.qAmbos, hint: t.hintAmbos };
+  // 🔴 «Recordatorios» ES EL PRODUCTO DE SEGUIMIENTO (2026-08-25).
+  //
+  // `hayMensajes` incluye al agente, así que a un cliente de solo chatbot esta
+  // pantalla le decía *"Recordatorios y confirmaciones que mandará tu sistema"* — le
+  // nombrábamos una pieza que no compró. Lo que su asistente sí manda son las
+  // CONFIRMACIONES de las visitas que agenda, y así se dice.
+  const campanas = tiene(p, "auto", "reactivacion");
+  const soloAsistente = !campanas && hayAsistente(p);
+  if (web && campanas) return { q: t.qAmbos, hint: t.hintAmbos };
+  if (web && soloAsistente) return { q: t.qAmbos, hint: t.hintAmbos };
   if (web) return { q: t.qWeb, hint: t.hintWeb };
+  if (soloAsistente) return { q: t.qAsistente, hint: t.hintAsistente };
   return { q: t.qMensajes, hint: t.hintMensajes };
 }
 

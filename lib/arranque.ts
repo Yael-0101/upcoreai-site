@@ -1,4 +1,6 @@
 import { normalizarPiezas, pideTono } from "./arranque-copy";
+import { TA } from "./arranque-textos";
+import type { Idioma } from "./acuerdo-textos";
 // Los giros válidos de la demo salen de lib/nicho.json (fuente única del nicho).
 import { GIROS_DEMO, DEMO_DEFAULTS } from "./demo-config";
 
@@ -356,90 +358,54 @@ export type CuentaDef = {
   tusManos?: boolean;
 };
 
-/** Qué cuentas necesita ESTE proyecto, según sus piezas y su plan. */
-export function cuentasRequeridas(config: ArranqueDatos["config"]): CuentaDef[] {
+/**
+ * Qué cuentas necesita ESTE proyecto, según sus piezas y su plan.
+ *
+ * 🔴 EL TEXTO YA NO VIVE AQUÍ (2026-08-25). Estaba escrito en español dentro de esta
+ * función, así que el portal en INGLÉS enseñaba el bloque de cuentas entero en
+ * español: los títulos, para qué es cada una y sus pasos. Justo la pantalla donde le
+ * pedimos que confíe para abrirle cuentas a su nombre.
+ *
+ * Aquí queda solo la DECISIÓN —cuáles le tocan—; lo que se lee vive en
+ * `arranque-textos.ts`, en los dos idiomas, como todo lo demás del portal.
+ */
+export function cuentasRequeridas(
+  config: ArranqueDatos["config"],
+  idioma: Idioma = "es"
+): CuentaDef[] {
   const p = config.productos ?? [];
+  const T = TA[idioma].cuentasDef;
   const usaWhatsApp =
     p.includes("agente") || p.includes("auto") || p.includes("reactivacion");
   const defs: CuentaDef[] = [];
 
+  const arma = (id: string, extra: Partial<CuentaDef> = {}): CuentaDef => {
+    const t = T[id];
+    return { id, titulo: t.titulo, para: t.para, pasos: t.pasos, nota: t.nota, ...extra };
+  };
+
   if (usaWhatsApp) {
-    defs.push({
-      id: "meta",
-      titulo: "Meta — WhatsApp oficial",
-      // Un cliente de solo recordatorios no tiene asistente: para él ese número
-      // no ATIENDE a nadie, solo manda. Decírselo mal le vende algo que no compró.
-      para: p.includes("agente")
-        ? "El número que atenderá tu asistente, verificado a nombre de tu inmobiliaria"
-        : "El número desde el que salen tus mensajes, verificado a nombre de tu inmobiliaria",
-      pasos: [
-        "Meta exige que salga del Facebook personal del dueño, así que esta es la única que no podemos abrir solos.",
-        "Son ~10 minutos en videollamada: nosotros te dictamos cada clic, tú solo tecleas.",
-        "En esa misma videollamada le pones tu método de pago — cada mensaje cuesta centavos.",
-      ],
-      nota: "Es el paso más tardado (Meta puede tardar días en verificar) — por eso lo arrancamos primero.",
-      tusManos: true,
-    });
+    defs.push(
+      arma("meta", {
+        // Un cliente de solo recordatorios no tiene asistente: para él ese número
+        // no ATIENDE a nadie, solo manda. Decírselo mal le vende algo que no compró.
+        para: p.includes("agente") ? T.meta.para : T.meta.paraAlterno,
+        tusManos: true,
+      })
+    );
   }
   // El cerebro lo usan las DOS piezas que conversan, no solo el chat: un cliente
   // de solo-voz se quedaba sin la cuenta que hace hablar a su asistente.
-  if (p.includes("agente") || p.includes("voz")) {
-    defs.push({
-      id: "ia",
-      titulo: "Anthropic — el cerebro de IA",
-      para: "El modelo de inteligencia artificial que conversa con tus compradores",
-      pasos: [
-        "La abrimos nosotros a tu nombre, con el tope de gasto ya activado.",
-        // ⚠️ La tarjeta va al ABRIRLA, no al entregar: el asistente consume desde
-        // que lo construimos y lo probamos. Ponerla al final significaría que
-        // Upcore adelanta tu consumo, y esa es la regla de oro que no se rompe.
-        "En cuanto quede, te mandamos el link para que le pongas tu tarjeta: 2 minutos, la tecleas tú y nosotros nunca la vemos.",
-        "Su llave de acceso jamás viaja por chat, ni contigo ni con nadie.",
-      ],
-    });
-  }
-  if (p.includes("voz")) {
-    defs.push({
-      id: "telefonia",
-      titulo: "Tu línea de voz",
-      para: "Por donde entran y se contestan las llamadas de tu asistente",
-      pasos: [
-        "La abrimos nosotros a tu nombre y te mandamos el link para que le pongas tu tarjeta: 2 minutos, la tecleas tú.",
-        "Se cobra por minuto hablado — te decimos el estimado según tus llamadas y se activa un tope de gasto.",
-        "Tu número de siempre no se toca: aquí solo vive la línea del asistente.",
-      ],
-      nota: "De todo lo que se consume al mes, esto es lo que más pesa — es normal, y te lo decimos de frente para que no te sorprenda.",
-    });
-  }
+  if (p.includes("agente") || p.includes("voz")) defs.push(arma("ia"));
+  if (p.includes("voz")) defs.push(arma("telefonia"));
   if (p.includes("web")) {
-    defs.push({
-      id: "dominio",
-      titulo: "Tu dominio (tuinmobiliaria.com)",
-      para: "La dirección de tu sitio, a tu nombre desde el día uno",
-      pasos: [
-        "Si ya tienes dominio, dínoslo y lo usamos — no compres otro.",
-        "Si no tienes, lo compramos NOSOTROS a tu nombre: ya va incluido en tu proyecto.",
-        "Tú solo dinos cómo te gustaría que se llame y lo revisamos juntos.",
-      ],
-      nota:
-        config.plan === "gestionado"
-          ? "Mientras estemos contigo, el dominio va incluido en tu mensualidad."
-          : "El primer año corre por nuestra cuenta. Del segundo en adelante la renovación es tuya — te dejamos un video de cómo se hace.",
-    });
+    defs.push(
+      arma("dominio", {
+        nota: config.plan === "gestionado" ? T.dominio.notaAlterna : T.dominio.nota,
+      })
+    );
   }
-  if (usaWhatsApp && config.plan === "llave") {
-    defs.push({
-      id: "hosting",
-      titulo: "Tu servidor (hosting)",
-      para: "Donde vive tu automatización — en tu propia cuenta, como todo lo demás",
-      pasos: [
-        "La abrimos y la configuramos nosotros, a tu nombre.",
-        // ⚠️ Decía "~$110–220 MXN al mes": pesos mexicanos cotizados a un cliente
-        // de Miami que paga en dólares. Se cachó abriendo el portal, no leyendo.
-        "Te mandamos el link para que le pongas tu tarjeta (~$6–12 USD al mes) — la tecleas tú, nosotros nunca la vemos.",
-      ],
-    });
-  }
+  if (usaWhatsApp && config.plan === "llave") defs.push(arma("hosting"));
   return defs;
 }
 

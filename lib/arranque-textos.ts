@@ -93,7 +93,12 @@ export type TextosArranque = {
     hintSolo: string;
     label: string;
     ejemplo: string;
-    tonoAsistente: string;
+    /** 🔴 Tres, no una: un chatbot ESCRIBE, un agente de voz SUENA, y con los dos
+     *  se dice "hable". Era una sola y le preguntaba a un cliente de solo WhatsApp
+     *  cómo debía sonar algo que nunca iba a hablar (2026-08-25). */
+    tonoAsistenteChat: string;
+    tonoAsistenteVoz: string;
+    tonoAsistenteAmbos: string;
     tonoSitio: string;
     tonoMensajes: string;
     faqsAsistente: string;
@@ -196,6 +201,12 @@ export type TextosArranque = {
     hintWeb: string;
     qMensajes: string;
     hintMensajes: string;
+    /** 🔴 Cuando el cliente lleva asistente pero NO compró seguimiento ni
+     *  reactivación. Antes le salía "Recordatorios…", que es el producto de
+     *  seguimiento: le nombrábamos algo que no compró (2026-08-25). Lo que su
+     *  asistente sí manda son las CONFIRMACIONES de lo que agenda. */
+    qAsistente: string;
+    hintAsistente: string;
   };
 
   // ── 10 · Su equipo (solo con la pieza `panel`) ────────────────────────────
@@ -241,7 +252,41 @@ export type TextosArranque = {
     hintTelefono: string;
     horarioEscribir: string;
     ejHorario: string;
+    // 🔴 Estas cuatro estaban escritas A MANO dentro del componente, en español, y
+    // salían tal cual en el portal en INGLÉS (2026-08-25).
+    losClicsAntes: string;
+    losClicsFuerte: string;
+    losClicsDespues: string;
+    soloNecesitamosAntes: string;
+    soloNecesitamosFuerte: string;
+    soloNecesitamosDespues: string;
+    estoTeCreamos: string;
+    tusManos: string;
   };
+  /**
+   * LAS CUENTAS QUE LE ABRIMOS, en los dos idiomas.
+   *
+   * 🔴 POR QUÉ VIVEN AQUÍ (2026-08-25). Estaban escritas dentro de
+   * `cuentasRequeridas()` en español y punto, así que el portal en inglés enseñaba
+   * el bloque entero en español: los títulos, para qué es cada cuenta y sus pasos.
+   * Es la pantalla donde le pedimos que confíe para abrirle cuentas a su nombre —
+   * la peor para que se vea a medio traducir.
+   *
+   * `cuentasRequeridas()` sigue decidiendo CUÁLES le tocan según sus piezas y su
+   * plan; aquí solo vive lo que se lee.
+   */
+  cuentasDef: Record<
+    string,
+    {
+      titulo: string;
+      /** Dos versiones cuando el texto cambia según las piezas (ver `cuentasRequeridas`). */
+      para: string;
+      paraAlterno?: string;
+      pasos: string[];
+      nota?: string;
+      notaAlterna?: string;
+    }
+  >;
   // ── 7 · Calendario (detalle) ──────────────────────────────────────────────
   calendarioPasos: { ruta: string; listo: string; marcar: string; marcado: string };
   // ── 8 · Demo ──────────────────────────────────────────────────────────────
@@ -267,6 +312,18 @@ export type TextosArranque = {
     porRevisar: string;
     queCambiamos: string;
     ejCambio: string;
+    // 🔴 Estas seis estaban escritas A MANO en el componente, en español, y salían
+    // tal cual en el portal en INGLÉS (2026-08-25). El guardián solo leía el
+    // español, así que la otra mitad no la miraba nadie.
+    tituloEstilo: string;
+    opcionalPeroMejor: string;
+    agregarReferencia: string;
+    meGusta: string;
+    porQue: string;
+    correoNuevoTitulo: string;
+    calendarioOtroAntes: string;
+    calendarioOtroFuerte: string;
+    calendarioOtroDespues: string;
   };
   // ── 10 · Resumen ──────────────────────────────────────────────────────────
   resumenUi: {
@@ -437,7 +494,9 @@ const ES: TextosArranque = {
     hintSolo: "Cuándo atiende tu equipo.",
     label: "Horarios de atención *",
     ejemplo: "Ej. Lunes a viernes 9:00–19:00\nSábado 9:00–14:00 · Domingo cerrado",
-    tonoAsistente: "¿Cómo debe sonar tu asistente? *",
+    tonoAsistenteChat: "¿Cómo quieres que escriba tu asistente? *",
+    tonoAsistenteVoz: "¿Cómo debe sonar tu asistente? *",
+    tonoAsistenteAmbos: "¿Cómo quieres que hable tu asistente? *",
     tonoSitio: "¿Cómo quieres que hable tu sitio? *",
     tonoMensajes: "¿Cómo quieres que suenen tus mensajes? *",
     faqsAsistente: "Preguntas frecuentes de tus compradores (opcional)",
@@ -538,8 +597,24 @@ const ES: TextosArranque = {
       "tu número de siempre se queda como está en tu teléfono, y el asistente estrena línea propia. Cuesta poco y se anuncia donde ya publicas hoy.",
     qMensajes: "¿Desde qué número salen tus mensajes?",
     hintMensajes: "Los recordatorios tienen que salir de algún WhatsApp — tú decides de cuál.",
+    // 🔴 NO LE PROMETAS UNA BANDEJA QUE NO COMPRÓ (2026-08-25).
+    //
+    // Decía lo mismo que la versión del chat: "tu equipo pasa a responder desde una
+    // bandeja en la computadora". Esa bandeja es la pantalla del agente de WhatsApp,
+    // y este texto sale justamente cuando el cliente NO lo lleva —solo seguimiento o
+    // reactivación—, así que su panel no tiene dónde responder. Le estábamos
+    // prometiendo una pantalla que no existe en su proyecto, en la decisión donde
+    // más caro sale equivocarse: su número de siempre.
+    //
+    // La verdad es incómoda y por eso se dice: si conecta su número, lo que le
+    // contesten no le llega a ningún lado. Y por eso aquí SÍ se recomienda estrenar.
+    // ⚠️ No dice «bandeja» a propósito. La primera versión sí, y el revisor la marcó
+    // con razón: esa palabra nombra una pantalla del chatbot, que este cliente no
+    // tiene. Se podría haber ensanchado la excepción del guardián para perdonarla,
+    // pero cada excepción que se agrega lo debilita — es más barato y más claro
+    // decirlo sin la jerga que nosotros inventamos.
     actualMensajes:
-      "tus compradores lo reconocen y no lo mandan a spam. El detalle: al conectarlo sale de la app del teléfono y tu equipo pasa a responder desde una bandeja en la computadora.",
+      "tus compradores lo reconocen y no lo mandan a spam. Pero ojo: al conectarlo, ese número sale de la app de tu teléfono — y como tu proyecto no lleva el asistente de WhatsApp, no habría dónde leer lo que te contesten. Si tu equipo usa ese número para platicar con compradores, mejor estrena uno.",
     nuevoMensajes:
       "tu número de siempre se queda como está en tu teléfono, y los mensajes salen de una línea aparte. Cuesta poco.",
     labelActual: "Mi número actual",
@@ -596,6 +671,8 @@ const ES: TextosArranque = {
     hintWeb: "Con esto el primer borrador ya se va a sentir tuyo. Todo es opcional, pero entre más nos des, mejor sale.",
     qMensajes: "Los textos de tu inmobiliaria",
     hintMensajes: "Recordatorios y confirmaciones que mandará tu sistema — tú les das el visto bueno.",
+    qAsistente: "Los mensajes de tu asistente",
+    hintAsistente: "Las confirmaciones que manda tu asistente cuando deja una visita agendada — tú les das el visto bueno antes de que salga la primera.",
   },
 
   equipo: {
@@ -645,6 +722,74 @@ const ES: TextosArranque = {
     hintTelefono: "10 dígitos — normalmente el mismo de tu WhatsApp",
     horarioEscribir: "¿Qué horario te queda mejor para que te escribamos? (opcional)",
     ejHorario: "ej. martes o jueves después de las 3, que es cuando puedo contestar rápido",
+    losClicsAntes: "Nosotros les damos los clics. Las cuentas quedan ",
+    losClicsFuerte: "a tu nombre y son tuyas",
+    losClicsDespues: " — si algún día te vas, se van contigo.",
+    soloNecesitamosAntes: "Lo único que necesitamos de ti: un teléfono donde nos contestes. ",
+    soloNecesitamosFuerte: "Tu contraseña no nos hace falta para nada",
+    soloNecesitamosDespues:
+      " — las cuentas se abren con un código de un solo uso, y la contraseña de cada una la defines tú al final.",
+    estoTeCreamos: "Esto es lo que te vamos a crear",
+    tusManos: "Necesitamos tus manos 10 min",
+  },
+
+  cuentasDef: {
+    meta: {
+      titulo: "Meta — WhatsApp oficial",
+      para: "El número que atenderá tu asistente, verificado a nombre de tu inmobiliaria",
+      // Un cliente de solo recordatorios no tiene asistente: para él ese número no
+      // ATIENDE a nadie, solo manda. Decírselo mal le vende algo que no compró.
+      paraAlterno: "El número desde el que salen tus mensajes, verificado a nombre de tu inmobiliaria",
+      pasos: [
+        "Meta exige que salga del Facebook personal del dueño, así que esta es la única que no podemos abrir solos.",
+        "Son ~10 minutos en videollamada: nosotros te dictamos cada clic, tú solo tecleas.",
+        "En esa misma videollamada le pones tu método de pago — cada mensaje cuesta centavos.",
+      ],
+      nota: "Es el paso más tardado (Meta puede tardar días en verificar) — por eso lo arrancamos primero.",
+    },
+    ia: {
+      titulo: "Anthropic — el cerebro de IA",
+      para: "El modelo de inteligencia artificial que conversa con tus compradores",
+      pasos: [
+        "La abrimos nosotros a tu nombre, con el tope de gasto ya activado.",
+        // ⚠️ La tarjeta va al ABRIRLA, no al entregar: el asistente consume desde que
+        // lo construimos y lo probamos. Ponerla al final significaría que Upcore
+        // adelanta tu consumo, y esa es la regla de oro que no se rompe.
+        "En cuanto quede, te mandamos el link para que le pongas tu tarjeta: 2 minutos, la tecleas tú y nosotros nunca la vemos.",
+        "Su llave de acceso jamás viaja por chat, ni contigo ni con nadie.",
+      ],
+    },
+    telefonia: {
+      titulo: "Tu línea de voz",
+      para: "Por donde entran y se contestan las llamadas de tu asistente",
+      pasos: [
+        "La abrimos nosotros a tu nombre y te mandamos el link para que le pongas tu tarjeta: 2 minutos, la tecleas tú.",
+        "Se cobra por minuto hablado — te decimos el estimado según tus llamadas y se activa un tope de gasto.",
+        "Tu número de siempre no se toca: aquí solo vive la línea del asistente.",
+      ],
+      nota: "De todo lo que se consume al mes, esto es lo que más pesa — es normal, y te lo decimos de frente para que no te sorprenda.",
+    },
+    dominio: {
+      titulo: "Tu dominio (tuinmobiliaria.com)",
+      para: "La dirección de tu sitio, a tu nombre desde el día uno",
+      pasos: [
+        "Si ya tienes dominio, dínoslo y lo usamos — no compres otro.",
+        "Si no tienes, lo compramos NOSOTROS a tu nombre: ya va incluido en tu proyecto.",
+        "Tú solo dinos cómo te gustaría que se llame y lo revisamos juntos.",
+      ],
+      nota: "El primer año corre por nuestra cuenta. Del segundo en adelante la renovación es tuya — te dejamos un video de cómo se hace.",
+      notaAlterna: "Mientras estemos contigo, el dominio va incluido en tu mensualidad.",
+    },
+    hosting: {
+      titulo: "Tu servidor (hosting)",
+      para: "Donde vive tu automatización — en tu propia cuenta, como todo lo demás",
+      pasos: [
+        "La abrimos y la configuramos nosotros, a tu nombre.",
+        // ⚠️ Decía "~$110–220 MXN al mes": pesos mexicanos cotizados a un cliente de
+        // Miami que paga en dólares. Se cachó abriendo el portal, no leyendo.
+        "Te mandamos el link para que le pongas tu tarjeta (~$6–12 USD al mes) — la tecleas tú, nosotros nunca la vemos.",
+      ],
+    },
   },
   calendarioPasos: {
     ruta: "Configuración del calendario → Compartir con determinadas personas → Añadir",
@@ -663,6 +808,17 @@ const ES: TextosArranque = {
   },
   estilo: {
     paleta: "Tu paleta de colores (si tienes una)",
+    tituloEstilo: "🎨 El estilo de tu sitio",
+    opcionalPeroMejor:
+      "Todo esto es opcional — pero entre más nos des, más tuyo se va a sentir el primer borrador.",
+    agregarReferencia: "+ Agregar una página de referencia (máx. 3)",
+    meGusta: "✓ Me gusta, apruébalo",
+    porQue: "Por qué: ",
+    correoNuevoTitulo: "✨ Te creamos un correo nuevo para tu inmobiliaria",
+    calendarioOtroAntes: "Perfecto — ",
+    calendarioOtroFuerte: "tu sistema no se toca",
+    calendarioOtroDespues:
+      ": nos integramos a él. Cuéntanos por WhatsApp cuál usas y te decimos el siguiente paso (suele ser un acceso de solo-agenda o un calendario espejo).",
     paginaQueGusta: "Página que te gusta",
     quitarReferencia: "Quitar referencia",
     queTeGusta: "¿Qué te gusta de ella?",
@@ -830,7 +986,9 @@ const EN: TextosArranque = {
     hintSolo: "When your team is available.",
     label: "Business hours *",
     ejemplo: "e.g. Monday to Friday 9:00–19:00\nSaturday 9:00–14:00 · Sunday closed",
-    tonoAsistente: "How should your assistant sound? *",
+    tonoAsistenteChat: "How do you want your assistant to write? *",
+    tonoAsistenteVoz: "How should your assistant sound? *",
+    tonoAsistenteAmbos: "How do you want your assistant to speak? *",
     tonoSitio: "How do you want your site to speak? *",
     tonoMensajes: "How do you want your messages to sound? *",
     faqsAsistente: "Frequently asked questions from your buyers (optional)",
@@ -923,8 +1081,10 @@ const EN: TextosArranque = {
       "your usual number stays exactly as it is on your phone, and the assistant gets its own line. It costs little and you advertise it wherever you already publish today.",
     qMensajes: "Which number do your messages go out from?",
     hintMensajes: "The reminders have to go out from some WhatsApp — you decide which one.",
+    // Misma corrección que en español: este texto sale cuando el cliente NO lleva el
+    // agente de WhatsApp, así que no hay ninguna bandeja donde responder.
     actualMensajes:
-      "your buyers recognize it and do not send it to spam. The detail: once connected it leaves the phone app, and your team answers from an inbox on the computer.",
+      "your buyers recognize it and do not send it to spam. But careful: once connected, that number leaves your phone app — and since your project does not include the WhatsApp assistant, there would be nowhere to read their replies. If your team uses that number to talk with buyers, better to get a new one.",
     nuevoMensajes:
       "your usual number stays exactly as it is on your phone, and the messages go out from a separate line. It costs little.",
     labelActual: "My current number",
@@ -981,6 +1141,8 @@ const EN: TextosArranque = {
     hintWeb: "With this the first draft will already feel like yours. All optional, but the more you give us, the better it comes out.",
     qMensajes: "Your firm's copy",
     hintMensajes: "Reminders and confirmations your system will send — you sign off on them.",
+    qAsistente: "Your assistant's messages",
+    hintAsistente: "The confirmations your assistant sends once it books a visit — you sign off on them before the first one goes out.",
   },
 
   equipo: {
@@ -1029,6 +1191,67 @@ const EN: TextosArranque = {
     hintTelefono: "10 digits — usually the same as your WhatsApp",
     horarioEscribir: "What time works best for us to message you? (optional)",
     ejHorario: "e.g. Tuesday or Thursday after 3, that is when I can reply quickly",
+    losClicsAntes: "We do the clicking. The accounts stay ",
+    losClicsFuerte: "in your name and they are yours",
+    losClicsDespues: " — if one day you leave, they leave with you.",
+    soloNecesitamosAntes: "The only thing we need from you: a phone where you will answer us. ",
+    soloNecesitamosFuerte: "We do not need your password for anything",
+    soloNecesitamosDespues:
+      " — accounts open with a one-time code, and you set each password yourself at the end.",
+    estoTeCreamos: "This is what we will create for you",
+    tusManos: "We need your hands for 10 min",
+  },
+
+  cuentasDef: {
+    meta: {
+      titulo: "Meta — official WhatsApp",
+      para: "The number your assistant will answer on, verified in your firm's name",
+      paraAlterno: "The number your messages go out from, verified in your firm's name",
+      pasos: [
+        "Meta requires it to come from the owner's personal Facebook, so this is the only one we cannot open on our own.",
+        "It takes about 10 minutes on a video call: we dictate every click, you just type.",
+        "On that same call you add your payment method — each message costs cents.",
+      ],
+      nota: "It is the slowest step (Meta can take days to verify) — that is why we start with it.",
+    },
+    ia: {
+      titulo: "Anthropic — the AI brain",
+      para: "The artificial intelligence model that talks with your buyers",
+      pasos: [
+        "We open it in your name, with the spending cap already switched on.",
+        "As soon as it is ready we send you the link to add your card: 2 minutes, you type it and we never see it.",
+        "Its access key never travels by chat, not with you and not with anyone.",
+      ],
+    },
+    telefonia: {
+      titulo: "Your voice line",
+      para: "Where your assistant's calls come in and get answered",
+      pasos: [
+        "We open it in your name and send you the link to add your card: 2 minutes, you type it.",
+        "It is billed per minute spoken — we tell you the estimate based on your call volume and a spending cap is switched on.",
+        "Your usual number is not touched: only the assistant's line lives here.",
+      ],
+      nota: "Of everything consumed each month, this is the heaviest — that is normal, and we tell you up front so it does not surprise you.",
+    },
+    dominio: {
+      titulo: "Your domain (yourfirm.com)",
+      para: "Your site's address, in your name from day one",
+      pasos: [
+        "If you already have a domain, tell us and we use it — do not buy another.",
+        "If you do not have one, WE buy it in your name: it is already included in your project.",
+        "You just tell us what you would like it to be called and we look at it together.",
+      ],
+      nota: "The first year is on us. From the second year on the renewal is yours — we leave you a video showing how.",
+      notaAlterna: "While we are with you, the domain is included in your monthly fee.",
+    },
+    hosting: {
+      titulo: "Your server (hosting)",
+      para: "Where your automation lives — in your own account, like everything else",
+      pasos: [
+        "We open it and set it up ourselves, in your name.",
+        "We send you the link to add your card (about $6–12 USD a month) — you type it, we never see it.",
+      ],
+    },
   },
   calendarioPasos: {
     ruta: "Calendar settings → Share with specific people → Add",
@@ -1047,6 +1270,17 @@ const EN: TextosArranque = {
   },
   estilo: {
     paleta: "Your color palette (if you have one)",
+    tituloEstilo: "🎨 Your site's style",
+    opcionalPeroMejor:
+      "All of this is optional — but the more you give us, the more the first draft will feel like yours.",
+    agregarReferencia: "+ Add a reference page (max. 3)",
+    meGusta: "✓ I like it, approve it",
+    porQue: "Why: ",
+    correoNuevoTitulo: "✨ We create a new email for your firm",
+    calendarioOtroAntes: "Perfect — ",
+    calendarioOtroFuerte: "your system stays untouched",
+    calendarioOtroDespues:
+      ": we plug into it. Tell us on WhatsApp which one you use and we will tell you the next step (usually a booking-only access or a mirrored calendar).",
     paginaQueGusta: "A site you like",
     quitarReferencia: "Remove reference",
     queTeGusta: "What do you like about it?",
