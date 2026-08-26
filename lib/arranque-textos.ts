@@ -555,7 +555,12 @@ const ES: TextosArranque = {
     {
       val: "publicado",
       label: "Solo lo que ya publico",
-      desc: "Puede repetir el rango que ya está en tu web (“desde $230,000”), nunca el precio de una unidad concreta. Nos das la frase y el link.",
+      // 🔴 Decía "el rango que ya está en TU WEB" (2026-08-25). Este modo se le
+      // ofrece a cualquiera con asistente, tenga sitio con nosotros o no — así que
+      // nombraba un sitio que su proyecto no incluye. Y donde ya publique el rango
+      // puede ser su web vieja, un folleto o su ficha de Google: lo que importa es
+      // que YA lo publica él, no dónde.
+      desc: "Puede repetir el rango que tú ya publicas (“desde $230,000”), nunca el precio de una unidad concreta. Nos das la frase y de dónde sale.",
     },
     {
       val: "en-vivo",
@@ -1043,7 +1048,7 @@ const EN: TextosArranque = {
     {
       val: "publicado",
       label: "Only what I already publish",
-      desc: "It can repeat the range already on your site (“from $230,000”), never the price of a specific unit. You give us the wording and the link.",
+      desc: "It can repeat the range you already publish (“from $230,000”), never the price of a specific unit. You give us the wording and where it comes from.",
     },
     {
       val: "en-vivo",

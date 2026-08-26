@@ -22,6 +22,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+// ⚠️ La regla vive en su propio módulo, SIN efectos: el revisor del panel también la
+// importa, y si viviera aquí, importarla ejecutaría este guardián entero.
+import { perdonaPorNegacion, CASOS_NEGACION } from "./lib-negacion.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -167,57 +170,10 @@ function datosCompletos(piezas) {
 }
 
 
-// ── Nombrar una pieza para decir que NO la lleva ES CORRECTO ─────────────────
-//
-// 🔴 POR QUÉ EXISTE ESTA EXCEPCIÓN (2026-08-25). Al arreglar el aviso del número
-// —"como tu proyecto NO lleva el asistente de WhatsApp, lo que te contesten no va a
-// llegar a ninguna bandeja"— este guardián marcó 12 combinaciones. Y esa frase es
-// justo la honesta: le avisa de una limitación real de lo que compró.
-//
-// Es la disciplina del "cuántas" del 6 de agosto: separar la frase que PROMETE de la
-// que solo describe. Y una excepción mal puesta es un agujero, así que va apretada:
-//
-//   · la negación tiene que ir DELANTE de la palabra y en la MISMA oración;
-//   · a menos de 40 caracteres;
-//   · y entre las dos, solo artículos — una coma o un "así que" delatan que la
-//     negación era de otra cosa ("no lleva sitio web, así que el asistente escribe"
-//     NO puede perdonar la palabra "asistente").
-//
-// ⚠️ Se prueba a sí misma más abajo, con los cinco casos que se parecen. Una
-// excepción sin pruebas es por donde vuelve a entrar lo que se acaba de sacar.
-const NIEGA =
-  /(?:no|sin)\s+(?:lo\s+|la\s+|le\s+)?(?:lleva|llevas|incluye|incluyes|tiene|tienes|compraste|contrataste|va a tener)/g;
-const DISTANCIA_NEGACION = 40;
-const SOLO_ARTICULOS = /^\s*(?:(?:el|la|los|las|tu|tus|un|una|de|del)\s+)*$/;
-
-export function perdonaPorNegacion(texto, palabra) {
-  const oraciones = texto
-    .split(/(?<=[.!?;])\s+|\n+/)
-    .map((o) => o.toLowerCase().trim())
-    .filter(Boolean);
-  return oraciones.some((o) => {
-    const donde = typeof palabra === "string" ? o.indexOf(palabra) : o.search(palabra);
-    if (donde < 0) return false;
-    NIEGA.lastIndex = 0;
-    for (let m; (m = NIEGA.exec(o)); ) {
-      const fin = m.index + m[0].length;
-      if (donde < fin || donde - fin > DISTANCIA_NEGACION) continue;
-      if (SOLO_ARTICULOS.test(o.slice(fin, donde))) return true;
-    }
-    return false;
-  });
-}
-
 const fallos = [];
 
 // ── 0 · La excepción se prueba a sí misma ───────────────────────────────────
-for (const [texto, palabra, esperado, que] of [
-  ["como tu proyecto no lleva el asistente de whatsapp, no te llega.", "asistente", true, "negar la pieza SÍ se perdona"],
-  ["tu asistente no incluye llamadas.", "asistente", false, "si la negación es de otra cosa, NO se perdona"],
-  ["tu asistente contesta a cualquier hora.", "asistente", false, "afirmarla nunca se perdona"],
-  ["no incluye nada más. tu asistente contesta solo.", "asistente", false, "en otra oración no cuenta"],
-  ["no lleva sitio web, así que el asistente escribe.", "asistente", false, "negar OTRA pieza no perdona ésta"],
-]) {
+for (const [texto, palabra, esperado, que] of CASOS_NEGACION) {
   if (perdonaPorNegacion(texto, palabra) !== esperado)
     fallos.push(`[excepción] ${que} — «${texto}»`);
 }
