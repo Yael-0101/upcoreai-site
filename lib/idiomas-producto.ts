@@ -94,6 +94,17 @@ export const IDIOMAS_DE_PIEZA: Record<string, FichaIdiomas> = {
       "en inglés o en portugués, contesta en ese idioma y sigue todas estas reglas " +
       "igual». El modelo es Claude, que maneja los tres.",
   },
+  "agente-basico": {
+    idiomas: ["es"],
+    principales: ["es"],
+    prueba:
+      "2026-08-28 · es una decisión de ALCANCE, no un límite del motor, y hay que " +
+      "decirlo así: el modelo es el mismo (Claude) y sabe inglés y portugués. Lo que " +
+      "NO se hace en esta pieza es el trabajo de atender en ellos — el guion, las " +
+      "pruebas y el mantenimiento de cada idioma extra—, y por eso cuesta la mitad. " +
+      "Su `alcance` lo dice de frente («no atiende en inglés ni portugués… para eso " +
+      "está el agente completo») en lugar de fingir que no puede.",
+  },
   voz: {
     idiomas: ["es", "en"],
     principales: ["es", "en"],

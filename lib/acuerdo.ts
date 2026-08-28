@@ -199,10 +199,11 @@ export type DatosAcuerdo = {
 
 /** Piezas que le hablan al comprador por WhatsApp — las únicas que necesitan Meta. */
 const usaWhatsApp = (p: PiezaClave[]) =>
-  p.includes("agente") || p.includes("auto") || p.includes("reactivacion");
+  p.includes("agente") || p.includes("agente-basico") || p.includes("auto") || p.includes("reactivacion");
 
 /** ¿Hay algo que ATIENDA al comprador (contesta, responde dudas, agenda)? */
-const hayAsistente = (p: PiezaClave[]) => p.includes("agente") || p.includes("voz");
+const hayAsistente = (p: PiezaClave[]) =>
+  p.includes("agente") || p.includes("agente-basico") || p.includes("voz");
 
 /**
  * Los terceros de los que de verdad depende ESTE proyecto.

@@ -87,11 +87,36 @@ type Producto = Option & {
 // firma promedio pierde entre el 60% y el 70% de sus prospectos por no dar seguimiento a
 // tiempo. No hay que explicar el retorno: se explica solo.
 //
-// ⚠️ Pendiente de investigar: qué cobran las agencias de Miami por esto. Los precios de
-// abajo se fijaron por valor entregado, NO comparando contra competidores — todavía no
-// tenemos ese dato comprobado y aquí no se escriben cifras sin fuente.
+// ✅ INVESTIGADO EL 2026-08-28 (antes decía "pendiente"). El informe completo, con fuentes,
+// está en `Upcore-AI/competencia/precios-mercado-miami-2026-08.md`. En corto:
+//
+//   · Agencias de Miami que construyen a medida: un agente de un solo propósito va de
+//     $2,500 a $5,000 (AutomateNexus: recepcionista desde $2,500, agente de ventas desde
+//     $3,500; ai50m: sistemas completos $1,500–$5,000).
+//   · La banda genérica para lo que hace NUESTRO agente completo —multi-idioma, WhatsApp e
+//     integraciones— es **$5,000–$15,000**. O sea que $6,000 no está caro: está en su piso.
+//   · Contra quien de verdad compara un agente solo: Roof AI desde $299/mes, Structurely
+//     ~$500/mes, Ylopo $895–$2,000/mes. Nuestro pago único sale más barato que 20 meses de
+//     Roof AI — pero el prospecto no compara totales a dos años.
+//
+// ⚠️ Esas cifras salen de las páginas de los proveedores, NO de cotizaciones que nos hayan
+// pasado. Un precio de escaparate suele ser el "desde". Sirven para ubicarse; no se le dice
+// a un cliente "la competencia cobra X" apoyándose en esto.
+//
+// 🔴 LO QUE CAMBIÓ POR ESA INVESTIGACIÓN (decisión de Yael, 2026-08-28). El problema no era
+// el nivel del precio: era que **no existía escalón de entrada**. Le cobrábamos lo mismo a
+// una agente sola de Doral que a una desarrolladora que construye torres, y lo más barato
+// del catálogo eran $3,000. Se creó `agente-basico`.
+//
+// ⚠️ Y se diferencia por ALCANCE, nunca por quién es el cliente. Si fuera el mismo producto
+// a mitad de precio, el día que un cliente de $6,000 se entere se siente estafado. Cada cosa
+// que se le quita al básico es trabajo real que no se hace: los otros idiomas (guion, pruebas
+// y mantenimiento aparte), la calificación del comprador (la lógica que más tiempo lleva
+// afinar), la integración al CRM (donde se va media instalación) y el seguimiento largo (que
+// es la pieza `auto`, y se vende aparte).
 export const PRODUCTO_OPTIONS: Producto[] = [
   { val: "agente", label: "Agente de WhatsApp 24/7", desc: "Contesta en español e inglés, a cualquier hora", icon: "💬", setupUSD: 6000, varMin: 10, varMax: 30, hrs: 14, alcance: "responde WhatsApp en español, inglés o portugués según en qué idioma le escriban, a cualquier hora y en cualquier huso horario, resuelve las dudas de siempre, califica al comprador (presupuesto, plazo y si necesita financiamiento) y deja agendada la visita o la videollamada" },
+  { val: "agente-basico", label: "Agente de WhatsApp esencial", desc: "Contesta en español a cualquier hora y agenda", icon: "🌱", setupUSD: 3000, varMin: 8, varMax: 20, hrs: 7, alcance: "responde WhatsApp únicamente en español, a cualquier hora, resuelve las dudas de siempre —ubicación, qué hay disponible y cómo es el proceso de compra— y deja agendada la visita; no califica al comprador ni se conecta a tu CRM: para eso está el agente completo" },
   { val: "voz", label: "Agente de voz 24/7", desc: "Contesta el teléfono en español e inglés", icon: "📞", setupUSD: 6500, varMin: 25, varMax: 60, hrs: 16, escalaFuerte: true, alcance: "contesta las llamadas que hoy se pierden, atiende en español o en inglés según quien llame, resuelve dudas hablando, agenda en tu calendario y avisa al asesor — conservando tu número actual" },
   { val: "web", label: "Sitio web con agenda", desc: "En español e inglés; capta y agenda solo", icon: "🌐", setupUSD: 4500, varMin: 0, varMax: 15, hrs: 6, alcance: "sitio en español e inglés, con la ficha de cada desarrollo, formulario que califica y agenda en línea, listo para recibir tráfico de anuncios" },
   { val: "auto", label: "Seguimiento automático", desc: "Que ningún prospecto se enfríe", icon: "🔄", setupUSD: 3500, varMin: 8, varMax: 20, hrs: 10, alcance: "seguimiento en el idioma de cada comprador —español o inglés— que aguanta los meses que dura una preventa: recordatorios de cada etapa de pago, avisos de avance de obra y reactivación del prospecto que dejó de contestar" },
@@ -138,6 +163,12 @@ export const PANEL_ADICIONAL = {
 // si se separan, la propuesta prometería un control que el panel no muestra.
 export const MANDOS_DE_PIEZA: Record<string, MandoKey[]> = {
   agente: ["conversaciones", "desarrollos", "asistente"],
+  // El esencial lleva LOS MISMOS mandos que el completo, y no es un descuido: la consola
+  // sirve para MANDAR sobre el asistente (leer los chats, tomar uno, elegir qué desarrollos
+  // se ofrecen, apagarlo), y eso aplica igual aunque el asistente atienda en un solo idioma.
+  // Lo que cambia entre las dos piezas es el alcance del producto, no el control que tienes
+  // sobre él — cobrar por el control sería justo la objeción que la consola vino a resolver.
+  "agente-basico": ["conversaciones", "desarrollos", "asistente"],
   voz: ["desarrollos", "asistente"],
   web: ["desarrollos"],
   auto: ["textos"],

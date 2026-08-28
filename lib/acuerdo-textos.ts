@@ -829,6 +829,14 @@ const CATALOGO_EN: Record<string, { label: string; alcance: string }> = {
       "the buyer (budget, timeline, and whether they need financing) and books the visit " +
       "or the video call",
   },
+  "Agente de WhatsApp esencial": {
+    label: "Essential WhatsApp agent",
+    alcance:
+      "answers WhatsApp in Spanish only, at any hour, handles the usual questions " +
+      "—location, what is available and how the buying process works— and books the " +
+      "visit; it does not qualify the buyer and does not connect to your CRM: the full " +
+      "agent is there for that",
+  },
   "Agente de voz 24/7": {
     label: "24/7 voice agent",
     alcance:

@@ -165,7 +165,7 @@ const FASE_WHATSAPP = "WhatsApp oficial con Meta";
 export function fasesDe(productos: string[]): AvanceItem[] {
   const p = normalizarPiezas(productos);
   // El trámite de Meta solo existe si algo suyo escribe por WhatsApp.
-  const conMeta = ["agente", "auto", "reactivacion"].some((x) => p.includes(x));
+  const conMeta = ["agente", "agente-basico", "auto", "reactivacion"].some((x) => p.includes(x));
   return [
     { fase: "Preparación: checklist y cuentas", estado: "pendiente" },
     ...(conMeta ? [{ fase: FASE_WHATSAPP, estado: "pendiente" as const }] : []),
@@ -313,7 +313,7 @@ export function pasosVisibles(productos: string[]): PasoId[] {
   const todos = p.length === 0;
   const tiene = (...c: string[]) => todos || c.some((x) => p.includes(x));
   const pasos: PasoId[] = ["bienvenida", "servicios", "horarios"];
-  if (tiene("agente", "auto", "reactivacion")) pasos.push("numero");
+  if (tiene("agente", "agente-basico", "auto", "reactivacion")) pasos.push("numero");
   // El agente de voz vive del TELÉFONO: decidir si se desvía su número o estrena
   // línea es LA decisión de ese producto, y no se le preguntaba nunca
   // (lección 2026-08-16). Es un paso aparte del número de WhatsApp: un cliente
@@ -321,12 +321,12 @@ export function pasosVisibles(productos: string[]): PasoId[] {
   if (tiene("voz")) pasos.push("linea");
   pasos.push("cuentas");
   // La web también agenda (su botón de citas cae al calendario del cliente).
-  if (tiene("agente", "voz", "auto", "web")) pasos.push("calendario");
+  if (tiene("agente", "agente-basico", "voz", "auto", "web")) pasos.push("calendario");
   // La demo es el CHAT del agente: a voz-sola o web-sola no les aplica.
-  if (tiene("agente")) pasos.push("demo");
+  if (tiene("agente", "agente-basico")) pasos.push("demo");
   // El paso de textos solo tiene contenido si hay sitio (su estilo) o mensajes
   // que aprobar. A un cliente de solo-voz le salía una pantalla vacía.
-  if (tiene("web", "agente", "auto", "reactivacion")) pasos.push("textos");
+  if (tiene("web", "agente", "agente-basico", "auto", "reactivacion")) pasos.push("textos");
   // 🔴 SU EQUIPO — solo con la pieza `panel` (2026-08-25).
   //
   // El panel del director enseña **cómo va cada asesor**, y para eso hacen falta dos
@@ -376,7 +376,7 @@ export function cuentasRequeridas(
   const p = config.productos ?? [];
   const T = TA[idioma].cuentasDef;
   const usaWhatsApp =
-    p.includes("agente") || p.includes("auto") || p.includes("reactivacion");
+    p.includes("agente") || p.includes("agente-basico") || p.includes("auto") || p.includes("reactivacion");
   const defs: CuentaDef[] = [];
 
   const arma = (id: string, extra: Partial<CuentaDef> = {}): CuentaDef => {
@@ -389,14 +389,14 @@ export function cuentasRequeridas(
       arma("meta", {
         // Un cliente de solo recordatorios no tiene asistente: para él ese número
         // no ATIENDE a nadie, solo manda. Decírselo mal le vende algo que no compró.
-        para: p.includes("agente") ? T.meta.para : T.meta.paraAlterno,
+        para: p.includes("agente") || p.includes("agente-basico") ? T.meta.para : T.meta.paraAlterno,
         tusManos: true,
       })
     );
   }
   // El cerebro lo usan las DOS piezas que conversan, no solo el chat: un cliente
   // de solo-voz se quedaba sin la cuenta que hace hablar a su asistente.
-  if (p.includes("agente") || p.includes("voz")) defs.push(arma("ia"));
+  if (p.includes("agente") || p.includes("agente-basico") || p.includes("voz")) defs.push(arma("ia"));
   if (p.includes("voz")) defs.push(arma("telefonia"));
   if (p.includes("web")) {
     defs.push(

@@ -19,7 +19,7 @@
 import { TA } from "./arranque-textos";
 import type { Idioma } from "./acuerdo-textos";
 
-export type Pieza = "agente" | "voz" | "web" | "auto" | "reactivacion" | "panel";
+export type Pieza = "agente" | "agente-basico" | "voz" | "web" | "auto" | "reactivacion" | "panel";
 
 export const TODAS_LAS_PIEZAS: Pieza[] = [
   "agente",
@@ -48,12 +48,12 @@ const tiene = (p: string[], ...cuales: Pieza[]) => cuales.some((c) => p.includes
 // una vez para todas las piezas que se comportan igual.
 
 /** Piezas que conversan con el comprador en nombre de la inmobiliaria. */
-export const hayAsistente = (p: string[]) => tiene(p, "agente", "voz");
+export const hayAsistente = (p: string[]) => tiene(p, "agente", "agente-basico", "voz");
 /** Piezas que mandan mensajes por WhatsApp (necesitan número y textos). */
-export const hayMensajes = (p: string[]) => tiene(p, "agente", "auto", "reactivacion");
+export const hayMensajes = (p: string[]) => tiene(p, "agente", "agente-basico", "auto", "reactivacion");
 export const hayWeb = (p: string[]) => tiene(p, "web");
 export const hayVoz = (p: string[]) => tiene(p, "voz");
-export const hayChat = (p: string[]) => tiene(p, "agente");
+export const hayChat = (p: string[]) => tiene(p, "agente", "agente-basico");
 
 /** ¿Le pedimos el tono? Solo si algo de lo suyo le habla a un comprador. */
 export const pideTono = (p: string[]) =>
@@ -112,7 +112,7 @@ export function loSuyo(piezas: string[], idioma: Idioma = "es"): string {
   const t = TA[idioma].suyo;
   const p = normalizarPiezas(piezas);
   const partes: string[] = [];
-  if (tiene(p, "agente", "voz")) {
+  if (tiene(p, "agente", "agente-basico", "voz")) {
     partes.push(
       p.includes("agente") && p.includes("voz")
         ? t.asistente

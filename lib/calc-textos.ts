@@ -129,6 +129,12 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
         alcance:
           "responde WhatsApp en español, inglés o portugués según en qué idioma le escriban, a cualquier hora y en cualquier huso horario, resuelve las dudas de siempre, califica al comprador (presupuesto, plazo y si necesita financiamiento) y deja agendada la visita o la videollamada",
       },
+      "agente-basico": {
+        label: "Agente de WhatsApp esencial",
+        desc: "Contesta en español a cualquier hora y agenda",
+        alcance:
+          "responde WhatsApp únicamente en español, a cualquier hora, resuelve las dudas de siempre —ubicación, qué hay disponible y cómo es el proceso de compra— y deja agendada la visita; no califica al comprador ni se conecta a tu CRM: para eso está el agente completo",
+      },
       voz: {
         label: "Agente de voz 24/7",
         desc: "Contesta el teléfono en español e inglés",
@@ -243,6 +249,12 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
         desc: "Replies in Spanish and English, at any hour",
         alcance:
           "answers WhatsApp in Spanish, English or Portuguese depending on the language they write in, at any hour and in any time zone, handles the usual questions, qualifies the buyer (budget, timeline and whether they need financing) and leaves the visit or video call booked",
+      },
+      "agente-basico": {
+        label: "Essential WhatsApp agent",
+        desc: "Replies in Spanish at any hour and books",
+        alcance:
+          "answers WhatsApp in Spanish only, at any hour, handles the usual questions —location, what is available and how the buying process works— and leaves the visit booked; it does not qualify the buyer and does not connect to your CRM: the full agent is there for that",
       },
       voz: {
         label: "24/7 voice agent",

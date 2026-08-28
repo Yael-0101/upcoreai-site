@@ -12,7 +12,7 @@
 import { TP } from "./propuesta-textos";
 import type { Idioma } from "./acuerdo-textos";
 
-export type PiezaClave = "web" | "agente" | "voz" | "auto" | "reactivacion" | "panel";
+export type PiezaClave = "web" | "agente" | "agente-basico" | "voz" | "auto" | "reactivacion" | "panel";
 
 const CLAVES: PiezaClave[] = ["web", "agente", "voz", "auto", "reactivacion", "panel"];
 
@@ -382,6 +382,16 @@ export const TU_PARTE: Record<PiezaClave, { t: string; min: string }[]> = {
     { t: "Tus cuentas: las creamos NOSOTROS a tu nombre — tú solo nos dices a qué correo quedan; contraseñas por chat, jamás", min: "5 min" },
     { t: "Darme acceso a tu calendario o agenda", min: "5 min" },
     { t: "Probarlo como si fueras tu comprador antes de salir en vivo", min: "15 min" },
+  ],
+  // Menos alcance = menos trabajo para él, y se nota en la lista: un solo idioma que
+  // revisar y sin calificación que afinar. Si esta lista fuera igual que la del agente
+  // completo, el cliente se preguntaría por qué paga la mitad y pone lo mismo.
+  "agente-basico": [
+    { t: "Contestar el checklist de tu inmobiliaria: proyectos, planes de pago, horarios y tu tono", min: "15 min" },
+    { t: "Decidir qué número de WhatsApp usará el asistente — te explico la diferencia antes", min: "5 min" },
+    { t: "Tus cuentas: las creamos NOSOTROS a tu nombre — tú solo nos dices a qué correo quedan; contraseñas por chat, jamás", min: "5 min" },
+    { t: "Darme acceso a tu calendario o agenda", min: "5 min" },
+    { t: "Probarlo como si fueras tu comprador antes de salir en vivo", min: "10 min" },
   ],
   voz: [
     { t: "Contestar el checklist de tu inmobiliaria: proyectos, planes de pago, horarios y tu tono", min: "15 min" },

@@ -274,7 +274,10 @@ for (const piezas of subconjuntos(VALS)) {
       // solo-web: ahí no hay nada que hable ni llamada que grabar, así que nombrarlo sería
       // hablarle de una pieza que no compró. Un guardián que exige de más obliga a meter
       // texto falso para callarlo — que es peor que el defecto que vigila.
-      const conAsistente = piezas.includes("agente") || piezas.includes("voz");
+      // ⚠️ El "esencial" (agente-basico) TAMBIEN es un asistente que habla con el
+      // comprador: cambia el alcance y el precio, no la naturaleza de la pieza.
+      const conAsistente =
+        piezas.includes("agente") || piezas.includes("agente-basico") || piezas.includes("voz");
       const delSuelo = [
         ["vivienda justa", /vivienda justa|fair housing/i, true],
         ["que no inventa", /nunca inventa|never makes anything up/i, true],
@@ -298,10 +301,10 @@ for (const piezas of subconjuntos(VALS)) {
       // de Meta, de WhatsApp y de los proveedores de IA. Mismo defecto que Yael cazó
       // en el Portal de Arranque, aquí dentro de un documento que se firma.
       const AJENO = [
-        { palabra: /\bWhatsApp\b/, si: ["agente", "auto", "reactivacion"] },
-        { palabra: /\bMeta\b/, si: ["agente", "auto", "reactivacion"] },
-        { palabra: /inteligencia artificial/i, si: ["agente", "voz", "auto", "reactivacion", "panel"] },
-        { palabra: /\basistente\b/i, si: ["agente", "voz"] },
+        { palabra: /\bWhatsApp\b/, si: ["agente", "agente-basico", "auto", "reactivacion"] },
+        { palabra: /\bMeta\b/, si: ["agente", "agente-basico", "auto", "reactivacion"] },
+        { palabra: /inteligencia artificial/i, si: ["agente", "agente-basico", "voz", "auto", "reactivacion", "panel"] },
+        { palabra: /\basistente\b/i, si: ["agente", "agente-basico", "voz"] },
         { palabra: /l[íi]nea telef[óo]nica/i, si: ["voz"] },
       ];
       // ⚠️ Las piezas se leen con la MISMA función que usa el acuerdo, no contando

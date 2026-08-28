@@ -91,7 +91,11 @@ const COMBOS = combinaciones(VALS);
       /export const (veConversaciones|veDesarrollos|veInterruptorAsistente|veTextos)\s*=\s*\([^)]*\)\s*=>\s*tiene\(p,([^)]*)\)/g;
     let m;
     while ((m = re.exec(txt)) !== null) {
-      const piezas = [...m[2].matchAll(/"([a-z]+)"/g)].map((x) => x[1]);
+      // ⚠️ El guion FORMA PARTE del nombre de la pieza (2026-08-28). Esto era `[a-z]+`, que
+      // no lo acepta, así que al crear `agente-basico` el guardián dejó de verla y reclamaba
+      // que el panel no la mostrara cuando sí lo hacía. Un patrón escrito para los datos de
+      // ayer no avisa de que se quedó corto: simplemente deja de reconocer lo nuevo.
+      const piezas = [...m[2].matchAll(/"([a-z-]+)"/g)].map((x) => x[1]);
       delPanel[EQUIVALE[m[1]]] = new Set(piezas);
     }
 
