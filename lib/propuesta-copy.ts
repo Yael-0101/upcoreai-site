@@ -10,6 +10,7 @@
 // v3 y anteriores: se infieren de los labels de `incluye`).
 
 import { TP } from "./propuesta-textos";
+import { CONTACT } from "./content";
 import type { Idioma } from "./acuerdo-textos";
 
 export type PiezaClave = "web" | "agente" | "agente-basico" | "voz" | "auto" | "reactivacion" | "panel";
@@ -99,10 +100,13 @@ export function linkWhatsApp(contacto: unknown, clinica: string, idioma: Idioma 
   const texto = encodeURIComponent(
     TP[idioma].waMensaje(clinica || (idioma === "en" ? "my firm" : "mi inmobiliaria"))
   );
-  // Los números viven en content.ts (CONTACT); aquí solo se decide cuál.
+  // 🔴 Este comentario decía "los números viven en content.ts; aquí solo se decide cuál" — y
+  // era MENTIRA: estaban escritos a mano justo debajo. Se descubrió al mudar la línea humana
+  // al +1 786 (2026-08-28): el sitio ya decía el número nuevo y la propuesta seguía mandando
+  // al viejo, sin dar un solo error. Ahora sí sale de CONTACT, que es la fuente.
   return esContactoBot(contacto)
-    ? `https://wa.me/14244472698?text=${texto}`
-    : `https://wa.me/14244472941?text=${texto}`;
+    ? `${CONTACT.whatsappBot}?text=${texto}`
+    : `${CONTACT.whatsappYael}?text=${texto}`;
 }
 
 // ── La invitación a recortar el alcance ──────────────────────────────────────

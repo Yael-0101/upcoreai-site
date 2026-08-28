@@ -381,8 +381,17 @@ casos++;
 // ── 10 · Quién contesta el "Me interesa" (2026-08-17) ───────────────────────
 // El botón mandaba SIEMPRE al WhatsApp del asistente: un prospecto al que Yael
 // acababa de llamar caía con un robot sin contexto de esa llamada.
-const BOT = "14244472698";
-const YAEL = "14244472941";
+// ⚠️ Los números se leen de CONTACT, la fuente, NO se escriben aquí a mano (2026-08-28). Al
+// mudar la línea humana al +1 786 esta prueba se habría quedado exigiendo el 424 — y entonces
+// habría hecho lo peor que puede hacer una prueba: ponerse roja por el arreglo correcto, o
+// —si alguien "la arregla" cambiando el código— fijar el número viejo para siempre.
+const { CONTACT } = jiti(path.join(AQUI, "..", "lib", "content.ts"));
+const soloDigitos = (url) => (String(url).match(/wa\.me\/(\d+)/) || [])[1];
+const BOT = soloDigitos(CONTACT.whatsappBot);
+const YAEL = soloDigitos(CONTACT.whatsappYael);
+if (!BOT || !YAEL) {
+  fallos.push("no pude leer los números de CONTACT — la prueba de WhatsApp no está comprobando nada");
+}
 casos++;
 {
   const num = (l) => (l.match(/wa\.me\/(\d+)/) || [])[1];
