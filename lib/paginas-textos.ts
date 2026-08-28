@@ -228,7 +228,7 @@ const ES: TextosPaginas = {
     faqs: [
       {
         q: "¿Cuánto cuesta cada pieza?",
-        a: "El precio es cerrado, no un rango: el asistente de WhatsApp son $6,000 USD, el agente de voz $6,500, el sitio con agenda $4,500, el seguimiento automático $3,500 y la reactivación $3,000. El panel, si lo quieres, $3,000. De la segunda pieza en adelante, 15% menos. Tu diagnóstico gratis te dice en 3 minutos cuáles necesitas y cuánto suma.",
+        a: "El precio es cerrado, no un rango: el asistente de WhatsApp son $6,000 USD —y hay una versión esencial de $3,000, que atiende solo en español—, el agente de voz $6,500, el sitio con agenda $4,500, el seguimiento automático $3,500 y la reactivación $3,000. El panel, si lo quieres, $3,000. De la segunda pieza en adelante, 15% menos. Tu diagnóstico gratis te dice en 3 minutos cuáles necesitas y cuánto suma.",
       },
       {
         q: "¿Hay mensualidad obligatoria?",
@@ -248,7 +248,7 @@ const ES: TextosPaginas = {
       },
       {
         q: "¿Y si mi presupuesto es limitado?",
-        a: "Empezamos por la pieza que más dinero te recupera (casi siempre el agente de WhatsApp) y el sistema crece después, cuando ya se está pagando solo. También existe el plan Gestionado sin inversión inicial fuerte.",
+        a: "Para eso existe el agente de WhatsApp esencial: $3,000, atiende en español a cualquier hora y deja la visita agendada. Es la pieza que más dinero recupera, en su versión más ligera, y el sistema crece después cuando ya se está pagando solo. También existe el plan Gestionado sin inversión inicial fuerte.",
       },
     ],
     migaInicio: "Inicio",
@@ -499,7 +499,7 @@ const EN: TextosPaginas = {
     faqs: [
       {
         q: "What does each piece cost?",
-        a: "The price is fixed, not a range: the WhatsApp assistant is $6,000 USD, the voice agent $6,500, the site with booking $4,500, automated follow-up $3,500 and re-engagement $3,000. The dashboard, if you want it, $3,000. From the second piece onward, 15% off. Your free assessment tells you in 3 minutes which ones you need and what they add up to.",
+        a: "The price is fixed, not a range: the WhatsApp assistant is $6,000 USD —and there is an essential version at $3,000 that answers in Spanish only—, the voice agent $6,500, the site with booking $4,500, automated follow-up $3,500 and re-engagement $3,000. The dashboard, if you want it, $3,000. From the second piece onward, 15% off. Your free assessment tells you in 3 minutes which ones you need and what they add up to.",
       },
       {
         q: "Is there a mandatory monthly fee?",
@@ -519,7 +519,7 @@ const EN: TextosPaginas = {
       },
       {
         q: "What if my budget is limited?",
-        a: "We start with the piece that recovers the most money for you (almost always the WhatsApp agent) and the system grows later, once it is already paying for itself. There is also the Managed plan without a heavy upfront investment.",
+        a: "That is what the essential WhatsApp agent is for: $3,000, it answers in Spanish at any hour and leaves the visit booked. It is the piece that recovers the most money, in its lightest version, and the system grows later once it is already paying for itself. There is also the Managed plan without a heavy upfront investment.",
       },
     ],
     migaInicio: "Home",

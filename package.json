@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/probar-acuerdo.mjs && node scripts/probar-propuesta.mjs && node scripts/probar-propuesta-vocabulario.mjs && node scripts/probar-arranque.mjs && node scripts/probar-pegar-desarrollos.mjs && node scripts/probar-arranque-vocabulario.mjs && node scripts/probar-sitio.mjs && node scripts/probar-sitio-bilingue.mjs && node scripts/probar-idiomas-producto.mjs && node scripts/probar-consola.mjs && node scripts/probar-token.mjs && node scripts/generar-acuerdo-md.mjs --verificar && node scripts/generar-redirecciones.mjs --verificar",
+    "prebuild": "node scripts/probar-acuerdo.mjs && node scripts/probar-propuesta.mjs && node scripts/probar-propuesta-vocabulario.mjs && node scripts/probar-arranque.mjs && node scripts/probar-pegar-desarrollos.mjs && node scripts/probar-arranque-vocabulario.mjs && node scripts/probar-sitio.mjs && node scripts/probar-sitio-bilingue.mjs && node scripts/probar-idiomas-producto.mjs && node scripts/probar-consola.mjs && node scripts/probar-precios-publicados.mjs && node scripts/probar-token.mjs && node scripts/generar-acuerdo-md.mjs --verificar && node scripts/generar-redirecciones.mjs --verificar",
     "build": "next build",
     "start": "next start",
     "probar:acuerdo": "node scripts/probar-acuerdo.mjs",

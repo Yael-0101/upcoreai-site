@@ -83,6 +83,19 @@ const PREGUNTAS_POR_PRODUCTO: Record<string, { q: string; options: Option[] }> =
       { val: "nose", label: "No sé, solo sé que se pierden", icon: "🤷" },
     ],
   },
+  // La misma pregunta que el agente completo: lo que cambia entre las dos piezas es el
+  // ALCANCE de lo que construimos, no el dolor que resuelven. Sin esta entrada, quien
+  // eligiera el esencial se saltaba la pregunta y el diagnóstico salía con menos datos
+  // que el de al lado — una pieza nueva sin su pregunta no da error, solo diagnostica peor.
+  "agente-basico": {
+    q: "¿Cuándo se les quedan más mensajes sin contestar?",
+    options: [
+      { val: "fuera", label: "Fuera de horario", icon: "🌙" },
+      { val: "findes", label: "Fines de semana", icon: "📆" },
+      { val: "siempre", label: "A toda hora, no damos abasto", icon: "🔥" },
+      { val: "nose", label: "No sé, solo sé que se pierden", icon: "🤷" },
+    ],
+  },
   voz: {
     q: "¿Cuántas llamadas dirías que se quedan sin contestar al día?",
     options: [

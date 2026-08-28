@@ -289,6 +289,15 @@ const ES: TextosEmpezar = {
         nose: "No sé, solo sé que se pierden",
       },
     },
+    "agente-basico": {
+      q: "¿Cuándo se les quedan más mensajes sin contestar?",
+      opciones: {
+        fuera: "Fuera de horario",
+        findes: "Fines de semana",
+        siempre: "A toda hora, no damos abasto",
+        nose: "No sé, solo sé que se pierden",
+      },
+    },
     voz: {
       q: "¿Cuántas llamadas dirías que se quedan sin contestar al día?",
       opciones: {
@@ -489,6 +498,15 @@ const EN: TextosEmpezar = {
   },
   porProducto: {
     agente: {
+      q: "When do most messages go unanswered?",
+      opciones: {
+        fuera: "Outside business hours",
+        findes: "Weekends",
+        siempre: "All the time, we cannot keep up",
+        nose: "I do not know, I just know we lose them",
+      },
+    },
+    "agente-basico": {
       q: "When do most messages go unanswered?",
       opciones: {
         fuera: "Outside business hours",

@@ -398,7 +398,7 @@ export const ARTICULOS: Articulo[] = [
           {
             h2: "Y nuestros precios, ya que estamos",
             parrafos: [
-              "Sería raro escribir esto y no decir los nuestros. Son cerrados, no rangos: el asistente de WhatsApp son $6,000 USD, el agente de voz $6,500, el sitio con agenda $4,500, el seguimiento automático $3,500 y la reactivación $3,000. El panel, si lo quieres, $3,000. De la segunda pieza en adelante hay 15% menos.",
+              "Sería raro escribir esto y no decir los nuestros. Son cerrados, no rangos: el asistente de WhatsApp son $6,000 USD —con una versión esencial de $3,000 que atiende solo en español—, el agente de voz $6,500, el sitio con agenda $4,500, el seguimiento automático $3,500 y la reactivación $3,000. El panel, si lo quieres, $3,000. De la segunda pieza en adelante hay 15% menos.",
               "Todo es pago único y queda a tu nombre. Si prefieres que nosotros lo operemos, hay una mensualidad aparte por ese servicio — nunca por el software.",
             ],
           },
@@ -463,7 +463,7 @@ export const ARTICULOS: Articulo[] = [
           {
             h2: "And our prices, while we are at it",
             parrafos: [
-              "It would be odd to write all this and not state ours. They are fixed, not ranges: the WhatsApp assistant is $6,000 USD, the voice agent $6,500, the site with booking $4,500, automated follow-up $3,500 and re-engagement $3,000. The dashboard, if you want it, $3,000. From the second piece onward there is 15% off.",
+              "It would be odd to write all this and not state ours. They are fixed, not ranges: the WhatsApp assistant is $6,000 USD —with an essential version at $3,000 that answers in Spanish only—, the voice agent $6,500, the site with booking $4,500, automated follow-up $3,500 and re-engagement $3,000. The dashboard, if you want it, $3,000. From the second piece onward there is 15% off.",
               "It is all one-time payment and it all stays in your name. If you would rather we ran it, there is a separate monthly fee for that service — never for the software.",
             ],
           },
