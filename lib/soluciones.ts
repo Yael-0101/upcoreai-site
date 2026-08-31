@@ -125,7 +125,7 @@ export const SOLUCIONES: Solucion[] = [
     actualizado: "2026-08-22",
     t: {
       es: {
-        title: "Chatbot de WhatsApp para inmobiliarias: responde y agenda 24/7",
+        title: "Chatbot de WhatsApp para inmobiliarias 24/7",
         metaDescription:
           "Un chatbot de WhatsApp con IA para tu inmobiliaria: atiende en español a cualquier hora, califica al comprador y agenda la visita. Hecho para preventa en Miami.",
         eyebrow: "Chatbot de WhatsApp para inmobiliarias",
@@ -241,7 +241,7 @@ export const SOLUCIONES: Solucion[] = [
         seguridad: SEGURIDAD_ES,
       },
       en: {
-        title: "WhatsApp chatbot for real estate: answers and books 24/7",
+        title: "WhatsApp chatbot for real estate: books 24/7",
         metaDescription:
           "An AI WhatsApp chatbot for your firm: answers in Spanish at any hour, qualifies the buyer and books the appointment. Built for Miami preconstruction sales.",
         eyebrow: "WhatsApp chatbot for real estate firms",
@@ -362,7 +362,7 @@ export const SOLUCIONES: Solucion[] = [
     actualizado: "2026-08-22",
     t: {
       es: {
-        title: "Asistente virtual para inmobiliarias: atiende, califica y agenda",
+        title: "Asistente virtual para inmobiliarias con IA",
         metaDescription:
           "Un asistente virtual con IA que atiende el WhatsApp y el teléfono de tu inmobiliaria, califica al comprador y agenda la visita. Sin contratar a nadie más.",
         eyebrow: "Asistente virtual para inmobiliarias",
@@ -440,7 +440,7 @@ export const SOLUCIONES: Solucion[] = [
         seguridad: SEGURIDAD_ES,
       },
       en: {
-        title: "Virtual assistant for real estate: answers, qualifies and books",
+        title: "AI virtual assistant for real estate firms",
         metaDescription:
           "An AI virtual assistant that answers your firm's WhatsApp and phone, qualifies the buyer and books the appointment. Without hiring anyone else.",
         eyebrow: "Virtual assistant for real estate firms",
@@ -533,7 +533,7 @@ export const SOLUCIONES: Solucion[] = [
     actualizado: "2026-08-22",
     t: {
       es: {
-        title: "Agente de voz para inmobiliarias: contesta el teléfono y agenda",
+        title: "Agente de voz para inmobiliarias: contesta y agenda",
         metaDescription:
           "Un agente de voz con IA que contesta las llamadas de tu inmobiliaria a cualquier hora, resuelve dudas hablando y agenda la visita. Conservas tu número actual.",
         eyebrow: "Agente de voz para inmobiliarias",
@@ -606,7 +606,7 @@ export const SOLUCIONES: Solucion[] = [
         seguridad: SEGURIDAD_ES,
       },
       en: {
-        title: "Voice agent for real estate: answers the phone and books",
+        title: "Voice agent for real estate: answers and books",
         metaDescription:
           "An AI voice agent that answers your firm's calls at any hour, handles questions out loud and books the appointment. You keep your current number.",
         eyebrow: "Voice agent for real estate firms",
@@ -688,9 +688,9 @@ export const SOLUCIONES: Solucion[] = [
     actualizado: "2026-08-22",
     t: {
       es: {
-        title: "Seguimiento de leads inmobiliarios: que ningún prospecto se enfríe",
+        title: "Seguimiento automático de leads inmobiliarios",
         metaDescription:
-          "El 60–70% de los prospectos inmobiliarios se pierde por seguimiento tardío. Automatiza el seguimiento largo de una preventa: recordatorios, avances de obra y reactivación.",
+          "El 60–70% de los prospectos se pierde por seguimiento tardío. Automatiza el seguimiento de una preventa: recordatorios, avances de obra y reactivación.",
         eyebrow: "Seguimiento de leads inmobiliarios",
         h1: "El primer contacto sí se atiende. El del mes cuatro es el que se cae.",
         intro:
@@ -753,7 +753,7 @@ export const SOLUCIONES: Solucion[] = [
       en: {
         title: "Real estate lead follow-up: so no lead goes cold",
         metaDescription:
-          "60–70% of real estate leads are lost to late follow-up. Automate the long follow-up of a preconstruction sale: reminders, construction updates and re-engagement.",
+          "60–70% of real estate leads are lost to late follow-up. Automate preconstruction follow-up: reminders, construction updates and re-engagement.",
         eyebrow: "Real estate lead follow-up",
         h1: "The first contact does get handled. It is month four that falls apart.",
         intro:
@@ -829,9 +829,9 @@ export const SOLUCIONES: Solucion[] = [
     actualizado: "2026-08-22",
     t: {
       es: {
-        title: "Automatización para inmobiliarias: la parte digital, completa",
+        title: "Automatización para inmobiliarias: todo conectado",
         metaDescription:
-          "Sitio con la ficha de cada desarrollo, agenda en línea, WhatsApp, teléfono y panel — montado, conectado a tu CRM y operando junto. Automatización para inmobiliarias.",
+          "Sitio con la ficha de cada desarrollo, agenda en línea, WhatsApp, teléfono y panel — montado, conectado a tu CRM y operando junto.",
         eyebrow: "Automatización para inmobiliarias",
         h1: "No piezas sueltas: la parte digital de tu inmobiliaria, completa.",
         intro:
@@ -910,7 +910,7 @@ export const SOLUCIONES: Solucion[] = [
       en: {
         title: "Real estate automation: the digital side, complete",
         metaDescription:
-          "A site with a page for every development, online booking, WhatsApp, phone and a dashboard — set up, wired into your CRM and running as one. Real estate automation.",
+          "A site with a page for every development, online booking, WhatsApp, phone and a dashboard — set up, wired into your CRM and running as one.",
         eyebrow: "Real estate automation",
         h1: "Not loose pieces: the digital side of your firm, complete.",
         intro:
@@ -1002,9 +1002,9 @@ export const SOLUCIONES: Solucion[] = [
     actualizado: "2026-08-22",
     t: {
       es: {
-        title: "Vender preventa en Miami a compradores latinoamericanos",
+        title: "Vender preventa en Miami a compradores latinos",
         metaDescription:
-          "El 52% de las compras de preventa en el sur de Florida son de extranjeros y ~86% de ellos son latinoamericanos. Cómo atenderlos en su idioma, en su horario y durante los meses que dura una preventa.",
+          "El 52% de las compras de preventa en el sur de Florida son de extranjeros y ~86% de ellos, latinoamericanos. Cómo atenderlos en su idioma y su horario.",
         eyebrow: "Preventa en Miami · comprador latinoamericano",
         h1: "Tu comprador decide en español. ¿Tu operación está lista para eso?",
         intro:
@@ -1068,9 +1068,9 @@ export const SOLUCIONES: Solucion[] = [
         seguridad: SEGURIDAD_ES,
       },
       en: {
-        title: "Selling Miami preconstruction to Latin American buyers",
+        title: "Selling Miami preconstruction to Latin America",
         metaDescription:
-          "52% of South Florida preconstruction purchases are made by foreign buyers, and ~86% of them are Latin American. How to serve them in their language, on their clock, across the months a preconstruction sale takes.",
+          "52% of South Florida preconstruction buyers are foreign, and ~86% of those are Latin American. How to serve them in their language, on their clock.",
         eyebrow: "Miami preconstruction · the Latin American buyer",
         h1: "Your buyer decides in Spanish. Is your operation ready for that?",
         intro:

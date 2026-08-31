@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { SOLUCIONES } from "./soluciones";
 import { ARTICULOS, HAY_BLOG } from "./blog";
+import { contenido } from "./site-textos";
+import { PRODUCTO_OPTIONS, opcionEn } from "./calc";
 import { LOCALE, IDIOMAS, ORIGEN, type Idioma } from "./idioma";
 import { alternativas, ruta } from "./rutas";
 
@@ -77,6 +79,9 @@ export function metaPagina({
   return {
     title: tituloAbsoluto ? { absolute: title } : title,
     description,
+    // Cada idioma lleva SUS keywords (antes las españolas del layout se heredaban
+    // también en /en). La fuente única es site-textos, la misma de la portada.
+    keywords: contenido(idioma).meta.keywords,
     alternates: {
       // ⚠️ El canonical de cada página es ELLA MISMA, no la española: si el
       // inglés declarara como canonical al español, le estaríamos pidiendo a
@@ -209,6 +214,43 @@ export function breadcrumbJsonLd(
         item: `${SITE_URL}${r === "/" ? "" : r}`,
       };
     }),
+  };
+}
+
+/** Catálogo de precios PROPIOS para /precios (rich result de ofertas).
+ *
+ *  Lee DIRECTO de lib/calc.ts — el único dueño de los precios, con guardián
+ *  (probar-precios-publicados.mjs) — así este JSON-LD no puede desfasarse del
+ *  precio visible. Son los precios de Upcore, que sí se publican; jamás datos
+ *  de inmuebles (precios/disponibilidad/fechas es la línea roja del nicho).
+ *
+ *  Se emite como nodo con el @id de la organización: para Google es EL MISMO
+ *  nodo que el del layout, solo que aquí gana la propiedad hasOfferCatalog. */
+export function preciosJsonLd(idioma: Idioma = "es") {
+  return {
+    "@type": "ProfessionalService",
+    "@id": `${SITE_URL}/#organizacion`,
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name:
+        idioma === "en"
+          ? "AI automation for real estate firms"
+          : "Automatización con IA para inmobiliarias",
+      itemListElement: PRODUCTO_OPTIONS.map((p) => {
+        const o = opcionEn(p, idioma);
+        return {
+          "@type": "Offer",
+          price: p.setupUSD,
+          priceCurrency: "USD",
+          itemOffered: {
+            "@type": "Service",
+            name: o.label,
+            description: o.desc,
+            provider: { "@id": `${SITE_URL}/#organizacion` },
+          },
+        };
+      }),
+    },
   };
 }
 

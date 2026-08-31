@@ -147,7 +147,7 @@ const ES: TextosSitio = {
   meta: {
     title: "Upcore AI | Automatización con IA para inmobiliarias",
     description:
-      "Ningún comprador sin respuesta. Automatización con IA que atiende tu WhatsApp y tu teléfono en español a cualquier hora, califica al comprador y agenda la visita — para inmobiliarias de preventa en Miami.",
+      "Automatización con IA para inmobiliarias de preventa en Miami: atiende tu WhatsApp y tu teléfono en español a cualquier hora, califica y agenda la visita.",
     keywords: [
       "automatización para inmobiliarias",
       "IA para inmobiliarias",
@@ -557,7 +557,7 @@ const EN: TextosSitio = {
   meta: {
     title: "Upcore AI | AI automation for real estate firms",
     description:
-      "No buyer left unanswered. AI automation that answers your WhatsApp and your phone in Spanish around the clock, qualifies the buyer and books the appointment — built for South Florida preconstruction sales.",
+      "AI automation for South Florida preconstruction sales: it answers your WhatsApp and your phone around the clock, qualifies the buyer and books the visit.",
     keywords: [
       "real estate automation",
       "AI for real estate",

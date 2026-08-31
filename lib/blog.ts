@@ -70,9 +70,9 @@ export const ARTICULOS: Articulo[] = [
     ],
     t: {
       es: {
-        title: "El 60–70% de tus prospectos se pierde por seguimiento tardío",
+        title: "60–70% de prospectos perdidos por seguimiento tardío",
         metaDescription:
-          "No es que no lleguen prospectos: es que no se les da seguimiento. Los números del sector inmobiliario, por qué pasa aunque el equipo sea bueno, y qué se puede automatizar sin que se note.",
+          "No es que no lleguen prospectos: es que nadie les da seguimiento. Los números del sector, por qué pasa aunque el equipo sea bueno y qué se puede automatizar.",
         h1: "El 60–70% de tus prospectos se pierde por seguimiento tardío",
         resumen:
           "La mayoría de las inmobiliarias no tiene un problema de generación de leads: tiene un problema de seguimiento. Aquí van los números del sector, la razón por la que pasa incluso con equipos buenos, y qué parte de esto se puede resolver sin contratar a nadie.",
@@ -139,7 +139,7 @@ export const ARTICULOS: Articulo[] = [
       en: {
         title: "60–70% of your leads are lost to late follow-up",
         metaDescription:
-          "It is not that leads are not arriving: it is that nobody follows up. The industry numbers, why it happens even with a good team, and what can be automated without it showing.",
+          "It is not that leads are not arriving: nobody follows up. The industry numbers, why it happens even with good teams, and what can be automated.",
         h1: "60–70% of your leads are lost to late follow-up",
         resumen:
           "Most real estate firms do not have a lead generation problem: they have a follow-up problem. Here are the industry numbers, the reason it happens even to good teams, and which part of it can be solved without hiring anyone.",
@@ -219,9 +219,9 @@ export const ARTICULOS: Articulo[] = [
     ],
     t: {
       es: {
-        title: "Cómo atender a un comprador latinoamericano que compra en Miami sin visitarla",
+        title: "Atender al comprador latinoamericano en Miami",
         metaDescription:
-          "Más de la mitad de las compras de preventa en el sur de Florida son de extranjeros, y la mayoría son latinoamericanos. Qué cambia en tu operación cuando ese es tu comprador.",
+          "Más de la mitad de las compras de preventa en el sur de Florida son de extranjeros, casi todos latinoamericanos. Qué cambia cuando ese es tu comprador.",
         h1: "Cómo atender a un comprador latinoamericano que compra en Miami sin visitarla",
         resumen:
           "Compra desde otro país, decide en familia, pregunta en español y muchas veces firma sin haber pisado la unidad. Este perfil ya es la mayoría del mercado de preventa en el sur de Florida, y atiende distinto a como está montada la mayoría de las operaciones.",
@@ -277,9 +277,9 @@ export const ARTICULOS: Articulo[] = [
         ],
       },
       en: {
-        title: "How to serve a Latin American buyer purchasing in Miami sight unseen",
+        title: "Serving the Latin American buyer in Miami",
         metaDescription:
-          "More than half of South Florida preconstruction purchases are made by foreign buyers, and most of them are Latin American. What changes in your operation when that is your buyer.",
+          "More than half of South Florida preconstruction purchases come from foreign buyers, most of them Latin American. What changes when that is your buyer.",
         h1: "How to serve a Latin American buyer purchasing in Miami sight unseen",
         resumen:
           "They buy from another country, decide as a family, ask in Spanish and often sign without ever setting foot in the unit. This profile is already the majority of the South Florida preconstruction market, and it needs to be served differently from how most operations are set up.",
@@ -350,9 +350,9 @@ export const ARTICULOS: Articulo[] = [
     ],
     t: {
       es: {
-        title: "¿Cuánto cuesta automatizar la atención de una inmobiliaria? (guía 2026)",
+        title: "¿Cuánto cuesta automatizar una inmobiliaria? (2026)",
         metaDescription:
-          "Qué determina de verdad el precio de automatizar la atención de una inmobiliaria, los tres modelos de cobro del mercado, los costos de APIs que casi nadie menciona y las preguntas para detectar letra chica.",
+          "Qué determina el precio de automatizar la atención, los tres modelos de cobro, los costos de APIs que casi nadie menciona y cómo detectar letra chica.",
         h1: "¿Cuánto cuesta automatizar la atención de una inmobiliaria?",
         resumen:
           "La mayoría de los proveedores te hace \"solicitar cotización\" para averiguarlo. Aquí va cómo se forma ese precio de verdad, los tres modelos de cobro que te vas a topar, los costos de APIs que suelen quedar fuera de la propuesta, y las preguntas que conviene hacer antes de firmar.",
@@ -415,9 +415,9 @@ export const ARTICULOS: Articulo[] = [
         ],
       },
       en: {
-        title: "What does it cost to automate a real estate firm's inbound? (2026 guide)",
+        title: "What it costs to automate a real estate firm (2026)",
         metaDescription:
-          "What actually determines the price of automating a real estate firm's inbound, the three billing models on the market, the API costs almost nobody mentions, and the questions that surface the fine print.",
+          "What determines the price of automating your inbound, the three billing models, the API costs almost nobody mentions, and how to spot the fine print.",
         h1: "What does it cost to automate a real estate firm's inbound?",
         resumen:
           "Most vendors make you \"request a quote\" to find out. Here is how that price is actually built, the three billing models you will run into, the API costs that usually stay out of the proposal, and the questions worth asking before you sign.",
@@ -495,7 +495,7 @@ export const ARTICULOS: Articulo[] = [
     ],
     t: {
       es: {
-        title: "WhatsApp Business API para inmobiliarias: guía sin tecnicismos",
+        title: "WhatsApp Business API para inmobiliarias: guía clara",
         metaDescription:
           "Qué es la API oficial de WhatsApp, en qué se diferencia de la app, por qué importa para una inmobiliaria y los riesgos reales de usar conexiones no oficiales.",
         h1: "WhatsApp Business API para inmobiliarias: guía sin tecnicismos",
@@ -545,7 +545,7 @@ export const ARTICULOS: Articulo[] = [
         ],
       },
       en: {
-        title: "WhatsApp Business API for real estate: a guide without the jargon",
+        title: "WhatsApp Business API for real estate: a clear guide",
         metaDescription:
           "What the official WhatsApp API is, how it differs from the app, why it matters for a real estate firm, and the real risks of using unofficial connections.",
         h1: "WhatsApp Business API for real estate: a guide without the jargon",
@@ -610,10 +610,9 @@ export const ARTICULOS: Articulo[] = [
     ],
     t: {
       es: {
-        title:
-          "Las llamadas que se van al buzón: quién contesta tu teléfono a las 8 de la noche",
+        title: "Quién contesta tu teléfono a las 8 de la noche",
         metaDescription:
-          "En preventa, quien llama suele ser el que ya está decidido. Qué pasa con esas llamadas fuera de horario, por qué un menú de opciones espanta y qué alternativas hay.",
+          "En preventa, quien llama suele ser quien ya decidió comprar. Qué pasa con las llamadas fuera de horario y por qué un menú de opciones espanta.",
         h1: "Las llamadas que se van al buzón: quién contesta tu teléfono a las 8 de la noche",
         resumen:
           "El WhatsApp se lleva la atención, pero en inmobiliario el teléfono sigue siendo el canal del comprador serio. Y es el que peor se cubre fuera de horario. Esto es lo que pasa con esas llamadas y qué se puede hacer.",
@@ -670,9 +669,9 @@ export const ARTICULOS: Articulo[] = [
         ],
       },
       en: {
-        title: "The calls that go to voicemail: who answers your phone at 8 p.m.",
+        title: "Who answers your phone at 8 p.m.?",
         metaDescription:
-          "In preconstruction, whoever calls is usually the one already decided. What happens to those after-hours calls, why a phone menu scares people off, and what the alternatives are.",
+          "In preconstruction, whoever calls is usually already decided. What happens to after-hours calls, why phone menus scare buyers off, and the alternatives.",
         h1: "The calls that go to voicemail: who answers your phone at 8 p.m.",
         resumen:
           "WhatsApp gets all the attention, but in real estate the phone is still the serious buyer's channel. And it is the one worst covered after hours. Here is what happens to those calls and what can be done.",
@@ -738,6 +737,31 @@ export const HAY_BLOG = ARTICULOS.length > 0;
  *  la nota de `getSolucion()` en lib/soluciones.ts. */
 export function getArticulo(slug: string, idioma: Idioma = "es"): Articulo | undefined {
   return ARTICULOS.find((a) => (idioma === "en" ? a.slugEn : a.slug) === slug);
+}
+
+// ── Enlazado interno DERIVADO (SEO) ─────────────────────────────────────────
+// Los dos salen del campo `solucionesRelacionadas` que ya existe: nada que
+// mantener a mano. Al publicar un artículo nuevo, sus enlaces aparecen solos
+// en las páginas de solución y en los artículos hermanos.
+
+/** Artículos que declaran esta solución como relacionada — el enlace inverso
+ *  (solución → blog), que antes no existía. */
+export function articulosDeSolucion(slugSolucion: string): Articulo[] {
+  return ARTICULOS.filter((a) =>
+    (a.solucionesRelacionadas ?? []).includes(slugSolucion)
+  );
+}
+
+/** Artículos hermanos: comparten al menos una solución relacionada. */
+export function articulosRelacionados(slug: string): Articulo[] {
+  const propio = ARTICULOS.find((a) => a.slug === slug);
+  if (!propio) return [];
+  const mias = new Set(propio.solucionesRelacionadas ?? []);
+  return ARTICULOS.filter(
+    (a) =>
+      a.slug !== slug &&
+      (a.solucionesRelacionadas ?? []).some((s) => mias.has(s))
+  );
 }
 
 /** La fecha, escrita como la escribe cada idioma. En inglés se pone el mes primero:

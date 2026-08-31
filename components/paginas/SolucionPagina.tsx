@@ -10,6 +10,7 @@ import { Reveal } from "@/components/Reveal";
 import { JsonLd } from "@/components/JsonLd";
 import { DemoVoz } from "@/components/DemoVoz";
 import { getSolucion, type Solucion } from "@/lib/soluciones";
+import { articulosDeSolucion } from "@/lib/blog";
 import { contenido } from "@/lib/site-textos";
 import { paginas } from "@/lib/paginas-textos";
 import { SITE_URL, breadcrumbJsonLd } from "@/lib/seo";
@@ -24,6 +25,9 @@ export function SolucionPagina({ s, idioma }: { s: Solucion; idioma: Idioma }) {
   // La demo de voz solo vive en su propia página (se cobra por minuto: ver /api/demo-voz)
   const esVoz = s.slug === SLUG_VOZ;
   const propia = ruta(idioma, `/soluciones/${s.slug}`);
+  // Enlace inverso blog → solución, derivado de `solucionesRelacionadas`:
+  // crece solo con cada artículo nuevo, sin listas a mano.
+  const guias = articulosDeSolucion(s.slug);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -256,6 +260,26 @@ export function SolucionPagina({ s, idioma }: { s: Solucion; idioma: Idioma }) {
                     </a>
                   );
                 })}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Guías del blog que hablan de esta solución (enlaces internos derivados) */}
+        {guias.length > 0 && (
+          <section className="px-[6%] pb-20 md:px-[10%]">
+            <div className="mx-auto max-w-3xl text-center">
+              <p className="mb-4 text-sm font-light text-mocha">{t.guias}</p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                {guias.map((a) => (
+                  <a
+                    key={a.slug}
+                    href={ruta(idioma, `/blog/${a.slug}`)}
+                    className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
+                  >
+                    {a.t[idioma].title}
+                  </a>
+                ))}
               </div>
             </div>
           </section>

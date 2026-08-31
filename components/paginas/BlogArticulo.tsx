@@ -7,7 +7,7 @@ import { CTAFinal } from "@/components/CTAFinal";
 import { FAQ } from "@/components/FAQ";
 import { Reveal } from "@/components/Reveal";
 import { JsonLd } from "@/components/JsonLd";
-import { fechaBonita, type Articulo } from "@/lib/blog";
+import { articulosRelacionados, fechaBonita, type Articulo } from "@/lib/blog";
 import { getSolucion } from "@/lib/soluciones";
 import { SITE_URL, breadcrumbJsonLd, articleJsonLd } from "@/lib/seo";
 import { paginas } from "@/lib/paginas-textos";
@@ -57,6 +57,8 @@ export function BlogArticulo({ a, idioma }: { a: Articulo; idioma: Idioma }) {
   const relacionadas = (a.solucionesRelacionadas ?? [])
     .map((s) => getSolucion(s))
     .filter((s) => s !== undefined);
+  // Artículos hermanos (comparten solución relacionada) — derivado, sin listas a mano.
+  const hermanos = articulosRelacionados(a.slug);
 
   return (
     <RaizIdioma idioma={idioma}>
@@ -142,6 +144,26 @@ export function BlogArticulo({ a, idioma }: { a: Articulo; idioma: Idioma }) {
                     className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
                   >
                     {rel.t[idioma].nombreCorto}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Sigue leyendo: artículos hermanos (enlaces internos derivados) */}
+        {hermanos.length > 0 && (
+          <section className="px-[6%] pb-20 md:px-[10%]">
+            <div className="mx-auto max-w-3xl text-center">
+              <p className="mb-4 text-sm font-light text-mocha">{t.sigueLeyendo}</p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                {hermanos.map((h) => (
+                  <a
+                    key={h.slug}
+                    href={ruta(idioma, `/blog/${h.slug}`)}
+                    className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
+                  >
+                    {h.t[idioma].title}
                   </a>
                 ))}
               </div>

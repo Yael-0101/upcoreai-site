@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import { Analytics } from "@vercel/analytics/react";
 import { JsonLd } from "@/components/JsonLd";
 import { jsonLdGlobal, SITE_NAME, SITE_URL } from "@/lib/seo";
+import { contenido } from "@/lib/site-textos";
 import "./globals.css";
 
 const title = "Upcore AI | Automatización con IA para inmobiliarias";
@@ -14,16 +15,9 @@ export const metadata: Metadata = {
   // Las páginas ponen su título "a secas" y el template agrega la marca.
   title: { default: title, template: `%s | ${SITE_NAME}` },
   description,
-  keywords: [
-    "automatización para inmobiliarias",
-    "IA para inmobiliarias",
-    "agente de WhatsApp para inmobiliarias",
-    "seguimiento de leads inmobiliarios",
-    "chatbot inmobiliario",
-    "preventa Miami",
-    "agente de voz inmobiliario",
-    "panel para inmobiliarias",
-  ],
+  // Una sola fuente (site-textos, por idioma). Las páginas ponen las suyas vía
+  // metaPagina(); estas son solo el respaldo del layout, en español.
+  keywords: contenido("es").meta.keywords,
   authors: [{ name: "Upcore AI" }],
   // "./" se resuelve a la URL de cada ruta (con metadataBase); un valor fijo
   // haría que todas las páginas declaren la home como su canonical.

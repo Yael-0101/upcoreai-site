@@ -70,6 +70,7 @@ export type TextosPaginas = {
     publicado: string;
     actualizado: string;
     tambien: string;
+    sigueLeyendo: string;
   };
   solucion: {
     ctaVoz: string;
@@ -85,6 +86,7 @@ export type TextosPaginas = {
     seguridadTitulo: string;
     faqTitulo: string;
     tambien: string;
+    guias: string;
     migaInicio: string;
   };
   demo: {
@@ -170,7 +172,7 @@ const ES: TextosPaginas = {
   precios: {
     metaTitle: "Precios: así se calcula tu inversión, sin letra chica",
     metaDescription:
-      "Nada de precios escondidos ni módulos sorpresa: te explicamos qué define tu inversión, qué incluye, y tu precio exacto sale gratis en 3 minutos con el diagnóstico.",
+      "Sin precios escondidos ni módulos sorpresa: qué define tu inversión, qué incluye cada pieza, y tu precio exacto sale gratis en 3 minutos con el diagnóstico.",
     eyebrow: "Precios claros",
     h1: "Sin precios escondidos. Sin letra chica.",
     introA:
@@ -258,7 +260,7 @@ const ES: TextosPaginas = {
   nosotros: {
     metaTitle: "Quiénes somos",
     metaDescription:
-      "Upcore AI (upcoreai.com) es una agencia mexicana de automatización con IA especializada en inmobiliarias de preventa del sur de Florida: agentes de WhatsApp y voz en español e inglés, seguimiento y sistemas que quedan a tu nombre.",
+      "Agencia de automatización con IA para inmobiliarias de preventa del sur de Florida: agentes de WhatsApp y voz, seguimiento y sistemas que quedan a tu nombre.",
     eyebrow: "Nosotros",
     h1: "Automatización con IA, hecha para inmobiliarias.",
     intro:
@@ -297,9 +299,9 @@ const ES: TextosPaginas = {
   },
 
   blog: {
-    metaTitle: "Blog: guías claras de IA y automatización para inmobiliarias",
+    metaTitle: "Blog: IA y automatización para inmobiliarias",
     metaDescription:
-      "Guías sin tecnicismos para inmobiliarias de preventa: cuánto cuesta automatizar la atención, cómo funciona la API de WhatsApp, por qué se enfrían tus prospectos y quién contesta tu teléfono a las 8 de la noche.",
+      "Guías sin tecnicismos para preventa: cuánto cuesta automatizar la atención, cómo funciona la API de WhatsApp y por qué se enfrían tus prospectos.",
     eyebrow: "Blog",
     h1: "Guías claras, sin tecnicismos.",
     intro:
@@ -311,6 +313,7 @@ const ES: TextosPaginas = {
     publicado: "Publicado el",
     actualizado: "Actualizado el",
     tambien: "Te puede servir:",
+    sigueLeyendo: "Sigue leyendo:",
   },
 
   solucion: {
@@ -330,6 +333,7 @@ const ES: TextosPaginas = {
     seguridadTitulo: "Tus datos y tus cuentas, siempre tuyos",
     faqTitulo: "Preguntas frecuentes",
     tambien: "También te puede servir:",
+    guias: "Guías del blog sobre esto:",
     migaInicio: "Inicio",
   },
 
@@ -439,9 +443,9 @@ const ES: TextosPaginas = {
 // ────────────────────────────────────────────────────────────────────────────
 const EN: TextosPaginas = {
   precios: {
-    metaTitle: "Pricing: how your investment is calculated, no fine print",
+    metaTitle: "Pricing: fixed prices, no fine print",
     metaDescription:
-      "No hidden prices and no surprise modules: we explain what determines your investment, what is included, and your exact price comes free in 3 minutes with the assessment.",
+      "No hidden prices and no surprise modules: what determines your investment, what is included, and your exact price free in 3 minutes with the assessment.",
     eyebrow: "Clear pricing",
     h1: "No hidden prices. No fine print.",
     introA:
@@ -529,7 +533,7 @@ const EN: TextosPaginas = {
   nosotros: {
     metaTitle: "About us",
     metaDescription:
-      "Upcore AI (upcoreai.com) is a Mexican AI automation agency specializing in South Florida preconstruction sales: WhatsApp and voice agents in Spanish and English, lead follow-up, and systems that stay in your name.",
+      "An AI automation agency for South Florida preconstruction sales: WhatsApp and voice agents, lead follow-up, and systems that stay in your name.",
     eyebrow: "About",
     h1: "AI automation, built for real estate.",
     intro:
@@ -568,9 +572,9 @@ const EN: TextosPaginas = {
   },
 
   blog: {
-    metaTitle: "Blog: clear guides on AI and automation for real estate",
+    metaTitle: "Blog: AI and automation for real estate",
     metaDescription:
-      "Jargon-free guides for preconstruction sales teams: what it costs to automate your inbound, how the WhatsApp API works, why your leads go cold, and who answers your phone at 8 p.m.",
+      "Jargon-free guides for preconstruction teams: what it costs to automate your inbound, how the WhatsApp API works, and why your leads go cold.",
     eyebrow: "Blog",
     h1: "Clear guides, no jargon.",
     intro:
@@ -582,6 +586,7 @@ const EN: TextosPaginas = {
     publicado: "Published",
     actualizado: "Updated",
     tambien: "You may also want:",
+    sigueLeyendo: "Keep reading:",
   },
 
   solucion: {
@@ -600,6 +605,7 @@ const EN: TextosPaginas = {
     seguridadTitulo: "Your data and your accounts, always yours",
     faqTitulo: "Frequently asked questions",
     tambien: "You may also want:",
+    guias: "Blog guides on this:",
     migaInicio: "Home",
   },
 

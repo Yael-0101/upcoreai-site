@@ -231,7 +231,8 @@ const ES: TextosLegales = {
 
   terminos: {
     metaTitle: "Términos de Servicio",
-    metaDescription: "Los términos que rigen el uso del sitio y los servicios de Upcore AI.",
+    metaDescription:
+      "Los términos que rigen el uso del sitio de Upcore AI y la contratación de sus servicios de automatización.",
     titulo: "Términos de Servicio",
     actualizado: "agosto de 2026",
     intro:
@@ -549,7 +550,8 @@ const EN: TextosLegales = {
 
   terminos: {
     metaTitle: "Terms of Service",
-    metaDescription: "The terms governing the use of Upcore AI's site and services.",
+    metaDescription:
+      "The terms governing the use of Upcore AI's website and the hiring of its automation services.",
     titulo: "Terms of Service",
     actualizado: "August 2026",
     intro:

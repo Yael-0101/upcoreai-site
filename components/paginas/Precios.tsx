@@ -11,7 +11,7 @@ import { Garantia } from "@/components/Garantia";
 import { SectionTitle } from "@/components/SectionTitle";
 import { Reveal } from "@/components/Reveal";
 import { JsonLd } from "@/components/JsonLd";
-import { breadcrumbJsonLd } from "@/lib/seo";
+import { breadcrumbJsonLd, preciosJsonLd } from "@/lib/seo";
 import { paginas } from "@/lib/paginas-textos";
 import { LOCALE, type Idioma } from "@/lib/idioma";
 import { ruta } from "@/lib/rutas";
@@ -38,6 +38,8 @@ export function Precios({ idioma }: { idioma: Idioma }) {
           acceptedAnswer: { "@type": "Answer", text: f.a },
         })),
       },
+      // Los precios propios como datos estructurados — leídos de lib/calc.ts.
+      preciosJsonLd(idioma),
     ],
   };
 
