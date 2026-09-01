@@ -729,6 +729,155 @@ export const ARTICULOS: Articulo[] = [
       },
     },
   },
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    slug: "responder-leads-inmobiliarios-primera-hora",
+    slugEn: "speed-to-lead-real-estate-first-hour",
+    fechaPublicado: "2026-08-31",
+    solucionesRelacionadas: [
+      "chatbot-whatsapp-para-inmobiliarias",
+      "agente-de-voz-para-inmobiliarias",
+      "seguimiento-de-leads-inmobiliarios",
+    ],
+    t: {
+      es: {
+        title: "Speed to lead inmobiliario: la primera hora decide",
+        metaDescription:
+          "Responder en menos de una hora multiplica por 7 la probabilidad de calificar al lead. Cómo medir tu tiempo real de respuesta y cómo bajarlo a minutos.",
+        h1: "La primera hora decide quién se queda con el comprador",
+        resumen:
+          "Quien contesta en la primera hora juega otro partido: el comprador sigue pensando en el proyecto, el mensaje sigue arriba en su chat y nadie más le ha respondido todavía. Aquí va lo que pasa en esos 60 minutos, cómo medir tu tiempo real de respuesta y las formas honestas de bajarlo a minutos.",
+        secciones: [
+          {
+            h2: "Qué es el speed to lead y por qué pesa tanto",
+            parrafos: [
+              "Speed to lead es el tiempo que pasa entre que un comprador pregunta y alguien de tu equipo le responde. Es la métrica menos glamorosa del marketing inmobiliario, y probablemente la que más dinero mueve.",
+              "El dato duro: quien responde un lead en menos de una hora tiene siete veces más probabilidad de calificarlo. No es magia — a los sesenta minutos la persona sigue en el mismo estado mental en el que preguntó: con el proyecto en la pantalla, el presupuesto en la cabeza y las ganas frescas.",
+              "Al día siguiente ya comparó otros tres proyectos, la urgencia se le pasó, y tu respuesta compite contra todo lo que vio después. La conversación arranca de cero — si es que arranca.",
+            ],
+          },
+          {
+            h2: "En preventa, la primera hora es la más difícil de cubrir",
+            parrafos: [
+              "El 52% de las compras de preventa en el sur de Florida son de extranjeros, y de esos compradores internacionales cerca del 86% son latinoamericanos. Ese comprador escribe a SU hora, no a la tuya: la consulta entra un domingo por la tarde, o ya entrada la noche, cuando en Miami la oficina lleva horas cerrada.",
+              "Ahí está la trampa: un equipo puede ser rapidísimo de lunes a viernes en horario de oficina y aun así perder la mitad de sus primeras horas, porque las consultas de preventa no llegan en horario de oficina.",
+              "La preventa además es un proceso de meses, y eso engaña: como la venta va a tardar, responder mañana parece no costar nada. Pero el comprador no elige en la primera hora qué torre compra — elige a quién le va a preguntar todo de aquí en adelante. Ese lugar se gana contestando primero.",
+            ],
+          },
+          {
+            h2: "Mide tu tiempo de respuesta real antes de arreglarlo",
+            parrafos: [
+              "Antes de comprar o cambiar nada, saca tu número. Es un ejercicio de veinte minutos:",
+            ],
+            lista: [
+              "Abre las últimas 10 conversaciones nuevas del WhatsApp de tu firma y anota cuánto pasó entre el primer mensaje del comprador y la primera respuesta de tu equipo.",
+              "Sepáralas en dos grupos: las que entraron en horario de oficina y las que entraron de noche, en fin de semana o en festivo.",
+              "No te quedes con el promedio, porque el promedio esconde: una firma que responde en 5 minutos de día y en 14 horas de noche promedia bonito y aun así pierde las consultas nocturnas — que en preventa suelen ser las del comprador extranjero.",
+            ],
+          },
+          {
+            h2: "Cómo bajar la primera respuesta a minutos",
+            parrafos: ["Hay tres caminos, y funcionan mejor combinados que solos:"],
+            lista: [
+              "Turnos y dueños claros: que cada consulta nueva tenga UNA persona responsable desde que entra, con la regla explícita de contestar antes de una hora. Es gratis, y solo con esto muchas firmas mejoran — hasta que llega la noche.",
+              "Respuestas preparadas: las cinco preguntas de siempre (ubicación, proceso de compra, cómo agendar una visita) con su respuesta lista para adaptar en segundos, en español y en inglés.",
+              "Automatización con IA: un asistente que contesta al instante a cualquier hora, resuelve las dudas de siempre y deja agendada la visita o la videollamada — y le pasa la conversación a tu equipo con el contexto completo. Es el único de los tres caminos que cubre las 2 de la mañana de un martes.",
+            ],
+          },
+          {
+            h2: "Lo que la velocidad no arregla",
+            parrafos: [
+              "Contestar rápido con mala información es peor que contestar tarde: el comprador nota en dos mensajes si la respuesta le resolvió algo o solo le dio las gracias por escribir. La velocidad gana la primera hora; el contenido de la respuesta gana la conversación.",
+              "Y la primera hora tampoco sustituye al seguimiento largo. En preventa, entre la primera pregunta y la firma pueden pasar meses: ganar la primera hora te mete al partido, pero el seguimiento de los meses siguientes es el que lo termina.",
+              "El orden sensato es: mide tu número real, ordena los turnos, prepara las respuestas, y automatiza cuando tengas claro qué preguntas llegan y a qué horas. Automatizar el caos solo produce caos más rápido.",
+            ],
+          },
+        ],
+        faqs: [
+          {
+            q: "¿Qué es el speed to lead?",
+            a: "El tiempo que pasa entre que un prospecto pregunta por primera vez y tu equipo le responde. En el sector inmobiliario, responder en menos de una hora multiplica por siete la probabilidad de calificar a ese lead.",
+          },
+          {
+            q: "¿La respuesta tiene que ser instantánea?",
+            a: "El umbral que cambia las probabilidades es una hora. Instantáneo es mejor —el comprador sigue con el proyecto en pantalla—, pero una respuesta útil a los veinte minutos le gana a un “¿en qué puedo ayudarle?” a los veinte segundos.",
+          },
+          {
+            q: "¿Un mensaje automático no se siente frío?",
+            a: "Depende de qué haga. Un autorespondedor que solo dice “gracias por su mensaje” estorba. Un asistente que responde la duda concreta, en el idioma del comprador, y le ofrece horarios reales para una visita se siente como buena atención — porque lo es.",
+          },
+        ],
+      },
+      en: {
+        title: "Speed to lead: the first hour wins in real estate",
+        metaDescription:
+          "Answering a lead within the hour makes you 7 times more likely to qualify them. How to measure your real response time and bring it down to minutes.",
+        h1: "The first hour decides who gets the buyer",
+        resumen:
+          "Whoever answers within the first hour is playing a different game: the buyer is still thinking about the project, the message is still at the top of their chat, and nobody else has replied yet. Here is what happens in those 60 minutes, how to measure your real response time, and the honest ways to bring it down to minutes.",
+        secciones: [
+          {
+            h2: "What speed to lead is, and why it matters so much",
+            parrafos: [
+              "Speed to lead is the time between a buyer asking a question and someone on your team answering it. It is the least glamorous metric in real estate marketing, and probably the one that moves the most money.",
+              "The hard number: answer a lead within the hour and you are seven times more likely to qualify them. There is no magic to it — at the sixty-minute mark the person is still in the same state of mind they asked in: project on the screen, budget in their head, enthusiasm fresh.",
+              "By the next day they have compared three other projects, the urgency has faded, and your reply competes against everything they saw after you. The conversation starts from zero — if it starts at all.",
+            ],
+          },
+          {
+            h2: "In preconstruction, the first hour is the hardest to cover",
+            parrafos: [
+              "52% of preconstruction purchases in South Florida are made by foreign buyers, and close to 86% of those international buyers are Latin American. That buyer writes on THEIR clock, not yours: the enquiry lands on a Sunday afternoon, or late at night, when the Miami office has been closed for hours.",
+              "That is the trap: a team can be lightning-fast Monday to Friday during office hours and still lose half of its first hours, because preconstruction enquiries do not arrive during office hours.",
+              "Preconstruction is also a months-long process, and that is deceiving: since the sale will take a while anyway, answering tomorrow feels free. But the buyer does not choose which tower to buy in the first hour — they choose who they will be asking everything from here on. That seat is won by answering first.",
+            ],
+          },
+          {
+            h2: "Measure your real response time before fixing it",
+            parrafos: [
+              "Before buying or changing anything, get your number. It is a twenty-minute exercise:",
+            ],
+            lista: [
+              "Open your firm's last 10 new WhatsApp conversations and note how long passed between the buyer's first message and your team's first reply.",
+              "Split them into two groups: the ones that came in during office hours, and the ones that came in at night, on weekends or on holidays.",
+              "Do not settle for the average, because the average hides things: a firm that answers in 5 minutes by day and 14 hours by night averages out nicely and still loses its overnight enquiries — which in preconstruction tend to be the foreign buyers.",
+            ],
+          },
+          {
+            h2: "How to bring the first reply down to minutes",
+            parrafos: ["There are three paths, and they work better combined than alone:"],
+            lista: [
+              "Shifts and clear owners: every new enquiry gets ONE person responsible from the moment it lands, with an explicit rule of answering within the hour. It is free, and this alone improves many firms — until night falls.",
+              "Prepared answers: the five usual questions (location, buying process, how to book a visit) with a ready reply you can adapt in seconds, in Spanish and in English.",
+              "AI automation: an assistant that replies instantly at any hour, handles the usual questions and leaves the visit or video call booked — then hands the conversation to your team with full context. It is the only one of the three that covers 2 a.m. on a Tuesday.",
+            ],
+          },
+          {
+            h2: "What speed does not fix",
+            parrafos: [
+              "Answering fast with poor information is worse than answering late: within two messages the buyer knows whether your reply solved anything or just thanked them for writing. Speed wins the first hour; the substance of the answer wins the conversation.",
+              "And the first hour is no substitute for long follow-up. In preconstruction, months can pass between the first question and the signature: winning the first hour gets you into the game, but the follow-up over the months that follow is what finishes it.",
+              "The sensible order: measure your real number, sort out the shifts, prepare the answers, and automate once you know which questions arrive and at what hours. Automating chaos just produces faster chaos.",
+            ],
+          },
+        ],
+        faqs: [
+          {
+            q: "What is speed to lead?",
+            a: "The time between a prospect's first question and your team's reply. In real estate, answering within the hour makes you seven times more likely to qualify that lead.",
+          },
+          {
+            q: "Does the reply have to be instant?",
+            a: "The threshold that changes the odds is one hour. Instant is better — the buyer still has the project on screen — but a useful reply at twenty minutes beats a “how can I help you?” at twenty seconds.",
+          },
+          {
+            q: "Doesn't an automated message feel cold?",
+            a: "It depends on what it does. An autoresponder that only says “thanks for your message” gets in the way. An assistant that answers the actual question, in the buyer's language, and offers real time slots for a visit feels like good service — because it is.",
+          },
+        ],
+      },
+    },
+  },
 ];
 
 export const HAY_BLOG = ARTICULOS.length > 0;

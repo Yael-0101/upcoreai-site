@@ -140,7 +140,8 @@ export const MAPA_KEYWORDS: Keyword[] = [
     keywordEn: "speed to lead real estate",
     intencion: "informacional",
     prioridad: 1,
-    estado: "planeado",
+    estado: "publicado",
+    path: "/blog/responder-leads-inmobiliarios-primera-hora",
   },
   {
     keywordEs: "IA para desarrolladoras de condominios",

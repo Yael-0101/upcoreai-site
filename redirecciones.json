@@ -60,6 +60,11 @@
     "permanent": true
   },
   {
+    "source": "/en/blog/responder-leads-inmobiliarios-primera-hora",
+    "destination": "/en/blog/speed-to-lead-real-estate-first-hour",
+    "permanent": true
+  },
+  {
     "source": "/en/precios",
     "destination": "/en/pricing",
     "permanent": true
