@@ -345,6 +345,10 @@ const ES: Textos = {
       items: [
         "**Si no te entrego lo acordado funcionando, te devuelvo tu anticipo completo.** Sin " +
           "discutir y sin condiciones.",
+        "**Piloto de 14 días:** desde que el sistema queda funcionando tienes 14 días para " +
+          "decidir si sigue. Si decides que no, lo apagamos, te entrego lo que es tuyo " +
+          "(cuentas y datos) y te devuelvo lo pagado del proyecto. El consumo de APIs de " +
+          "terceros —contratadas a tu nombre— no es reembolsable.",
         "Lo que sí garantizo: que el sistema haga lo que dice el punto 1, que quede a tu " +
           "nombre, y los 30 días de ajustes de arriba.",
         "Lo que no puedo garantizar —y te recomiendo desconfiar de quien te lo prometa— son " +
@@ -672,6 +676,10 @@ const EN: Textos = {
       items: [
         "**If I do not deliver what we agreed, working, I return your full deposit.** No " +
           "argument and no conditions.",
+        "**14-day pilot:** from the moment the system is live, you have 14 days to decide " +
+          "whether it stays. If you decide it does not, we switch it off, I hand over what is " +
+          "yours (accounts and data) and I refund what you paid for the project. Third-party " +
+          "API usage — contracted in your name — is not refundable.",
         "What I do guarantee: that the system does what section 1 says, that it ends up in your " +
           "name, and the 30 days of adjustments above.",
         "What I cannot guarantee — and I would be wary of anyone who promises it — are outcome " +

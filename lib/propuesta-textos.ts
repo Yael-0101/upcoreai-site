@@ -213,8 +213,13 @@ const ES: TextosProp = {
   titular: (nombre, empresa, objetivo) =>
     `${nombre}, esto es lo que necesita ${empresa} para ${objetivo}`,
   preparado: (fecha) => `Preparado el ${fecha}`,
-  conSusNumeros: "calculado con los números que tú nos diste, sin promesas infladas",
-  conInfoPublica: "armado con la información pública de tu inmobiliaria, sin promesas infladas",
+  // 🔴 "sin compromiso" ES PARTE DEL PRODUCTO (pedido de Yael, 2026-09-01): quien lee
+  // una propuesta de un proveedor nuevo necesita saber que leerla no lo amarra a nada.
+  // Va aquí, en la línea que enmarca todo el documento, y en las dos variantes.
+  conSusNumeros:
+    "calculado con los números que tú nos diste, sin promesas infladas. Es gratis y sin compromiso: leerlo no te obliga a nada",
+  conInfoPublica:
+    "armado con la información pública de tu inmobiliaria, sin promesas infladas. Es gratis y sin compromiso: leerlo no te obliga a nada",
   verEnOtroIdioma: "View in English",
   avisoTraduccion: "",
 
@@ -275,8 +280,11 @@ const ES: TextosProp = {
     // esta frase, "está caro" se convierte en un no, y con ella en una venta
     // aplazada. Hay guardián que exige que la promesa esté y que el precio que se
     // enseña sea de verdad el de paquete (`probar-panel-vs-consola.mjs`).
+    // La primera frase es el pedido de Yael (2026-09-01) dicho de frente: cotizamos solo
+    // lo que aporta valor HOY, y lo demás se enseña aparte — eso es no vender de más.
     texto:
-      "No está incluido en el precio de abajo. Sirve, y en algún momento te va a convenir — pero " +
+      "Te cotizamos únicamente lo que sí le aporta valor a tu negocio hoy — no te vendemos de más. " +
+      "Esto no está incluido en el precio de abajo: sirve, y en algún momento te va a convenir, pero " +
       "primero se resuelve lo que hoy te está costando ventas. Si lo quieres desde el arranque, " +
       "esto es lo que sumaría — y si prefieres agregarlo más adelante, te respeto este mismo " +
       "precio de paquete durante el primer año:",
@@ -300,9 +308,16 @@ const ES: TextosProp = {
 
   garantia: {
     titulo: "Si no te entrego lo acordado funcionando, te devuelvo tu anticipo.",
+    // 🔴 EL PILOTO DE 14 DÍAS (decisión de Yael, 2026-09-02): el riesgo del cliente baja a
+    // cero SIN regalar el trabajo ni romper el ancla del precio — paga normal, y si en dos
+    // semanas funcionando decide que no es para él, se apaga y se le devuelve. Solo el
+    // consumo de APIs (contratadas a su nombre) no se devuelve: es de terceros.
     texto:
-      "Y los primeros 30 días después de la entrega, todos los ajustes van por mi cuenta. Tú solo " +
-      "arriesgas seguir como estás.",
+      "Y va más allá: tienes un piloto de 14 días. Desde que el sistema queda funcionando, si en " +
+      "las dos primeras semanas decides que no es para ti, lo apagamos y te devuelvo lo pagado del " +
+      "proyecto — solo el consumo de APIs, que va a tu nombre con los proveedores, no es " +
+      "reembolsable. Además, los primeros 30 días después de la entrega todos los ajustes van por " +
+      "mi cuenta. Tú solo arriesgas seguir como estás.",
     nota: "",
   },
 
@@ -559,8 +574,10 @@ const EN: TextosProp = {
   titular: (nombre, empresa, objetivo) =>
     `${nombre}, this is what ${empresa} needs in order to ${objetivo}`,
   preparado: (fecha) => `Prepared on ${fecha}`,
-  conSusNumeros: "calculated with the numbers you gave us, with no inflated promises",
-  conInfoPublica: "put together from your firm's public information, with no inflated promises",
+  conSusNumeros:
+    "calculated with the numbers you gave us, with no inflated promises. It is free and carries no commitment: reading it does not oblige you to anything",
+  conInfoPublica:
+    "put together from your firm's public information, with no inflated promises. It is free and carries no commitment: reading it does not oblige you to anything",
   verEnOtroIdioma: "Ver en español",
   avisoTraduccion: "",
 
@@ -613,7 +630,8 @@ const EN: TextosProp = {
   fueraAProposito: {
     titulo: "We left this out on purpose",
     texto:
-      "It is not included in the price below. It is useful, and at some point it will be worth it — " +
+      "We only quote what genuinely adds value to your business today — we do not oversell. " +
+      "This is not included in the price below: it is useful, and at some point it will be worth it, " +
       "but first we fix what is costing you sales today. If you want it from the start, this is what " +
       "it would add — and if you would rather add it later, I will honor this same package price " +
       "for the first year:",
@@ -638,8 +656,11 @@ const EN: TextosProp = {
   garantia: {
     titulo: "If I do not deliver what we agreed, working, I return your deposit.",
     texto:
-      "And for the first 30 days after delivery, every adjustment is on me. The only thing you risk " +
-      "is staying exactly as you are.",
+      "And it goes further: you get a 14-day pilot. From the moment the system is live, if within " +
+      "the first two weeks you decide it is not for you, we switch it off and I refund what you " +
+      "paid for the project — only the API usage, billed to your name by the providers, is " +
+      "non-refundable. On top of that, for the first 30 days after delivery every adjustment is on " +
+      "me. The only thing you risk is staying exactly as you are.",
     nota: "",
   },
 
