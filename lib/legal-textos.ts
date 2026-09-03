@@ -16,6 +16,10 @@
 
 import type { Idioma } from "./idioma";
 import { LEY_POR_IDIOMA } from "./acuerdo-textos";
+// El número de WhatsApp que se ENSEÑA sale de content.ts, la única fuente. Antes estaba
+// escrito a mano cuatro veces aquí (es/en × 2 páginas): al mudar el bot a un número de
+// Miami (2026-09-03) esas cuatro copias se habrían quedado anunciando el viejo.
+import { CONTACT } from "./content";
 
 /** Un trozo de frase. `fuerte` es negrita; `enlace` es un vínculo. */
 export type Frag =
@@ -218,7 +222,7 @@ const ES: TextosLegales = {
           {
             p: [
               "Para cualquier duda sobre esta política o tus datos, contáctanos por WhatsApp al ",
-              { enlace: "+1 424 447 2698", href: "__WHATSAPP__", externo: true },
+              { enlace: CONTACT.whatsappDisplay, href: "__WHATSAPP__", externo: true },
               " o al correo ",
               correo(),
               ".",
@@ -354,7 +358,7 @@ const ES: TextosLegales = {
           {
             p: [
               "Para cualquier duda sobre estos términos, contáctanos por WhatsApp al ",
-              { enlace: "+1 424 447 2698", href: "__WHATSAPP__", externo: true },
+              { enlace: CONTACT.whatsappDisplay, href: "__WHATSAPP__", externo: true },
               " o al correo ",
               correo(),
               ".",
@@ -537,7 +541,7 @@ const EN: TextosLegales = {
           {
             p: [
               "For any question about this policy or your data, contact us on WhatsApp at ",
-              { enlace: "+1 424 447 2698", href: "__WHATSAPP__", externo: true },
+              { enlace: CONTACT.whatsappDisplay, href: "__WHATSAPP__", externo: true },
               " or by email at ",
               correo(),
               ".",
@@ -673,7 +677,7 @@ const EN: TextosLegales = {
           {
             p: [
               "For any question about these terms, contact us on WhatsApp at ",
-              { enlace: "+1 424 447 2698", href: "__WHATSAPP__", externo: true },
+              { enlace: CONTACT.whatsappDisplay, href: "__WHATSAPP__", externo: true },
               " or by email at ",
               correo(),
               ".",

@@ -9,18 +9,37 @@
 
 export { contenido, TS, type TextosSitio, type Punto } from "./site-textos";
 
+// ─── LOS NÚMEROS, ESCRITOS UNA SOLA VEZ ───────────────────────────────────────
+// Cada número de Upcore se escribe aquí y en ningún otro lado: los campos de CONTACT se
+// DERIVAN de estas constantes. Antes el número del bot estaba tres veces dentro de este
+// mismo archivo y cinco más repartidas por el sitio; al mudar el bot a un número de Miami
+// (2026-09-03) cada copia era una oportunidad de anunciar el viejo. Lo vigila
+// scripts/probar-contacto.mjs: fuera de este archivo, ningún número de Upcore va a mano.
+//
+// Solo dígitos, con la clave de país (11 dígitos para EE.UU.).
+/** El BOT de WhatsApp (Cloud API oficial de Meta). Vive en la nube, jamás en un teléfono. */
+const DIGITOS_BOT = "14244472698";
+/** La línea HUMANA de Yael (WhatsApp Business + llamadas). Nunca se conecta a una API. */
+const DIGITOS_YAEL = "17868871283";
+
+/** "1AAABBBCCCC" → "+1 AAA BBB CCCC" (formato de EE.UU.; otro largo se muestra tal cual). */
+function mostrar(digitos: string): string {
+  if (digitos.length !== 11) return `+${digitos}`;
+  return `+${digitos[0]} ${digitos.slice(1, 4)} ${digitos.slice(4, 7)} ${digitos.slice(7)}`;
+}
+
 export const CONTACT = {
-  // Número de negocio de Upcore (EEUU): entra a la bandeja Chatwoot y al asistente IA.
+  // Número de negocio de Upcore (EEUU): entra al asistente IA (el bot).
   // En este nicho el +1 juega a favor: el cliente está en Florida y un número gringo es
   // lo normal (con clínicas mexicanas era justo al revés y por eso no se abrían).
-  /** La base del enlace del BOT, sin texto. Una sola copia del número: el resto la usa. */
-  whatsappBot: "https://wa.me/14244472698",
+  /** La base del enlace del BOT, sin texto. */
+  whatsappBot: `https://wa.me/${DIGITOS_BOT}`,
   whatsapp:
-    "https://wa.me/14244472698?text=" +
+    `https://wa.me/${DIGITOS_BOT}?text=` +
     encodeURIComponent(
       "Hola Upcore AI, quiero que ningún comprador se me quede sin respuesta. ¿Me ayudan?",
     ),
-  whatsappDisplay: "+1 424 447 2698",
+  whatsappDisplay: mostrar(DIGITOS_BOT),
   /**
    * El número de YAEL, una persona. NO es el del asistente.
    *
@@ -45,8 +64,8 @@ export const CONTACT = {
    * propósito (el cliente no puede leer mañana algo distinto de lo que aceptó), pero significa
    * que las viejas siguen apuntando al 424.
    */
-  whatsappYael: "https://wa.me/17868871283",
-  whatsappYaelDisplay: "+1 786 887 1283",
+  whatsappYael: `https://wa.me/${DIGITOS_YAEL}`,
+  whatsappYaelDisplay: mostrar(DIGITOS_YAEL),
   // (2026-07-23) Sin agendado de llamadas en el embudo de diagnóstico — decisión
   // de Yael: los leads entrantes ya nos conocen; el diagnóstico es solo sin llamada.
 };
@@ -58,5 +77,7 @@ export function linkWhatsApp(idioma: "es" | "en"): string {
     idioma === "en"
       ? "Hi Upcore AI, I don't want any buyer of mine going unanswered. Can you help?"
       : "Hola Upcore AI, quiero que ningún comprador se me quede sin respuesta. ¿Me ayudan?";
-  return "https://wa.me/14244472698?text=" + encodeURIComponent(texto);
+  // El número sale de CONTACT.whatsappBot: aquí estaba escrito a mano por segunda vez, y una
+  // segunda copia es justo lo que se desfasa el día que el bot cambia de número (2026-09-03).
+  return `${CONTACT.whatsappBot}?text=` + encodeURIComponent(texto);
 }

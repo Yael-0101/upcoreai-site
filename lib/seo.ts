@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SOLUCIONES } from "./soluciones";
 import { ARTICULOS, HAY_BLOG } from "./blog";
 import { contenido } from "./site-textos";
+import { CONTACT } from "./content";
 import { PRODUCTO_OPTIONS, opcionEn } from "./calc";
 import { LOCALE, IDIOMAS, ORIGEN, type Idioma } from "./idioma";
 import { alternativas, ruta } from "./rutas";
@@ -18,7 +19,10 @@ export const SITE_NAME = "Upcore AI";
 export const ORGANIZACION = {
   nombre: SITE_NAME,
   email: "upcoreai.com@gmail.com",
-  telefono: "+1-424-447-2698",
+  // El teléfono del JSON-LD sale de content.ts (fuente única). Hoy es el número del bot de
+  // WhatsApp; cuando exista la línea de voz de Upcore, el `telephone` debe pasar a ese número,
+  // porque es el que CONTESTA llamadas (2026-09-03).
+  telefono: CONTACT.whatsappDisplay.replace(/\s+/g, "-"),
   logo: `${SITE_URL}/icon-512.png`,
   descripcion:
     "Automatización con IA para inmobiliarias de preventa en el sur de Florida: agentes de WhatsApp y voz en español e inglés, seguimiento de prospectos, sitios y paneles a la medida.",
