@@ -22,7 +22,11 @@ const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const RAIZ = path.join(AQUI, "..");
 const require = createRequire(import.meta.url);
 const jiti = require("jiti")(fileURLToPath(import.meta.url), { cache: false, requireCache: false });
-const { CONTACT } = jiti(path.join(RAIZ, "lib", "content.ts"));
+const { CONTACT, DIGITOS_RETIRADOS } = jiti(path.join(RAIZ, "lib", "content.ts"));
+// Los números RETIRADOS (2026-09-03: el 424 del bot viejo) tampoco pueden aparecer en ningún
+// lado — ni siquiera en content.ts, salvo en la propia lista. Un número muerto publicado manda a
+// la gente a un WhatsApp que ya no existe, sin dar error.
+const retirados = (Array.isArray(DIGITOS_RETIRADOS) ? DIGITOS_RETIRADOS : []).map((d) => String(d).replace(/\D/g, ""));
 
 const INYECTAR = process.argv.includes("--inyectar");
 const CARPETAS = ["app", "lib", "components"];
@@ -51,6 +55,7 @@ const patron = (digitos) => {
   return new RegExp(`(?<!\\d)(?:1[\\s\\-.()]*)?${cuerpo}(?!\\d)`);
 };
 const patrones = numeros.map((d) => ({ digitos: d, re: patron(d) }));
+const patronesRetirados = retirados.map((d) => ({ digitos: d, re: patron(d) }));
 
 function archivos() {
   const out = [];
@@ -76,6 +81,8 @@ for (const archivo of archivos()) {
   // Defecto a propósito: el número del bot pegado en un componente cualquiera.
   if (INYECTAR && archivo.endsWith(path.join("components", "Legal.tsx"))) {
     txt += `\n// prueba: ${CONTACT.whatsappDisplay}\n`;
+    // y un número RETIRADO, que también debe caer
+    if (retirados[0]) txt += `\n// prueba: https://wa.me/${retirados[0]}\n`;
   }
   const lineas = txt.split(/\r?\n/);
   lineas.forEach((linea, i) => {
@@ -85,6 +92,16 @@ for (const archivo of archivos()) {
           archivo: path.relative(RAIZ, archivo),
           linea: i + 1,
           digitos,
+          texto: linea.trim().slice(0, 120),
+        });
+      }
+    }
+    for (const { digitos, re } of patronesRetirados) {
+      if (re.test(linea)) {
+        problemas.push({
+          archivo: path.relative(RAIZ, archivo),
+          linea: i + 1,
+          digitos: `${digitos} (RETIRADO)`,
           texto: linea.trim().slice(0, 120),
         });
       }

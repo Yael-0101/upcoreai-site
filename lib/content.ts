@@ -26,6 +26,11 @@ const DIGITOS_BOT = "17868872372";
 /** La línea HUMANA de Yael (WhatsApp Business + llamadas). Nunca se conecta a una API. */
 const DIGITOS_YAEL = "17868871283";
 
+/** Números de Upcore que YA NO existen para el público: no pueden aparecer en ningún archivo del
+ *  sitio (lo vigila scripts/probar-contacto.mjs). El primero es el bot viejo de Los Ángeles,
+ *  dado de baja el 2026-09-03. Solo dígitos, con clave de país. */
+export const DIGITOS_RETIRADOS = ["14244472698"];
+
 /** "1AAABBBCCCC" → "+1 AAA BBB CCCC" (formato de EE.UU.; otro largo se muestra tal cual). */
 function mostrar(digitos: string): string {
   if (digitos.length !== 11) return `+${digitos}`;
