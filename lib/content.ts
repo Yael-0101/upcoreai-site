@@ -19,8 +19,9 @@ export { contenido, TS, type TextosSitio, type Punto } from "./site-textos";
 // Solo dígitos, con la clave de país (11 dígitos para EE.UU.).
 /** El BOT de WhatsApp (Cloud API oficial de Meta). Vive en la nube, jamás en un teléfono.
  *  🔄 2026-09-03: mudado del 424 (Los Ángeles) a un 786 (Miami-Dade, el condado de los
- *  prospectos). El 424 sigue vivo unas semanas para las propuestas ya enviadas y luego se
- *  retira. (Los dígitos van SOLO en la constante de abajo: el guardián cuenta copias.) */
+ *  prospectos). El 424 se dio de baja de la Cloud API ese mismo día por decisión de Yael:
+ *  ya no contesta nadie ahí. (Los dígitos van SOLO en la constante de abajo: el guardián
+ *  cuenta copias.) */
 const DIGITOS_BOT = "17868872372";
 /** La línea HUMANA de Yael (WhatsApp Business + llamadas). Nunca se conecta a una API. */
 const DIGITOS_YAEL = "17868871283";
