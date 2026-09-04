@@ -122,6 +122,7 @@ export async function POST(req: Request) {
 
   const apiKey = process.env.ANTHROPIC_DEMO_KEY;
   if (!apiKey) {
+    avisarDemoProbada(clinica, giro, "falta la llave ANTHROPIC_DEMO_KEY en Vercel");
     return NextResponse.json({ ok: true, reply: DEMO_FALLBACK, done: true });
   }
 
@@ -200,6 +201,14 @@ export async function POST(req: Request) {
       "[demo] cayó al fallback:",
       JSON.stringify({ status: err?.status, name: err?.name, message: err?.message?.slice(0, 200) })
     );
+    // Y se lo dice a Yael, con el motivo en claro (sin crédito / límite / caída), porque un
+    // prospecto acaba de ver la demo "descansando" y eso se arregla hoy, no cuando se lea un log.
+    const motivo = /credit balance/i.test(err?.message ?? "")
+      ? "la cuenta de Anthropic se quedó SIN CRÉDITO"
+      : err?.status === 429
+      ? "límite de peticiones de Anthropic"
+      : `error ${err?.status ?? "?"} de la API de Anthropic`;
+    avisarDemoProbada(clinica, giro, motivo);
     return NextResponse.json({ ok: true, reply: DEMO_FALLBACK, done: true });
   }
 }
@@ -207,13 +216,18 @@ export async function POST(req: Request) {
 // Fire-and-forget: avisa a Yael (vía n8n) que un prospecto está usando SU demo.
 // Reusa el secreto que el sitio ya tiene para leer propuestas. Si falta la URL,
 // la función queda apagada sin romper nada.
-function avisarDemoProbada(clinica: string, giro: string) {
+//
+// `fallo` (2026-09-04): la demo también avisa cuando CAE A SU MENSAJE DE RESPALDO. Ese día
+// la cuenta de Anthropic se quedó sin crédito, la demo contestó "está tomando un descanso"
+// a un prospecto de Yael, y el único rastro fue un console.error que nadie lee. El aviso
+// va por el mismo webhook, con el motivo, y n8n decide a qué pantalla mandar y cada cuánto.
+function avisarDemoProbada(clinica: string, giro: string, fallo?: string) {
   const url = process.env.N8N_DEMO_ALERT_WEBHOOK_URL;
   const secret = process.env.N8N_PANEL_SECRET;
   if (!url || !secret) return;
   fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-Panel-Secret": secret },
-    body: JSON.stringify({ clinica, giro, fecha: new Date().toISOString() }),
+    body: JSON.stringify({ clinica, giro, fecha: new Date().toISOString(), ...(fallo ? { fallo } : {}) }),
   }).catch(() => {});
 }

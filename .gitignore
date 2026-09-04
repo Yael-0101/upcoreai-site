@@ -32,3 +32,7 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# temporales de sesión (nunca al repo público)
+.tmp/
+.tmp-*
