@@ -139,9 +139,9 @@ function datosCompletos(piezas) {
   const pasos = A.pasosVisibles(piezas);
   const ve = (id) => pasos.includes(id);
   return A.normalizarDatos({
-    config: { nombre: "Dr. Prueba", clinica: "Clínica Prueba", giro: "dental", productos: piezas, plan: "llave" },
+    config: { nombre: "Ana Prueba", clinica: "Firma Prueba", giro: "comercializadora", productos: piezas, plan: "llave" },
     checklist: {
-      servicios: [{ nombre: "Limpieza", precio: "800", duracion: "45 min" }],
+      servicios: [{ nombre: "Recorrido guiado del proyecto", precio: "800", duracion: "45 min" }],
       horarios: "L-V 9-19",
       tono: C.pideTono(piezas) ? "calido" : null,
       faqs: "",

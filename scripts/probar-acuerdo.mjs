@@ -373,7 +373,7 @@ const debeSerNull = [
   // Un precio tan bajo que la mitad redondea a cero: mejor no emitir acuerdo.
   ["precio de $1", { ...base, llave: { ...base.llave, inversion: precioFijo(1) } }],
   ["sin alcance", { ...base, incluye: [] }],
-  ["sin clínica ni nombre", { ...base, lead: { ...base.lead, clinica: "", nombre: "" } }],
+  ["sin firma ni nombre", { ...base, lead: { ...base.lead, clinica: "", nombre: "" } }],
   [
     "gestionado sin mensualidad",
     { ...base, gestionado: { ...base.gestionado, mensualidadUpcore: { mxn: "", usd: "" } } },
