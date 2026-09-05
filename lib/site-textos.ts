@@ -49,6 +49,9 @@ export type TextosSitio = {
     seguirWaCorto: string;
     pensando: string;
     privacidad: string;
+    /** Takeover (2026-09-05): cuando Yael toma el chat desde el panel, el asistente calla y contesta ella. */
+    yaelAtiende: string;
+    etiquetaYael: string;
   };
   meta: {
     title: string;
@@ -185,6 +188,8 @@ const ES: TextosSitio = {
     seguirWaCorto: "WhatsApp",
     pensando: "Escribiendo…",
     privacidad: "Lo que escribas aquí lo lee nuestro asistente y el equipo de Upcore, nadie más.",
+    yaelAtiende: "Yael, de Upcore, tomó esta conversación y te contesta en persona. Puedes seguir escribiendo aquí.",
+    etiquetaYael: "Yael · Upcore",
   },
   meta: {
     title: "Upcore AI | Automatización con IA para inmobiliarias",
@@ -612,6 +617,8 @@ const EN: TextosSitio = {
     seguirWaCorto: "WhatsApp",
     pensando: "Typing…",
     privacidad: "What you write here is read by our assistant and the Upcore team, no one else.",
+    yaelAtiende: "Yael from Upcore has taken over this conversation and is replying in person. You can keep writing here.",
+    etiquetaYael: "Yael · Upcore",
   },
   meta: {
     title: "Upcore AI | AI automation for real estate firms",

@@ -19,7 +19,9 @@ import { CHAT_LIMITES } from "@/lib/chat-web";
 // que un lector de pantalla anuncie las respuestas, sin animaciones que el sistema deba frenar.
 // Dentro del panel sigue estando la salida a WhatsApp, que es el canal principal de cierre.
 
-type Mensaje = { rol: "user" | "bot"; texto: string };
+// «yael»: lo que Yael escribe desde el panel cuando toma el chat (takeover, 2026-09-05).
+type Mensaje = { rol: "user" | "bot" | "yael"; texto: string };
+const SONDEO_MS = 5000;
 
 const RUTAS_PRIVADAS = ["/p/", "/acuerdo/", "/arranque/"];
 const CLAVE_SESION = "upcore-chat-sesion";
@@ -56,7 +58,7 @@ function leerMensajes(): Mensaje[] {
   try {
     const v = sessionStorage.getItem(CLAVE_MENSAJES);
     const arr = v ? (JSON.parse(v) as Mensaje[]) : [];
-    return Array.isArray(arr) ? arr.filter((m) => m && (m.rol === "user" || m.rol === "bot") && typeof m.texto === "string").slice(-MAX_GUARDADOS) : [];
+    return Array.isArray(arr) ? arr.filter((m) => m && (m.rol === "user" || m.rol === "bot" || m.rol === "yael") && typeof m.texto === "string").slice(-MAX_GUARDADOS) : [];
   } catch {
     return [];
   }
@@ -91,6 +93,9 @@ export function ChatWeb() {
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
   const [texto, setTexto] = useState("");
   const [enviando, setEnviando] = useState(false);
+  // Takeover: si Yael tomó el chat, el asistente calla y lo que ella escribe llega por sondeo.
+  const [pausado, setPausado] = useState(false);
+  const ultimoVisto = useRef<number>(-1); // -1 = todavía no se fijó la marca de partida
   const sesion = useRef<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
   const finRef = useRef<HTMLDivElement>(null);
@@ -114,6 +119,42 @@ export function ChatWeb() {
     finRef.current?.scrollIntoView({ block: "end" });
   }, [mensajes, enviando, abierto]);
 
+  // Sondeo mientras el panel está abierto: pregunta qué escribió Yael desde el panel. La primera
+  // vuelta solo fija la marca (lo que ya hay en el historial no se repite en pantalla).
+  useEffect(() => {
+    if (!abierto) return;
+    let vivo = true;
+    const sondear = async () => {
+      if (!sesion.current) return;
+      try {
+        const r = await fetch("/api/chat/sondeo", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sesion: sesion.current, desde: Math.max(0, ultimoVisto.current) }),
+        });
+        const j = (await r.json().catch(() => ({}))) as { pausado?: boolean; ultimo?: number; mensajes?: { id: number; texto: string }[] };
+        if (!vivo) return;
+        const primeraVez = ultimoVisto.current < 0;
+        ultimoVisto.current = Math.max(ultimoVisto.current, Number(j.ultimo) || 0);
+        setPausado(j.pausado === true);
+        if (!primeraVez && Array.isArray(j.mensajes) && j.mensajes.length) {
+          setMensajes((prev) => {
+            const nuevos: Mensaje[] = j.mensajes!.map((m) => ({ rol: "yael", texto: String(m.texto) }));
+            const todos = [...prev, ...nuevos];
+            guardarMensajes(todos);
+            return todos;
+          });
+        }
+      } catch {}
+    };
+    void sondear();
+    const id = window.setInterval(() => void sondear(), SONDEO_MS);
+    return () => {
+      vivo = false;
+      window.clearInterval(id);
+    };
+  }, [abierto]);
+
   const enviar = useCallback(async () => {
     const limpio = texto.replace(/\s+/g, " ").trim();
     if (!limpio || enviando) return;
@@ -128,7 +169,12 @@ export function ChatWeb() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sesion: sesion.current, texto: limpio, idioma }),
       });
-      const j = (await r.json().catch(() => ({}))) as { respuesta?: string };
+      const j = (await r.json().catch(() => ({}))) as { respuesta?: string | null; pausado?: boolean };
+      if (j.pausado === true) {
+        // Yael tomó el chat: el asistente calla; su mensaje quedó guardado y ella lo ve en el panel.
+        setPausado(true);
+        return;
+      }
       const respuesta = typeof j.respuesta === "string" && j.respuesta.trim() ? j.respuesta.trim() : t.sub;
       const conBot: Mensaje[] = [...siguiente, { rol: "bot", texto: respuesta }];
       setMensajes(conBot);
@@ -212,18 +258,28 @@ export function ChatWeb() {
           <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4" aria-live="polite">
             <p className="rounded-2xl bg-white/5 px-3.5 py-2.5 text-[0.8rem] leading-relaxed text-mocha">{t.bienvenida}</p>
             {mensajes.map((m, i) => (
-              <div key={i} className={m.rol === "user" ? "flex justify-end" : "flex justify-start"}>
+              <div key={i} className={m.rol === "user" ? "flex justify-end" : "flex flex-col items-start"}>
+                {m.rol === "yael" && (
+                  <span className="mb-0.5 px-1 text-[0.7rem] font-semibold text-clay-bright">{t.etiquetaYael}</span>
+                )}
                 <p
                   className={
                     m.rol === "user"
                       ? "max-w-[85%] whitespace-pre-line rounded-2xl rounded-br-md bg-clay px-3.5 py-2.5 text-[0.9rem] leading-relaxed text-obsidian"
+                      : m.rol === "yael"
+                      ? "max-w-[85%] whitespace-pre-line rounded-2xl rounded-bl-md border border-clay-bright/40 bg-clay/15 px-3.5 py-2.5 text-[0.9rem] leading-relaxed text-sand"
                       : "max-w-[85%] whitespace-pre-line rounded-2xl rounded-bl-md border border-white/10 bg-white/5 px-3.5 py-2.5 text-[0.9rem] leading-relaxed text-sand"
                   }
                 >
-                  {m.rol === "bot" ? conEnlaces(m.texto) : m.texto}
+                  {m.rol === "user" ? m.texto : conEnlaces(m.texto)}
                 </p>
               </div>
             ))}
+            {pausado && (
+              <p className="rounded-2xl border border-clay-bright/30 bg-clay/10 px-3.5 py-2.5 text-[0.8rem] leading-relaxed text-sand" role="status">
+                {t.yaelAtiende}
+              </p>
+            )}
             {enviando && (
               <p className="text-[0.8rem] text-mocha" role="status">
                 {t.pensando}

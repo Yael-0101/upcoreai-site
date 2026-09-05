@@ -47,7 +47,7 @@ console.log("\nChat del sitio · reglas puras");
 
 console.log("\nChat del sitio · textos en los dos idiomas");
 {
-  const CLAVES = ["abrir", "cerrar", "titulo", "sub", "bienvenida", "placeholder", "enviar", "seguirWa", "seguirWaCorto", "pensando", "privacidad"];
+  const CLAVES = ["abrir", "cerrar", "titulo", "sub", "bienvenida", "placeholder", "enviar", "seguirWa", "seguirWaCorto", "pensando", "privacidad", "yaelAtiende", "etiquetaYael"];
   for (const idi of ["es", "en"]) {
     const c = T.contenido(idi).chatWeb;
     ok(`${idi}: chatWeb trae las ${CLAVES.length} claves con texto`, c && CLAVES.every((k) => typeof c[k] === "string" && c[k].trim().length > 1), JSON.stringify(Object.keys(c || {})));
@@ -69,6 +69,11 @@ console.log("\nChat del sitio · montaje");
   const ruta = fs.readFileSync(path.join(RAIZ, "app", "api", "chat", "route.ts"), "utf8");
   ok("la ruta avisa a Yael cuando cae al respaldo", /avisarFallo\(/.test(ruta) && /fallo: motivo/.test(ruta));
   ok("la ruta lee la IP real detrás de Cloudflare", /cf-connecting-ip/.test(ruta));
+  // Takeover desde el panel (2026-09-05): el navegador sondea lo que Yael escribe y respeta la pausa.
+  const sondeo = fs.readFileSync(path.join(RAIZ, "app", "api", "chat", "sondeo", "route.ts"), "utf8");
+  ok("existe /api/chat/sondeo y solo deja pasar mensajes de Yael", /chat-web-sondeo-x7k2/.test(sondeo) && /rol === "yael"/.test(sondeo));
+  ok("el componente sondea mientras el panel está abierto y pinta a Yael con su etiqueta", /\/api\/chat\/sondeo/.test(comp) && /setInterval/.test(comp) && /etiquetaYael/.test(comp) && /rol === "yael"/.test(comp));
+  ok("si Yael tomó el chat, el asistente calla y se avisa al visitante", /pausado === true/.test(comp) && /yaelAtiende/.test(comp));
 }
 
 console.log("\nChat del sitio · contraste medido de los tokens que usa");
