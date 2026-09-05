@@ -81,6 +81,22 @@ export const CONTACT = {
 
 /** El primer mensaje de WhatsApp, en el idioma de quien lo abre. El número es el
  *  mismo; lo que cambia es el texto que le llega ya escrito. */
+/**
+ * «Seguir por WhatsApp» desde el chat del sitio (2026-09-05): el mensaje precargado lleva la
+ * referencia de la sesión, y con ella el cerebro del bot carga en WhatsApp la plática que ya
+ * hubo en el sitio (nodo «Historial web» de Bot — Cerebro reconoce `referencia: <32 hex>`).
+ * Sin la referencia, el bot empezaría de cero y le preguntaría todo otra vez.
+ */
+export function linkWhatsAppDesdeChat(idioma: "es" | "en", sesion: string): string {
+  const ref = /^[a-f0-9]{32}$/.test(sesion) ? sesion : "";
+  if (!ref) return linkWhatsApp(idioma);
+  const texto =
+    idioma === "en"
+      ? `Hi Upcore AI, I'm continuing our chat from the website. Reference: ${ref}`
+      : `Hola Upcore AI, sigo aquí la plática del chat del sitio. Referencia: ${ref}`;
+  return `${CONTACT.whatsappBot}?text=` + encodeURIComponent(texto);
+}
+
 export function linkWhatsApp(idioma: "es" | "en"): string {
   const texto =
     idioma === "en"

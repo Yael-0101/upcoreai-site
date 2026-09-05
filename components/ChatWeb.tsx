@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { linkWhatsApp } from "@/lib/content";
+import { linkWhatsAppDesdeChat } from "@/lib/content";
 import { contenido } from "@/lib/site-textos";
 import type { Idioma } from "@/lib/idioma";
 import { CHAT_LIMITES } from "@/lib/chat-web";
@@ -230,7 +230,7 @@ export function ChatWeb() {
               <p className="truncate text-[0.75rem] leading-tight text-mocha">{t.sub}</p>
             </div>
             <a
-              href={linkWhatsApp(idioma)}
+              href={linkWhatsAppDesdeChat(idioma, sesion.current)}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={t.seguirWa}

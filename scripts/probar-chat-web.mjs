@@ -63,7 +63,15 @@ console.log("\nChat del sitio · montaje");
   ok("la burbuja vieja ya no existe (un solo lanzador flotante)", !fs.existsSync(path.join(RAIZ, "components", "BurbujaWhatsApp.tsx")) && !/BurbujaWhatsApp/.test(layout));
   const comp = fs.readFileSync(path.join(RAIZ, "components", "ChatWeb.tsx"), "utf8");
   ok("el componente lee sus textos de site-textos, no trae frases sueltas del asistente", /contenido\(idioma\)\.chatWeb/.test(comp) && !/Soy el asistente/.test(comp));
-  ok("el componente lleva la salida a WhatsApp (linkWhatsApp)", /linkWhatsApp\(idioma\)/.test(comp));
+  ok("el componente lleva la salida a WhatsApp CON la referencia de la sesión (linkWhatsAppDesdeChat)", /linkWhatsAppDesdeChat\(idioma, sesion\.current\)/.test(comp));
+  {
+    const C = jiti(path.join(RAIZ, "lib", "content.ts"));
+    const conRef = C.linkWhatsAppDesdeChat("es", "56ae4ee728cfda819b896cb951f4a132");
+    const sinRef = C.linkWhatsAppDesdeChat("es", "no-es-una-sesion");
+    ok("el enlace desde el chat lleva «Referencia: <sesión>» y va al bot", /Referencia%3A%2056ae4ee728cfda819b896cb951f4a132/.test(conRef) && /wa\.me\/17868872372/.test(conRef), conRef);
+    ok("sin sesión válida cae al enlace normal", sinRef === C.linkWhatsApp("es"));
+    ok("en inglés también lleva la referencia", /Reference%3A%2056ae4ee7/.test(C.linkWhatsAppDesdeChat("en", "56ae4ee728cfda819b896cb951f4a132")));
+  }
   ok("se esconde en propuesta, acuerdo y arranque", /"\/p\/"/.test(comp) && /"\/acuerdo\/"/.test(comp) && /"\/arranque\/"/.test(comp));
   ok("el diálogo se cierra con Escape y tiene nombre accesible", /Escape/.test(comp) && /role="dialog"/.test(comp) && /aria-label=\{t\.titulo\}/.test(comp));
   const ruta = fs.readFileSync(path.join(RAIZ, "app", "api", "chat", "route.ts"), "utf8");
