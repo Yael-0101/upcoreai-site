@@ -31,6 +31,25 @@ export type TextosSitio = {
    * que lee el lector de pantalla y el `title` del enlace.
    */
   burbujaWa: { label: string; aria: string };
+  /**
+   * Chat del sitio (2026-09-05): el MISMO agente de WhatsApp por otra puerta. Estos son solo
+   * los textos del cascarón (botón, cabecera, caja de texto); lo que dice el asistente viene
+   * del cerebro en n8n, nunca de aquí.
+   */
+  chatWeb: {
+    abrir: string;
+    cerrar: string;
+    titulo: string;
+    sub: string;
+    bienvenida: string;
+    placeholder: string;
+    enviar: string;
+    seguirWa: string;
+    /** La versión corta que cabe en la cabecera del panel (380 px); `seguirWa` queda como nombre accesible. */
+    seguirWaCorto: string;
+    pensando: string;
+    privacidad: string;
+  };
   meta: {
     title: string;
     description: string;
@@ -153,6 +172,19 @@ const ES: TextosSitio = {
   burbujaWa: {
     label: "Escríbenos por WhatsApp",
     aria: "Escríbenos por WhatsApp: te contesta nuestro asistente al momento",
+  },
+  chatWeb: {
+    abrir: "Escríbenos",
+    cerrar: "Cerrar el chat",
+    titulo: "Asistente de Upcore AI",
+    sub: "Contesta al momento, a cualquier hora",
+    bienvenida: "Cuéntanos qué te trae por aquí. Te contesta el mismo asistente que atiende nuestro WhatsApp; es una IA, y lo dice si le preguntas.",
+    placeholder: "Escribe tu mensaje…",
+    enviar: "Enviar",
+    seguirWa: "Seguir por WhatsApp",
+    seguirWaCorto: "WhatsApp",
+    pensando: "Escribiendo…",
+    privacidad: "Lo que escribas aquí lo lee nuestro asistente y el equipo de Upcore, nadie más.",
   },
   meta: {
     title: "Upcore AI | Automatización con IA para inmobiliarias",
@@ -567,6 +599,19 @@ const EN: TextosSitio = {
   burbujaWa: {
     label: "Message us on WhatsApp",
     aria: "Message us on WhatsApp: our assistant replies right away",
+  },
+  chatWeb: {
+    abrir: "Chat with us",
+    cerrar: "Close the chat",
+    titulo: "Upcore AI assistant",
+    sub: "Replies right away, any time",
+    bienvenida: "Tell us what brings you here. You'll get the same assistant that answers our WhatsApp; it's an AI, and it says so if you ask.",
+    placeholder: "Type your message…",
+    enviar: "Send",
+    seguirWa: "Continue on WhatsApp",
+    seguirWaCorto: "WhatsApp",
+    pensando: "Typing…",
+    privacidad: "What you write here is read by our assistant and the Upcore team, no one else.",
   },
   meta: {
     title: "Upcore AI | AI automation for real estate firms",

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { Analytics } from "@vercel/analytics/react";
 import { JsonLd } from "@/components/JsonLd";
-import { BurbujaWhatsApp } from "@/components/BurbujaWhatsApp";
+import { ChatWeb } from "@/components/ChatWeb";
 import { jsonLdGlobal, SITE_NAME, SITE_URL } from "@/lib/seo";
 import { contenido } from "@/lib/site-textos";
 import "./globals.css";
@@ -49,7 +49,7 @@ export default function RootLayout({
     <html lang="es-MX" className={GeistSans.variable}>
       <body className="font-sans antialiased">
         {children}
-        <BurbujaWhatsApp />
+        <ChatWeb />
         <JsonLd data={jsonLdGlobal()} />
         <Analytics />
       </body>
