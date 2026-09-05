@@ -25,6 +25,12 @@ import type { Idioma } from "./idioma";
 export type Punto = { ok: boolean; texto: string };
 
 export type TextosSitio = {
+  /**
+   * Burbuja flotante de WhatsApp (decisión de Yael, 2026-09-04): la puerta al bot desde
+   * cualquier página pública. `label` se ve en pantallas anchas junto al icono; `aria` es lo
+   * que lee el lector de pantalla y el `title` del enlace.
+   */
+  burbujaWa: { label: string; aria: string };
   meta: {
     title: string;
     description: string;
@@ -144,6 +150,10 @@ export type TextosSitio = {
 // ESPAÑOL — el original. El inglés se traduce de aquí, nunca al revés.
 // ────────────────────────────────────────────────────────────────────────────
 const ES: TextosSitio = {
+  burbujaWa: {
+    label: "Escríbenos por WhatsApp",
+    aria: "Escríbenos por WhatsApp: te contesta nuestro asistente al momento",
+  },
   meta: {
     title: "Upcore AI | Automatización con IA para inmobiliarias",
     description:
@@ -554,6 +564,10 @@ const ES: TextosSitio = {
 // vendamos atención en inglés.
 // ────────────────────────────────────────────────────────────────────────────
 const EN: TextosSitio = {
+  burbujaWa: {
+    label: "Message us on WhatsApp",
+    aria: "Message us on WhatsApp: our assistant replies right away",
+  },
   meta: {
     title: "Upcore AI | AI automation for real estate firms",
     description:

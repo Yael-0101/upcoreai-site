@@ -36,3 +36,4 @@ next-env.d.ts
 # temporales de sesión (nunca al repo público)
 .tmp/
 .tmp-*
+.claude/
