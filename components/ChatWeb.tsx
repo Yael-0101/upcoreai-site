@@ -272,9 +272,14 @@ export function ChatWeb() {
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-clay text-obsidian" aria-hidden="true">
               <span className="text-[0.95rem] font-bold">U</span>
             </div>
+            {/* 🔴 Sin `truncate` (2026-09-07). Los dos renglones se cortaban EN TODOS los
+                teléfonos: a 390 px la promesa quedaba en «Contesta al momento, a cualquie…» y a
+                320 px hasta el nombre se partía —«Asistente de Upc…»—. `truncate` está bien para
+                un dato de fuera que puede venir larguísimo; estos dos textos son NUESTROS y caben
+                en dos renglones. Ahora se ajustan solos: en pantalla ancha siguen en una línea. */}
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[0.9rem] font-semibold leading-tight">{t.titulo}</p>
-              <p className="truncate text-[0.75rem] leading-tight text-mocha">{t.sub}</p>
+              <p className="text-[0.9rem] font-semibold leading-snug">{t.titulo}</p>
+              <p className="text-[0.75rem] leading-snug text-mocha">{t.sub}</p>
             </div>
             <a
               href={linkWhatsAppDesdeChat(idioma, sesion.current)}
@@ -304,7 +309,16 @@ export function ChatWeb() {
             </button>
           </header>
 
-          <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4" aria-live="polite">
+          {/* 🔴 `break-words` va AQUÍ, en la zona de mensajes, y no en cada burbuja (2026-09-07).
+              `overflow-wrap` se HEREDA, así que puesto una sola vez lo respetan la bienvenida, las
+              tres clases de burbuja y las que se agreguen mañana — que es la diferencia entre un
+              arreglo y cinco copias que se desfasan.
+              Qué pasaba: una palabra sin espacios no se puede partir por sí sola, así que en un
+              teléfono angosto se salía de su caja y ponía a desplazarse de lado la conversación.
+              El caso real más probable no es el asistente (sus enlaces ya van con `break-all`),
+              sino el mensaje DEL VISITANTE: se pinta tal cual, y pegar un link es lo más normal
+              del mundo. */}
+          <div className="flex-1 space-y-3 overflow-y-auto break-words px-4 py-4" aria-live="polite">
             <p className="rounded-2xl bg-white/5 px-3.5 py-2.5 text-[0.8rem] leading-relaxed text-mocha">{t.bienvenida}</p>
             {mensajes.map((m, i) => (
               <div key={i} className={m.rol === "user" ? "flex justify-end" : "flex flex-col items-start"}>
