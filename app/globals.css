@@ -26,6 +26,17 @@ body {
   overflow-x: hidden;
 }
 
+/* ⚠️ El corte va TAMBIÉN en el <html> (2026-09-07). Con él solo en el body, el
+   desbordamiento se escapa por arriba y la página SÍ se desplaza de lado: la
+   portada en inglés se movía 41 px en un iPhone, y encima se retroalimentaba —
+   las capas `fixed inset-x-0` (el fondo, la barra) se estiran al ancho ya
+   desbordado, así que al medir parecían ellas las culpables.
+   `clip` y no `hidden`: `hidden` convertiría al <html> en un contenedor con
+   scroll propio y mataría las animaciones ligadas al scroll. */
+html {
+  overflow-x: clip;
+}
+
 ::selection {
   background: rgba(200, 98, 61, 0.3);
   color: var(--sand);

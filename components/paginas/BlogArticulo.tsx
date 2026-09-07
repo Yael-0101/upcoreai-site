@@ -74,7 +74,8 @@ export function BlogArticulo({ a, idioma }: { a: Articulo; idioma: Idioma }) {
               <div className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-clay-bright">
                 <a
                   href={ruta(idioma, "/blog")}
-                  className="transition-colors hover:text-clay-bright"
+                  // Es la vuelta al índice del blog y medía 16 px de alto (2026-09-07).
+                  className="inline-flex min-h-[32px] items-center transition-colors hover:text-clay-bright"
                 >
                   {t.migaAqui}
                 </a>

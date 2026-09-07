@@ -56,7 +56,9 @@ export function PaginaLegal({
         <div className="mx-auto max-w-3xl">
           <a
             href={ruta(idioma, "/")}
-            className="mb-8 inline-block text-xs font-semibold uppercase tracking-[0.15em] text-mocha transition-colors hover:text-clay-bright"
+            // 16 px de alto y es el ÚNICO camino de vuelta de estas páginas: privacidad y términos
+            // no llevan menú, así que quien entra desde el pie sale por aquí (2026-09-07).
+            className="mb-8 inline-flex min-h-[44px] items-center text-xs font-semibold uppercase tracking-[0.15em] text-mocha transition-colors hover:text-clay-bright"
           >
             {t.volver}
           </a>
