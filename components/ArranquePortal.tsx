@@ -425,7 +425,7 @@ export function ArranquePortal({
         <button
           type="button"
           onClick={cambiarIdioma}
-          className="rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay-bright"
+          className="inline-flex min-h-[44px] items-center rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay-bright"
         >
           {T.ui.verEnOtroIdioma}
         </button>
@@ -584,7 +584,7 @@ export function ArranquePortal({
           <button
             type="button"
             onClick={() => setChecklist({ servicios: [...d.checklist.servicios, { ...servicioVacio }] })}
-            className="mb-8 rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
+            className="mb-8 inline-flex min-h-[44px] items-center rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
           >
             {/* ⚠️ Antes decía "+ Agregar otro desarrollo" escrito a mano: a un cliente con el
                 portal en inglés le salía en español. La llave ya existía sin usarse. */}
@@ -1117,7 +1117,7 @@ export function ArranquePortal({
                         web: { ...d.web, referencias: [...d.web.referencias, { url: "", nota: "" }] },
                       })
                     }
-                    className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
+                    className="inline-flex min-h-[44px] items-center rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
                   >
                     {T.estilo.agregarReferencia}
                   </button>

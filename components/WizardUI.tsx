@@ -44,7 +44,7 @@ export function OptionBtn({
         {opt.label}
       </span>
       {opt.desc && (
-        <span className="text-[0.68rem] leading-tight text-mocha">{opt.desc}</span>
+        <span className="text-[0.75rem] leading-tight text-mocha">{opt.desc}</span>
       )}
     </button>
   );

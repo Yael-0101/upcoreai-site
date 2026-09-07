@@ -175,7 +175,7 @@ export default async function ArranquePage({
         <footer className="mt-12 border-t border-[rgba(242,231,219,0.08)] pt-6 text-center text-xs font-light text-mocha/80">
           {T.ui.pie(fila.clinica || (idioma === "en" ? "your firm" : "tu inmobiliaria"))} ·{" "}
           {T.ui.dudas} {T.ui.escribenos.replace(/ ?WhatsApp$/, "")}{" "}
-          <a href={CONTACT.whatsapp} className="underline hover:text-clay-bright">
+          <a href={CONTACT.whatsapp} className="inline-block px-1 py-2 underline hover:text-clay-bright">
             WhatsApp
           </a>
         </footer>
