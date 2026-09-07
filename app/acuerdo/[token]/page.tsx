@@ -204,7 +204,7 @@ export default async function AcuerdoPublico({
           {hayIngles && (
             <a
               href={`/acuerdo/${encodeURIComponent(token)}${en ? "" : "?lang=en"}`}
-              className="no-print rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay-bright"
+              className="no-print inline-flex min-h-[44px] items-center rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay-bright"
             >
               {t.ui.verEnOtroIdioma}
             </a>

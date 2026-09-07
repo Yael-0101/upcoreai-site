@@ -91,12 +91,15 @@ export function AcuerdoAceptar({
         />
         <p className="mt-2 text-xs font-light text-mocha/80">{t.ui.correoNota}</p>
 
-        <label className="mt-4 flex cursor-pointer items-start gap-3 text-sm font-light text-mocha">
+        {/* Es LA casilla con la que se acepta el contrato: la caja medía 16×16 y su etiqueta se
+            quedaba corta, así que en un teléfono había que apuntar. Ahora la casilla es de 20 y
+            la etiqueta entera —texto incluido— tiene 44 px de alto: se toca en cualquier parte. */}
+        <label className="mt-4 flex min-h-[44px] cursor-pointer items-start gap-3 py-1 text-sm font-light text-mocha">
           <input
             type="checkbox"
             checked={leido}
             onChange={(e) => setLeido(e.target.checked)}
-            className="mt-1 h-4 w-4 shrink-0 accent-clay"
+            className="mt-0.5 h-5 w-5 shrink-0 accent-clay"
           />
           <span>{t.ui.leiTodo}</span>
         </label>
