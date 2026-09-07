@@ -10,6 +10,7 @@
 //
 // Correr con:  node scripts/probar-propuesta.mjs   (corre en el prebuild)
 
+import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
@@ -31,8 +32,17 @@ function subconjuntos(lista) {
 
 // Literales de la página que el módulo no genera (viven en el JSX): se prueban
 // aquí tal cual, gateados por los mismos booleanos que usa la página.
-const LITERAL_DEMO =
-  "¿Quieres ver el agente en acción antes de decidir? Pruébalo tú mismo aquí — juega a ser tu propio comprador.";
+//
+// 🔴 La invitación a la demo YA NO se escribe aquí a mano (2026-09-07): se arma con las mismas
+// tres piezas que usa la página. Cuando era una copia, la página cambió y esta copia no, y el
+// guardián se quedó vigilando una frase que ya no existía — mientras la propuesta de verdad
+// enseñaba el párrafo DUPLICADO y, en inglés, con la cola en español.
+const TXT = jiti(path.join(AQUI, "..", "lib", "propuesta-textos.ts"));
+const demoArmada = (idioma) => {
+  const t = TXT.TP[idioma];
+  return `${t.probarDemo} ${t.probarDemoEnlace} ${t.probarDemoCola}`;
+};
+const LITERAL_DEMO = demoArmada("es");
 const LITERAL_PERDIDA = "Lo que te está costando seguir igual · que hoy se van cada mes";
 
 const DECLARADOS = { perdidaMensual: 12124, citasEstimado: false, ticketEstimado: false };
@@ -89,6 +99,44 @@ casos++;
         `${nombre} sigue diciendo "${m[0]}" — se quedó atrás de lo que dice la página, ` +
           "así que este guardián estaría vigilando una frase que ya no existe"
       );
+  }
+}
+
+// ── 0.b La invitación a la demo se lee UNA vez y en UN idioma ────────────────
+// 🔴 Lo que pasó (2026-09-07): `probarDemo` guardaba la frase completa —enlace incluido— y la
+// página, además de imprimirla, volvía a poner el enlace con su propia cola escrita a mano. El
+// cliente leía el párrafo DOS veces, y en la propuesta en inglés la segunda mitad salía en
+// español. Ningún guardián lo vio porque los dos revisan la TABLA de textos, y el defecto vivía
+// en la página que la envuelve — la capa que siempre se olvida al traducir.
+casos++;
+{
+  const PAGINA = fs.readFileSync(path.join(AQUI, "..", "app", "p", "[token]", "page.tsx"), "utf8");
+  for (const idioma of ["es", "en"]) {
+    const t = TXT.TP[idioma];
+    // Las tres piezas existen y ninguna repite a otra.
+    for (const clave of ["probarDemo", "probarDemoEnlace", "probarDemoCola"]) {
+      if (!t[clave] || !String(t[clave]).trim())
+        fallos.push(`[${idioma}] falta el texto «${clave}» de la invitación a la demo`);
+    }
+    if (t.probarDemo.includes(t.probarDemoEnlace))
+      fallos.push(`[${idioma}] la frase de la demo YA trae el enlace dentro: se leería dos veces`);
+    // La página no puede escribir ninguna de las tres por su cuenta.
+    for (const clave of ["probarDemoEnlace", "probarDemoCola"]) {
+      if (PAGINA.includes(String(t[clave])))
+        fallos.push(
+          `[${idioma}] la página escribe «${t[clave]}» a mano en vez de leerla de propuesta-textos: ` +
+            "así es como una traducción se queda a medias",
+        );
+    }
+  }
+  // Y la inglesa no puede ser la española.
+  // ⚠️ Mi primera versión buscaba acentos, y NO habría cazado el defecto de verdad: la cola que
+  // se estaba colando —«juega a ser tu propio comprador»— no lleva ni una tilde. Lo que sí lo
+  // caza es comparar los dos idiomas: si la pieza inglesa es idéntica a la española, no está
+  // traducida. (Se comprobó inyectando el defecto REAL, no uno inventado.)
+  for (const clave of ["probarDemo", "probarDemoEnlace", "probarDemoCola"]) {
+    if (TXT.TP.en[clave] === TXT.TP.es[clave])
+      fallos.push(`[en] «${clave}» es el mismo texto que en español: se quedó sin traducir`);
   }
 }
 

@@ -823,11 +823,11 @@ export default async function PropuestaPublica({
               href={`https://upcoreai.com/demo${p.lead.clinica ? `?c=${encodeURIComponent(p.lead.clinica)}` : ""}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block px-1 py-2 font-medium text-sand underline hover:text-clay-bright"
+              className="inline-flex min-h-[44px] items-center px-1 font-medium text-sand underline hover:text-clay-bright"
             >
-              {en ? "Try it yourself here" : "Pruébalo tú mismo aquí"}
+              {T.probarDemoEnlace}
             </a>{" "}
-            — juega a ser tu propio comprador.
+            {T.probarDemoCola}
           </div>
         )}
 

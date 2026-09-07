@@ -120,7 +120,14 @@ export type TextosProp = {
   consejoHonesto: string;
 
   // ── Cierre ────────────────────────────────────────────────────────────────
+  // 🔴 La invitación a la demo va en TRES piezas porque el enlace está en medio de la frase
+  // (2026-09-07). Cuando era una sola cadena, la página ponía la frase completa Y ADEMÁS el
+  // enlace con su propia cola escrita a mano: el bloque salía duplicado, y en la propuesta en
+  // inglés la cola aparecía en español. Con tres piezas, la frase entera vive aquí y la página
+  // no tiene nada que escribir.
   probarDemo: string;
+  probarDemoEnlace: string;
+  probarDemoCola: string;
   meInteresa: string;
   sinCompromiso: (hasta: string) => string;
   descargarPdf: string;
@@ -359,7 +366,9 @@ const ES: TextosProp = {
   noNecesitasTitulo: "Y lo que NO vas a necesitar:",
   consejoHonesto: "Nuestro consejo honesto:",
 
-  probarDemo: "¿Quieres ver el agente en acción antes de decidir? Pruébalo tú mismo aquí — juega a ser tu propio comprador.",
+  probarDemo: "¿Quieres ver el agente en acción antes de decidir?",
+  probarDemoEnlace: "Pruébalo tú mismo aquí",
+  probarDemoCola: "— juega a ser tu propio comprador.",
   meInteresa: "Me interesa — hablemos por WhatsApp",
   sinCompromiso: (hasta) => `Este diagnóstico no te compromete a nada · Válido hasta el ${hasta}`,
   descargarPdf: "Descargar en PDF",
@@ -704,7 +713,9 @@ const EN: TextosProp = {
   noNecesitasTitulo: "And what you will NOT need:",
   consejoHonesto: "Our honest advice:",
 
-  probarDemo: "Want to see the agent in action before deciding? Try it yourself here — play your own buyer.",
+  probarDemo: "Want to see the agent in action before deciding?",
+  probarDemoEnlace: "Try it yourself here",
+  probarDemoCola: "— play your own buyer.",
   meInteresa: "I'm interested — let's talk on WhatsApp",
   sinCompromiso: (hasta) => `This assessment commits you to nothing · Valid through ${hasta}`,
   descargarPdf: "Download as PDF",
