@@ -249,7 +249,7 @@ function PlanCard({
       }`}
     >
       {destacado && (
-        <span className="absolute -top-3 left-6 rounded-full bg-clay px-3 py-1 text-[0.68rem] font-bold text-obsidian">
+        <span className="absolute -top-3 left-6 rounded-full bg-clay px-3 py-1 text-[0.75rem] font-bold text-obsidian">
           {t.planes.favorito}
         </span>
       )}
@@ -259,7 +259,7 @@ function PlanCard({
       <p className="mb-5 text-sm font-light text-mocha">{desc}</p>
       {filas.map((f) => (
         <div key={f.k} className="border-t border-[rgba(242,231,219,0.08)] py-2.5">
-          <div className="text-[0.68rem] uppercase tracking-[0.08em] text-mocha">{f.k}</div>
+          <div className="text-[0.75rem] uppercase tracking-[0.08em] text-mocha">{f.k}</div>
           <div className="font-semibold text-clay-bright">{f.v}</div>
           {f.n && <div className="text-xs font-light text-mocha">{f.n}</div>}
         </div>
@@ -440,7 +440,7 @@ export default async function PropuestaPublica({
               acuerdo, que sí congela el documento ya redactado. */}
           <a
             href={`/p/${encodeURIComponent(token)}${en ? "" : "?lang=en"}`}
-            className="no-print rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay-bright"
+            className="no-print inline-flex min-h-[44px] items-center rounded-full border border-sand/25 px-4 py-1.5 text-xs font-semibold text-mocha transition-colors hover:border-clay hover:text-clay-bright"
           >
             {T.verEnOtroIdioma}
           </a>
@@ -527,7 +527,7 @@ export default async function PropuestaPublica({
             <div className="mb-12 rounded-3xl border border-clay/40 bg-[rgba(200,98,61,0.07)] p-7">
               <div className="grid gap-6 sm:grid-cols-2">
                 <div>
-                  <div className="text-[0.68rem] uppercase tracking-[0.08em] text-mocha">
+                  <div className="text-[0.75rem] uppercase tracking-[0.08em] text-mocha">
                     {T.cadaMes}
                   </div>
                   <div className="text-3xl font-bold tracking-tight text-clay-bright">
@@ -535,7 +535,7 @@ export default async function PropuestaPublica({
                   </div>
                 </div>
                 <div>
-                  <div className="text-[0.68rem] uppercase tracking-[0.08em] text-mocha">
+                  <div className="text-[0.75rem] uppercase tracking-[0.08em] text-mocha">
                     {T.enUnAno}
                   </div>
                   <div className="text-3xl font-bold tracking-tight text-clay-bright">
@@ -699,7 +699,7 @@ export default async function PropuestaPublica({
               pérdida y que la fila de retorno. */}
           {conPerdida && (
             <div className="mb-12 rounded-3xl border border-sage/40 bg-[rgba(138,154,133,0.07)] p-7">
-              <div className="text-[0.68rem] uppercase tracking-[0.08em] text-mocha">
+              <div className="text-[0.75rem] uppercase tracking-[0.08em] text-mocha">
                 {T.filas.ahorro}
               </div>
               <div className="text-3xl font-bold tracking-tight">
@@ -823,7 +823,7 @@ export default async function PropuestaPublica({
               href={`https://upcoreai.com/demo${p.lead.clinica ? `?c=${encodeURIComponent(p.lead.clinica)}` : ""}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-sand underline hover:text-clay-bright"
+              className="inline-block px-1 py-2 font-medium text-sand underline hover:text-clay-bright"
             >
               {en ? "Try it yourself here" : "Pruébalo tú mismo aquí"}
             </a>{" "}
