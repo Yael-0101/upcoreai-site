@@ -124,7 +124,12 @@ export function DemoChat({
             {clinica.charAt(0).toUpperCase()}
           </span>
           <div className="min-w-0 flex-1">
-            <div className="truncate text-sm font-semibold text-sand">
+            {/* ⚠️ `truncate` no: en un teléfono angosto cortaba nuestro propio título
+                —«Asistente de Inmobiliaria Demo» perdía 194px— y un texto recortado con
+                «…» es invisible para cualquier auditor de tamaños, porque por definición
+                "cabe". Con dos renglones se lee entero, y un nombre de firma larguísimo
+                (que viene de fuera) sigue teniendo tope. */}
+            <div className="line-clamp-2 break-words text-sm font-semibold text-sand">
               {T.asistenteDe(clinica)}
             </div>
             <div className="flex items-center gap-1.5 text-[0.72rem] text-sage">

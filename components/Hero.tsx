@@ -17,10 +17,16 @@ const CHIPS = [
 export function Hero({ idioma = "es" }: { idioma?: Idioma }) {
   const HERO = contenido(idioma).hero;
 
+  // ⚠️ El `py-28` de abajo no es aire: la barra de arriba es FIJA y mide 85px, y este
+  // bloque se centra dentro de la pantalla completa. En un teléfono chico el contenido
+  // no cabe en una pantalla, así que al centrarse se subía POR DEBAJO de la barra: en un
+  // iPhone SE, "Upcore AI" quedaba impreso encima del lema (2026-09-07). Con el hueco
+  // arriba y abajo el contenido nunca sube más allá de la barra, y donde SÍ cabe
+  // (escritorio) el centrado no se mueve, porque el hueco es simétrico.
   return (
     <header
       id="top"
-      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-[8%] text-center"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-[8%] py-28 text-center"
     >
       {CHIPS.map((c, i) => (
         <div

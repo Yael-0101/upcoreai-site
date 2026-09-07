@@ -75,7 +75,7 @@ export function BlogArticulo({ a, idioma }: { a: Articulo; idioma: Idioma }) {
                 <a
                   href={ruta(idioma, "/blog")}
                   // Es la vuelta al índice del blog y medía 16 px de alto (2026-09-07).
-                  className="inline-flex min-h-[32px] items-center transition-colors hover:text-clay-bright"
+                  className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center transition-colors hover:text-clay-bright"
                 >
                   {t.migaAqui}
                 </a>
@@ -142,7 +142,7 @@ export function BlogArticulo({ a, idioma }: { a: Articulo; idioma: Idioma }) {
                   <a
                     key={rel.slug}
                     href={ruta(idioma, `/soluciones/${rel.slug}`)}
-                    className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
+                    className="inline-flex min-h-[44px] items-center rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
                   >
                     {rel.t[idioma].nombreCorto}
                   </a>
@@ -162,7 +162,7 @@ export function BlogArticulo({ a, idioma }: { a: Articulo; idioma: Idioma }) {
                   <a
                     key={h.slug}
                     href={ruta(idioma, `/blog/${h.slug}`)}
-                    className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
+                    className="inline-flex min-h-[44px] items-center rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
                   >
                     {h.t[idioma].title}
                   </a>

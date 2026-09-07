@@ -159,6 +159,29 @@ export function ChatWeb() {
     finRef.current?.scrollIntoView({ block: "end" });
   }, [mensajes, enviando, abierto]);
 
+  // ¿Se puede enseñar ya el lanzador? Ver el comentario de `lanzadorVisible`, más abajo.
+  // En pantalla ancha, siempre. En una angosta, cuando el visitante pasó la primera
+  // pantalla — y si la página no se puede desplazar, desde el principio, porque si no
+  // no aparecería nunca.
+  const [aLaVista, setALaVista] = useState(false);
+  useEffect(() => {
+    const mirar = () => {
+      const angosta = window.matchMedia("(max-width: 639px)").matches;
+      if (!angosta) return setALaVista(true);
+      const alto = window.innerHeight;
+      const pagina = document.documentElement.scrollHeight;
+      if (pagina <= alto + 40) return setALaVista(true);
+      setALaVista(window.scrollY > alto * 0.6);
+    };
+    mirar();
+    window.addEventListener("scroll", mirar, { passive: true });
+    window.addEventListener("resize", mirar);
+    return () => {
+      window.removeEventListener("scroll", mirar);
+      window.removeEventListener("resize", mirar);
+    };
+  }, []);
+
   // Sondeo mientras el panel está abierto: pregunta qué escribió Yael desde el panel. La primera
   // vuelta solo fija la marca (lo que ya hay en el historial no se repite en pantalla).
   useEffect(() => {
@@ -232,10 +255,17 @@ export function ChatWeb() {
   if (RUTAS_PRIVADAS.some((r) => pathname.startsWith(r))) return null;
 
   const abajo = { bottom: "calc(1rem + env(safe-area-inset-bottom, 0px))" } as const;
+  // En un teléfono el lanzador va en la esquina, y ahí se sentaba ENCIMA del botón
+  // principal: en un iPhone SE tapaba las últimas letras de "Haz tu diagnóstico gratis"
+  // —y es del mismo color naranja, así que se leía como un borrón— (2026-09-07). Un
+  // botón de esquina y un botón casi del ancho de la pantalla no pueden convivir. En
+  // pantalla chica aparece cuando el visitante ya pasó la primera pantalla; de paso, ahí
+  // la primera pantalla queda con UNA sola acción. En pantallas grandes no cambia nada.
+  const lanzadorVisible = !abierto && aLaVista;
 
   return (
     <>
-      {!abierto && (
+      {lanzadorVisible && (
         <button
           type="button"
           onClick={() => setAbierto(true)}

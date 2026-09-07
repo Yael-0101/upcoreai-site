@@ -5,12 +5,12 @@ import { contenido } from "@/lib/site-textos";
 import type { Idioma } from "@/lib/idioma";
 import { ruta } from "@/lib/rutas";
 
-// Los enlaces del pie se tocan con el dedo: con `py-1` medían 24 px de alto, por debajo del
-// mínimo de control en móvil (44×44, y 28 como piso absoluto). Con `py-2.5` quedan en 38 y el
-// espacio vertical entre filas sube, que según la guía pesa tanto como el tamaño. No se agranda
-// el texto para no rehacer el pie: son enlaces secundarios, no acciones principales.
+// Los enlaces del pie se tocan con el dedo. Con `py-1` medían 24 px de alto; una primera pasada
+// los dejó en 36 con `py-2.5`, que pasa el piso absoluto (28) pero no llega al tamaño de control
+// recomendado. Desde el 2026-09-07 (decisión de Yael) llegan a los 44 completos: el texto sigue
+// siendo chico —son enlaces secundarios— y lo que crece es la zona que recibe el toque.
 const ENLACE_PIE =
-  "inline-block px-1 py-2.5 text-xs text-mocha transition-colors hover:text-clay-bright";
+  "inline-flex min-h-[44px] min-w-[44px] items-center justify-center px-1 text-xs text-mocha transition-colors hover:text-clay-bright";
 
 export function Footer({ idioma = "es" }: { idioma?: Idioma }) {
   const t = contenido(idioma);
@@ -18,7 +18,7 @@ export function Footer({ idioma = "es" }: { idioma?: Idioma }) {
   return (
     <footer className="border-t border-[rgba(242,231,219,0.06)] px-[6%] pb-12 pt-20 text-center md:px-[10%]">
       <div className="mb-6 flex justify-center">
-        <a href="#top" aria-label={t.nav.inicio} className="inline-flex">
+        <a href="#top" aria-label={t.nav.inicio} className="inline-flex min-h-[44px] items-center">
           <Logo />
         </a>
       </div>

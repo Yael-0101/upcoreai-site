@@ -93,7 +93,7 @@ export function Nosotros({ idioma }: { idioma: Idioma }) {
               <a
                 key={s.slug}
                 href={ruta(idioma, `/soluciones/${s.slug}`)}
-                className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
+                className="inline-flex min-h-[44px] items-center rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
               >
                 {s.t[idioma].nombreCorto}
               </a>

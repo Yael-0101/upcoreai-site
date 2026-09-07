@@ -64,7 +64,7 @@ export function NavClient({
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      <a href={inicio} aria-label={textos.inicio} className="inline-flex">
+      <a href={inicio} aria-label={textos.inicio} className="inline-flex min-h-[44px] items-center">
         <Logo markClass="h-7 w-7" textClass="text-[1.25rem]" />
       </a>
 

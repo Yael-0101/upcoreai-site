@@ -254,7 +254,7 @@ export function SolucionPagina({ s, idioma }: { s: Solucion; idioma: Idioma }) {
                     <a
                       key={slugRel}
                       href={ruta(idioma, `/soluciones/${rel.slug}`)}
-                      className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
+                      className="inline-flex min-h-[44px] items-center rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
                     >
                       {rel.t[idioma].nombreCorto}
                     </a>
@@ -275,7 +275,7 @@ export function SolucionPagina({ s, idioma }: { s: Solucion; idioma: Idioma }) {
                   <a
                     key={a.slug}
                     href={ruta(idioma, `/blog/${a.slug}`)}
-                    className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
+                    className="inline-flex min-h-[44px] items-center rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2.5 text-sm font-medium text-sand transition-colors hover:border-clay hover:text-clay-bright"
                   >
                     {a.t[idioma].title}
                   </a>
