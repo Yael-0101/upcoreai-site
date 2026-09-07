@@ -22,6 +22,9 @@ const jiti = require("jiti")(fileURLToPath(import.meta.url));
 const { PRODUCTO_OPTIONS, calculate, precioFijo } = jiti(path.join(AQUI, "..", "lib", "calc.ts"));
 const { datosAcuerdo } = jiti(path.join(AQUI, "..", "lib", "acuerdo.ts"));
 const { bonos, piezasDeSnapshot, lineaSeo } = jiti(path.join(AQUI, "..", "lib", "propuesta-copy.ts"));
+const { PAPELES } = jiti(path.join(AQUI, "..", "lib", "papeles.ts"));
+const { TEXTOS: TEXTOS_ACUERDO } = jiti(path.join(AQUI, "..", "lib", "acuerdo-textos.ts"));
+const { TP: TP_TEXTOS } = jiti(path.join(AQUI, "..", "lib", "propuesta-textos.ts"));
 
 // ── Construir un snapshot igual al que congela el panel ───────────────────────
 // Espejo de snapshotDeLead() (upcore-panel/lib/propuesta.ts:272): mismos campos y misma
@@ -848,6 +851,116 @@ casos++;
   ]) {
     if (/Estados Unidos Mexicanos|tribunales[^.]{0,40}M[ée]xico/i.test(txt)) {
       fallos.push(`${donde} sigue diciendo que se rige por ley mexicana`);
+    }
+  }
+}
+
+// ── El documento en el TELÉFONO y en el idioma del cliente (2026-09-07) ──────
+//
+// Los cuatro defectos que encontró la pasada móvil del acuerdo. Ninguno rompía nada:
+// el documento se veía entero y todos los guardianes estaban en verde.
+
+{
+  const paginaAcuerdo = fs.readFileSync(
+    path.join(AQUI, "..", "app", "acuerdo", "[token]", "page.tsx"),
+    "utf8"
+  );
+  const paginaPropuesta = fs.readFileSync(
+    path.join(AQUI, "..", "app", "p", "[token]", "page.tsx"),
+    "utf8"
+  );
+
+  // 1) La tabla de pagos SIN ancho mínimo. Con `min-w-[380px]` no cabía en un teléfono
+  //    de 320px y los cuatro importes se quedaban fuera de la pantalla: el cliente leía
+  //    "Para arrancar (al aceptar)" y ningún número, en la sección que dice cuánto paga.
+  const tabla = /<table className="([^"]*)"/.exec(paginaAcuerdo);
+  if (!tabla) {
+    fallos.push("no encuentro la tabla del acuerdo: ¿se movió? el guardián se quedó ciego");
+  } else if (/min-w-/.test(tabla[1])) {
+    fallos.push(
+      `la tabla de pagos lleva ancho mínimo (${tabla[1].match(/min-w-\S+/)[0]}): en un teléfono ` +
+        `angosto las cifras se salen de la pantalla`
+    );
+  }
+
+  // 2) El nombre de la pestaña, en el idioma que el cliente está leyendo.
+  for (const [donde, src, textos, clave] of [
+    ["el acuerdo", paginaAcuerdo, TEXTOS_ACUERDO, (t) => t.ui.tituloPagina],
+    ["la propuesta", paginaPropuesta, TP_TEXTOS, (t) => t.tituloPagina],
+  ]) {
+    if (!/export async function generateMetadata/.test(src)) {
+      fallos.push(`${donde} fija el título de la pestaña: en inglés sale en español`);
+    }
+    if (/title:\s*"/.test(src)) {
+      fallos.push(`${donde} tiene un título escrito a mano en la página, no en sus textos`);
+    }
+    const es = clave(textos.es);
+    const en = clave(textos.en);
+    if (!es || !en) fallos.push(`${donde} no tiene título de pestaña en los dos idiomas`);
+    else if (es === en) fallos.push(`${donde} usa el MISMO título en los dos idiomas ("${es}")`);
+  }
+
+  // 3) El idioma del documento. Sin esto, un lector de pantalla lee el contrato en
+  //    inglés con pronunciación española.
+  for (const [donde, src] of [
+    ["el acuerdo", paginaAcuerdo],
+    ["la propuesta", paginaPropuesta],
+  ]) {
+    if (!/IdiomaDelDocumento\s+lang=/.test(src)) {
+      fallos.push(`${donde} no declara en qué idioma está (IdiomaDelDocumento)`);
+    }
+  }
+  const portal = fs.readFileSync(path.join(AQUI, "..", "components", "ArranquePortal.tsx"), "utf8");
+  if (!/useDocumentoEn\(/.test(portal)) {
+    fallos.push("el Portal de Arranque no declara en qué idioma está");
+  }
+
+  // 4) El papel de quien firma: traducido y en forma de cargo, no la respuesta cruda.
+  //    "Valentina Ríos, Soy el dueño/a · September 7" era lo que se leía.
+  for (const p of PAPELES) {
+    if (p.puesto.es === undefined || p.puesto.en === undefined) {
+      fallos.push(`el papel "${p.label}" no dice cómo se lee dentro de una frase`);
+      continue;
+    }
+    if (/^Soy /i.test(p.puesto.es) || /^Soy /i.test(p.puesto.en)) {
+      fallos.push(`el papel "${p.label}" se mete en la frase como respuesta ("${p.puesto.es}")`);
+    }
+    // El único que puede ir vacío es "Otro": "Fulana, Otro" no le dice nada a nadie.
+    if (p.val !== "otro" && (!p.puesto.es.trim() || !p.puesto.en.trim())) {
+      fallos.push(`el papel "${p.label}" se queda sin traducir en uno de los dos idiomas`);
+    }
+    if (p.puesto.es && p.puesto.es === p.puesto.en) {
+      fallos.push(`el papel "${p.label}" dice lo mismo en los dos idiomas ("${p.puesto.es}")`);
+    }
+  }
+  // Y la prueba de verdad: se ARMA el documento y se lee lo que salió.
+  for (const p of PAPELES) {
+    for (const idioma of ["es", "en"]) {
+      const snap = snapshotFalso(["agente"], false);
+      snap.lead.decisor = p.label;
+      const doc = datosAcuerdo(snap, "llave", idioma);
+      casos++;
+      if (!doc) {
+        fallos.push(`no se genera acuerdo con el papel "${p.label}"`);
+        continue;
+      }
+      if (doc.puesto !== p.puesto[idioma]) {
+        fallos.push(
+          `el acuerdo en ${idioma} imprime "${doc.puesto}" para el papel "${p.label}" ` +
+            `(esperaba "${p.puesto[idioma]}")`
+        );
+      }
+    }
+  }
+  // Un cargo escrito a mano por el cliente se respeta tal cual: lo que no sé traducir,
+  // lo conservo.
+  {
+    const snap = snapshotFalso(["agente"], false);
+    snap.lead.decisor = "Director de ventas";
+    const doc = datosAcuerdo(snap, "llave", "en");
+    casos++;
+    if (doc && doc.puesto !== "Director de ventas") {
+      fallos.push(`un cargo escrito a mano se perdió: salió "${doc.puesto}"`);
     }
   }
 }

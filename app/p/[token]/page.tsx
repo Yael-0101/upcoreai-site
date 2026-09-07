@@ -21,6 +21,7 @@ import {
   invitacionRecortar,
 } from "@/lib/propuesta-copy";
 import { DescargarPDF } from "@/components/DescargarPDF";
+import { IdiomaDelDocumento } from "@/components/IdiomaDelDocumento";
 import { TP } from "@/lib/propuesta-textos";
 import { idiomaDe, traducirRenglon, type Idioma } from "@/lib/acuerdo-textos";
 
@@ -32,11 +33,18 @@ import { idiomaDe, traducirRenglon, type Idioma } from "@/lib/acuerdo-textos";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  // El template del layout agrega "| Upcore AI".
-  title: "Tu diagnóstico",
-  robots: { index: false, follow: false },
-};
+// El nombre de la pestaña va en el idioma en que el cliente está leyendo. El template
+// del layout agrega "| Upcore AI".
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}): Promise<Metadata> {
+  return {
+    title: TP[idiomaDe((await searchParams)?.lang)].tituloPagina,
+    robots: { index: false, follow: false },
+  };
+}
 
 // ⚠️ `Money` se importa de lib/calc (su dueño), no se redeclara aquí. Era una de tres
 // copias del mismo tipo y al renombrar sus campos esta siguió compilando con los viejos.
@@ -426,6 +434,7 @@ export default async function PropuestaPublica({
 
   return (
     <main className="pagina-propuesta min-h-screen bg-obsidian px-[6%] py-12 text-sand md:px-[10%]">
+      <IdiomaDelDocumento lang={en ? "en-US" : "es-MX"} />
       <div className="mx-auto max-w-[860px]">
         <div className="mb-14 text-lg font-semibold tracking-tight">
           Upcore <span className="text-clay-bright">AI</span>

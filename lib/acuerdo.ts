@@ -16,6 +16,7 @@
 // armadores paralelos se habrían desfasado igual que la propuesta contra el portal.
 
 import { partirEnDosPagos, type Money } from "./calc";
+import { puestoLegible } from "./papeles";
 import {
   piezasDeSnapshot,
   esWebSola,
@@ -478,7 +479,11 @@ export function datosAcuerdo(
   return {
     clinica,
     contacto,
-    puesto: (snap.lead?.decisor || "").trim(),
+    // El papel va traducido y en forma de cargo, no como la respuesta que se guardó:
+    // el lead dice "Soy el dueño/a" y aquí abajo se lee "Valentina Ríos, dueña · 7 de
+    // septiembre". En inglés, "Owner" — antes salía la frase en español dentro del
+    // documento que la firma iba a firmar. Ver lib/papeles.ts.
+    puesto: puestoLegible(snap.lead?.decisor || "", idioma),
     plan,
     planLabel: cfg.label,
     precio: planDatos.inversion.principal,

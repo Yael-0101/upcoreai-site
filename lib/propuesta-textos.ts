@@ -21,6 +21,8 @@ export type ItemParte = { t: string; min: string };
 
 export type TextosProp = {
   // ── Chrome de la página ───────────────────────────────────────────────────
+  /** El nombre de la pestaña del navegador. El layout le agrega "| Upcore AI". */
+  tituloPagina: string;
   etiquetaVigencia: (hasta: string) => string;
   titular: (nombre: string, empresa: string, objetivo: string) => string;
   preparado: (fecha: string) => string;
@@ -216,6 +218,7 @@ export type TextosProp = {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const ES: TextosProp = {
+  tituloPagina: "Tu diagnóstico",
   etiquetaVigencia: (hasta) => `Diagnóstico personalizado · válido hasta el ${hasta}`,
   titular: (nombre, empresa, objetivo) =>
     `${nombre}, esto es lo que necesita ${empresa} para ${objetivo}`,
@@ -579,6 +582,7 @@ const ES: TextosProp = {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const EN: TextosProp = {
+  tituloPagina: "Your assessment",
   etiquetaVigencia: (hasta) => `Personalized assessment · valid through ${hasta}`,
   titular: (nombre, empresa, objetivo) =>
     `${nombre}, this is what ${empresa} needs in order to ${objetivo}`,

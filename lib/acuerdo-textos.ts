@@ -79,6 +79,8 @@ export type Textos = {
    *  aceptación. No es parte del documento, pero lo lee la misma persona — si sale
    *  en español dentro de una página en inglés, el documento se ve a medio traducir. */
   ui: {
+    /** El nombre de la pestaña del navegador. El layout le agrega "| Upcore AI". */
+    tituloPagina: string;
     etiquetaAceptado: string;
     etiquetaActivo: string;
     verEnOtroIdioma: string;
@@ -241,6 +243,7 @@ const ES: Textos = {
   unir: unirCon("y"),
 
   ui: {
+    tituloPagina: "Tu acuerdo",
     etiquetaAceptado: "Acuerdo aceptado",
     etiquetaActivo: "Acuerdo de servicio",
     verEnOtroIdioma: "View in English",
@@ -572,6 +575,7 @@ const EN: Textos = {
   unir: unirCon("and"),
 
   ui: {
+    tituloPagina: "Your agreement",
     etiquetaAceptado: "Agreement accepted",
     etiquetaActivo: "Service agreement",
     verEnOtroIdioma: "Ver en español",

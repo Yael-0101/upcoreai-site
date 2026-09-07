@@ -3,6 +3,7 @@ import { CONTACT } from "@/lib/content";
 import { ZONA_CLIENTE, idiomaDe, type Idioma, type DatosAcuerdo, type Bloque } from "@/lib/acuerdo";
 import { TEXTOS } from "@/lib/acuerdo-textos";
 import { AcuerdoAceptar } from "@/components/AcuerdoAceptar";
+import { IdiomaDelDocumento } from "@/components/IdiomaDelDocumento";
 
 // Acuerdo de servicio con link secreto: upcoreai.com/acuerdo/[token].
 //
@@ -15,10 +16,20 @@ import { AcuerdoAceptar } from "@/components/AcuerdoAceptar";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Tu acuerdo",
-  robots: { index: false, follow: false },
-};
+// El nombre de la pestaña también es del cliente: con el título fijo en español, quien
+// leía el contrato en inglés tenía "Tu acuerdo" arriba de la ventana. El layout le
+// agrega "| Upcore AI".
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}): Promise<Metadata> {
+  const pedido = (await searchParams)?.lang;
+  return {
+    title: TEXTOS[pedido ? idiomaDe(pedido) : "es"].ui.tituloPagina,
+    robots: { index: false, follow: false },
+  };
+}
 
 type Congelado = {
   version?: number;
@@ -115,9 +126,14 @@ function RenderBloque({ bloque }: { bloque: Bloque }) {
       </ul>
     );
   }
+  // ⚠️ Sin ancho mínimo. Con `min-w-[380px]`, en un teléfono de 320px la tabla no cabía
+  // en su caja y las CIFRAS se quedaban fuera de la pantalla: se leía "Para arrancar (al
+  // aceptar)" y ningún importe, en la única sección que dice cuánto paga el cliente. Sin
+  // el mínimo, el concepto da la vuelta al renglón y los cuatro importes se ven enteros.
+  // El `overflow-x-auto` se queda de red por si algún día un importe es larguísimo.
   return (
     <div className="mb-5 overflow-x-auto">
-      <table className="w-full min-w-[380px] border-collapse text-left">
+      <table className="w-full border-collapse text-left">
         <tbody>
           {bloque.filas.map(([concepto, monto], i) => (
             <tr key={i} className="border-b border-sand/10">
@@ -189,6 +205,7 @@ export default async function AcuerdoPublico({
 
   return (
     <main className="pagina-propuesta min-h-screen bg-obsidian px-[6%] py-12 text-sand md:px-[10%]">
+      <IdiomaDelDocumento lang={en ? "en-US" : "es-MX"} />
       <div className="mx-auto max-w-[820px]">
         <div className="mb-12 text-lg font-semibold tracking-tight">
           Upcore <span className="text-clay-bright">AI</span>

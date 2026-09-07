@@ -6,6 +6,7 @@
 // automático (la página server hidrata con lo guardado).
 
 import { useRef, useState } from "react";
+import { useDocumentoEn } from "./IdiomaDelDocumento";
 import {
   OptionBtn,
   ProgressDots,
@@ -162,6 +163,10 @@ export function ArranquePortal({
   const [idioma, setIdioma] = useState<Idioma>(idiomaInicial);
   const T = TA[idioma];
   const en = idioma === "en";
+  // El idioma del documento va aquí dentro y no en la página, porque aquí el cliente lo
+  // cambia sin recargar: con el aviso en el servidor, tras cambiar a inglés el navegador
+  // seguiría anunciando la página como española.
+  useDocumentoEn(en ? "en-US" : "es-MX");
   const [d, setD] = useState<ArranqueDatos>(() => ({
     ...datosIniciales,
     checklist: {

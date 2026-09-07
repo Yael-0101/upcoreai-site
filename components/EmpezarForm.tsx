@@ -13,6 +13,7 @@ import {
   type Option,
 } from "./WizardUI";
 import { CLINICA_OPTIONS, PRODUCTO_OPTIONS, opcionEn } from "@/lib/calc";
+import { PAPELES } from "@/lib/papeles";
 import { linkWhatsApp } from "@/lib/content";
 import { empezar, etiqueta, TE, type Etiquetas } from "@/lib/empezar-textos";
 import type { Idioma } from "@/lib/idioma";
@@ -149,12 +150,21 @@ const URGENCIA_OPTIONS: Option[] = [
   { val: "explorando", label: "Solo estoy explorando", icon: "👀" },
 ];
 
-const PAPEL_OPTIONS: Option[] = [
-  { val: "dueno", label: "Soy el dueño/a", icon: "🔑" },
-  { val: "asesor", label: "Soy asesor(a) de ventas", icon: "🤝" },
-  { val: "admin", label: "Administración / operaciones", icon: "🗂️" },
-  { val: "otro", label: "Otro", icon: "💼" },
-];
+// Las etiquetas salen de lib/papeles.ts porque son lo que se GUARDA en el lead, y el
+// acuerdo tiene que saber traducirlas para meterlas en una frase. Con la lista escrita
+// aquí, cambiar una etiqueta dejaba al diccionario del acuerdo apuntando a un texto que
+// ya no existe — sin dar ningún error. Los iconos sí son de la pantalla y viven aquí.
+const ICONO_PAPEL: Record<string, string> = {
+  dueno: "🔑",
+  asesor: "🤝",
+  admin: "🗂️",
+  otro: "💼",
+};
+const PAPEL_OPTIONS: Option[] = PAPELES.map((p) => ({
+  val: p.val,
+  label: p.label,
+  icon: ICONO_PAPEL[p.val],
+}));
 
 const HORARIO_OPTIONS: Option[] = [
   { val: "manana", label: "Por la mañana", icon: "🌅" },
