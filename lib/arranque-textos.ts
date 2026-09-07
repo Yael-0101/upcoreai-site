@@ -248,6 +248,9 @@ export type TextosArranque = {
     porWhatsAppA: string;
     tuNoHaces: string;
     comoSeLlame: string;
+    /** El ejemplo del campo del correo. Estaba escrito a mano en el componente —el de al lado
+     *  sí venía de aquí— así que en el portal en inglés salía en español (2026-09-07). */
+    hintCorreo: string;
     telefonoCodigos: string;
     hintTelefono: string;
     horarioEscribir: string;
@@ -293,6 +296,11 @@ export type TextosArranque = {
   demoUi: {
     titulo: string;
     subtitulo: string;
+    // 🔴 El botón que abre la demo estaba escrito A MANO dentro del componente —«💬 Abrir la demo
+    // de tu inmobiliaria →»— así que el portal en inglés lo enseñaba en español, y era el botón
+    // principal de ese paso (2026-09-07). Va aquí, con el nombre de la firma dentro, y con su
+    // propio texto de respaldo cuando todavía no sabemos cómo se llama.
+    abrirDemo: (empresa: string) => string;
     ponloAPrueba: string;
     yaLoProbe: string;
     marcarProbado: string;
@@ -388,6 +396,12 @@ export type TextosArranque = {
     pie: (empresa: string) => string;
     dudas: string;
     escribenos: string;
+    /** Cómo llamar a la firma cuando todavía no sabemos su nombre. Estaba escrito con un
+     *  `idioma === "en" ? … : …` DOS veces dentro de la página, y una copia repetida es
+     *  exactamente lo que se desfasa (2026-09-07). */
+    tuInmobiliaria: string;
+    /** El título de la pestaña del navegador. */
+    tituloPagina: string;
     faltaPara: (que: string) => string;
     notaAvance: string;
     /** Las 5 fases del proyecto. La clave es el texto EN ESPAÑOL, que es lo que
@@ -723,6 +737,7 @@ const ES: TextosArranque = {
     porWhatsAppA: "por WhatsApp, y solo a este número:",
     tuNoHaces: "tú no haces nada",
     comoSeLlame: "¿Cómo te gustaría que se llame? (opcional)",
+    hintCorreo: "ej. contacto@tuinmobiliaria — si no, te proponemos uno",
     telefonoCodigos: "Teléfono donde te llegan los códigos",
     hintTelefono: "10 dígitos — normalmente el mismo de tu WhatsApp",
     horarioEscribir: "¿Qué horario te queda mejor para que te escribamos? (opcional)",
@@ -805,6 +820,7 @@ const ES: TextosArranque = {
   demoUi: {
     titulo: "Juega a ser tu comprador",
     subtitulo: "Prueba un asistente como el tuyo — así se sentirá escribirle a tu inmobiliaria.",
+    abrirDemo: (empresa) => `💬 Abrir la demo de ${empresa} →`,
     ponloAPrueba: "Ponlo a prueba con esto:",
     yaLoProbe: "✓ Ya lo probé",
     marcarProbado: "Marcar cuando lo hayas probado",
@@ -899,6 +915,8 @@ const ES: TextosArranque = {
     pie: (empresa) => `Upcore AI · Portal privado de ${empresa} — no compartas este link`,
     dudas: "¿Dudas?",
     escribenos: "Escríbenos por WhatsApp",
+    tuInmobiliaria: "tu inmobiliaria",
+    tituloPagina: "Tu Portal de Arranque",
     faltaPara: (que) => `Para seguir, falta: ${que}`,
     notaAvance:
       "Esta sección la vamos actualizando nosotros conforme avanza tu proyecto — entra cuando quieras a ver cómo va.",
@@ -1192,6 +1210,7 @@ const EN: TextosArranque = {
     porWhatsAppA: "on WhatsApp, and only to this number:",
     tuNoHaces: "you do nothing",
     comoSeLlame: "What would you like it to be called? (optional)",
+    hintCorreo: "e.g. contact@yourfirm — if not, we suggest one",
     telefonoCodigos: "Phone where the codes reach you",
     hintTelefono: "10 digits — usually the same as your WhatsApp",
     horarioEscribir: "What time works best for us to message you? (optional)",
@@ -1267,6 +1286,10 @@ const EN: TextosArranque = {
   demoUi: {
     titulo: "Play your own buyer",
     subtitulo: "Try an assistant like yours — this is what messaging your firm will feel like.",
+    // ⚠️ «the demo for X» y no «the X demo»: cuando todavía no sabemos el nombre, X es «your
+    // firm» y la segunda forma sale «Open the your firm demo». Se vio LEYENDO la página
+    // publicada, no escribiendo la plantilla (2026-09-07).
+    abrirDemo: (empresa) => `💬 Open the demo for ${empresa} →`,
     ponloAPrueba: "Put it to the test with this:",
     yaLoProbe: "✓ I already tried it",
     marcarProbado: "Mark it when you have tried it",
@@ -1355,6 +1378,8 @@ const EN: TextosArranque = {
     pie: (empresa) => `Upcore AI · Private portal for ${empresa} — please do not share this link`,
     dudas: "Questions?",
     escribenos: "Message us on WhatsApp",
+    tuInmobiliaria: "your firm",
+    tituloPagina: "Your onboarding portal",
     faltaPara: (que) => `To continue, still missing: ${que}`,
     notaAvance:
       "We keep this section updated as your project moves along — come in whenever you want to see how it is going.",

@@ -149,9 +149,38 @@ function textosVisibles(codigo) {
       out.push({ linea: i + 1, txt });
     }
     // Texto suelto dentro de JSX: >Palabras aquí<
-    for (const m of l.matchAll(/>([^<>{}\n]{6,})</g)) {
+    //
+    // ⚠️ Antes exigía terminar en «<», así que **una frase partida por una interpolación era
+    // invisible**: en `>💬 Abrir la demo de {empresa} →<`, el trozo que de verdad lee el cliente
+    // acaba en «{» y no se extraía nunca. Se descubrió inyectando ese defecto exacto —el que
+    // este guardián se acababa de escribir para cazar— y viendo que pasaba en VERDE
+    // (2026-09-07). Ahora el trozo puede empezar en «>» o «}» y terminar en «<» o «{».
+    for (const m of l.matchAll(/[>}]([^<>{}\n]{6,})[<{]/g)) {
+      // ⚠️ Al aceptar «}…{» también entra el hueco ENTRE DOS ATRIBUTOS
+      // (`} nextEnabled nextLabel={`), que es marcado y no texto. Se distingue por la forma:
+      // un atributo trae «=» o comillas; una frase que alguien lee, no.
+      if (/[="]/.test(m[1])) continue;
       out.push({ linea: i + 1, txt: m[1].trim() });
     }
+    // Y el texto que EMPIEZA el renglón, porque la etiqueta que lo abre suele estar en el de
+    // arriba: `<a\n  ...>\n  💬 Abrir la demo de {empresa} →\n</a>`. Sin esto, la frase del
+    // botón de la demo seguía siendo invisible aunque se aceptara «}…{» (2026-09-07).
+    //
+    // ⚠️ Aquí también empieza el código: `const ICONO: Record<…>` o `type Option,` cumplen la
+    // misma forma. Se separan por la forma de la PROSA —dos palabras en minúscula seguidas— y
+    // porque el código trae «:», «,» o «;» y una frase suelta de JSX no. Probado con los dos
+    // lados: la frase del botón entra, los 8 renglones de código se quedan fuera.
+    const inicio = /^\s*([^<>{}\n="]{6,})[<{]/.exec(l);
+    // Las palabras con las que EMPIEZA una instrucción de JavaScript. Es una lista cerrada de
+    // verdad —las define el lenguaje— y ninguna frase que lea un cliente empieza por «export».
+    const ES_CODIGO = /^(export|import|const|let|var|function|return|type|interface|class|async|await|if|for|while|switch)\b/;
+    if (
+      inicio &&
+      /[a-záéíóúñ]\s+[a-záéíóúñ]/.test(inicio[1]) &&
+      !/[:;,]/.test(inicio[1]) &&
+      !ES_CODIGO.test(inicio[1].trim())
+    )
+      out.push({ linea: i + 1, txt: inicio[1].trim() });
   });
   return out;
 }
@@ -171,6 +200,69 @@ for (const rel of ARCHIVOS) {
   }
 }
 
+
+// ── FRASES ESCRITAS A MANO EN EL COMPONENTE (2026-09-07) ─────────────────────
+//
+// 🔴 El botón principal del paso de la demo decía «💬 Abrir la demo de tu inmobiliaria →»
+// escrito DENTRO del componente, así que el portal en inglés lo enseñaba en español. Las
+// reglas de vocabulario no lo veían —«demo» e «inmobiliaria» son palabras correctas— y las
+// de paridad tampoco, porque comparan las TABLAS y esta frase nunca estuvo en una tabla.
+// Es el mismo defecto que ese mismo día apareció en la propuesta, en otra pantalla.
+//
+// La regla es de forma, no de vocabulario: **en estos dos archivos no se escribe texto**.
+// Todo lo que el cliente lee sale de `arranque-textos.ts`, así que cualquier frase de dos
+// palabras o más que quede aquí es una traducción que no va a existir.
+const SIN_TEXTO_A_MANO = ["components/ArranquePortal.tsx", "app/arranque/[token]/page.tsx"];
+// Lo que NO es una frase para leer: nombres de campo, valores que se guardan, formatos.
+const NO_ES_FRASE = [
+  /^[\p{Emoji}\s→←·—-]+$/u, // solo símbolos
+  /^[A-Za-z0-9_-]+$/, // una palabra suelta sin espacios (clave, id, valor)
+  /^https?:/i,
+  /^[a-z-]+\/[a-z-]+$/i, // tipos MIME, rutas cortas
+  /^use (client|server)$/, // la directiva de React
+  // Valores de atributos de HTML, no texto: `rel="noopener noreferrer"`. Es una lista cerrada
+  // de verdad (las define el estándar), no una de esas listas de nombres que se quedan cortas.
+  /^(noopener|noreferrer|nofollow|external|alternate)(\s+(noopener|noreferrer|nofollow|external|alternate))*$/,
+];
+/**
+ * ¿Es una lista de clases de CSS?
+ *
+ * ⚠️ Se decide por la FORMA, no con una lista de prefijos. El filtro que ya existía arriba
+ * nombra `rounded`, `border-`, `px-`… y por eso dejaba pasar «flex gap-3»: una lista de
+ * nombres siempre se queda corta, que es la lección de la casa. Aquí: todas las piezas tienen
+ * que estar hechas de los caracteres que usa Tailwind (sin acentos, sin @, sin comas sueltas)
+ * y al menos una tiene que traer guion, dos puntos o corchete — cosas que una frase en español
+ * no tiene. Así «flex gap-3» es CSS y «te proponemos uno» no.
+ */
+const esClases = (s) => {
+  const piezas = s.trim().split(/\s+/);
+  return (
+    piezas.length > 1 &&
+    piezas.every((p) => /^[a-z0-9:_[\]().%/-]+$/.test(p)) &&
+    piezas.some((p) => /[-:[]/.test(p))
+  );
+};
+for (const rel of SIN_TEXTO_A_MANO) {
+  const ruta = path.join(RAIZ, rel);
+  if (!fs.existsSync(ruta)) continue;
+  for (const { linea, txt } of textosVisibles(soloVivo(fs.readFileSync(ruta, "utf8")))) {
+    const limpio = txt.trim();
+    if (NO_ES_FRASE.some((r) => r.test(limpio)) || esClases(limpio)) continue;
+    // Dos "palabras" con letras = una frase que alguien lee.
+    // ⚠️ Antes pedía dos palabras de 3+ letras y por eso dejaba pasar «tu inmobiliaria»: en
+    // español las palabras que más se repiten —tu, de, la, el— tienen dos. Ahora cuentan las de
+    // dos letras, exigiendo que al menos una del conjunto sea larga.
+    const palabras = limpio.split(/\s+/).filter((p) => /[\p{L}]{2,}/u.test(p));
+    if (palabras.length < 2 || !palabras.some((p) => /[\p{L}]{3,}/u.test(p))) continue;
+    problemas.push({
+      rel,
+      linea,
+      txt: limpio.slice(0, 90),
+      palabra: "(texto a mano)",
+      porque: "el texto del Portal vive en arranque-textos.ts: escrito aquí no tiene traducción",
+    });
+  }
+}
 
 // ── PARIDAD ENTRE ESPAÑOL E INGLÉS (2026-08-22) ──────────────────────────────
 //

@@ -13,11 +13,23 @@ import { normalizarDatos, type ArranqueDatos } from "@/lib/arranque";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
+// El título de la pestaña también es texto que el cliente lee, y estaba fijo en español
+// (2026-09-07). Se elige con `?lang=`, que es lo único que se puede saber aquí sin volver a
+// pedir la fila a n8n. ⚠️ Su límite, dicho a propósito: un cliente que ya eligió inglés y
+// vuelve con el link pelado verá la pestaña en español aunque el portal salga en inglés —
+// molesto, no roto, y arreglarlo costaría una segunda lectura de la tabla en cada visita.
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}): Promise<Metadata> {
+  const pedido = (await searchParams)?.lang;
   // El template del layout agrega "| Upcore AI".
-  title: "Tu Portal de Arranque",
-  robots: { index: false, follow: false },
-};
+  return {
+    title: TA[pedido ? idiomaDe(pedido) : "es"].ui.tituloPagina,
+    robots: { index: false, follow: false },
+  };
+}
 
 type Fila = { token: string; clinica: string; estado: string; datos: ArranqueDatos };
 
@@ -112,7 +124,7 @@ export default async function ArranquePage({
           <Logo markClass="h-8 w-8" textClass="text-[1.35rem]" />
           <div className="text-xs font-semibold uppercase tracking-[0.2em] text-clay-bright">
             {T.bienvenida.etiqueta(
-              fila.clinica || d.config.clinica || (idioma === "en" ? "your firm" : "tu inmobiliaria")
+              fila.clinica || d.config.clinica || T.ui.tuInmobiliaria
             )}
           </div>
         </div>
@@ -173,7 +185,7 @@ export default async function ArranquePage({
         </section>
 
         <footer className="mt-12 border-t border-[rgba(242,231,219,0.08)] pt-6 text-center text-xs font-light text-mocha/80">
-          {T.ui.pie(fila.clinica || (idioma === "en" ? "your firm" : "tu inmobiliaria"))} ·{" "}
+          {T.ui.pie(fila.clinica || T.ui.tuInmobiliaria)} ·{" "}
           {T.ui.dudas}{" "}
           {/* ⚠️ El enlace es la FRASE ENTERA, no solo la palabra «WhatsApp». Es la única
               salida del cliente cuando se atora en el portal, y suelta medía 65×32 en un

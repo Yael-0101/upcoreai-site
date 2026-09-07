@@ -879,7 +879,7 @@ export function ArranquePortal({
                   label={T.cuentas.comoSeLlame}
                   type="text"
                   value={d.concierge.correoIdea}
-                  placeholder="ej. contacto@tuinmobiliaria — si no, te proponemos uno"
+                  placeholder={T.cuentas.hintCorreo}
                   onChange={(v) => setConcierge({ correoIdea: v })}
                 />
                 <Field
@@ -998,7 +998,7 @@ export function ArranquePortal({
               rel="noopener noreferrer"
               className="btn-shine inline-block rounded-full bg-clay px-8 py-3.5 font-semibold text-obsidian transition-all hover:scale-[1.03] hover:bg-clay-bright"
             >
-              💬 Abrir la demo de {d.config.clinica || "tu inmobiliaria"} →
+              {T.demoUi.abrirDemo(d.config.clinica || T.ui.tuInmobiliaria)}
             </a>
           </div>
           <div className="mx-auto mb-6 max-w-md rounded-2xl border border-[rgba(242,231,219,0.12)] bg-[rgba(242,231,219,0.03)] p-5">
