@@ -89,18 +89,31 @@ export function StepHeader({ q, hint }: { q: string; hint: string }) {
   );
 }
 
+// Qué le ofrece el teléfono al tocar el campo. Sin esto, alguien que llena el diagnóstico
+// desde el celular teclea su nombre, su WhatsApp y su correo con el pulgar, letra por letra,
+// en vez de aceptar lo que el propio teléfono ya sabe (2026-09-07).
+const AUTOCOMPLETAR: Record<string, string> = {
+  tel: "tel",
+  email: "email",
+  text: "off",
+  number: "off",
+};
+
 export function Field({
   label,
   value,
   placeholder,
   onChange,
   type = "number",
+  autoComplete,
 }: {
   label: string;
   value: string;
   placeholder: string;
   onChange: (v: string) => void;
   type?: "number" | "text" | "tel" | "email";
+  /** Para afinarlo por campo: "name" en el nombre de la persona, "organization" en el de la firma. */
+  autoComplete?: string;
 }) {
   return (
     <label className="flex flex-col gap-1.5">
@@ -110,6 +123,8 @@ export function Field({
         min={type === "number" ? 0 : undefined}
         value={value}
         placeholder={placeholder}
+        autoComplete={autoComplete ?? AUTOCOMPLETAR[type] ?? "off"}
+        inputMode={type === "number" ? "numeric" : undefined}
         onChange={(e) => onChange(e.target.value)}
         className="w-full rounded-xl border border-[rgba(242,231,219,0.2)] bg-[rgba(242,231,219,0.03)] px-5 py-3 font-semibold text-sand outline-none transition-all focus:border-clay focus:bg-[rgba(200,98,61,0.05)]"
       />

@@ -455,6 +455,7 @@ export function EmpezarForm({ idioma = "es" }: { idioma?: Idioma }) {
                   <Field
                     label={t.campoNombreFirma}
                     type="text"
+                    autoComplete="organization"
                     value={s.clinicaNombre}
                     placeholder={t.ejemploNombreFirma}
                     onChange={(v) => set({ clinicaNombre: v })}
@@ -790,6 +791,7 @@ export function EmpezarForm({ idioma = "es" }: { idioma?: Idioma }) {
                   <Field
                     label={t.campoNombre}
                     type="text"
+                    autoComplete="name"
                     value={s.nombre}
                     placeholder={t.ejemploNombre}
                     onChange={(v) => set({ nombre: v })}
