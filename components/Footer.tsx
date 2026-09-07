@@ -77,13 +77,13 @@ export function Footer({ idioma = "es" }: { idioma?: Idioma }) {
       <div className="mb-8 flex flex-col items-center justify-center gap-4 md:flex-row md:gap-8">
         <a
           href={ruta(idioma, "/privacidad")}
-          className="text-xs uppercase tracking-[0.1em] text-mocha transition-colors hover:text-clay-bright"
+          className="inline-flex min-h-[44px] items-center px-1 text-xs uppercase tracking-[0.1em] text-mocha transition-colors hover:text-clay-bright"
         >
           {t.footer.privacidad}
         </a>
         <a
           href={ruta(idioma, "/terminos")}
-          className="text-xs uppercase tracking-[0.1em] text-mocha transition-colors hover:text-clay-bright"
+          className="inline-flex min-h-[44px] items-center px-1 text-xs uppercase tracking-[0.1em] text-mocha transition-colors hover:text-clay-bright"
         >
           {t.footer.terminos}
         </a>

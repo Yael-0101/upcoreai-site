@@ -127,7 +127,7 @@ export function DemoChat({
             <div className="truncate text-sm font-semibold text-sand">
               {T.asistenteDe(clinica)}
             </div>
-            <div className="flex items-center gap-1.5 text-[0.68rem] text-sage">
+            <div className="flex items-center gap-1.5 text-[0.72rem] text-sage">
               <span className="h-1.5 w-1.5 rounded-full bg-sage" aria-hidden />
               {T.enLinea}
             </div>
@@ -160,7 +160,7 @@ export function DemoChat({
                     <AgendarCTA
                       idioma={idioma}
                       label={T.quieroEsto}
-                      className="btn-shine mt-2.5 inline-block rounded-full bg-clay px-4 py-2 text-xs font-semibold text-obsidian transition-transform active:scale-95"
+                      className="btn-shine mt-2.5 inline-flex min-h-[44px] items-center rounded-full bg-clay px-5 py-2 text-xs font-semibold text-obsidian transition-transform active:scale-95"
                     />
                   </div>
                 ) : (
@@ -216,7 +216,7 @@ export function DemoChat({
                 key={c}
                 type="button"
                 onClick={() => enviar(c)}
-                className="rounded-full border border-clay/40 bg-clay/10 px-3 py-1.5 text-xs text-sand transition-all hover:border-clay active:scale-95"
+                className="inline-flex min-h-[44px] items-center rounded-full border border-clay/40 bg-clay/10 px-3.5 py-1.5 text-xs text-sand transition-all hover:border-clay active:scale-95"
               >
                 {c}
               </button>
