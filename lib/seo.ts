@@ -50,6 +50,44 @@ export const ORGANIZACION = {
 // es superficial) y la página pierde og:image/siteName/locale — ese bug ya
 // nos pasó una vez.
 // ============================================================================
+/**
+ * La metadata del ESQUELETO, por idioma: lo que hereda una página que no declara la suya.
+ *
+ * 🔴 POR QUÉ EXISTE (2026-09-07)
+ * El sitio tiene dos esqueletos —uno por idioma— porque el `<html lang>` no se puede
+ * cambiar desde una página. Si cada uno escribiera sus textos, se desfasarían: el que
+ * nadie mira se queda con la descripción del año pasado. Los dos leen de aquí, y esto
+ * lee de site-textos, que es la misma fuente de la portada.
+ *
+ * Ojo: casi ninguna página usa estos valores — las públicas declaran los suyos con
+ * metaPagina(). Los hereda el acuerdo, la propuesta y el Portal, que son privados.
+ */
+export function metaRaiz(idioma: Idioma): Metadata {
+  const t = contenido(idioma).meta;
+  return {
+    metadataBase: new URL(SITE_URL),
+    // Las páginas ponen su título "a secas" y el template agrega la marca.
+    title: { default: t.title, template: `%s | ${SITE_NAME}` },
+    description: t.description,
+    keywords: t.keywords,
+    authors: [{ name: SITE_NAME }],
+    // "./" se resuelve a la URL de cada ruta (con metadataBase); un valor fijo haría
+    // que todas las páginas declaren la home como su canonical.
+    alternates: { canonical: "./" },
+    openGraph: {
+      title: t.title,
+      description: t.description,
+      url: `${SITE_URL}${ruta(idioma, "/")}`,
+      siteName: SITE_NAME,
+      type: "website",
+      locale: LOCALE[idioma].og,
+      // Sin `images`: la provee app/opengraph-image.tsx (convención de archivo),
+      // que sobrevive al merge superficial en todas las rutas.
+    },
+    twitter: { card: "summary_large_image", title: t.title, description: t.description },
+  };
+}
+
 export function metaPagina({
   title,
   description,

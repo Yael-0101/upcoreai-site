@@ -27,6 +27,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { rutaRepo } from "./lib-rutas-app.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const RAIZ = path.join(AQUI, "..");
@@ -189,7 +190,7 @@ let fallos = 0;
 const problemas = [];
 
 for (const rel of ARCHIVOS) {
-  const ruta = path.join(RAIZ, rel);
+  const ruta = rutaRepo(rel);
   if (!fs.existsSync(ruta)) continue;
   const visibles = textosVisibles(soloVivo(fs.readFileSync(ruta, "utf8")));
   for (const { linea, txt } of visibles) {
@@ -243,7 +244,7 @@ const esClases = (s) => {
   );
 };
 for (const rel of SIN_TEXTO_A_MANO) {
-  const ruta = path.join(RAIZ, rel);
+  const ruta = rutaRepo(rel);
   if (!fs.existsSync(ruta)) continue;
   for (const { linea, txt } of textosVisibles(soloVivo(fs.readFileSync(ruta, "utf8")))) {
     const limpio = txt.trim();

@@ -26,6 +26,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { paginaApp } from "./lib-rutas-app.mjs";
 import { soloVivo, textosVisibles, palabraCompleta } from "./lib-textos-visibles.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
@@ -160,7 +161,7 @@ for (const rel of ARCHIVOS) {
 // 1, 3, 4, 5 — parece que la página se cargó mal, en el documento con el que le estás
 // pidiendo que confíe.
 {
-  const pagina = fs.readFileSync(path.join(RAIZ, "app", "p", "[token]", "page.tsx"), "utf8");
+  const pagina = fs.readFileSync(paginaApp("p/[token]/page.tsx"), "utf8");
   // ⚠️ El `\{?` no sobra: un número fijo puede venir como `titulo="5 · …"` pero
   // también como `titulo={`5 · …`}`. La primera versión solo miraba la forma con
   // comillas y se le escapó la del template literal — que es justo la que queda

@@ -14,6 +14,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { paginaApp } from "./lib-rutas-app.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -110,7 +111,7 @@ casos++;
 // en la página que la envuelve — la capa que siempre se olvida al traducir.
 casos++;
 {
-  const PAGINA = fs.readFileSync(path.join(AQUI, "..", "app", "p", "[token]", "page.tsx"), "utf8");
+  const PAGINA = fs.readFileSync(paginaApp("p/[token]/page.tsx"), "utf8");
   for (const idioma of ["es", "en"]) {
     const t = TXT.TP[idioma];
     // Las tres piezas existen y ninguna repite a otra.

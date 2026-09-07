@@ -13,6 +13,7 @@
     "generar:acuerdo": "node scripts/generar-acuerdo-md.mjs",
     "verificar:acuerdo": "node scripts/generar-acuerdo-md.mjs --verificar",
     "probar:bilingue": "node scripts/probar-sitio-bilingue.mjs",
+    "probar:bilingue-inyectar": "node scripts/probar-bilingue-inyectar.mjs",
     "probar:idiomas": "node scripts/probar-idiomas-producto.mjs",
     "generar:redirecciones": "node scripts/generar-redirecciones.mjs",
     "leer:ingles": "node scripts/leer-ingles.mjs",

@@ -14,6 +14,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { paginaApp } from "./lib-rutas-app.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -811,7 +812,7 @@ casos++;
   // ahora mira donde de verdad está. Aflojar la regla habría sido lo fácil y lo
   // equivocado: el acuerdo REMITE a estos Términos.
   const terminos =
-    fs.readFileSync(path.join(AQUI, "..", "app", "terminos", "page.tsx"), "utf8") +
+    fs.readFileSync(paginaApp("terminos/page.tsx"), "utf8") +
     fs.readFileSync(path.join(AQUI, "..", "lib", "legal-textos.ts"), "utf8");
 
   if (!texto.includes(LEY_APLICABLE)) {
@@ -862,11 +863,11 @@ casos++;
 
 {
   const paginaAcuerdo = fs.readFileSync(
-    path.join(AQUI, "..", "app", "acuerdo", "[token]", "page.tsx"),
+    paginaApp("acuerdo/[token]/page.tsx"),
     "utf8"
   );
   const paginaPropuesta = fs.readFileSync(
-    path.join(AQUI, "..", "app", "p", "[token]", "page.tsx"),
+    paginaApp("p/[token]/page.tsx"),
     "utf8"
   );
 

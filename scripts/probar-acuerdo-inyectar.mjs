@@ -16,11 +16,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { paginaApp } from "./lib-rutas-app.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const GUARDIAN = path.join(AQUI, "probar-acuerdo.mjs");
-const PAGINA = path.join(AQUI, "..", "app", "acuerdo", "[token]", "page.tsx");
-const PROPUESTA = path.join(AQUI, "..", "app", "p", "[token]", "page.tsx");
+const PAGINA = paginaApp("acuerdo/[token]/page.tsx");
+const PROPUESTA = paginaApp("p/[token]/page.tsx");
 const PORTAL = path.join(AQUI, "..", "components", "ArranquePortal.tsx");
 const PAPELES = path.join(AQUI, "..", "lib", "papeles.ts");
 const ACUERDO = path.join(AQUI, "..", "lib", "acuerdo.ts");

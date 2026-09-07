@@ -26,6 +26,7 @@ import path from "node:path";
 import fs from "node:fs";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { paginaApp, hayPaginaApp } from "./lib-rutas-app.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const RAIZ = path.join(AQUI, "..");
@@ -272,14 +273,13 @@ for (const a of ARTICULOS) revisarIngles(a.t.en, `artículo ${a.slug}`);
     carpetas.add(tramos.length >= 2 ? `${tramos[0]}/[slug]` : tramos[0] ?? "");
   }
   for (const c of carpetas) {
-    const f = path.join(RAIZ, "app", "en", c, "page.tsx");
-    if (!fs.existsSync(f)) {
+    if (!hayPaginaApp(`en/${c}/page.tsx`)) {
       marca("app/en", `falta /${c}`, "el hreflang y el sitemap apuntan a una página que no existe");
     }
   }
   // La demo no está en el sitemap con su propia entrada en todos los casos, y
   // aun así el Nav enlaza a ella en los dos idiomas.
-  if (!fs.existsSync(path.join(RAIZ, "app", "en", "demo", "page.tsx"))) {
+  if (!hayPaginaApp("en/demo/page.tsx")) {
     marca("app/en", "falta /demo", "el Nav inglés enlaza a una página que no existe");
   }
 }
@@ -322,12 +322,11 @@ for (const a of ARTICULOS) revisarIngles(a.t.en, `artículo ${a.slug}`);
 // está escrita en español: al compartir la página inglesa, la tarjeta salía en
 // otro idioma que la página. No se ve navegando el sitio — solo al compartirlo.
 for (const og of ["opengraph-image.tsx", "solutions/[slug]/opengraph-image.tsx", "blog/[slug]/opengraph-image.tsx"]) {
-  const f = path.join(RAIZ, "app", "en", og);
-  if (!fs.existsSync(f)) {
+  if (!hayPaginaApp(`en/${og}`)) {
     marca("app/en", `falta ${og}`, "el inglés heredaría la imagen OG en español");
     continue;
   }
-  const src = fs.readFileSync(f, "utf8");
+  const src = fs.readFileSync(paginaApp(`en/${og}`), "utf8");
   if (/\.t\.es\b/.test(src)) marca(`app/en/${og}`, "t.es", "la imagen del inglés lee los textos en español");
   // ⚠️ Y tiene que pasarle el idioma a la plantilla. La plantilla trae un PIE
   // propio ("Automatización con IA para inmobiliarias") que hasta el 2026-08-22
@@ -459,6 +458,69 @@ for (const og of ["opengraph-image.tsx", "solutions/[slug]/opengraph-image.tsx",
 // ── 9 · El `<html lang>` de cada idioma ──────────────────────────────────────
 if (LOCALE.es.html !== "es-MX" || LOCALE.en.html !== "en-US") {
   marca("lib/idioma.ts", "LOCALE", "los códigos de idioma no son los esperados");
+}
+
+// ── 9b · Los DOS esqueletos: uno por idioma, y solo se diferencian en eso ────
+//
+// 🔴 Hasta el 2026-09-07 el sitio tenía un solo esqueleto con `lang="es-MX"`, así que
+// TODO /en se servía anunciado como español: un lector de pantalla leía las páginas en
+// inglés con pronunciación española. No se ve en la pantalla y no lo cazaba nadie.
+//
+// La cura tiene su propio riesgo: dos esqueletos son dos sitios que se pueden ir
+// separando. Por eso aquí se exige que lo ÚNICO distinto sea el idioma.
+{
+  const esqueletos = [
+    { grupo: "(es)", idioma: "es", lang: LOCALE.es.html },
+    { grupo: "(en)", idioma: "en", lang: LOCALE.en.html },
+  ];
+
+  // Un layout en la raíz volvería a envolver a los dos y el idioma se perdería otra vez.
+  if (fs.existsSync(path.join(RAIZ, "app", "layout.tsx"))) {
+    marca(
+      "app/layout.tsx",
+      "esqueleto en la raíz",
+      "volvería a envolver los dos idiomas con un solo <html lang> y el inglés se anunciaría como español"
+    );
+  }
+
+  for (const e of esqueletos) {
+    const f = path.join(RAIZ, "app", e.grupo, "layout.tsx");
+    if (!fs.existsSync(f)) {
+      marca(`app/${e.grupo}`, "falta el esqueleto", "sin él, ese idioma no se puede declarar");
+      continue;
+    }
+    const src = fs.readFileSync(f, "utf8");
+    const lang = /<html\s+lang="([^"]+)"/.exec(src);
+    if (!lang) {
+      marca(`app/${e.grupo}/layout.tsx`, "sin <html lang>", "el documento no dice en qué idioma está");
+    } else if (lang[1] !== e.lang) {
+      marca(
+        `app/${e.grupo}/layout.tsx`,
+        `lang="${lang[1]}"`,
+        `este árbol es ${e.idioma}: debería declarar "${e.lang}"`
+      );
+    }
+    // El cuerpo es compartido a propósito: si un esqueleto escribe el suyo, los dos
+    // sitios empiezan a separarse y el que nadie mira se queda atrás.
+    if (!/<CuerpoRaiz>/.test(src)) {
+      marca(`app/${e.grupo}/layout.tsx`, "cuerpo propio", "el cuerpo del sitio se comparte (components/CuerpoRaiz.tsx)");
+    }
+    if (/<body|<ChatWeb|<Analytics|<JsonLd/.test(src)) {
+      marca(`app/${e.grupo}/layout.tsx`, "escribe su propio cuerpo", "eso es lo que hace que los dos idiomas se desfasen");
+    }
+    if (!new RegExp(`metaRaiz\\("${e.idioma}"\\)`).test(src)) {
+      marca(`app/${e.grupo}/layout.tsx`, "metadata suelta", `debería salir de metaRaiz("${e.idioma}")`);
+    }
+  }
+
+  // Y que cada árbol esté donde dice estar: el inglés dentro de (en), y nada de /en
+  // colgando del esqueleto español.
+  if (!fs.existsSync(path.join(RAIZ, "app", "(en)", "en", "page.tsx"))) {
+    marca("app/(en)/en", "sin portada", "el árbol inglés no está bajo su propio esqueleto");
+  }
+  if (fs.existsSync(path.join(RAIZ, "app", "(es)", "en"))) {
+    marca("app/(es)/en", "inglés bajo el esqueleto español", "esas páginas se anunciarían como españolas");
+  }
 }
 
 if (problemas.length) {

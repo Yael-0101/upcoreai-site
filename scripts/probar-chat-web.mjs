@@ -58,8 +58,10 @@ console.log("\nChat del sitio · textos en los dos idiomas");
 
 console.log("\nChat del sitio · montaje");
 {
-  const layout = fs.readFileSync(path.join(RAIZ, "app", "layout.tsx"), "utf8");
-  ok("el layout raíz monta <ChatWeb />", /<ChatWeb\s*\/>/.test(layout) && /components\/ChatWeb/.test(layout));
+  // El cuerpo del sitio vive en components/CuerpoRaiz.tsx desde que el sitio se partió
+  // en dos esqueletos (uno por idioma) para poder declarar el idioma del documento.
+  const layout = fs.readFileSync(path.join(RAIZ, "components", "CuerpoRaiz.tsx"), "utf8");
+  ok("el cuerpo del sitio monta <ChatWeb />", /<ChatWeb\s*\/>/.test(layout) && /components\/ChatWeb/.test(layout));
   ok("la burbuja vieja ya no existe (un solo lanzador flotante)", !fs.existsSync(path.join(RAIZ, "components", "BurbujaWhatsApp.tsx")) && !/BurbujaWhatsApp/.test(layout));
   const comp = fs.readFileSync(path.join(RAIZ, "components", "ChatWeb.tsx"), "utf8");
   ok("el componente lee sus textos de site-textos, no trae frases sueltas del asistente", /contenido\(idioma\)\.chatWeb/.test(comp) && !/Soy el asistente/.test(comp));
