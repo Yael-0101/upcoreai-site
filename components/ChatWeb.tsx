@@ -115,6 +115,46 @@ export function ChatWeb() {
     return () => window.removeEventListener("keydown", onKey);
   }, [abierto]);
 
+  // ── El alto del panel en el teléfono (2026-09-07) ──────────────────────────────────────
+  //
+  // 🔴 EL DEFECTO: el panel iba a `inset-0`, o sea al alto del viewport. En un teléfono eso
+  // NO es lo que se ve: la barra de direcciones ocupa su parte, y sobre todo, al TOCAR el
+  // campo de escribir sube el teclado y en iOS el viewport no cambia — así que el campo, que
+  // vive abajo, se quedaba DEBAJO del teclado. Escribir en el chat desde el celular era pelear
+  // con la pantalla.
+  //
+  // El arreglo: se mide el viewport VISUAL (lo que de verdad queda a la vista, teclado incluido)
+  // y se fija como alto del panel en una variable CSS. Donde no exista `visualViewport` se cae a
+  // 100dvh, que ya descuenta la barra del navegador. Solo en móvil: en escritorio el panel tiene
+  // su alto fijo y esto no lo toca.
+  useEffect(() => {
+    if (!abierto) return;
+    const vv = typeof window !== "undefined" ? window.visualViewport : null;
+    const raiz = document.documentElement;
+    const medir = () => {
+      const alto = vv ? vv.height : window.innerHeight;
+      raiz.style.setProperty("--chat-alto", `${Math.round(alto)}px`);
+      // Con el teclado abierto, iOS desplaza la página: `offsetTop` dice cuánto.
+      raiz.style.setProperty("--chat-arriba", `${Math.round(vv?.offsetTop ?? 0)}px`);
+    };
+    medir();
+    // Los DOS avisos, porque cada sistema cuenta el teclado a su manera: iOS mueve el viewport
+    // visual y deja la ventana igual; Android encoge la ventana. Escuchar uno solo deja al
+    // teclado tapando el campo en la mitad de los teléfonos — se vio probándolo.
+    vv?.addEventListener("resize", medir);
+    vv?.addEventListener("scroll", medir);
+    window.addEventListener("resize", medir);
+    window.addEventListener("orientationchange", medir);
+    return () => {
+      vv?.removeEventListener("resize", medir);
+      vv?.removeEventListener("scroll", medir);
+      window.removeEventListener("resize", medir);
+      window.removeEventListener("orientationchange", medir);
+      raiz.style.removeProperty("--chat-alto");
+      raiz.style.removeProperty("--chat-arriba");
+    };
+  }, [abierto]);
+
   useEffect(() => {
     finRef.current?.scrollIntoView({ block: "end" });
   }, [mensajes, enviando, abierto]);
@@ -216,17 +256,24 @@ export function ChatWeb() {
         <section
           role="dialog"
           aria-label={t.titulo}
-          className="chat-web-panel fixed inset-0 z-[70] flex flex-col bg-obsidian text-sand sm:inset-auto sm:right-4 sm:w-[min(92vw,380px)] sm:overflow-hidden sm:rounded-[24px] sm:border sm:border-white/10 sm:shadow-[0_20px_60px_rgba(0,0,0,0.5)] md:right-6"
-          style={{ ...abajo, height: undefined }}
+          className="chat-web-panel fixed inset-x-0 z-[70] flex flex-col bg-obsidian text-sand sm:inset-auto sm:right-4 sm:w-[min(92vw,380px)] sm:overflow-hidden sm:rounded-[24px] sm:border sm:border-white/10 sm:shadow-[0_20px_60px_rgba(0,0,0,0.5)] md:right-6"
+          style={abajo}
           data-alto="sm"
         >
-          <style>{`@media (min-width: 640px){ .chat-web-panel { height: min(600px, 80vh); } } @media (max-width: 639.98px){ .chat-web-panel { bottom: 0 !important; } }`}</style>
+          {/* En el teléfono el panel ocupa el alto REAL que se ve (con el teclado abierto, lo que
+              queda encima de él): --chat-alto lo mide el efecto de arriba y 100dvh es el respaldo.
+              Desde 640px vuelve a ser una tarjeta flotante anclada abajo a la derecha. */}
+          <style>{`
+            .chat-web-panel { top: var(--chat-arriba, 0px); height: var(--chat-alto, 100dvh); bottom: auto; }
+            @supports not (height: 100dvh) { .chat-web-panel { height: var(--chat-alto, 100vh); } }
+            @media (min-width: 640px){ .chat-web-panel { top: auto; bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); height: min(600px, 80vh); } }
+          `}</style>
           <header className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-clay text-obsidian" aria-hidden="true">
               <span className="text-[0.95rem] font-bold">U</span>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[0.9rem] font-semibold leading-tight">{t.titulo}</p>
+              <p className="truncate text-[0.9rem] font-semibold leading-tight">{t.titulo}</p>
               <p className="truncate text-[0.75rem] leading-tight text-mocha">{t.sub}</p>
             </div>
             <a
@@ -235,12 +282,14 @@ export function ChatWeb() {
               rel="noopener noreferrer"
               aria-label={t.seguirWa}
               title={t.seguirWa}
-              className="flex h-11 items-center gap-1.5 rounded-full bg-[#25D366] px-3 text-[0.8rem] font-semibold text-obsidian"
+              // En el teléfono va solo el icono (44×44): con el texto, el título del chat se
+              // quedaba en 70px y el nombre del asistente salía cortado.
+              className="flex h-11 w-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#25D366] text-[0.8rem] font-semibold text-obsidian sm:w-auto sm:px-3"
             >
               <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
                 <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2m0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.54-3.7 8.24-8.23 8.24m4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18l-.55-.27" />
               </svg>
-              <span>{t.seguirWaCorto}</span>
+              <span className="hidden sm:inline">{t.seguirWaCorto}</span>
             </a>
             <button
               type="button"
@@ -289,7 +338,10 @@ export function ChatWeb() {
           </div>
 
           <form
-            className="border-t border-white/10 px-3 pb-3 pt-2"
+            // El panel llega hasta el borde del teléfono, así que la barra de escribir tiene que
+            // esquivar el indicador de inicio del iPhone (safe area) o queda medio tapada.
+            style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom, 0px))" }}
+            className="border-t border-white/10 px-3 pt-2"
             onSubmit={(e) => {
               e.preventDefault();
               void enviar();
@@ -311,7 +363,9 @@ export function ChatWeb() {
                 placeholder={t.placeholder}
                 aria-label={t.placeholder}
                 autoComplete="off"
-                className="h-11 min-w-0 flex-1 rounded-full border border-white/15 bg-white/5 px-4 text-[0.95rem] text-sand placeholder:text-mocha/80 focus:border-clay-bright focus:outline-none"
+                // ⚠️ 16px (text-base) NO es decoración: iOS hace zoom automático al enfocar un
+                // campo con letra más chica, y la página se agranda sola al tocar el chat.
+                className="h-11 min-w-0 flex-1 rounded-full border border-white/15 bg-white/5 px-4 text-base text-sand placeholder:text-mocha/80 focus:border-clay-bright focus:outline-none"
               />
               <button
                 type="submit"

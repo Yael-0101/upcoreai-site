@@ -482,7 +482,9 @@ export function ArranquePortal({
                 value={pegado}
                 onChange={(e) => setPegado(e.target.value)}
                 placeholder={T.desarrollos.pegarEjemplo}
-                className="w-full rounded-xl border border-[rgba(242,231,219,0.15)] bg-obsidian px-3 py-2 font-mono text-sm text-sand outline-none transition-colors placeholder:text-mocha/40 focus:border-clay"
+                // 16px: el cliente pega aquí su lista de desarrollos desde el celular, y con letra
+                // más chica iOS agranda la página justo al enfocar el campo.
+                className="w-full rounded-xl border border-[rgba(242,231,219,0.15)] bg-obsidian px-3 py-2 font-mono text-base text-sand outline-none transition-colors placeholder:text-mocha/40 focus:border-clay"
               />
 
               {/* Lo que se entendió, ANTES de aplicarlo. Si una columna se interpretó mal,

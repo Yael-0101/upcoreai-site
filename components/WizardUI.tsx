@@ -167,7 +167,7 @@ export function NavBtns({
         <button
           type="button"
           onClick={onBack}
-          className="rounded-full border border-[rgba(242,231,219,0.2)] px-6 py-2.5 text-sm font-semibold text-mocha transition-all hover:border-[rgba(242,231,219,0.4)] hover:text-sand"
+          className="min-h-[44px] rounded-full border border-[rgba(242,231,219,0.2)] px-6 py-2.5 text-sm font-semibold text-mocha transition-all hover:border-[rgba(242,231,219,0.4)] hover:text-sand"
         >
           {backLabel}
         </button>
@@ -176,7 +176,7 @@ export function NavBtns({
         type="button"
         onClick={onNext}
         disabled={!nextEnabled || loading}
-        className="rounded-full bg-clay px-7 py-2.5 text-sm font-semibold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100"
+        className="min-h-[44px] rounded-full bg-clay px-7 py-2.5 text-sm font-semibold text-obsidian transition-all duration-300 hover:scale-[1.04] hover:bg-clay-bright disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100"
       >
         {loading ? (loadingLabel ?? nextLabel) : nextLabel}
       </button>

@@ -235,14 +235,16 @@ export function DemoChat({
             placeholder={done ? T.placeholderFin : T.placeholder}
             disabled={escribiendo || done}
             aria-label={T.aria}
-            className="min-w-0 flex-1 rounded-full border border-white/10 bg-obsidian px-4 py-2.5 text-sm text-sand outline-none transition-colors placeholder:text-mocha/75 focus:border-clay/60 disabled:opacity-50"
+            // 16px y 44 px de alto: con letra más chica iOS agranda la página al enfocar el
+            // campo, y esto es justo donde el prospecto prueba el producto.
+            className="min-h-[44px] min-w-0 flex-1 rounded-full border border-white/10 bg-obsidian px-4 py-2.5 text-base text-sand outline-none transition-colors placeholder:text-mocha/75 focus:border-clay/60 disabled:opacity-50"
           />
           <button
             type="button"
             onClick={() => enviar()}
             disabled={!texto.trim() || escribiendo || done}
             aria-label={T.enviar}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-clay text-white transition-all hover:bg-clay-bright disabled:opacity-40 active:scale-90"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-clay text-white transition-all hover:bg-clay-bright disabled:opacity-40 active:scale-90"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
               <path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
