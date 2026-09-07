@@ -174,9 +174,17 @@ export default async function ArranquePage({
 
         <footer className="mt-12 border-t border-[rgba(242,231,219,0.08)] pt-6 text-center text-xs font-light text-mocha/80">
           {T.ui.pie(fila.clinica || (idioma === "en" ? "your firm" : "tu inmobiliaria"))} ·{" "}
-          {T.ui.dudas} {T.ui.escribenos.replace(/ ?WhatsApp$/, "")}{" "}
-          <a href={CONTACT.whatsapp} className="inline-block px-1 py-2 underline hover:text-clay-bright">
-            WhatsApp
+          {T.ui.dudas}{" "}
+          {/* ⚠️ El enlace es la FRASE ENTERA, no solo la palabra «WhatsApp». Es la única
+              salida del cliente cuando se atora en el portal, y suelta medía 65×32 en un
+              teléfono: por debajo del tamaño del dedo. De paso se va el `.replace()` que le
+              recortaba la última palabra al texto — un truco que se rompía solo el día que
+              alguien tradujera la frase sin terminarla en «WhatsApp». */}
+          <a
+            href={CONTACT.whatsapp}
+            className="inline-flex min-h-[44px] items-center px-2 underline hover:text-clay-bright"
+          >
+            {T.ui.escribenos}
           </a>
         </footer>
       </div>

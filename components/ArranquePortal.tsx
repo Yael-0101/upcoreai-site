@@ -526,12 +526,14 @@ export function ArranquePortal({
                 </div>
               )}
 
+              {/* Estos dos botones viven detrás de un clic, así que el auditor de móvil no los
+                  alcanza y medían 36px de alto. Se les pone el área del dedo a mano. */}
               <div className="mt-4 flex flex-wrap gap-3">
                 <button
                   type="button"
                   onClick={aplicarPegado}
                   disabled={leido.filas.length === 0}
-                  className="rounded-full bg-clay px-5 py-2 text-sm font-semibold text-obsidian transition-all hover:bg-clay-bright disabled:opacity-40"
+                  className="inline-flex min-h-[44px] items-center rounded-full bg-clay px-5 py-2 text-sm font-semibold text-obsidian transition-all hover:bg-clay-bright disabled:opacity-40"
                 >
                   {T.desarrollos.pegarUsar}
                 </button>
@@ -541,7 +543,7 @@ export function ArranquePortal({
                     setPegando(false);
                     setPegado("");
                   }}
-                  className="rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-mocha transition-colors hover:text-sand"
+                  className="inline-flex min-h-[44px] items-center rounded-full border border-[rgba(242,231,219,0.2)] px-5 py-2 text-sm font-medium text-mocha transition-colors hover:text-sand"
                 >
                   {T.desarrollos.pegarCancelar}
                 </button>
@@ -1207,8 +1209,14 @@ export function ArranquePortal({
           <div className="mx-auto max-w-md">
             <div className="grid gap-3">
               {d.equipo.asesores.map((a, i) => (
-                <div key={i} className="flex items-end gap-2">
-                  <div className="flex-1">
+                // 🔴 En un teléfono los tres no caben en un renglón (2026-09-07). El puesto
+                // ocupaba 160px fijos y el botón de quitar otros 39, así que en una pantalla
+                // de 320px al NOMBRE —el dato de verdad— le quedaban 42: no se alcanza a leer
+                // lo que uno escribe. Con `flex-wrap` el nombre se lleva su propio renglón y
+                // el puesto y la ✕ comparten el de abajo; de `sm` en adelante, los tres en
+                // línea como siempre.
+                <div key={i} className="flex flex-wrap items-end gap-2">
+                  <div className="min-w-0 basis-full sm:flex-1 sm:basis-auto">
                     <Field
                       label={i === 0 ? T.equipo.labelNombre : ""}
                       type="text"
@@ -1217,7 +1225,7 @@ export function ArranquePortal({
                       onChange={(v) => setAsesor(i, { nombre: v })}
                     />
                   </div>
-                  <div className="w-40">
+                  <div className="min-w-0 flex-1 sm:w-40 sm:flex-none">
                     {i === 0 && (
                       <label className="mb-1 block text-xs font-light text-mocha">
                         {T.equipo.labelRol}
@@ -1245,7 +1253,9 @@ export function ArranquePortal({
                       setEquipo({ asesores: d.equipo.asesores.filter((_, j) => j !== i) })
                     }
                     disabled={d.equipo.asesores.length === 1}
-                    className="h-11 rounded-xl border border-[rgba(242,231,219,0.15)] px-3 text-mocha transition-colors hover:border-clay hover:text-clay-bright disabled:opacity-30"
+                    // `w-11` (44px) y no `px-3`: medía 39 de ancho, y es el botón que BORRA a
+                    // una persona de la lista — el que menos se puede fallar de un dedazo.
+                    className="h-11 w-11 shrink-0 rounded-xl border border-[rgba(242,231,219,0.15)] text-mocha transition-colors hover:border-clay hover:text-clay-bright disabled:opacity-30"
                   >
                     ✕
                   </button>
