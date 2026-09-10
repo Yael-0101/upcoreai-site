@@ -33,6 +33,8 @@ export type TextosProp = {
 
   secciones: {
     contaste: string;
+    /** Titular cuando la propuesta va EN FRIO: el cliente no nos conto nada. */
+    vimos: string;
     costando: string;
     construiriamos: (complejidad: string) => string;
     inversion: string;
@@ -235,6 +237,11 @@ const ES: TextosProp = {
 
   secciones: {
     contaste: "Lo que nos contaste",
+    // 🔴 En una propuesta EN FRÍO el cliente no nos contó nada: la armamos con lo que se
+    // ve de su firma. Titularla «lo que nos contaste» es la primera línea del documento
+    // diciendo algo que él sabe que es falso (2026-09-10). Cuál se usa lo decide si dio
+    // sus cifras o no, que es la misma señal que esconde el bloque de pérdida.
+    vimos: "Lo que vimos de tu firma",
     costando: "Lo que te está costando seguir igual",
     construiriamos: (c) => `Lo que construiríamos para ti (${c})`,
     inversion: "Tu inversión, con números honestos",
@@ -596,6 +603,7 @@ const EN: TextosProp = {
 
   secciones: {
     contaste: "What you told us",
+    vimos: "What we saw about your firm",
     costando: "What staying as you are is costing you",
     construiriamos: (c) => `What we would build for you (${c})`,
     inversion: "Your investment, with honest numbers",

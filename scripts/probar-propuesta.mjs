@@ -486,6 +486,63 @@ casos++;
     fallos.push("[web+agente] perdió la invitación a quitar piezas, que ahí sí aplica");
 }
 
+// ── La pérdida solo se enseña con SUS cifras ──────────────────────────────────
+// 🔴 De esta función cuelgan las tres cifras más grandes de la propuesta: «lo que te
+// cuesta seguir igual», el ahorro mensual y el retorno. Hasta el 2026-09-10 la protección
+// solo cubría web-sola, así que a un prospecto de voz o WhatsApp se le pintaba una pérdida
+// armada con los valores por defecto del motor — a un broker con 20 años, $467,640 al año
+// que nadie le preguntó. No lo vigilaba ninguna prueba.
+{
+  const conCifrasSuyas = { perdidaMensual: 38970, citasEstimado: false, ticketEstimado: false };
+  const todoEstimado = { perdidaMensual: 38970, citasEstimado: true, ticketEstimado: true };
+  const medioEstimado = { perdidaMensual: 38970, citasEstimado: false, ticketEstimado: true };
+  const otroMedio = { perdidaMensual: 38970, citasEstimado: true, ticketEstimado: false };
+
+  // TODAS las combinaciones de piezas, no solo web-sola: por ahí se colaba el defecto.
+  for (const piezas of [["web"], ["agente"], ["voz"], ["voz", "agente"], ["web", "agente"], ["auto"]]) {
+    const q = piezas.join("+");
+    if (!C.mostrarPerdida(piezas, conCifrasSuyas))
+      fallos.push(`[${q}] con las cifras QUE ÉL DIO debería mostrarse la pérdida y no se muestra`);
+    if (C.mostrarPerdida(piezas, todoEstimado))
+      fallos.push(`[${q}] enseña una pérdida armada con estimados — le inventa un número a su negocio`);
+    // Basta con que UNO sea estimado: el producto de ambos es la cifra que se enseña.
+    if (C.mostrarPerdida(piezas, medioEstimado))
+      fallos.push(`[${q}] enseña la pérdida con el ticket estimado`);
+    if (C.mostrarPerdida(piezas, otroMedio))
+      fallos.push(`[${q}] enseña la pérdida con las citas estimadas`);
+    // Sin números no hay nada que enseñar.
+    if (C.mostrarPerdida(piezas, null)) fallos.push(`[${q}] enseña pérdida sin números`);
+    if (C.mostrarPerdida(piezas, { perdidaMensual: 0, citasEstimado: false, ticketEstimado: false }))
+      fallos.push(`[${q}] enseña una pérdida de cero`);
+    casos += 6;
+  }
+}
+
+// ── «Pruébalo tú mismo» va ANTES del precio, y la demo de voz existe ──────────
+// 🔴 Dos defectos del 2026-09-10, los dos invisibles para cualquier prueba de textos:
+//   (1) la demo de VOZ nunca estuvo en la propuesta — o sea que justo a quien le vendes
+//       el agente de voz por $6,500 era el único que no podía oírlo;
+//   (2) el bloque vivía al final, después de las FAQ y pegado al botón: Yael lo dijo
+//       claro, «no se ve abajo». Quien no llegaba hasta el fondo no se enteraba.
+// El ORDEN no lo puede comprobar ninguna función, así que aquí se mira la posición en el
+// JSX de la página: la demo tiene que aparecer antes del título de la inversión.
+{
+  if (!C.mostrarDemoVoz(["voz"])) fallos.push("[voz] no se ofrece la demo del agente de voz");
+  if (!C.mostrarDemoVoz(["voz", "agente"])) fallos.push("[voz+agente] no se ofrece la demo de voz");
+  if (C.mostrarDemoVoz(["web"])) fallos.push("[web] ofrece una demo de voz que no compró");
+  if (C.mostrarDemoVoz(["agente"])) fallos.push("[agente] ofrece la demo de voz sin la pieza de voz");
+  casos += 4;
+
+  const jsx = fs.readFileSync(paginaApp("p/[token]/page.tsx"), "utf8");
+  const demo = jsx.indexOf("<DemoVoz");
+  const precio = jsx.indexOf("T.secciones.inversion");
+  if (demo < 0) fallos.push("la página ya no monta <DemoVoz>: el cliente de voz no puede probarlo");
+  else if (precio < 0) fallos.push("no encuentro la sección de inversión en la página");
+  else if (demo > precio)
+    fallos.push("«pruébalo tú mismo» volvió a quedar DESPUÉS del precio — se ve, pero abajo");
+  casos += 2;
+}
+
 // ── Veredicto ─────────────────────────────────────────────────────────────────
 console.log(`Casos probados: ${casos}`);
 if (fallos.length) {

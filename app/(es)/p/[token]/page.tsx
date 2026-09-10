@@ -12,6 +12,7 @@ import {
   noNecesitas,
   tuParte,
   mostrarDemo,
+  mostrarDemoVoz,
   mostrarPerdida,
   esWebSola,
   entregaDesc,
@@ -49,6 +50,7 @@ export async function generateMetadata({
 // ⚠️ `Money` se importa de lib/calc (su dueño), no se redeclara aquí. Era una de tres
 // copias del mismo tipo y al renombrar sus campos esta siguió compilando con los viejos.
 import type { Money } from "@/lib/calc";
+import { DemoVoz } from "@/components/DemoVoz";
 type Plan = {
   inversion: Money;
   inversionNota: string;
@@ -516,8 +518,11 @@ export default async function PropuestaPublica({
           </a>
         )}
 
+        {/* «Lo que nos contaste» solo si de verdad nos contó: en una propuesta en frío
+            no dio nada y la armamos con lo que se ve de su firma. Misma señal que
+            esconde el bloque de pérdida (2026-09-10). */}
         {diag.length > 0 && (
-          <Seccion titulo={`${num()} · ${T.secciones.contaste}`}>
+          <Seccion titulo={`${num()} · ${conPerdida ? T.secciones.contaste : T.secciones.vimos}`}>
             <div className="mb-12 rounded-3xl border border-[rgba(242,231,219,0.1)] bg-[rgba(242,231,219,0.04)] p-7">
               {diag.map((d) => (
                 <div
@@ -674,6 +679,37 @@ export default async function PropuestaPublica({
           </div>
         </Seccion>
 
+        {/* 🔴 PRUÉBALO — aquí, entre «lo que construiríamos» y el precio (Yael,
+            2026-09-10: «no se ve abajo»). Antes vivía al final, después de las FAQ y
+            pegado al botón: quien no llegaba hasta el fondo nunca se enteraba de que
+            podía probarlo. Y el orden importa además para vender — qué es, lo pruebas,
+            cuánto cuesta: llega al precio habiendo visto funcionar el producto.
+            La demo de CHAT es el agente de WhatsApp y la de VOZ es una llamada por el
+            micrófono: cada una se ofrece solo si esa pieza está cotizada. */}
+        {(mostrarDemo(piezas) || mostrarDemoVoz(piezas)) && (
+          <div className="no-print mb-12">
+            {mostrarDemoVoz(piezas) && (
+              <div className="mb-6">
+                <DemoVoz clinica={p.lead.clinica} idioma={idioma} />
+              </div>
+            )}
+            {mostrarDemo(piezas) && (
+              <div className="rounded-3xl border border-[rgba(242,231,219,0.1)] bg-[rgba(242,231,219,0.03)] p-6 text-center font-light text-mocha">
+                {T.probarDemo}{" "}
+                <a
+                  href={`https://upcoreai.com/demo${p.lead.clinica ? `?c=${encodeURIComponent(p.lead.clinica)}` : ""}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-[44px] items-center px-1 font-medium text-sand underline hover:text-clay-bright"
+                >
+                  {T.probarDemoEnlace}
+                </a>{" "}
+                {T.probarDemoCola}
+              </div>
+            )}
+          </div>
+        )}
+
         <Seccion titulo={`${num()} · ${T.secciones.inversion}`}>
           {conPerdida && n && (
             <p className="mb-5 font-light text-mocha">
@@ -821,24 +857,6 @@ export default async function PropuestaPublica({
             ))}
           </div>
         </Seccion>
-
-        {/* La demo pública es el agente de WhatsApp: invitar a probarla solo tiene
-            sentido si el agente está cotizado (a un cliente de solo-web o de voz le
-            estaríamos enseñando un producto que no pidió). */}
-        {mostrarDemo(piezas) && (
-          <div className="no-print mb-12 rounded-3xl border border-[rgba(242,231,219,0.1)] bg-[rgba(242,231,219,0.03)] p-6 text-center font-light text-mocha">
-            {T.probarDemo}{" "}
-            <a
-              href={`https://upcoreai.com/demo${p.lead.clinica ? `?c=${encodeURIComponent(p.lead.clinica)}` : ""}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-[44px] items-center px-1 font-medium text-sand underline hover:text-clay-bright"
-            >
-              {T.probarDemoEnlace}
-            </a>{" "}
-            {T.probarDemoCola}
-          </div>
-        )}
 
         <div className="no-print my-16 text-center">
           <a

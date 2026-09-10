@@ -468,14 +468,45 @@ export function tuParte(p: PiezaClave[], idioma: Idioma = "es"): { t: string; mi
  *  A un proyecto de voz-sola no se le manda a ESCRIBIRLE a algo que contesta llamadas. */
 export const mostrarDemo = (p: PiezaClave[]) => p.includes("agente");
 
-/** Números honestos: a una web-sola no se le restriega una "pérdida mensual" armada
- *  con puros estimados de fallback. Si el cliente SÍ declaró sus citas perdidas y su
- *  ticket, el número es suyo y se muestra. Para las demás piezas, igual que siempre. */
+/**
+ * La demo de VOZ (hablar por el micrófono con el agente) solo se ofrece si se cotizó el
+ * agente de voz.
+ *
+ * 🔴 Existía desde hacía tiempo en las páginas de soluciones y NUNCA se había puesto en la
+ * propuesta (2026-09-10). O sea que a quien le vendíamos la pieza más cara —el agente de
+ * voz, $6,500— era justo a quien no podía oírla antes de decidir: la única demo de la
+ * propuesta era la de chat. Se cazó cuando Yael preguntó si Federico podía probar lo que le
+ * estábamos cotizando.
+ */
+export const mostrarDemoVoz = (p: PiezaClave[]) => p.includes("voz");
+
+/**
+ * Números honestos: la pérdida mensual solo se enseña si sale de CIFRAS QUE DIO ÉL.
+ *
+ * 🔴 AMPLIADO EL 2026-09-10, y el defecto llevaba meses. La protección existía solo para
+ * `esWebSola`, con la nota «para las demás piezas, igual que siempre» — así que a un
+ * prospecto de voz o de WhatsApp se le pintaba la pérdida armada con los valores por
+ * defecto del motor. Se vio preparando la propuesta de un broker con 20 años de oficio:
+ * el motor iba a decirle que pierde **$467,640 al año** y que ganaría **$12,612 limpios al
+ * mes**, con una comisión de $18,000 y 5 llamadas perdidas por semana que nadie le
+ * preguntó. Eso no se lee como una estimación: se lee como que no conocemos su negocio.
+ *
+ * Y el render de la propuesta ya prometía este comportamiento por escrito —«si no las dio,
+ * esta caja desaparece: prometer un ahorro calculado con valores por defecto es inventarle
+ * un número a su negocio»—, así que las dos mitades decían cosas distintas. Ahora la
+ * condición cumple lo que el comentario promete, para TODAS las piezas.
+ *
+ * De esto cuelgan tres cosas de la página: el bloque de «lo que te cuesta seguir igual»,
+ * la caja de ahorro y la fila de retorno. Si el cliente declaró sus citas perdidas y su
+ * comisión, el número es SUYO y se muestra entero.
+ */
 export function mostrarPerdida(
-  p: PiezaClave[],
+  _p: PiezaClave[],
   n?: { perdidaMensual: number; citasEstimado: boolean; ticketEstimado: boolean } | null
 ): boolean {
   if (!n || !(n.perdidaMensual > 0)) return false;
-  if (esWebSola(p) && (n.citasEstimado || n.ticketEstimado)) return false;
+  // Basta con que UNO de los dos sea estimado: el producto de ambos es la cifra que se
+  // enseñaría, así que un solo supuesto ya la contamina.
+  if (n.citasEstimado || n.ticketEstimado) return false;
   return true;
 }
