@@ -390,29 +390,30 @@ const ES: TextosProp = {
   },
 
   boceto: {
-    etiqueta: "Ya está hecho · véalo ahora",
-    titulo: "No se lo vamos a describir: se lo enseñamos funcionando.",
+    etiqueta: "Ya está hecho · míralo ahora",
+    titulo: "No te lo vamos a describir: te lo enseñamos funcionando.",
     intro: (empresa) =>
-      `Lo construimos con la información que ya es pública de ${empresa}, antes de pedirle nada. ` +
-      `Ábralo desde su celular y pruébelo como lo haría un comprador.`,
+      `Lo construimos con la información que ya es pública de ${empresa}, antes de pedirte nada. ` +
+      `Ábrelo desde tu celular y pruébalo como lo haría un comprador.`,
     queLlevaWeb: [
-      "Su página completa: la ficha de cada desarrollo, ubicación con mapa, preguntas frecuentes y las opiniones de sus clientes.",
+      "Tu página completa: la ficha de cada desarrollo, ubicación con mapa, preguntas frecuentes y las opiniones de tus clientes.",
+      // ⚠️ Los «su» de aquí son del COMPRADOR, no del cliente: se quedan.
       "Agenda en línea: el comprador elige proyecto, día y hora en menos de un minuto, desde su país y sin llamar.",
-      "Una pantalla privada para usted y su equipo, donde apaga los días, las tardes o las horas sueltas que no atienden.",
+      "Una pantalla privada para ti y tu equipo, donde apagas los días, las tardes o las horas sueltas que no atienden.",
     ],
     queLlevaOtro: (empresa) => [
-      `Armado con lo que ya es público de ${empresa}, para que lo pruebe con sus propios datos.`,
+      `Armado con lo que ya es público de ${empresa}, para que lo pruebes con tus propios datos.`,
       "Funciona de verdad: no es un video ni una presentación.",
     ],
     esBocetoTitulo: "Es un boceto: todo se puede cambiar",
     esBocetoWeb:
-      "Nada de lo que ve está cerrado. Los colores, la tipografía, las animaciones, el orden de las " +
-      "secciones, los textos y las fotos se cambian por los suyos — usted nos manda su logo y su " +
-      "paleta, o nos dice qué le gustaría distinto, y se lo rehacemos. Los horarios y las fotos que " +
-      "aparecen son de ejemplo hasta que nos pase los suyos.",
+      "Nada de lo que ves está cerrado. Los colores, la tipografía, las animaciones, el orden de las " +
+      "secciones, los textos y las fotos se cambian por los tuyos — nos mandas tu logo y tu " +
+      "paleta, o nos dices qué te gustaría distinto, y te lo rehacemos. Los horarios y las fotos que " +
+      "aparecen son de ejemplo hasta que nos pases los tuyos.",
     esBocetoOtro:
-      "Nada de lo que ve está cerrado. El tono, las respuestas y la forma de trabajar se ajustan a " +
-      "como atiende usted — dígame qué le cambiaría y se lo rehacemos.",
+      "Nada de lo que ves está cerrado. El tono, las respuestas y la forma de trabajar se ajustan a " +
+      "como atiendes tú — dime qué le cambiarías y te lo rehacemos.",
     cta: "Ver el adelanto →",
   },
   waMensaje: (empresa) => `Hola, vi el diagnóstico de ${empresa} y me interesa.`,
@@ -460,7 +461,7 @@ const ES: TextosProp = {
   },
   faqDeDonde: {
     q: "¿De dónde sacaron la información de mi inmobiliaria?",
-    a: "De lo que ya es público: su propio sitio, su ficha de Google y sus reseñas. Nada de eso nos lo dio usted, y por eso lo que ve puede tener detalles por ajustar — los horarios, por ejemplo, están de ejemplo hasta que nos diga los suyos. El precio de aquí abajo no depende de eso: es cerrado.",
+    a: "De lo que ya es público: tu propio sitio, tu ficha de Google y tus reseñas. Nada de eso nos lo diste tú, y por eso lo que ves puede tener detalles por ajustar — los horarios, por ejemplo, están de ejemplo hasta que nos digas los tuyos. El precio de aquí abajo no depende de eso: es cerrado.",
   },
   faqApis: {
     q: "¿Por qué los costos de APIs van aparte?",

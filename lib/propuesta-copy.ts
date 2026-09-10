@@ -131,51 +131,6 @@ export function filaCostos(
   return esWebSola(p) ? { k: c.dominioK, n: c.dominioN } : { k: c.apisK, n: c.apisN };
 }
 
-// ── FAQ: la última entrada cambia por pieza ──────────────────────────────────
-const FAQ_BASE = [
-  {
-    q: "¿Es difícil de usar? No soy de tecnología.",
-    a: "Está pensado justo para eso: tú sigues trabajando como siempre y el sistema hace la parte pesada. Te enseño lo poco que hay que saber en un video corto; si algo no queda claro, me escribes y lo vemos.",
-  },
-  {
-    q: "Ya tengo mi sistema / mi forma de trabajar.",
-    a: "No se toca. Nos integramos a lo que ya usas (agenda, WhatsApp, Excel, software) — tus datos se quedan donde están y esto se encarga de lo que hoy nadie alcanza a hacer.",
-  },
-  {
-    q: "¿De quién queda todo esto?",
-    a: "Tuyo, al 100%. Las cuentas, el número, la página y el sistema quedan a tu nombre. Si un día no quieres seguir con Upcore, todo sigue siendo tuyo — nunca quedas amarrado.",
-  },
-  {
-    q: "¿Y si no funciona como esperaba?",
-    a: "Los primeros 30 días los ajustes van por mi cuenta hasta que quede como acordamos. Y si no te entrego lo acordado funcionando, te devuelvo tu anticipo.",
-  },
-];
-
-// Esta solo aparece cuando la propuesta SÍ trae estimaciones hechas con sus
-// cifras. En una propuesta en frío no hay ningún número suyo, así que preguntar
-// "¿son reales?" y responder "los calculamos con los datos que TÚ nos diste"
-// deja al cliente buscando unos datos que nunca dio. Lo cazó Yael leyendo.
-const FAQ_NUMEROS = {
-  q: "¿Los números de esta propuesta son reales?",
-  a: "Son estimaciones conservadoras calculadas con los datos que TÚ nos diste (los supuestos están a la vista). Preferimos quedarnos cortos a prometerte de más.",
-};
-
-// Y esta la sustituye cuando la propuesta va en frío: la duda que de verdad
-// tiene alguien que acaba de recibir un adelanto de su sitio sin haber hablado
-// con nadie es otra — de dónde salió su información.
-const FAQ_DE_DONDE = {
-  q: "¿De dónde sacaron la información de mi inmobiliaria?",
-  a: "De lo que ya es público: su propio sitio, su ficha de Google y sus reseñas. Nada de eso nos lo dio usted, y por eso lo que ve puede tener detalles por ajustar — los horarios, por ejemplo, están de ejemplo hasta que nos diga los suyos. El precio de aquí abajo no depende de eso: es cerrado.",
-};
-const FAQ_APIS = {
-  q: "¿Por qué los costos de APIs van aparte?",
-  a: "Porque son tuyos y así lo ves todo transparente: pagas el consumo real directo al proveedor, sin margen escondido de Upcore. Suelen ser unos cuantos dólares al mes, con tope de gasto activado.",
-};
-const FAQ_DOMINIO = {
-  q: "¿Y el dominio de mi página?",
-  a: "Lo compramos nosotros y va incluido en el precio, a nombre de la inmobiliaria desde el primer día. A partir del segundo año se renueva por unos $15 a $25 dólares al año, que pasan a su tarjeta — o corren por nuestra cuenta si se queda con el mantenimiento. La dirección es suya siempre: nadie se la puede quitar.",
-};
-
 /**
  * Las preguntas que se muestran.
  *

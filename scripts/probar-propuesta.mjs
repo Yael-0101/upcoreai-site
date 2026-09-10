@@ -543,6 +543,55 @@ casos++;
   casos += 2;
 }
 
+// ── La propuesta TUTEA de principio a fin ─────────────────────────────────────
+// 🔴 Lo cazó Yael leyendo la propuesta de un cliente (2026-09-10): el bloque del boceto
+// entero y una de las preguntas frecuentes hablaban de usted —«Ábralo desde su celular»,
+// «Nada de eso nos lo dio usted»— mientras el resto del documento tutea. No es cosmético:
+// se lee como dos personas distintas escribiendo el mismo documento, justo donde le pides
+// que confíe. Ningún guardián lo veía porque todos miran QUÉ dice el texto, no cómo trata
+// a quien lo lee.
+//
+// Se recorre la tabla EJECUTADA (las funciones se invocan), nunca el archivo: media tabla
+// son plantillas y el defecto puede vivir dentro de una de ellas.
+{
+  const TEXTOS = jiti(path.join(AQUI, "..", "lib", "propuesta-textos.ts")).TP.es;
+  // «usted» es la señal segura. Los imperativos son una lista corta y a sabiendas
+  // incompleta — están porque un bloque en usted puede no contener la palabra.
+  const B = "(?<![a-záéíóúüñ])";
+  // ⚠️ `usted(?:es)?`, NUNCA `ustedes?` — eso último significa «ustede» con la s
+  // opcional, así que no caza «usted» y el guardián pasa en verde sobre el defecto.
+  // Se descubrió inyectando el texto real que estaba publicado, no leyendo la regla.
+  const USTED = new RegExp(`${B}usted(?:es)?(?![a-záéíóúüñ])`, "i");
+  const IMPERATIVOS = new RegExp(
+    `${B}(véa|ábra|pruébe|díga|mánde|páse|hága|escríba|llámé|múestre|revíse|elíja|tóme)[a-záéíóúñ]+`,
+    "i"
+  );
+
+  const visto = new Set();
+  function recorrer(v, ruta) {
+    if (typeof v === "string") {
+      const m = v.match(USTED) || v.match(IMPERATIVOS);
+      if (m) fallos.push(`[tuteo] ${ruta} trata de usted: «${m[0]}» en "${v.slice(0, 70)}…"`);
+      casos++;
+      return;
+    }
+    if (typeof v === "function") {
+      // Se prueba con los argumentos que de verdad recibe: un nombre de firma o una cifra.
+      for (const arg of ["Firma Demo", 1000]) {
+        try { recorrer(v(arg), `${ruta}()`); break; } catch { /* prueba el siguiente */ }
+      }
+      return;
+    }
+    if (v && typeof v === "object") {
+      if (visto.has(v)) return;
+      visto.add(v);
+      for (const [k, hijo] of Object.entries(v)) recorrer(hijo, `${ruta}.${k}`);
+    }
+  }
+  recorrer(TEXTOS, "TP.es");
+  if (casos < 200) fallos.push(`[tuteo] solo revisé ${casos} textos: la tabla no se está recorriendo`);
+}
+
 // ── Veredicto ─────────────────────────────────────────────────────────────────
 console.log(`Casos probados: ${casos}`);
 if (fallos.length) {
