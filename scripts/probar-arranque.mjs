@@ -25,6 +25,7 @@ import { fileURLToPath } from "node:url";
 // ⚠️ La regla vive en su propio módulo, SIN efectos: el revisor del panel también la
 // importa, y si viviera aquí, importarla ejecutaría este guardián entero.
 import { perdonaPorNegacion, CASOS_NEGACION } from "./lib-negacion.mjs";
+import { revisarTuteo } from "./lib-tuteo.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -700,6 +701,17 @@ for (const idioma of ["es", "en"]) {
   if (suelo.some((s) => !String(s.porque || "").trim())) {
     fallos.push(`[${idioma}] alguna regla del suelo se quedó sin su motivo`);
   }
+}
+
+// ── El Portal TUTEA, igual que la propuesta y el acuerdo ────────────────────
+// Misma regla, mismo módulo (scripts/lib-tuteo.mjs). Aquí importa el doble: el Portal
+// es donde se le piden las cuentas y los accesos, y un documento que de pronto cambia
+// de trato es exactamente lo que hace dudar de con quién se está hablando.
+{
+  const { fallos: deUsted, revisados } = revisarTuteo(TA.es, "arranque.es");
+  fallos.push(...deUsted);
+  casos += revisados;
+  if (revisados < 100) fallos.push(`[tuteo] solo revisé ${revisados} textos del portal: no se está recorriendo`);
 }
 
 // ── Veredicto ───────────────────────────────────────────────────────────────

@@ -15,6 +15,7 @@ import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { paginaApp } from "./lib-rutas-app.mjs";
+import { revisarTuteo } from "./lib-tuteo.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -964,6 +965,18 @@ casos++;
       fallos.push(`un cargo escrito a mano se perdió: salió "${doc.puesto}"`);
     }
   }
+}
+
+// ── El acuerdo TUTEA, igual que la propuesta ──────────────────────────────────
+// El defecto se encontró en la propuesta (2026-09-10), pero la regla es de los TRES
+// documentos que lee el cliente: el que firma no puede tratarlo de otra manera que el
+// que le vendió. Se pone hoy, no el día que aparezca — es la lección de aplicar el
+// candado a todos los campos que decide la misma función, no solo al que dio la cara.
+{
+  const { fallos: deUsted, revisados } = revisarTuteo(TEXTOS_ACUERDO.es, "acuerdo.es");
+  fallos.push(...deUsted);
+  casos += revisados;
+  if (revisados < 50) fallos.push(`[tuteo] solo revisé ${revisados} textos del acuerdo: no se está recorriendo`);
 }
 
 // ── Veredicto ─────────────────────────────────────────────────────────────────
