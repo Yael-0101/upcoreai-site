@@ -28,6 +28,21 @@ export type TextosPaginas = {
     factoresTitulo: string;
     factoresSub: string;
     factores: { n: string; title: string; body: string }[];
+    /**
+     * La tabla de precios por pieza (2026-09-10). La página prometía «cada pieza tiene un
+     * precio cerrado, lo ves abajo» y abajo NO había ni una cifra: para verlas había que
+     * completar el cuestionario de la calculadora. Y el guion de llamadas le dice al
+     * prospecto «está publicado en nuestra página», así que Yael afirmaba por teléfono algo
+     * que no era verdad. ⚠️ Aquí solo van los ENCABEZADOS: las cifras y los nombres de las
+     * piezas salen de lib/calc.ts, nunca escritos a mano.
+     */
+    tablaTitulo: string;
+    tablaSub: string;
+    tablaCabPieza: string;
+    tablaCabPrecio: string;
+    tablaDescuento: string;
+    tablaPanel: string;
+    tablaNota: string;
     claridadesTitulo: string;
     claridadesSub: string;
     claridades: { title: string; body: string }[];
@@ -182,6 +197,14 @@ const ES: TextosPaginas = {
       ", lo ves abajo, y tu total exacto sale gratis y al instante con tu diagnóstico de 3 minutos.",
     ctaPrimario: "Mi precio exacto en 3 minutos →",
     ctaSecundario: "Primero quiero probar la demo",
+    tablaTitulo: "El precio de cada pieza",
+    tablaSub: "Aquí están, sin cuestionario de por medio. Puedes empezar con una y crecer después.",
+    tablaCabPieza: "Pieza",
+    tablaCabPrecio: "Precio",
+    tablaDescuento: "De la segunda pieza en adelante, 15% menos.",
+    tablaPanel: "Panel del director comercial (opcional)",
+    tablaNota:
+      "Pago en dos partes: la mitad para arrancar y la mitad al entregar. Sin mensualidad y el sistema queda tuyo. Aparte van los consumos de las herramientas (IA, WhatsApp, minutos), que corren a tu nombre y sin margen nuestro. Si prefieres que nosotros lo operemos, el plan Gestionado va por mensualidad.",
     factoresTitulo: "Qué define tu inversión",
     factoresSub: "Cuatro factores — los mismos que revisamos contigo en el diagnóstico.",
     factores: [
@@ -455,6 +478,14 @@ const EN: TextosPaginas = {
       ", you see it below, and your exact total comes free and instantly with your 3-minute assessment.",
     ctaPrimario: "My exact price in 3 minutes →",
     ctaSecundario: "I want to try the demo first",
+    tablaTitulo: "What each piece costs",
+    tablaSub: "Right here, no questionnaire first. You can start with one and add more later.",
+    tablaCabPieza: "Piece",
+    tablaCabPrecio: "Price",
+    tablaDescuento: "From the second piece onward, 15% off.",
+    tablaPanel: "Sales director dashboard (optional)",
+    tablaNota:
+      "Paid in two parts: half to start and half on delivery. No monthly fee, and the system is yours. Tool usage (AI, WhatsApp, voice minutes) is billed separately, in your name and with no markup from us. If you'd rather we run it for you, the Managed plan is monthly.",
     factoresTitulo: "What determines your investment",
     factoresSub: "Four factors — the same ones we go through with you in the assessment.",
     factores: [

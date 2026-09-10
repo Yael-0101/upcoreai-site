@@ -15,6 +15,13 @@ import { breadcrumbJsonLd, preciosJsonLd } from "@/lib/seo";
 import { paginas } from "@/lib/paginas-textos";
 import { LOCALE, type Idioma } from "@/lib/idioma";
 import { ruta } from "@/lib/rutas";
+// 🔴 Las cifras salen de la FUENTE ÚNICA, nunca escritas a mano aquí (2026-09-10). Antes
+// esta página prometía «cada pieza tiene un precio cerrado, lo ves abajo» y abajo no había
+// ninguna: para verlas había que terminar el cuestionario de la calculadora. Y el guion de
+// llamadas afirma por teléfono que están publicadas, así que la promesa era falsa por dos
+// lados. Los precios ya se publicaban en los datos estructurados para Google (preciosJsonLd,
+// justo abajo) — o sea que el buscador los veía y la persona no.
+import { PANEL_ADICIONAL, PRODUCTO_OPTIONS, opcionEn, precioFijo } from "@/lib/calc";
 
 export function Precios({ idioma }: { idioma: Idioma }) {
   const t = paginas(idioma).precios;
@@ -103,6 +110,59 @@ export function Precios({ idioma }: { idioma: Idioma }) {
               </Reveal>
             ))}
           </div>
+        </section>
+
+        {/* El precio de cada pieza, a la vista y sin cuestionario de por medio. */}
+        <section className="px-[6%] py-20 md:px-[10%] md:py-24">
+          <SectionTitle title={t.tablaTitulo} sub={t.tablaSub} variant="fadeUp" />
+          <Reveal>
+            <div className="card-soft mx-auto max-w-3xl rounded-2xl p-4 sm:p-7">
+              <div className="glass-body">
+                {/* Sin ancho mínimo: en un teléfono angosto los precios se apilan, no se
+                    esconden detrás de un desplazamiento lateral que nadie descubre. */}
+                <table className="w-full border-collapse text-left">
+                  <thead>
+                    <tr className="border-b border-[rgba(242,231,219,0.15)]">
+                      <th className="py-3 pr-3 text-xs font-semibold uppercase tracking-[0.14em] text-mocha">
+                        {t.tablaCabPieza}
+                      </th>
+                      <th className="py-3 pl-3 text-right text-xs font-semibold uppercase tracking-[0.14em] text-mocha">
+                        {t.tablaCabPrecio}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {PRODUCTO_OPTIONS.map((p) => {
+                      const o = opcionEn(p, idioma);
+                      return (
+                        <tr key={p.val} className="border-b border-[rgba(242,231,219,0.08)]">
+                          <td className="py-4 pr-3 align-top">
+                            <div className="font-medium text-sand">{o.label}</div>
+                            <div className="mt-1 text-sm font-light leading-relaxed text-mocha">
+                              {o.desc}
+                            </div>
+                          </td>
+                          <td className="whitespace-nowrap py-4 pl-3 text-right align-top font-semibold text-sand">
+                            {precioFijo(p.setupUSD).principal}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    <tr>
+                      <td className="py-4 pr-3 align-top font-medium text-sand">{t.tablaPanel}</td>
+                      <td className="whitespace-nowrap py-4 pl-3 text-right align-top font-semibold text-sand">
+                        {precioFijo(PANEL_ADICIONAL.setupUSD).principal}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p className="mt-5 border-t border-[rgba(242,231,219,0.15)] pt-5 text-sm font-medium text-clay-bright">
+                  {t.tablaDescuento}
+                </p>
+                <p className="mt-3 text-sm font-light leading-relaxed text-mocha">{t.tablaNota}</p>
+              </div>
+            </div>
+          </Reveal>
         </section>
 
         <Planes idioma={idioma} />

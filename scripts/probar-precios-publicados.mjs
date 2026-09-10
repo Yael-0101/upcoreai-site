@@ -87,6 +87,55 @@ if (listas < MINIMO) {
   process.exit(1);
 }
 
+// ── El otro eje: que la página de precios de verdad los ENSEÑE ────────────────────────────
+// 🔴 2026-09-10. Este guardián vigilaba que ninguna lista MINTIERA, y por eso pasó meses en
+// verde con un defecto peor: /precios no enseñaba ni una cifra. Prometía «cada pieza tiene un
+// precio cerrado, lo ves abajo» y para verlas había que terminar el cuestionario de la
+// calculadora — mientras los datos estructurados SÍ se los daban a Google. Y el guion de
+// llamadas le dice al prospecto «está publicado en nuestra página», así que Yael afirmaba por
+// teléfono algo que no era verdad.
+// «No mentir» y «no faltar» son dos cosas distintas, y una medida que solo mira una de las
+// dos da la falsa sensación de estar cubierta.
+{
+  const fs = await import("node:fs");
+  const COMPONENTE = path.join(RAIZ, "components", "paginas", "Precios.tsx");
+  const src = fs.readFileSync(COMPONENTE, "utf8");
+
+  // Que la tabla salga del CATÁLOGO. No se comprueba el contenido leyendo el JSX (eso sería
+  // parsear código fuente, que ya nos falló una vez): se comprueba el ENGANCHE a la fuente
+  // única, que es lo único que se puede ver sin levantar el sitio. Que las cifras salgan
+  // bien en pantalla lo mira scripts/probar-produccion.mjs contra la página servida.
+  // ⚠️ Se exige el USO, no la mención. La primera versión buscaba `PRODUCTO_OPTIONS` a
+  // secas y al inyectarle el defecto (cambiar la tabla a `[].map(...)`) PASÓ EN VERDE: el
+  // nombre seguía en la línea del import. Un guardián que no dispara nunca es peor que no
+  // tenerlo, porque da por revisado lo que nadie revisó.
+  for (const [pieza, uso] of [
+    ["el catálogo de piezas", "PRODUCTO_OPTIONS.map"],
+    ["el precio del panel", "PANEL_ADICIONAL.setupUSD"],
+    ["el formateador de precios", "precioFijo("],
+  ]) {
+    if (!src.includes(uso))
+      fallos.push(
+        `components/paginas/Precios.tsx ya no usa ${pieza} (${uso}): la página de precios dejó de leer el catálogo`
+      );
+  }
+  // Y que no haya vuelto una cifra escrita a mano dentro del componente.
+  const aMano = src.match(/\$\s?\d[\d,]{2,}/g);
+  if (aMano) fallos.push(`components/paginas/Precios.tsx tiene precios escritos a mano: ${aMano.join(", ")}`);
+
+  // Los encabezados de la tabla, en los DOS idiomas y distintos entre sí (media traducción
+  // se nota más que ninguna).
+  const { paginas } = jiti(path.join(RAIZ, "lib", "paginas-textos.ts"));
+  const CLAVES = ["tablaTitulo", "tablaSub", "tablaCabPieza", "tablaCabPrecio", "tablaDescuento", "tablaPanel", "tablaNota"];
+  const es = paginas("es").precios;
+  const en = paginas("en").precios;
+  for (const c of CLAVES) {
+    if (!String(es?.[c] || "").trim()) fallos.push(`falta el texto «${c}» en español`);
+    if (!String(en?.[c] || "").trim()) fallos.push(`falta el texto «${c}» en inglés`);
+    else if (es?.[c] === en?.[c]) fallos.push(`«${c}» está igual en los dos idiomas: no se tradujo`);
+  }
+}
+
 console.log("");
 if (fallos.length) {
   console.error(`❌ Los precios publicados no cuadran con el catálogo (${fallos.length}):\n`);
