@@ -156,8 +156,14 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
       reactivacion: {
         label: "Reactivación de prospectos",
         desc: "Recupera a los que nunca cerraron",
+        // 🔴 REDISEÑADA POR LEY (2026-09-11). Antes decía «campaña para volver a tocar a los
+        // prospectos viejos», que descrito así es un envío masivo: en Florida, escribir o
+        // llamar a contactos viejos sin permiso previo por escrito expone al CLIENTE a
+        // $500–$1,500 por mensaje (Fla. Stat. 501.059) y, pasados 3 meses, ya no vale la
+        // relación previa para los números en la lista de «no llamar». Lo que vendemos ahora
+        // es el trabajo que lo hace legal, y así se cotiza y así se escribe en su acuerdo.
         alcance:
-          "campaña en español o en inglés para volver a tocar a los prospectos viejos que quedaron en la lista y nunca compraron",
+          "campaña en español o en inglés para volver a tocar a los prospectos viejos de tu lista, hecha con permisos revisados: se cruza tu lista contra los registros de «no llamar», se arranca por correo —el único canal que no exige permiso previo—, por WhatsApp se escribe solo a quien ya te escribió o te dio permiso por escrito, y cada mensaje lleva su forma de darse de baja",
       },
     },
     opciones: {
@@ -277,8 +283,10 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
       reactivacion: {
         label: "Lead re-engagement",
         desc: "Recover the ones who never closed",
+        // Misma redacción que en español (ver el comentario allá): lo que se vende es la
+        // campaña CON los permisos revisados, no un envío masivo.
         alcance:
-          "a campaign in Spanish or English to go back to the old leads sitting on your list who never bought",
+          "a campaign in Spanish or English to go back to the old leads sitting on your list, run with checked consent: your list is screened against the do-not-call registries, it starts by email —the only channel that does not require prior consent—, on WhatsApp it only reaches people who already messaged you or gave written consent, and every message carries its own opt-out",
       },
     },
     opciones: {
