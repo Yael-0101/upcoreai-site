@@ -117,7 +117,7 @@ type Producto = Option & {
 export const PRODUCTO_OPTIONS: Producto[] = [
   { val: "agente", label: "Agente de WhatsApp 24/7", desc: "Contesta en español e inglés, a cualquier hora", icon: "💬", setupUSD: 6000, varMin: 35, varMax: 95, hrs: 14, alcance: "responde WhatsApp en español, inglés o portugués según en qué idioma le escriban, a cualquier hora y en cualquier huso horario, resuelve las dudas de siempre, califica al comprador (presupuesto, plazo y si necesita financiamiento) y deja agendada la visita o la videollamada" },
   { val: "agente-basico", label: "Agente de WhatsApp esencial", desc: "Contesta en español a cualquier hora y agenda", icon: "🌱", setupUSD: 3000, varMin: 30, varMax: 80, hrs: 7, alcance: "responde WhatsApp únicamente en español, a cualquier hora, resuelve las dudas de siempre —ubicación, qué hay disponible y cómo es el proceso de compra— y deja agendada la visita; no califica al comprador ni se conecta a tu CRM: para eso está el agente completo" },
-  { val: "voz", label: "Agente de voz 24/7", desc: "Contesta el teléfono en español e inglés", icon: "📞", setupUSD: 6500, varMin: 25, varMax: 60, hrs: 16, escalaFuerte: true, alcance: "contesta las llamadas que hoy se pierden, atiende en español o en inglés según quien llame, resuelve dudas hablando, agenda en tu calendario y avisa al asesor — conservando tu número actual" },
+  { val: "voz", label: "Agente de voz 24/7", desc: "Contesta el teléfono en español e inglés", icon: "📞", setupUSD: 6500, varMin: 35, varMax: 75, hrs: 16, escalaFuerte: true, alcance: "contesta las llamadas que hoy se pierden, atiende en español o en inglés según quien llame, resuelve dudas hablando, agenda en tu calendario y avisa al asesor — conservando tu número actual" },
   { val: "web", label: "Sitio web con agenda", desc: "En español e inglés; capta y agenda solo", icon: "🌐", setupUSD: 4500, varMin: 0, varMax: 15, hrs: 6, alcance: "sitio en español e inglés, con la ficha de cada desarrollo, formulario que califica y agenda en línea, listo para recibir tráfico de anuncios" },
   { val: "auto", label: "Seguimiento automático", desc: "Que ningún prospecto se enfríe", icon: "🔄", setupUSD: 3500, varMin: 8, varMax: 20, hrs: 10, alcance: "seguimiento en el idioma de cada comprador —español o inglés— que aguanta los meses que dura una preventa: recordatorios de cada etapa de pago, avisos de avance de obra y reactivación del prospecto que dejó de contestar" },
   { val: "reactivacion", label: "Reactivación de prospectos", desc: "Recupera a los que nunca cerraron", icon: "📈", setupUSD: 3000, varMin: 8, varMax: 25, hrs: 8, alcance: "campaña en español o en inglés para volver a tocar a los prospectos viejos de tu lista, hecha con permisos revisados: se cruza tu lista contra los registros de «no llamar», se arranca por correo —el único canal que no exige permiso previo—, por WhatsApp se escribe solo a quien ya te escribió o te dio permiso por escrito, y cada mensaje lleva su forma de darse de baja" },
@@ -393,7 +393,21 @@ export function calculate(s: CalcState): CalcResult {
   // Y desde el 1-oct-2026 Meta además cobra las respuestas del bot. Por eso `agente` pasó de
   // 10–30 a 35–95 y el esencial de 8–20 a 30–80 (hoy comparten el mismo cerebro, así que su
   // costo es casi el mismo; si algún día se le acorta el prompt, se vuelve a medir).
-  // ⏳ PENDIENTE DE MEDIR IGUAL: voz, seguimiento y reactivación siguen con cifras estimadas.
+  // ✅ VOZ, MEDIDA EL 2026-09-11 con los precios publicados de Retell ese día: plataforma
+  // $0.055 + voz Cartesia $0.015 + modelo gpt-4.1 $0.045 + telefonía $0.015 = **$0.130 por
+  // minuto**, que cuadra con los $0.127 medidos en julio. Con llamadas de 3 minutos y el
+  // número ($2/mes): ~$41 al mes con 100 llamadas, ~$119 con 300 y ~$314 con 800. El piso
+  // pasó de 25 a 35 porque en volumen bajo se quedaba corto; el techo de 60 a 75, que con el
+  // factor de volumen fuerte ya cubre el caso de 800 llamadas.
+  //
+  // 📩 SEGUIMIENTO Y REACTIVACIÓN: se calcularon con las tarifas por mensaje del rate card
+  // 2026 (mezcla de países del comprador) y salen MUY por debajo de lo que ya cotizamos
+  // —seguimiento ~$3–20, reactivación ~$1–9—, así que sus cifras se dejan como están: el
+  // cliente no se va a llevar una sorpresa, que es lo que importa. No se afinan más a
+  // propósito, porque **ninguna de las dos está construida todavía como producto**: su
+  // consumo real dependerá de cuántos mensajes mande el diseño que se haga. Ojo también:
+  // la tabla oficial de Meta solo se publica como archivo descargable, así que esas
+  // tarifas vienen de fuente secundaria.
   //
   // Factor de volumen SUAVE (los costos de IA sí escalan, pero menos que proporcional).
   // ~1.3x en volumen bajo → ~2.6x en muy alto. Los mensajes pesan más; los pacientes
