@@ -115,8 +115,8 @@ type Producto = Option & {
 // afinar), la integración al CRM (donde se va media instalación) y el seguimiento largo (que
 // es la pieza `auto`, y se vende aparte).
 export const PRODUCTO_OPTIONS: Producto[] = [
-  { val: "agente", label: "Agente de WhatsApp 24/7", desc: "Contesta en español e inglés, a cualquier hora", icon: "💬", setupUSD: 6000, varMin: 10, varMax: 30, hrs: 14, alcance: "responde WhatsApp en español, inglés o portugués según en qué idioma le escriban, a cualquier hora y en cualquier huso horario, resuelve las dudas de siempre, califica al comprador (presupuesto, plazo y si necesita financiamiento) y deja agendada la visita o la videollamada" },
-  { val: "agente-basico", label: "Agente de WhatsApp esencial", desc: "Contesta en español a cualquier hora y agenda", icon: "🌱", setupUSD: 3000, varMin: 8, varMax: 20, hrs: 7, alcance: "responde WhatsApp únicamente en español, a cualquier hora, resuelve las dudas de siempre —ubicación, qué hay disponible y cómo es el proceso de compra— y deja agendada la visita; no califica al comprador ni se conecta a tu CRM: para eso está el agente completo" },
+  { val: "agente", label: "Agente de WhatsApp 24/7", desc: "Contesta en español e inglés, a cualquier hora", icon: "💬", setupUSD: 6000, varMin: 35, varMax: 95, hrs: 14, alcance: "responde WhatsApp en español, inglés o portugués según en qué idioma le escriban, a cualquier hora y en cualquier huso horario, resuelve las dudas de siempre, califica al comprador (presupuesto, plazo y si necesita financiamiento) y deja agendada la visita o la videollamada" },
+  { val: "agente-basico", label: "Agente de WhatsApp esencial", desc: "Contesta en español a cualquier hora y agenda", icon: "🌱", setupUSD: 3000, varMin: 30, varMax: 80, hrs: 7, alcance: "responde WhatsApp únicamente en español, a cualquier hora, resuelve las dudas de siempre —ubicación, qué hay disponible y cómo es el proceso de compra— y deja agendada la visita; no califica al comprador ni se conecta a tu CRM: para eso está el agente completo" },
   { val: "voz", label: "Agente de voz 24/7", desc: "Contesta el teléfono en español e inglés", icon: "📞", setupUSD: 6500, varMin: 25, varMax: 60, hrs: 16, escalaFuerte: true, alcance: "contesta las llamadas que hoy se pierden, atiende en español o en inglés según quien llame, resuelve dudas hablando, agenda en tu calendario y avisa al asesor — conservando tu número actual" },
   { val: "web", label: "Sitio web con agenda", desc: "En español e inglés; capta y agenda solo", icon: "🌐", setupUSD: 4500, varMin: 0, varMax: 15, hrs: 6, alcance: "sitio en español e inglés, con la ficha de cada desarrollo, formulario que califica y agenda en línea, listo para recibir tráfico de anuncios" },
   { val: "auto", label: "Seguimiento automático", desc: "Que ningún prospecto se enfríe", icon: "🔄", setupUSD: 3500, varMin: 8, varMax: 20, hrs: 10, alcance: "seguimiento en el idioma de cada comprador —español o inglés— que aguanta los meses que dura una preventa: recordatorios de cada etapa de pago, avisos de avance de obra y reactivación del prospecto que dejó de contestar" },
@@ -384,7 +384,18 @@ export function calculate(s: CalcState): CalcResult {
   const msgs = Math.max(parseInt(s.msgs) || 15, 0);
   const leads = Math.max(parseInt(s.leads) || 30, 0);
 
-  // Factor de volumen SUAVE (los costos reales casi no escalan: responder es gratis).
+  // ⚠️ MEDIDO EL 2026-09-11, y el número anterior estaba MAL. Aquí decía que "responder es
+  // gratis" y el agente de WhatsApp salía en $10–30 al mes. Se contaron los tokens reales del
+  // prompt de PRODUCCIÓN (contador oficial de Anthropic, gratis): el prompt del bot son 31,325
+  // caracteres y viajan ENTEROS en cada respuesta, porque el nodo de n8n no expone la caché de
+  // prompt. Son ~16,989 tokens de entrada por respuesta = $0.0365, o sea $0.37 por conversación
+  // de 10 respuestas: ~$36 al mes con 100 conversaciones, ~$109 con 300 y ~$292 con 800.
+  // Y desde el 1-oct-2026 Meta además cobra las respuestas del bot. Por eso `agente` pasó de
+  // 10–30 a 35–95 y el esencial de 8–20 a 30–80 (hoy comparten el mismo cerebro, así que su
+  // costo es casi el mismo; si algún día se le acorta el prompt, se vuelve a medir).
+  // ⏳ PENDIENTE DE MEDIR IGUAL: voz, seguimiento y reactivación siguen con cifras estimadas.
+  //
+  // Factor de volumen SUAVE (los costos de IA sí escalan, pero menos que proporcional).
   // ~1.3x en volumen bajo → ~2.6x en muy alto. Los mensajes pesan más; los pacientes
   // algo (marketing/reactivación sí escala con envíos).
   const volFactor =
