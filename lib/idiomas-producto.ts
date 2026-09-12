@@ -130,18 +130,6 @@ export const IDIOMAS_DE_PIEZA: Record<string, FichaIdiomas> = {
       "`scripts/leer-ingles.mjs` dio 0 de 2 páginas con español. Ese lector queda " +
       "en la plantilla y se corre antes de enseñarle el sitio a nadie.",
   },
-  auto: {
-    idiomas: ["es", "en"],
-    principales: ["es", "en"],
-    prueba:
-      "2026-08-22 · el seguimiento lo redactan los mismos agentes, que ya detectan " +
-      "el idioma del comprador. Los textos de plantilla se escriben en los dos.",
-  },
-  reactivacion: {
-    idiomas: ["es", "en"],
-    principales: ["es", "en"],
-    prueba: "2026-08-22 · igual que el seguimiento: los mensajes se escriben en los dos.",
-  },
   panel: {
     idiomas: ["es", "en"],
     principales: ["es", "en"],

@@ -306,9 +306,9 @@ for (const piezas of subconjuntos(VALS)) {
       // de Meta, de WhatsApp y de los proveedores de IA. Mismo defecto que Yael cazó
       // en el Portal de Arranque, aquí dentro de un documento que se firma.
       const AJENO = [
-        { palabra: /\bWhatsApp\b/, si: ["agente", "agente-basico", "auto", "reactivacion"] },
-        { palabra: /\bMeta\b/, si: ["agente", "agente-basico", "auto", "reactivacion"] },
-        { palabra: /inteligencia artificial/i, si: ["agente", "agente-basico", "voz", "auto", "reactivacion", "panel"] },
+        { palabra: /\bWhatsApp\b/, si: ["agente", "agente-basico"] },
+        { palabra: /\bMeta\b/, si: ["agente", "agente-basico"] },
+        { palabra: /inteligencia artificial/i, si: ["agente", "agente-basico", "voz", "panel"] },
         { palabra: /\basistente\b/i, si: ["agente", "agente-basico", "voz"] },
         { palabra: /l[íi]nea telef[óo]nica/i, si: ["voz"] },
       ];

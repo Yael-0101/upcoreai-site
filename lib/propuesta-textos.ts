@@ -181,15 +181,12 @@ export type TextosProp = {
     agente: string;
     voz: string;
     web: string;
-    auto: string;
-    reactivacion: string;
     generico: string;
   };
   seo: string;
   entrega: { web: string; otro: string };
   nuestra: {
     primeraWeb: string;
-    primeraReactivacion: string;
     primeraSistema: string;
     probarlo: string;
     garantia: string;
@@ -497,8 +494,6 @@ const ES: TextosProp = {
     agente: "Lo usas como si fueras tu propio comprador y ajustamos lo que pidas antes de salir en vivo.",
     voz: "Le marcas como si fueras tu propio comprador: haces la llamada, pides informes de un proyecto y ajustamos lo que pidas antes de salir en vivo.",
     web: "Recorres tu sitio completo en tu celular y en tu computadora, como un comprador que te encuentra por primera vez, y pides los cambios que quieras antes de publicarlo.",
-    auto: "Corremos el flujo completo con un prospecto de mentira: ves llegar los recordatorios y avisos tal como los verán tus compradores, y ajustamos lo que pidas.",
-    reactivacion: "Revisas y apruebas los mensajes con tu propia lista antes de que salga el primero — nada se manda sin tu visto bueno.",
     generico: "Lo pruebas con calma y ajustamos lo que pidas antes de darlo por entregado.",
   },
   seo: "Dejarlo listo para Google: su título y su descripción en los dos idiomas —cada uno con su propia dirección, para que el buscador indexe las dos versiones y no las tome por repetidas—, tu ficha de negocio declarada (nombre, dirección, teléfono y a qué te dedicas) y la página cargando rápido en el celular",
@@ -508,7 +503,6 @@ const ES: TextosProp = {
   },
   nuestra: {
     primeraWeb: "Diseñar y construir tu sitio completo, de punta a punta — estructura, textos en español e inglés y agenda de visitas incluidos",
-    primeraReactivacion: "Armar la campaña completa, de punta a punta — lista, mensajes y seguimiento",
     primeraSistema: "Construir el sistema completo, de punta a punta",
     probarlo: "Probarlo contigo hasta que quede como acordamos",
     garantia: "La garantía: si no entrego lo acordado funcionando, te devuelvo tu anticipo",
@@ -563,15 +557,6 @@ const ES: TextosProp = {
       { t: "Horarios, dirección, teléfono y redes, tal cual quieres que aparezcan", min: "5 min" },
       { t: "Cómo llevas hoy la agenda — libreta, calendario en el celular, algún programa", min: "5 min" },
       { t: "Revisar el borrador y pedirme cambios", min: "15 min" },
-    ],
-    auto: [
-      { t: "Darme acceso a tu calendario o agenda", min: "5 min" },
-      { t: "Aprobar los textos de recordatorios y avisos de seguimiento (van con tu tono)", min: "10 min" },
-      { t: "Probar el flujo completo con un prospecto de mentira", min: "10 min" },
-    ],
-    reactivacion: [
-      { t: "Sacar tu lista de prospectos que nunca cerraron — te digo exactamente cómo exportarla", min: "15 min" },
-      { t: "Aprobar los mensajes de reactivación", min: "10 min" },
     ],
     panel: [{ t: "Una revisión corta de avances para dejar tu panel a tu gusto", min: "15 min" }],
   },
@@ -848,8 +833,6 @@ const EN: TextosProp = {
     agente: "You use it as if you were your own buyer and we adjust whatever you ask before it goes live.",
     voz: "You call it as if you were your own buyer: you make the call, ask about a project, and we adjust whatever you ask before it goes live.",
     web: "You go through your whole site on your phone and on your computer, like a buyer finding you for the first time, and you ask for any changes before we publish it.",
-    auto: "We run the whole flow with a made-up prospect: you watch the reminders and notices arrive exactly as your buyers will see them, and we adjust whatever you ask.",
-    reactivacion: "You review and approve the messages against your own list before the first one goes out — nothing is sent without your sign-off.",
     generico: "You test it at your own pace and we adjust whatever you ask before calling it delivered.",
   },
   seo: "Set up for Google: its title and description in both languages —each with its own address, so the search engine indexes both versions instead of treating them as duplicates—, your business listing declared (name, address, phone and what you do) and the page loading fast on a phone",
@@ -859,7 +842,6 @@ const EN: TextosProp = {
   },
   nuestra: {
     primeraWeb: "Designing and building your entire site, end to end — structure, copy in Spanish and English and visit booking included",
-    primeraReactivacion: "Putting the whole campaign together, end to end — list, messages and follow-up",
     primeraSistema: "Building the complete system, end to end",
     probarlo: "Testing it with you until it is the way we agreed",
     garantia: "The guarantee: if I do not deliver what we agreed, working, I return your deposit",
@@ -914,15 +896,6 @@ const EN: TextosProp = {
       { t: "Hours, address, phone and social media, exactly as you want them to appear", min: "5 min" },
       { t: "How you keep the calendar today — a notebook, a phone calendar, some software", min: "5 min" },
       { t: "Reviewing the draft and asking me for changes", min: "15 min" },
-    ],
-    auto: [
-      { t: "Giving me access to your calendar", min: "5 min" },
-      { t: "Approving the copy for reminders and follow-up notices (they go in your tone)", min: "10 min" },
-      { t: "Testing the whole flow with a made-up prospect", min: "10 min" },
-    ],
-    reactivacion: [
-      { t: "Pulling your list of prospects who never closed — I tell you exactly how to export it", min: "15 min" },
-      { t: "Approving the re-engagement messages", min: "10 min" },
     ],
     panel: [{ t: "A short progress review to leave your dashboard the way you like it", min: "15 min" }],
   },

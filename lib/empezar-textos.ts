@@ -324,14 +324,6 @@ const ES: TextosEmpezar = {
         nose: "No lo medimos",
       },
     },
-    reactivacion: {
-      q: "¿Dónde guardan los prospectos que nunca cerraron?",
-      opciones: {
-        software: "En un software",
-        excel: "Excel o papel",
-        no: "No tenemos registro ordenado",
-      },
-    },
   },
 };
 
@@ -539,14 +531,6 @@ const EN: TextosEmpezar = {
         "3-5": "3 – 5",
         "5+": "More than 5",
         nose: "We do not measure it",
-      },
-    },
-    reactivacion: {
-      q: "Where do you keep the leads that never closed?",
-      opciones: {
-        software: "In a software tool",
-        excel: "Excel or paper",
-        no: "We have no organized record",
       },
     },
   },

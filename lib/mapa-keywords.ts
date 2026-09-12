@@ -70,14 +70,6 @@ export const MAPA_KEYWORDS: Keyword[] = [
     path: "/soluciones/agente-de-voz-para-inmobiliarias",
   },
   {
-    keywordEs: "seguimiento de leads inmobiliarios",
-    keywordEn: "real estate lead follow-up",
-    intencion: "comercial",
-    prioridad: 1,
-    estado: "publicado",
-    path: "/soluciones/seguimiento-de-leads-inmobiliarios",
-  },
-  {
     keywordEs: "vender preventa en Miami a compradores latinoamericanos",
     keywordEn: "selling Miami preconstruction to Latin American buyers",
     intencion: "comercial",

@@ -139,8 +139,35 @@ export function alternativas(path: string) {
  *  dónde van ahora. Estuvieron publicadas y hay que redirigirlas, no dejarlas
  *  en 404. Lo consume `next.config.mjs`, que no puede importar TypeScript: se
  *  genera con `npm run generar:redirecciones`. */
+/**
+ * Páginas que SE RETIRARON del sitio y que estuvieron publicadas e indexadas.
+ *
+ * No se borran a secas: quien llegue desde Google o desde un enlace viejo tiene que
+ * caer en algo vivo, no en un 404. Van escritas literales a propósito — `ruta()` las
+ * traduciría leyendo `lib/soluciones.ts`, y ahí ya no existen.
+ */
+export const PAGINAS_RETIRADAS: { source: string; destination: string; permanent: boolean }[] = [
+  // 2026-09-12 · se fue con las piezas de Seguimiento y Reactivación (ver `calc.ts`).
+  {
+    source: "/soluciones/seguimiento-de-leads-inmobiliarios",
+    destination: "/soluciones/automatizacion-para-inmobiliarias",
+    permanent: true,
+  },
+  {
+    source: "/en/solutions/real-estate-lead-follow-up",
+    destination: "/en/solutions/real-estate-automation",
+    permanent: true,
+  },
+  // Su dirección inglesa vieja (tramo y slug en español) también estuvo publicada.
+  {
+    source: "/en/soluciones/seguimiento-de-leads-inmobiliarios",
+    destination: "/en/solutions/real-estate-automation",
+    permanent: true,
+  },
+];
+
 export function redireccionesViejas(): { source: string; destination: string; permanent: boolean }[] {
-  const salida: { source: string; destination: string; permanent: boolean }[] = [];
+  const salida: { source: string; destination: string; permanent: boolean }[] = [...PAGINAS_RETIRADAS];
   for (const seccion of Object.keys(SEGMENTOS)) {
     const lista = CON_SLUG[seccion];
     if (lista) {

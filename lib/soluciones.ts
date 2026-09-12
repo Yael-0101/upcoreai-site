@@ -119,7 +119,6 @@ export const SOLUCIONES: Solucion[] = [
     giroDemo: "comercializadora",
     relacionadas: [
       "agente-de-voz-para-inmobiliarias",
-      "seguimiento-de-leads-inmobiliarios",
       "vender-preventa-en-miami-a-compradores-latinos",
     ],
     actualizado: "2026-08-22",
@@ -677,152 +676,10 @@ export const SOLUCIONES: Solucion[] = [
 
   // ─────────────────────────────────────────────────────────────────────────
   {
-    slug: "seguimiento-de-leads-inmobiliarios",
-    slugEn: "real-estate-lead-follow-up",
-    giroDemo: "equipo",
-    relacionadas: [
-      "automatizacion-para-inmobiliarias",
-      "chatbot-whatsapp-para-inmobiliarias",
-      "asistente-virtual-para-inmobiliarias",
-    ],
-    actualizado: "2026-08-22",
-    t: {
-      es: {
-        title: "Seguimiento automático de leads inmobiliarios",
-        metaDescription:
-          "El 60–70% de los prospectos se pierde por seguimiento tardío. Automatiza el seguimiento de una preventa: recordatorios, avances de obra y reactivación.",
-        eyebrow: "Seguimiento de leads inmobiliarios",
-        h1: "El primer contacto sí se atiende. El del mes cuatro es el que se cae.",
-        intro:
-          "En preventa pasan meses —a veces años— entre la primera pregunta y la firma. Sostener esa conversación a mano, con cientos de prospectos a la vez, no lo aguanta ningún equipo. Esto lo sostiene solo: recuerda cada etapa de pago, avisa del avance de obra y vuelve a tocar al que dejó de contestar.",
-        nombreCorto: "Seguimiento de leads",
-        dolores: [
-          {
-            title: "Casi la mitad de los asesores no da un segundo toque",
-            body: "El 48% no vuelve a contactar después de la primera llamada. No es falta de ganas: es que el volumen gana cuando no hay un sistema detrás.",
-          },
-          {
-            title: "El prospecto se enfría y nadie lo nota",
-            body: "Entre el 60% y el 70% de los prospectos se pierden por seguimiento tardío. No dejan rastro: simplemente dejan de contestar y nadie se entera de que existían.",
-          },
-          {
-            title: "La preventa dura demasiado para la memoria de nadie",
-            body: "Reserva, contrato, cada etapa de pago, avances de obra, entrega. Son meses de recordatorios que alguien tiene que estar dando.",
-          },
-        ],
-        comoAyuda: [
-          {
-            title: "Cada prospecto tiene su siguiente toque programado",
-            body: "Nadie se queda sin un próximo paso. El sistema sabe a quién le toca hoy y por qué, y te lo pone enfrente.",
-          },
-          {
-            title: "Los recordatorios de pago salen solos",
-            body: "Cada etapa del plan de pagos avisa con tiempo, con tu tono y por el canal donde de verdad te leen. Menos llamadas incómodas para tu equipo.",
-          },
-          {
-            title: "El que se enfrió vuelve a la conversación",
-            body: "Una campaña de reactivación toca a los prospectos viejos que quedaron en la lista y nunca compraron. Es la lista más barata que tienes, y casi nadie la usa.",
-          },
-        ],
-        stats: [
-          { value: "60–70%", label: "de los prospectos se pierden por seguimiento tardío" },
-          { value: "48%", label: "de los asesores no da un segundo contacto" },
-          { value: "0.4–2.4%", label: "es lo que convierte hoy el sector" },
-          { value: "24/7", label: "el seguimiento no descansa" },
-        ],
-        faqs: [
-          {
-            q: "¿Se siente automático para el comprador?",
-            a: "No, si está bien hecho. Los mensajes van con tu tono, con su nombre y con el dato que le corresponde a él — no una plantilla igual para todos. Tú apruebas los textos antes de que salga el primero.",
-          },
-          {
-            q: "¿Funciona con mi CRM?",
-            a: "Sí. Nos conectamos al sistema donde hoy viven tus prospectos. Si no usas ninguno, te montamos el panel — pero se ofrece, no se impone.",
-          },
-          {
-            q: "¿Cuántas ventas más voy a cerrar?",
-            a: "No te lo podemos decir, y desconfía de quien te dé un número: no tenemos tu CRM ni tu tasa de cierre. Lo que sí controlamos es que ningún prospecto se quede sin su siguiente toque, y eso lo garantizamos.",
-          },
-          {
-            q: "¿Puedo aprobar los mensajes antes de que salgan?",
-            a: "Sí, y es obligatorio en la campaña de reactivación: nada se manda a tu lista sin tu visto bueno.",
-          },
-        ],
-        seguridad: SEGURIDAD_ES,
-      },
-      en: {
-        title: "Real estate lead follow-up: so no lead goes cold",
-        metaDescription:
-          "60–70% of real estate leads are lost to late follow-up. Automate preconstruction follow-up: reminders, construction updates and re-engagement.",
-        eyebrow: "Real estate lead follow-up",
-        h1: "The first contact does get handled. It is month four that falls apart.",
-        intro:
-          "In preconstruction, months — sometimes years — pass between the first question and the signature. No team can hold that conversation by hand across hundreds of leads at once. This holds it on its own: it remembers every payment milestone, reports construction progress, and goes back to whoever stopped replying.",
-        nombreCorto: "Lead follow-up",
-        dolores: [
-          {
-            title: "Almost half of agents never make a second touch",
-            body: "48% do not follow up after the first call. It is not for lack of will: volume wins when there is no system behind it.",
-          },
-          {
-            title: "The lead goes cold and nobody notices",
-            body: "Between 60% and 70% of leads are lost to late follow-up. They leave no trace: they simply stop replying and nobody finds out they existed.",
-          },
-          {
-            title: "Preconstruction lasts longer than anyone's memory",
-            body: "Reservation, contract, every payment milestone, construction updates, handover. Months of reminders somebody has to be giving.",
-          },
-        ],
-        comoAyuda: [
-          {
-            title: "Every lead has its next touch scheduled",
-            body: "Nobody is left without a next step. The system knows who is due today and why, and puts it in front of you.",
-          },
-          {
-            title: "Payment reminders go out on their own",
-            body: "Every stage of the payment plan gets flagged in advance, in your tone and on the channel where people actually read you. Fewer awkward calls for your team.",
-          },
-          {
-            title: "Whoever went cold comes back into the conversation",
-            body: "A re-engagement campaign reaches the old leads sitting on your list who never bought. It is the cheapest list you own, and almost nobody uses it.",
-          },
-        ],
-        stats: [
-          { value: "60–70%", label: "of leads are lost to late follow-up" },
-          { value: "48%", label: "of agents never make a second contact" },
-          { value: "0.4–2.4%", label: "is what the industry converts today" },
-          { value: "24/7", label: "follow-up that never rests" },
-        ],
-        faqs: [
-          {
-            q: "Does it feel automated to the buyer?",
-            a: "Not if it is done right. The messages carry your tone, their name and the detail that belongs to them — not one template for everybody. You approve the copy before the first one goes out.",
-          },
-          {
-            q: "Does it work with my CRM?",
-            a: "Yes. We connect to the system where your leads live today. If you do not use one, we set up the dashboard — but it is offered, never imposed.",
-          },
-          {
-            q: "How many more sales will I close?",
-            a: "We cannot tell you, and be suspicious of anyone who gives you a number: we do not have your CRM or your close rate. What we do control is that no lead is left without its next touch, and that we guarantee.",
-          },
-          {
-            q: "Can I approve the messages before they go out?",
-            a: "Yes, and it is mandatory for the re-engagement campaign: nothing goes to your list without your sign-off.",
-          },
-        ],
-        seguridad: SEGURIDAD_EN,
-      },
-    },
-  },
-
-  // ─────────────────────────────────────────────────────────────────────────
-  {
     slug: "automatizacion-para-inmobiliarias",
     slugEn: "real-estate-automation",
     giroDemo: "desarrolladora",
     relacionadas: [
-      "seguimiento-de-leads-inmobiliarios",
       "asistente-virtual-para-inmobiliarias",
       "chatbot-whatsapp-para-inmobiliarias",
     ],
@@ -997,7 +854,6 @@ export const SOLUCIONES: Solucion[] = [
     relacionadas: [
       "chatbot-whatsapp-para-inmobiliarias",
       "agente-de-voz-para-inmobiliarias",
-      "seguimiento-de-leads-inmobiliarios",
     ],
     actualizado: "2026-08-22",
     t: {

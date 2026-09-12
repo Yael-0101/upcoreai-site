@@ -112,16 +112,26 @@ type Producto = Option & {
 // a mitad de precio, el día que un cliente de $6,000 se entere se siente estafado. Cada cosa
 // que se le quita al básico es trabajo real que no se hace: los otros idiomas (guion, pruebas
 // y mantenimiento aparte), la calificación del comprador (la lógica que más tiempo lleva
-// afinar), la integración al CRM (donde se va media instalación) y el seguimiento largo (que
-// es la pieza `auto`, y se vende aparte).
+// afinar) y la integración al CRM (donde se va media instalación).
 export const PRODUCTO_OPTIONS: Producto[] = [
   { val: "agente", label: "Agente de WhatsApp 24/7", desc: "Contesta en español e inglés, a cualquier hora", icon: "💬", setupUSD: 6000, varMin: 35, varMax: 95, hrs: 14, alcance: "responde WhatsApp en español, inglés o portugués según en qué idioma le escriban, a cualquier hora y en cualquier huso horario, resuelve las dudas de siempre, califica al comprador (presupuesto, plazo y si necesita financiamiento) y deja agendada la visita o la videollamada" },
   { val: "agente-basico", label: "Agente de WhatsApp esencial", desc: "Contesta en español a cualquier hora y agenda", icon: "🌱", setupUSD: 3000, varMin: 30, varMax: 80, hrs: 7, alcance: "responde WhatsApp únicamente en español, a cualquier hora, resuelve las dudas de siempre —ubicación, qué hay disponible y cómo es el proceso de compra— y deja agendada la visita; no califica al comprador ni se conecta a tu CRM: para eso está el agente completo" },
   { val: "voz", label: "Agente de voz 24/7", desc: "Contesta el teléfono en español e inglés", icon: "📞", setupUSD: 6500, varMin: 35, varMax: 75, hrs: 16, escalaFuerte: true, alcance: "contesta las llamadas que hoy se pierden, atiende en español o en inglés según quien llame, resuelve dudas hablando, agenda en tu calendario y avisa al asesor — conservando tu número actual" },
   { val: "web", label: "Sitio web con agenda", desc: "En español e inglés; capta y agenda solo", icon: "🌐", setupUSD: 4500, varMin: 0, varMax: 15, hrs: 6, alcance: "sitio en español e inglés, con la ficha de cada desarrollo, formulario que califica y agenda en línea, listo para recibir tráfico de anuncios" },
-  { val: "auto", label: "Seguimiento automático", desc: "Que ningún prospecto se enfríe", icon: "🔄", setupUSD: 3500, varMin: 8, varMax: 20, hrs: 10, alcance: "seguimiento en el idioma de cada comprador —español o inglés— que aguanta los meses que dura una preventa: recordatorios de cada etapa de pago, avisos de avance de obra y reactivación del prospecto que dejó de contestar" },
-  { val: "reactivacion", label: "Reactivación de prospectos", desc: "Recupera a los que nunca cerraron", icon: "📈", setupUSD: 3000, varMin: 8, varMax: 25, hrs: 8, alcance: "campaña en español o en inglés para volver a tocar a los prospectos viejos de tu lista, hecha con permisos revisados: se cruza tu lista contra los registros de «no llamar», se arranca por correo —el único canal que no exige permiso previo—, por WhatsApp se escribe solo a quien ya te escribió o te dio permiso por escrito, y cada mensaje lleva su forma de darse de baja" },
 ];
+
+// 🔴 RETIRADAS DEL CATÁLOGO el 2026-09-12 (decisión de Yael). Aquí vivían «Seguimiento
+// automático» ($3,500) y «Reactivación de prospectos» ($3,000). Se vendían desde julio y
+// NUNCA se construyeron: no existía ni el enviador, ni las plantillas de Meta, ni la
+// separación por cliente. Y al investigarlo salió el freno que las mata de raíz: **Meta no
+// entrega mensajes de marketing a números de Estados Unidos desde abril de 2025** (error
+// 131049), así que la reactivación por WhatsApp no se puede cumplir por mucho permiso que
+// tenga el cliente. Se retiran en vez de seguir prometiéndolas.
+//
+// ⚠️ NO se vuelven a agregar sin: (1) un cliente que las pida y pague, (2) plantillas
+// aprobadas en la cuenta de ESE cliente, y (3) revisión de un abogado de Florida — mandar
+// campañas por cuenta de otro puede exigir licencia de telemarketing con fianza. Hay
+// guardián que truena si alguien las reintroduce (`probar-piezas-retiradas.mjs`).
 
 /** De la SEGUNDA pieza en adelante. No es un descuento inventado: montar la segunda
  *  sobre lo ya construido cuesta menos de verdad. */
@@ -171,8 +181,9 @@ export const MANDOS_DE_PIEZA: Record<string, MandoKey[]> = {
   "agente-basico": ["conversaciones", "desarrollos", "asistente"],
   voz: ["desarrollos", "asistente"],
   web: ["desarrollos"],
-  auto: ["textos"],
-  reactivacion: ["textos"],
+  // El mando «textos» (aprobar los mensajes antes del primer envío) vivía aquí, y era el
+  // único mando de las dos piezas retiradas. Se fue con ellas: un mando que ninguna pieza
+  // entrega sería una promesa sin dueño en la propuesta.
 };
 
 /** Los mandos de estas piezas, sin repetir y en el orden en que se leen. */
@@ -424,7 +435,6 @@ export function calculate(s: CalcState): CalcResult {
   // --- Ahorro (conservador y honesto) ---------------------------------------
   const has = (v: string) => list.some((p) => p.val === v);
   const capta24_7 = has("agente") || has("web") || has("voz"); // responde e invita a agendar al instante
-  const hasReact = has("reactivacion");
 
   // Costo de una hora de asistente comercial en Florida. Antes eran $3.50 (recepción en
   // México); con ese número el retorno en Miami salía absurdamente bajo.
@@ -470,15 +480,11 @@ export function calculate(s: CalcState): CalcResult {
   // Pesa especialmente aquí: el comprador escribe desde otro país y otro huso horario, así
   // que "responder al instante" es la diferencia entre atenderlo y perderlo.
   const nuevosCaptados = leads * (capta24_7 ? 0.1 : 0.03);
-  // Prospectos viejos que vuelven a la conversación si hay campaña de reactivación.
-  const reactivados = hasReact ? leads * 0.1 : 0;
+  // (Aquí se sumaban los prospectos viejos que volvían con la campaña de reactivación.
+  // Esa pieza se retiró del catálogo el 2026-09-12: ver la nota junto a PRODUCTO_OPTIONS.)
 
-  const citasGanadas = rescatados + nuevosCaptados + reactivados;
-  const ahorroUSD =
-    timeValue +
-    rescatados * LEAD_USD +
-    nuevosCaptados * NUEVO_USD +
-    reactivados * LEAD_USD;
+  const citasGanadas = rescatados + nuevosCaptados;
+  const ahorroUSD = timeValue + rescatados * LEAD_USD + nuevosCaptados * NUEVO_USD;
 
   // --- Mensualidad de Upcore (solo Gestionado) ------------------------------
   // Fija y predecible: base + un extra por cada pieza que hay que operar.

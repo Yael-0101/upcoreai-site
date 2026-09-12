@@ -1,5 +1,20 @@
 [
   {
+    "source": "/soluciones/seguimiento-de-leads-inmobiliarios",
+    "destination": "/soluciones/automatizacion-para-inmobiliarias",
+    "permanent": true
+  },
+  {
+    "source": "/en/solutions/real-estate-lead-follow-up",
+    "destination": "/en/solutions/real-estate-automation",
+    "permanent": true
+  },
+  {
+    "source": "/en/soluciones/seguimiento-de-leads-inmobiliarios",
+    "destination": "/en/solutions/real-estate-automation",
+    "permanent": true
+  },
+  {
     "source": "/en/soluciones/chatbot-whatsapp-para-inmobiliarias",
     "destination": "/en/solutions/whatsapp-chatbot-for-real-estate",
     "permanent": true
@@ -12,11 +27,6 @@
   {
     "source": "/en/soluciones/agente-de-voz-para-inmobiliarias",
     "destination": "/en/solutions/ai-voice-agent-for-real-estate",
-    "permanent": true
-  },
-  {
-    "source": "/en/soluciones/seguimiento-de-leads-inmobiliarios",
-    "destination": "/en/solutions/real-estate-lead-follow-up",
     "permanent": true
   },
   {

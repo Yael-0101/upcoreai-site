@@ -13,9 +13,12 @@ import { TP } from "./propuesta-textos";
 import { CONTACT } from "./content";
 import type { Idioma } from "./acuerdo-textos";
 
-export type PiezaClave = "web" | "agente" | "agente-basico" | "voz" | "auto" | "reactivacion" | "panel";
+// «auto» (Seguimiento automático) y «reactivacion» salieron del catálogo el 2026-09-12:
+// ver la nota en `calc.ts`. Un snapshot viejo que las traiga simplemente no las reconoce,
+// que es lo correcto — el documento que el cliente aceptó sigue congelado tal cual.
+export type PiezaClave = "web" | "agente" | "agente-basico" | "voz" | "panel";
 
-const CLAVES: PiezaClave[] = ["web", "agente", "voz", "auto", "reactivacion", "panel"];
+const CLAVES: PiezaClave[] = ["web", "agente", "voz", "panel"];
 
 // v3 no trae claves crudas: se infieren del label. "Agente de voz" se prueba ANTES
 // que "Agente" — el startsWith ciego era el bug que le daba a la voz el checklist
@@ -26,8 +29,6 @@ export function inferPiezas(incluye: string[]): PiezaClave[] {
     if (x.startsWith("Agente de voz")) out.push("voz");
     else if (x.startsWith("Agente")) out.push("agente");
     else if (x.startsWith("Sitio")) out.push("web");
-    else if (x.startsWith("Automatizaciones")) out.push("auto");
-    else if (x.startsWith("Reactivación")) out.push("reactivacion");
     else if (x.startsWith("Dashboard") || x.startsWith("Panel")) out.push("panel");
   }
   return [...new Set(out)];
@@ -41,8 +42,7 @@ export function piezasDeSnapshot(snap: { piezas?: string[]; incluye: string[] })
 const tiene = (p: PiezaClave[], ...claves: PiezaClave[]) => claves.some((c) => p.includes(c));
 
 /** ¿Alguna pieza consume APIs/IA? Todo menos la web sola. */
-export const usaApis = (p: PiezaClave[]) =>
-  tiene(p, "agente", "voz", "auto", "reactivacion", "panel");
+export const usaApis = (p: PiezaClave[]) => tiene(p, "agente", "agente-basico", "voz", "panel");
 
 export const esWebSola = (p: PiezaClave[]) => p.length > 0 && p.every((x) => x === "web");
 
@@ -162,7 +162,7 @@ export const faq = (p: PiezaClave[], conNumeros = true, idioma: Idioma = "es") =
 export function dia1Desc(p: PiezaClave[], idioma: Idioma = "es"): string {
   const t = TP[idioma].dia1;
   const partes = [t.checklist];
-  if (tiene(p, "agente", "auto", "reactivacion")) partes.push(t.numeroWa);
+  if (tiene(p, "agente", "agente-basico")) partes.push(t.numeroWa);
   if (tiene(p, "voz")) partes.push(t.desvio);
   if (tiene(p, "web")) partes.push(t.materialWeb);
   // Las cuentas las abrimos NOSOTROS (arranque concierge): lo unico que se le
@@ -180,8 +180,6 @@ export function pruebasDesc(p: PiezaClave[], idioma: Idioma = "es"): string {
   if (tiene(p, "agente")) return t.agente;
   if (tiene(p, "voz")) return t.voz;
   if (tiene(p, "web")) return t.web;
-  if (tiene(p, "auto")) return t.auto;
-  if (tiene(p, "reactivacion")) return t.reactivacion;
   return t.generico;
 }
 
@@ -212,11 +210,7 @@ export function nuestraParte(
   idioma: Idioma = "es"
 ): string[] {
   const t = TP[idioma].nuestra;
-  const primera = esWebSola(p)
-    ? t.primeraWeb
-    : p.length === 1 && p[0] === "reactivacion"
-      ? t.primeraReactivacion
-      : t.primeraSistema;
+  const primera = esWebSola(p) ? t.primeraWeb : t.primeraSistema;
   const resto = [t.probarlo, entregaDesc(p, idioma), t.garantia, t.ajustes];
   // El SEO va incluido y va JUNTO a la construccion, no al final: es parte de
   // dejar el sitio hecho, no un extra que se agrega despues.
@@ -255,7 +249,7 @@ export function lineaAgendaPorPieza(
   const t = TP[idioma].agenda;
   const a = (agendaHoy || "").trim();
   if (!a) return null;
-  if (tiene(p, "agente", "voz", "auto", "panel")) {
+  if (tiene(p, "agente", "agente-basico", "voz", "panel")) {
     const software = a.match(/\(([^)]+)\)/)?.[1]?.trim();
     if (software) return t.integrarSoftware(software);
     if (/software|sistema/i.test(a)) return t.integrarSistema;
@@ -304,7 +298,7 @@ export function bonos(
   // 2. Su calendario montado. Solo en piezas que TOCAN la agenda, y solo si no
   //    consta que ya usen uno digital: ofrecerle a alguien algo que ya tiene es
   //    relleno, y el relleno se nota.
-  if (tiene(p, "web", "agente", "voz", "auto") && !agendaYaEsDigital(agendaHoy)) {
+  if (tiene(p, "web", "agente", "agente-basico", "voz") && !agendaYaEsDigital(agendaHoy)) {
     const enPapel = /papel|libreta|cuaderno|excel/i.test((agendaHoy || "").trim());
     // En frio (propuesta con boceto, sin diagnostico) no sabemos como agendan: se
     // dice en condicional. Afirmar que llevan libreta seria inventarle un dato de
@@ -384,15 +378,6 @@ export const TU_PARTE: Record<PiezaClave, { t: string; min: string }[]> = {
     // precio (decisión 2026-08-16). El cliente no abre ninguna cuenta.
     { t: "Revisar el borrador y pedirme cambios", min: "15 min" },
   ],
-  auto: [
-    { t: "Darme acceso a tu calendario o agenda", min: "5 min" },
-    { t: "Aprobar los textos de recordatorios y avisos de seguimiento (van con tu tono)", min: "10 min" },
-    { t: "Probar el flujo completo con un prospecto de mentira", min: "10 min" },
-  ],
-  reactivacion: [
-    { t: "Sacar tu lista de prospectos que nunca cerraron — te digo exactamente cómo exportarla", min: "15 min" },
-    { t: "Aprobar los mensajes de reactivación", min: "10 min" },
-  ],
   panel: [
     { t: "Una revisión corta de avances para dejar tu panel a tu gusto", min: "15 min" },
   ],
@@ -407,7 +392,7 @@ export function tuParte(p: PiezaClave[], idioma: Idioma = "es"): { t: string; mi
   const tabla = TP[idioma].tuParte;
   const items: { t: string; min: string }[] = [];
   const vistos = new Set<string>();
-  for (const clave of ["voz", "agente", "web", "auto", "reactivacion", "panel"] as PiezaClave[]) {
+  for (const clave of ["voz", "agente", "web", "panel"] as PiezaClave[]) {
     if (!p.includes(clave)) continue;
     for (const item of tabla[clave] ?? []) {
       if (vistos.has(item.t)) continue; // dedup entre piezas (ej. acceso al calendario)

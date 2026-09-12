@@ -143,7 +143,7 @@ casos++;
 }
 
 // ── 1. Ninguna combinación deja pasar texto de una pieza ausente ──────────────
-for (const sub of subconjuntos(["web", "agente", "voz", "auto", "reactivacion"])) {
+for (const sub of subconjuntos(["web", "agente", "voz"])) {
   for (const conPanel of [false, true]) {
     casos++;
     const piezas = conPanel ? [...sub, "panel"] : sub;
@@ -154,7 +154,7 @@ for (const sub of subconjuntos(["web", "agente", "voz", "auto", "reactivacion"])
 
     const prohibidos = [];
     if (!t("agente")) prohibidos.push("juega a ser tu propio comprador", "agente en acción");
-    if (!t("agente", "auto", "reactivacion"))
+    if (!t("agente", "agente-basico"))
       prohibidos.push("número de whatsapp", "decisión de tu número");
     if (!C.usaApis(piezas)) prohibidos.push("costos de apis", "crear tus cuentas");
     if (!t("voz")) prohibidos.push("desvío");
@@ -352,7 +352,7 @@ casos++;
     C.bonos(piezas, agenda).map((b) => `${b.titulo}\n${b.desc}`).join("\n").toLowerCase();
 
   // 1. La ficha de Google solo con sitio: sin sitio no hay a dónde enlazar.
-  for (const piezas of [["agente"], ["voz"], ["auto"], ["reactivacion"], ["panel"]]) {
+  for (const piezas of [["agente"], ["voz"], ["panel"]]) {
     if (/ficha/i.test(textoDeBonos(piezas, "")))
       fallos.push(`[${piezas.join("+")}] se le ofrece la ficha de Google sin sitio que enlazar`);
   }
@@ -398,8 +398,6 @@ casos++;
   }
 
   // 5. A quien no toca la agenda no se le monta un calendario.
-  if (/calendario/i.test(textoDeBonos(["reactivacion"], "")))
-    fallos.push("[reactivacion] se le monta un calendario que su pieza no usa");
 }
 
 // ── 9 · El SEO va incluido, y se dice (2026-08-17) ──────────────────────────
@@ -423,7 +421,7 @@ casos++;
     if (!parte.includes(seoWeb)) fallos.push("[web] el SEO no aparece en Nuestra parte");
   }
   // A quien no compró sitio no se le promete SEO de un sitio que no existe.
-  for (const piezas of [["agente"], ["voz"], ["auto"], ["reactivacion"], ["panel"]]) {
+  for (const piezas of [["agente"], ["voz"], ["panel"]]) {
     if (C.lineaSeo(piezas)) fallos.push(`[${piezas.join("+")}] se le promete SEO sin sitio web`);
   }
 }
@@ -500,7 +498,7 @@ casos++;
   const otroMedio = { perdidaMensual: 38970, citasEstimado: true, ticketEstimado: false };
 
   // TODAS las combinaciones de piezas, no solo web-sola: por ahí se colaba el defecto.
-  for (const piezas of [["web"], ["agente"], ["voz"], ["voz", "agente"], ["web", "agente"], ["auto"]]) {
+  for (const piezas of [["web"], ["agente"], ["voz"], ["voz", "agente"], ["web", "agente"]]) {
     const q = piezas.join("+");
     if (!C.mostrarPerdida(piezas, conCifrasSuyas))
       fallos.push(`[${q}] con las cifras QUE ÉL DIO debería mostrarse la pérdida y no se muestra`);

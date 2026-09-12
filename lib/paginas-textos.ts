@@ -253,7 +253,7 @@ const ES: TextosPaginas = {
     faqs: [
       {
         q: "¿Cuánto cuesta cada pieza?",
-        a: "El precio es cerrado, no un rango: el asistente de WhatsApp son $6,000 USD —y hay una versión esencial de $3,000, que atiende solo en español—, el agente de voz $6,500, el sitio con agenda $4,500, el seguimiento automático $3,500 y la reactivación $3,000. El panel, si lo quieres, $3,000. De la segunda pieza en adelante, 15% menos. Tu diagnóstico gratis te dice en 3 minutos cuáles necesitas y cuánto suma.",
+        a: "El precio es cerrado, no un rango: el asistente de WhatsApp son $6,000 USD —y hay una versión esencial de $3,000, que atiende solo en español—, el agente de voz $6,500 y el sitio con agenda $4,500. El panel, si lo quieres, $3,000. De la segunda pieza en adelante, 15% menos. Tu diagnóstico gratis te dice en 3 minutos cuáles necesitas y cuánto suma.",
       },
       {
         q: "¿Hay mensualidad obligatoria?",
@@ -534,7 +534,7 @@ const EN: TextosPaginas = {
     faqs: [
       {
         q: "What does each piece cost?",
-        a: "The price is fixed, not a range: the WhatsApp assistant is $6,000 USD —and there is an essential version at $3,000 that answers in Spanish only—, the voice agent $6,500, the site with booking $4,500, automated follow-up $3,500 and re-engagement $3,000. The dashboard, if you want it, $3,000. From the second piece onward, 15% off. Your free assessment tells you in 3 minutes which ones you need and what they add up to.",
+        a: "The price is fixed, not a range: the WhatsApp assistant is $6,000 USD —and there is an essential version at $3,000 that answers in Spanish only—, the voice agent $6,500 and the site with booking $4,500. The dashboard, if you want it, $3,000. From the second piece onward, 15% off. Your free assessment tells you in 3 minutes which ones you need and what they add up to.",
       },
       {
         q: "Is there a mandatory monthly fee?",

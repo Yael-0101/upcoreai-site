@@ -19,16 +19,10 @@
 import { TA } from "./arranque-textos";
 import type { Idioma } from "./acuerdo-textos";
 
-export type Pieza = "agente" | "agente-basico" | "voz" | "web" | "auto" | "reactivacion" | "panel";
+// «auto» y «reactivacion» se retiraron del catálogo el 2026-09-12 (ver `calc.ts`).
+export type Pieza = "agente" | "agente-basico" | "voz" | "web" | "panel";
 
-export const TODAS_LAS_PIEZAS: Pieza[] = [
-  "agente",
-  "voz",
-  "web",
-  "auto",
-  "reactivacion",
-  "panel",
-];
+export const TODAS_LAS_PIEZAS: Pieza[] = ["agente", "voz", "web", "panel"];
 
 /**
  * Lista vacía = fila vieja que nunca se sembró con sus piezas. Se trata como
@@ -50,7 +44,7 @@ const tiene = (p: string[], ...cuales: Pieza[]) => cuales.some((c) => p.includes
 /** Piezas que conversan con el comprador en nombre de la inmobiliaria. */
 export const hayAsistente = (p: string[]) => tiene(p, "agente", "agente-basico", "voz");
 /** Piezas que mandan mensajes por WhatsApp (necesitan número y textos). */
-export const hayMensajes = (p: string[]) => tiene(p, "agente", "agente-basico", "auto", "reactivacion");
+export const hayMensajes = (p: string[]) => tiene(p, "agente", "agente-basico");
 export const hayWeb = (p: string[]) => tiene(p, "web");
 export const hayVoz = (p: string[]) => tiene(p, "voz");
 export const hayChat = (p: string[]) => tiene(p, "agente", "agente-basico");
@@ -122,8 +116,6 @@ export function loSuyo(piezas: string[], idioma: Idioma = "es"): string {
     );
   }
   if (p.includes("web")) partes.push(t.sitio);
-  if (p.includes("auto")) partes.push(t.recordatorios);
-  if (p.includes("reactivacion")) partes.push(t.reactivacion);
   if (p.includes("panel")) partes.push(t.panel);
   return partes.length === 0 ? t.sistema : TA[idioma].unir(partes);
 }
@@ -273,9 +265,10 @@ export function copyTextos(piezas: string[], idioma: Idioma = "es") {
   // pantalla le decía *"Recordatorios y confirmaciones que mandará tu sistema"* — le
   // nombrábamos una pieza que no compró. Lo que su asistente sí manda son las
   // CONFIRMACIONES de las visitas que agenda, y así se dice.
-  const campanas = tiene(p, "auto", "reactivacion");
-  const soloAsistente = !campanas && hayAsistente(p);
-  if (web && campanas) return { q: t.qAmbos, hint: t.hintAmbos };
+  // (Aquí se miraba también si había campañas —seguimiento o reactivación—, las dos
+  // piezas retiradas del catálogo el 2026-09-12. Hoy lo único que manda mensajes es
+  // el asistente, y lo que manda son las confirmaciones de las visitas que agenda.)
+  const soloAsistente = hayAsistente(p);
   if (web && soloAsistente) return { q: t.qAmbos, hint: t.hintAmbos };
   if (web) return { q: t.qWeb, hint: t.hintWeb };
   if (soloAsistente) return { q: t.qAsistente, hint: t.hintAsistente };

@@ -65,10 +65,12 @@ export type TextosCalc = {
     };
   };
 
-/** Los cuatro mandos posibles. El orden de esta lista es el orden en que se leen. */
-export const MANDOS: readonly MandoKey[] = ["conversaciones", "desarrollos", "asistente", "textos"];
+/** Los mandos posibles. El orden de esta lista es el orden en que se leen.
+ *  Había un cuarto, «textos» (aprobar los mensajes antes del primer envío), y se retiró
+ *  el 2026-09-12 con las dos piezas que lo entregaban — ver la nota en `calc.ts`. */
+export const MANDOS: readonly MandoKey[] = ["conversaciones", "desarrollos", "asistente"];
 
-export type MandoKey = "conversaciones" | "desarrollos" | "asistente" | "textos";
+export type MandoKey = "conversaciones" | "desarrollos" | "asistente";
 
 export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
   es: {
@@ -147,24 +149,8 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
         alcance:
           "sitio en español e inglés, con la ficha de cada desarrollo, formulario que califica y agenda en línea, listo para recibir tráfico de anuncios",
       },
-      auto: {
-        label: "Seguimiento automático",
-        desc: "Que ningún prospecto se enfríe",
-        alcance:
-          "seguimiento en el idioma de cada comprador —español o inglés— que aguanta los meses que dura una preventa: recordatorios de cada etapa de pago, avisos de avance de obra y reactivación del prospecto que dejó de contestar",
-      },
-      reactivacion: {
-        label: "Reactivación de prospectos",
-        desc: "Recupera a los que nunca cerraron",
-        // 🔴 REDISEÑADA POR LEY (2026-09-11). Antes decía «campaña para volver a tocar a los
-        // prospectos viejos», que descrito así es un envío masivo: en Florida, escribir o
-        // llamar a contactos viejos sin permiso previo por escrito expone al CLIENTE a
-        // $500–$1,500 por mensaje (Fla. Stat. 501.059) y, pasados 3 meses, ya no vale la
-        // relación previa para los números en la lista de «no llamar». Lo que vendemos ahora
-        // es el trabajo que lo hace legal, y así se cotiza y así se escribe en su acuerdo.
-        alcance:
-          "campaña en español o en inglés para volver a tocar a los prospectos viejos de tu lista, hecha con permisos revisados: se cruza tu lista contra los registros de «no llamar», se arranca por correo —el único canal que no exige permiso previo—, por WhatsApp se escribe solo a quien ya te escribió o te dio permiso por escrito, y cada mensaje lleva su forma de darse de baja",
-      },
+      // Aquí vivían «Seguimiento automático» y «Reactivación de prospectos». Retiradas del
+      // catálogo el 2026-09-12: ver la nota completa en `calc.ts`.
     },
     opciones: {
       sistema: { label: "Con sistema completo", desc: "Dashboard + todo integrado" },
@@ -194,7 +180,6 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
         conversaciones: "ver cada conversación y tomar el chat cuando quieras",
         desarrollos: "elegir qué desarrollos se ofrecen",
         asistente: "apagar el asistente en un toque",
-        textos: "aprobar los textos antes del primer envío",
       },
       une: (partes) => {
         if (partes.length <= 1) return partes[0] ?? "";
@@ -274,20 +259,7 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
         alcance:
           "a site in Spanish and English, with a page for each development, a form that qualifies and books online, ready to receive ad traffic",
       },
-      auto: {
-        label: "Automated follow-up",
-        desc: "So no lead goes cold",
-        alcance:
-          "follow-up in each buyer's own language — Spanish or English — that lasts the months a preconstruction sale takes: reminders for every payment milestone, construction progress updates and re-engagement of the lead who stopped replying",
-      },
-      reactivacion: {
-        label: "Lead re-engagement",
-        desc: "Recover the ones who never closed",
-        // Misma redacción que en español (ver el comentario allá): lo que se vende es la
-        // campaña CON los permisos revisados, no un envío masivo.
-        alcance:
-          "a campaign in Spanish or English to go back to the old leads sitting on your list, run with checked consent: your list is screened against the do-not-call registries, it starts by email —the only channel that does not require prior consent—, on WhatsApp it only reaches people who already messaged you or gave written consent, and every message carries its own opt-out",
-      },
+      // Las dos piezas retiradas (ver la nota en la tabla española y en `calc.ts`).
     },
     opciones: {
       sistema: { label: "With the complete system", desc: "Dashboard + everything integrated" },
@@ -314,7 +286,6 @@ export const CALC_TEXTOS: Record<"es" | "en", TextosCalc> = {
         conversaciones: "see every conversation and take over any chat",
         desarrollos: "choose which developments are offered",
         asistente: "switch the assistant off with one tap",
-        textos: "approve the texts before the first send",
       },
       une: (partes) => {
         if (partes.length <= 1) return partes[0] ?? "";

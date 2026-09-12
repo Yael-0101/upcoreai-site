@@ -309,7 +309,7 @@ for (const rel of SIN_TEXTO_A_MANO) {
 
   // 2. Misma ESTRUCTURA en las dos: si el inglés tuviera un paso, un tono o una
   //    idea de prueba de más o de menos, serían dos portales distintos.
-  const PIEZAS = ["web", "agente", "voz", "auto", "reactivacion", "panel"];
+  const PIEZAS = ["web", "agente", "voz", "panel"];
   const combos = [];
   for (let m = 1; m < 1 << PIEZAS.length; m++) combos.push(PIEZAS.filter((_, i) => m & (1 << i)));
   if (TA.es.tonos.length !== TA.en.tonos.length) {

@@ -36,7 +36,7 @@ const A = jiti(path.join(AQUI, "..", "lib", "arranque.ts"));
 // Los textos sueltos del paso 3 (los que no pasan por copyHorarios) viven aquí.
 const TA = jiti(path.join(AQUI, "..", "lib", "arranque-textos.ts")).TA;
 
-const PIEZAS = ["agente", "voz", "web", "auto", "reactivacion", "panel"];
+const PIEZAS = ["agente", "voz", "web", "panel"];
 
 /** Todos los subconjuntos NO vacíos. */
 function subconjuntos(lista) {
@@ -232,7 +232,7 @@ for (const piezas of subconjuntos(PIEZAS)) {
   // "asistente" es LA palabra del caso que se coló: solo la pueden leer quienes
   // compraron una pieza que conversa.
   if (!t("agente", "voz")) prohibidos.push("asistente");
-  if (!t("agente", "auto", "reactivacion")) prohibidos.push("whatsapp", "número de whatsapp");
+  if (!t("agente", "agente-basico")) prohibidos.push("whatsapp", "número de whatsapp");
   // ⚠️ "llamada" va con frontera escrita a mano: sin ella marcaba "videoLLAMADA"
   // —que es CORRECTO en cualquier proyecto, es como acompañamos al cliente— y
   // tumbaba 28 combinaciones buenas. Es la regla de la casa: en español las
@@ -276,7 +276,7 @@ for (const piezas of subconjuntos(PIEZAS)) {
   // copy de los pasos y las fases no las miraba nadie.
   const fases = A.fasesDe(piezas).map((f) => f.fase);
   const tieneMeta = fases.some((f) => /whatsapp/i.test(f));
-  const deberiaMeta = t("agente", "auto", "reactivacion");
+  const deberiaMeta = t("agente", "agente-basico");
   if (tieneMeta && !deberiaMeta)
     fallos.push(`${etiqueta} su avance anuncia el trámite de WhatsApp con Meta, que no le toca`);
   if (!tieneMeta && deberiaMeta)
@@ -327,7 +327,7 @@ casos++;
   // acordarse de preguntarlos — o no, y el tablero salía con el equipo entero en
   // "Sin asignar". Se vigilan las DOS direcciones, como siempre.
   if (!panel.includes("equipo")) fallos.push("[panel] NO se le pregunta quiénes son sus asesores");
-  for (const otra of ["agente", "voz", "web", "auto", "reactivacion"]) {
+  for (const otra of ["agente", "voz", "web"]) {
     if (A.pasosVisibles([otra]).includes("equipo"))
       fallos.push(`[${otra}] se le pide su equipo de ventas y no compró el panel`);
   }
@@ -373,7 +373,12 @@ casos++;
     if (!vacio.includes(id))
       fallos.push(`[sin piezas] no ve el paso "${id}" — a un proyecto sin sembrar no se le esconde nada`);
   }
-  if (C.normalizarPiezas([]).length !== 6)
+  // ⚠️ Aquí había un 6 escrito a mano, y al retirar dos piezas del catálogo tumbó el
+  // build (2026-09-12). Un guardián comprueba COHERENCIA, nunca una cantidad exacta de
+  // algo que crece y encoge solo: lo que importa es que «sin piezas» signifique todas.
+  const todas = C.TODAS_LAS_PIEZAS.length;
+  if (todas === 0) fallos.push("[sin piezas] el catálogo de piezas quedó vacío");
+  if (C.normalizarPiezas([]).length !== todas)
     fallos.push("[sin piezas] el copy no lo trata como 'todas', y se desalinea con los pasos");
 }
 
@@ -480,7 +485,7 @@ casos++;
   if (A.conciergeListo({ ...soloTelefono, correoTipo: "mio", correo: "" }))
     fallos.push("una fila vieja de 'correo mío' se da por lista sin el correo que se le pidió");
 
-  for (const piezas of [["web"], ["agente"], ["voz"], ["agente", "web", "auto"]]) {
+  for (const piezas of [["web"], ["agente"], ["voz"], ["agente", "web"]]) {
     for (const c of A.cuentasRequeridas({ productos: piezas, plan: "llave" })) {
       const texto = [c.para, ...c.pasos, c.nota ?? ""].join(" ").toLowerCase();
       // Meta es la ÚNICA excepción (el proveedor exige los clics del dueño) y

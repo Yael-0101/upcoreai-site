@@ -65,7 +65,7 @@ export type ArranqueDatos = {
     nombre: string;
     clinica: string;
     giro: string; // clave de giro de lib/nicho.json (alimenta la demo)
-    productos: string[]; // agente | voz | web | auto | reactivacion | panel
+    productos: string[]; // agente | agente-basico | voz | web | panel
     plan: string; // llave | gestionado
   };
   checklist: {
@@ -165,7 +165,7 @@ const FASE_WHATSAPP = "WhatsApp oficial con Meta";
 export function fasesDe(productos: string[]): AvanceItem[] {
   const p = normalizarPiezas(productos);
   // El trámite de Meta solo existe si algo suyo escribe por WhatsApp.
-  const conMeta = ["agente", "agente-basico", "auto", "reactivacion"].some((x) => p.includes(x));
+  const conMeta = ["agente", "agente-basico"].some((x) => p.includes(x));
   return [
     { fase: "Preparación: checklist y cuentas", estado: "pendiente" },
     ...(conMeta ? [{ fase: FASE_WHATSAPP, estado: "pendiente" as const }] : []),
@@ -313,7 +313,7 @@ export function pasosVisibles(productos: string[]): PasoId[] {
   const todos = p.length === 0;
   const tiene = (...c: string[]) => todos || c.some((x) => p.includes(x));
   const pasos: PasoId[] = ["bienvenida", "servicios", "horarios"];
-  if (tiene("agente", "agente-basico", "auto", "reactivacion")) pasos.push("numero");
+  if (tiene("agente", "agente-basico")) pasos.push("numero");
   // El agente de voz vive del TELÉFONO: decidir si se desvía su número o estrena
   // línea es LA decisión de ese producto, y no se le preguntaba nunca
   // (lección 2026-08-16). Es un paso aparte del número de WhatsApp: un cliente
@@ -321,12 +321,12 @@ export function pasosVisibles(productos: string[]): PasoId[] {
   if (tiene("voz")) pasos.push("linea");
   pasos.push("cuentas");
   // La web también agenda (su botón de citas cae al calendario del cliente).
-  if (tiene("agente", "agente-basico", "voz", "auto", "web")) pasos.push("calendario");
+  if (tiene("agente", "agente-basico", "voz", "web")) pasos.push("calendario");
   // La demo es el CHAT del agente: a voz-sola o web-sola no les aplica.
   if (tiene("agente", "agente-basico")) pasos.push("demo");
   // El paso de textos solo tiene contenido si hay sitio (su estilo) o mensajes
   // que aprobar. A un cliente de solo-voz le salía una pantalla vacía.
-  if (tiene("web", "agente", "agente-basico", "auto", "reactivacion")) pasos.push("textos");
+  if (tiene("web", "agente", "agente-basico")) pasos.push("textos");
   // 🔴 SU EQUIPO — solo con la pieza `panel` (2026-08-25).
   //
   // El panel del director enseña **cómo va cada asesor**, y para eso hacen falta dos
@@ -375,8 +375,7 @@ export function cuentasRequeridas(
 ): CuentaDef[] {
   const p = config.productos ?? [];
   const T = TA[idioma].cuentasDef;
-  const usaWhatsApp =
-    p.includes("agente") || p.includes("agente-basico") || p.includes("auto") || p.includes("reactivacion");
+  const usaWhatsApp = p.includes("agente") || p.includes("agente-basico");
   const defs: CuentaDef[] = [];
 
   const arma = (id: string, extra: Partial<CuentaDef> = {}): CuentaDef => {

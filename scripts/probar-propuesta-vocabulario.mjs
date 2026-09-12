@@ -253,7 +253,7 @@ for (const rel of ARCHIVOS) {
 
   // 2. MISMA ESTRUCTURA por pieza: si el inglés listara un punto de más o de menos,
   //    serían dos propuestas distintas, no una traducción.
-  const PIEZAS = ["web", "agente", "voz", "auto", "reactivacion", "panel"];
+  const PIEZAS = ["web", "agente", "voz", "panel"];
   const combos = [];
   for (let m = 1; m < 1 << PIEZAS.length; m++) combos.push(PIEZAS.filter((_, i) => m & (1 << i)));
   for (const piezas of combos) {
@@ -336,7 +336,7 @@ for (const rel of ARCHIVOS) {
     }
 
     // Todo lo que produce el motor en inglés, revisado palabra por palabra.
-    const combos2 = [["web"], ["agente", "voz"], ["agente", "voz", "web", "auto", "reactivacion"]];
+    const combos2 = [["web"], ["agente", "voz"], ["agente", "voz", "web", "panel"]];
     for (const piezas of combos2) {
       for (const operacion of ["yo", "upcore"]) {
         const r = calculate({

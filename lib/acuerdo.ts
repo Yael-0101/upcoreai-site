@@ -70,7 +70,7 @@ export type Numeros = {
 
 export type Snapshot = {
   version?: number;
-  // v4: claves crudas de lo cotizado (web/agente/voz/auto/reactivacion/panel).
+  // v4: claves crudas de lo cotizado (web/agente/agente-basico/voz/panel).
   piezas?: string[];
   fecha: string;
   lead: { nombre: string; clinica: string; decisor: string; tipo_clinica: string; tamano: string };
@@ -199,8 +199,7 @@ export type DatosAcuerdo = {
 // en el Portal de Arranque, aquí dentro de un documento que se firma.
 
 /** Piezas que le hablan al comprador por WhatsApp — las únicas que necesitan Meta. */
-const usaWhatsApp = (p: PiezaClave[]) =>
-  p.includes("agente") || p.includes("agente-basico") || p.includes("auto") || p.includes("reactivacion");
+const usaWhatsApp = (p: PiezaClave[]) => p.includes("agente") || p.includes("agente-basico");
 
 /** ¿Hay algo que ATIENDA al comprador (contesta, responde dudas, agenda)? */
 const hayAsistente = (p: PiezaClave[]) =>

@@ -29,8 +29,6 @@ export type TextosArranque = {
     asistenteWa: string;
     asistenteTel: string;
     sitio: string;
-    recordatorios: string;
-    reactivacion: string;
     panel: string;
     sistema: string;
   };
@@ -428,8 +426,6 @@ const ES: TextosArranque = {
     asistenteWa: "tu asistente de WhatsApp",
     asistenteTel: "tu asistente telefónico",
     sitio: "tu sitio",
-    recordatorios: "tus recordatorios",
-    reactivacion: "tus mensajes de reactivación",
     panel: "tu panel",
     sistema: "tu sistema",
   },
@@ -941,8 +937,6 @@ const EN: TextosArranque = {
     asistenteWa: "your WhatsApp assistant",
     asistenteTel: "your phone assistant",
     sitio: "your site",
-    recordatorios: "your reminders",
-    reactivacion: "your re-engagement messages",
     panel: "your dashboard",
     sistema: "your system",
   },

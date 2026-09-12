@@ -123,14 +123,6 @@ const PREGUNTAS_POR_PRODUCTO: Record<string, { q: string; options: Option[] }> =
       { val: "nose", label: "No lo medimos", icon: "🤷" },
     ],
   },
-  reactivacion: {
-    q: "¿Dónde guardan los prospectos que nunca cerraron?",
-    options: [
-      { val: "software", label: "En un software", icon: "💻" },
-      { val: "excel", label: "Excel o papel", icon: "📒" },
-      { val: "no", label: "No tenemos registro ordenado", icon: "🤷" },
-    ],
-  },
 };
 
 // Si eligió "no estoy seguro": preguntamos qué le duele y nosotros recomendamos.
